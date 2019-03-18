@@ -13,8 +13,8 @@ class light_bullet : public light_object {
 
 public:
 
-    light_bullet(int id, int speed, std::vector<float> position)
-            : m_id(id), m_speed(speed), m_position(position)
+    light_bullet(int id, int speed, std::vector<float> position, std::vector<float> direction)
+            : m_id(id), m_speed(speed), m_position(position), m_direction(direction)
 
     std::vector<float> get_position() { return m_position; }
 
