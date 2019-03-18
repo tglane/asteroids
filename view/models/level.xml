@@ -1,0 +1,23 @@
+<level>
+  <skybox width="1024">
+    <file1>box1.jpg</file1>
+    <file2>box2.jpg</file2>
+    <file3>box3.jpg</file3>
+    <file4>box4.jpg</file4>
+    <file5>box5.jpg</file5>
+    <file6>box6.jpg</file6>
+  </skybox>
+  <asteroids filename="asteroid.3ds">
+    <count>10</count>
+    <range_max>2500</range_max>
+    <size_min>3</size_min>
+    <size_max>5</size_max>
+  </asteroids>
+  <actor filename="arrow.3ds">
+    <spawn_x>0</spawn_x>
+    <spawn_y>0</spawn_y>
+    <spawn_z>0</spawn_z>
+    <move_speed>10</move_speed>
+    <rotate_speed>0.05</rotate_speed>
+  </actor>
+</level>
