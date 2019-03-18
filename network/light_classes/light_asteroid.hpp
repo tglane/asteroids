@@ -5,15 +5,16 @@
 #ifndef CPP18_ASTEROIDS_LIGHT_ASTEROID_HPP
 #define CPP18_ASTEROIDS_LIGHT_ASTEROID_HPP
 
+#include <vector>
 
-class light_asteroid {
+#include "light_object.hpp"
+
+class light_asteroid : public light_object {
 
 public:
 
-    light_asteroid(int id, float size, std::vector<float> position, std::vector<float> rotation)
-            : m_id(id), m_size(size), m_position(position)
-
-    int get_id() { return m_id; }
+    light_asteroid(int id, int speed, float size, std::vector<float> position, std::vector<float> rotation)
+            : m_id(id), m_speed(speed), m_size(size), m_position(position)
 
     float get_size() { return m_size; }
 
@@ -21,11 +22,7 @@ public:
 
 private:
 
-    int m_id;
-
     float m_size;
-
-    std::vector<float> m_position;
 
 };
 

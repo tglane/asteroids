@@ -7,14 +7,14 @@
 
 #include <vector>
 
-class light_ship {
+#include "light_object.hpp"
+
+class light_ship : public light_object {
 
 public:
 
-    light_ship(int id, int life, int shield, std::vector<float> position, std::vector<float> rotation)
-        : m_id(id), m_position(position), m_rotation(rotation), m_life(life), m_shield(shield)
-
-    int get_id() { return m_id; }
+    light_ship(int id, int speed, int life, int shield, std::vector<float> position, std::vector<float> rotation)
+        : m_id(id), m_speed(speed), m_position(position), m_rotation(rotation), m_life(life), m_shield(shield)
 
     int get_life() { return m_life; }
 
@@ -26,13 +26,9 @@ public:
 
 private:
 
-    int m_id;
-
     int m_life;
 
     int m_shield;
-
-    std::vector<float> m_position;
 
     std::vector<float> m_rotation;
 

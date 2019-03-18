@@ -5,23 +5,18 @@
 #ifndef CPP18_ASTEROIDS_LIGHT_BULLET_HPP
 #define CPP18_ASTEROIDS_LIGHT_BULLET_HPP
 
+#include <vector>
 
-class light_bullet {
+#include "light_object.hpp"
+
+class light_bullet : public light_object {
 
 public:
 
-    light_bullet(int id, std::vector<float> position)
-            : m_id(id), m_position(position)
-
-    int get_id() { return m_id; }
+    light_bullet(int id, int speed, std::vector<float> position)
+            : m_id(id), m_speed(speed), m_position(position)
 
     std::vector<float> get_position() { return m_position; }
-
-private:
-
-    int m_id;
-
-    std::vector<float> m_position;
 
 };
 
