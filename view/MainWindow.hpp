@@ -21,7 +21,7 @@
 
 #include "GLWidget.hpp"
 
-#include "../build/ui_MainWindow.h"
+#include "view/build/ui_MainWindow.h"
 
 namespace asteroids
 {
