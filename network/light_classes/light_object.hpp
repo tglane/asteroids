@@ -17,7 +17,7 @@ public:
 
 protected:
 
-    int m_id();
+    int m_id;
 
     int m_speed;
 

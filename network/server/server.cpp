@@ -16,23 +16,31 @@ void Server::run()
 
     while(1)
     {
+        // rufe movement aus
+        for(auto obj: this->objects) {
+            //obj->move()
+        }
+
+
         while(socket->hasPendingDatagrams())
         {
             QNetworkDatagram datagram = socket->receiveDatagram();
             QByteArray data = datagram.data();
-            std::cout << "received: " << data << std::endl;
+            std::cout << "received: " << data[0] << std::endl;
 
             // überprüfe header
             if (data.startsWith("POS")) {
+                // check player position
+                // update player position
+                // send player position to other clients
             } else if (data.startsWith("")) {
+
             }
             // rufe behandlungroutine auf
-
-            // rufe movement aus
         }
+        //std::cout << "safd" << std::endl;
+// schicke Zustand an clienten
 
-        std::cout << "safd" << std::endl;
-        // schicke Zustand an clienten
         std::this_thread::sleep_for(sleep_time);
     }
 }

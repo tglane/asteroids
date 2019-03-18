@@ -6,6 +6,7 @@ find_package(Qt5Network REQUIRED)
 set(SERVER_SRC
     server.cpp)
 
+include_directories(../light_classes/)
 include_directories(${Qt5Network_INCLUDE_DIRS})
 
 add_executable(server ${SERVER_SRC})
