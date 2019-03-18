@@ -41,7 +41,7 @@ ReadTIFF::ReadTIFF(string filename)
 
 ReadTIFF::~ReadTIFF()
 {
-    // TODO Auto-generated destructor stub
+    // notTODO Auto-generated destructor stub
 }
 
 

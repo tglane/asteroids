@@ -245,7 +245,7 @@ auto Read3DS::getMesh() -> TriangleMesh::Ptr
 
 Read3DS::~Read3DS()
 {
-    // TODO Auto-generated destructor stub
+    // notTODO Auto-generated destructor stub
 }
 
 }

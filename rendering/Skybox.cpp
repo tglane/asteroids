@@ -37,8 +37,6 @@ void Skybox::render(Camera& cam)
     glDisable(GL_LIGHTING);
     glDisable(GL_BLEND);
 
-    cam.applyRotationOnly();
-
     // Set color
     glColor3f(1.0f, 1.0f, 1.0f);
 
