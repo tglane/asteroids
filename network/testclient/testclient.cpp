@@ -4,6 +4,7 @@
 
 #include <QCoreApplication>
 #include <iostream>
+#include <stdlib.h>
 #include "testclient.hpp"
 
 testclient::testclient(QObject *parent) : QObject(parent) {
@@ -12,25 +13,28 @@ testclient::testclient(QObject *parent) : QObject(parent) {
 
     socket->bind(QHostAddress::LocalHost, 1234);
 
+    m_timer = new QTimer(this);
+    connect(m_timer, SIGNAL(timeout()), this, SLOT(hello_udp()));
+    m_timer->start(1000/4);
+
     connect(socket, SIGNAL(readyRead()), this, SLOT(readyRead()));
 }
 
 void testclient::hello_udp() {
     QByteArray data;
-    data.append("BUL");
-    data.append(std::to_string(14).c_str());
-    data.append(std::to_string(15).c_str());
-    data.append(std::to_string(-899).c_str());
-    socket->writeDatagram(data, QHostAddress::LocalHost, 1234);
-    data = "BUL";
-    data.append(std::to_string(89).c_str());
-    data.append(std::to_string(29).c_str());
-    data.append(std::to_string(56349).c_str());
-    socket->writeDatagram(data, QHostAddress::LocalHost, 1234);
-    data = "AST";
-    data.append(std::to_string(14).c_str());
-    data.append(std::to_string(14).c_str());
-    data.append(std::to_string(-200).c_str());
+    char target[sizeof(seq_number)];
+    switch(rand() % 3){
+        case 0: data.append("P"); break;
+        case 1: data.append("B"); break;
+        case 2: data.append("C"); break;
+    }
+
+    //sprintf(target, "%04d", seq_number++ );
+    //double r = rand() / (RAND_MAX + 1.);
+    //sprintf(target, "%04d", seq_number++ );
+    seq_number++;
+    memcpy(target, &seq_number, sizeof(seq_number));
+    data.append(target);
     socket->writeDatagram(data, QHostAddress::LocalHost, 1234);
 }
 
@@ -43,12 +47,26 @@ void testclient::readyRead() {
 
     socket->readDatagram(buffer.data(), buffer.size(), &sender, &senderPort);
 
-    qDebug() << "Message: " << buffer;
+    char* data = buffer.data();
+    char type;
+    memcpy(&type, data, sizeof(char));
+    data++;
+    int newseqn;
+    memcpy(&newseqn, data, sizeof(int));
+
+
+    std::cout << "Message: " << type << newseqn << std::endl;
+
+    /**QByteArray data;
+    data.append("A");
+    char target[5];
+    sprintf(target, "%04d", seq_number++ );
+    socket->writeDatagram(data, QHostAddress::LocalHost, 1234);*/
 }
 
 int main(int argc, char *argv[]){
     QCoreApplication a(argc, argv);
     testclient client;
-    client.hello_udp();
+    client.seq_number = 0;
     return a.exec();
 }
