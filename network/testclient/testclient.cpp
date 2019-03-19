@@ -48,11 +48,14 @@ void testclient::readyRead() {
     socket->readDatagram(buffer.data(), buffer.size(), &sender, &senderPort);
 
     char* data = buffer.data();
+    char type;
+    memcpy(&type, data, sizeof(char));
     data++;
     int newseqn;
     memcpy(&newseqn, data, sizeof(int));
 
-    std::cout << "Message: " << newseqn << std::endl;
+
+    std::cout << "Message: " << type << newseqn << std::endl;
 
     /**QByteArray data;
     data.append("A");
