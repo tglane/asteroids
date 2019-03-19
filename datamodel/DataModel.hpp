@@ -4,6 +4,16 @@
 #include "Planet.hpp"
 #include "Player.hpp"
 
+
+/**
+ * NOTE Maybe this class should also provide the servers technology
+ *      like accepting incoming data packets and send back the updated data to the clients
+ * 
+ * OR   This data model runs on every client and the server, the clients data is updated
+ *      by the server
+ */
+
+
 namespace asteroids{
 
 class DataModel
@@ -29,7 +39,7 @@ private:
     void getUniverse(std::string filename);
 
     // Map to hold all planets, filled by getUniverse()
-    std::map<std::string, Planet*>   m_planets;
+    std::map<int, Planet*>  m_planets;
 
     // The host Player
     Player*  host;

@@ -10,6 +10,7 @@
  */
 
 #include "view/MainWindow.hpp"
+#include "datamodel/DataModel.hpp"
 
 int main(int argc, char** argv)
 {
@@ -18,6 +19,8 @@ int main(int argc, char** argv)
         cerr << "Usage: asteroids <level-file>" << endl;
         return 1;
     }
+
+    DataModel model(argv[1]);
 
     QApplication a(argc, argv);
 

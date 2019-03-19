@@ -146,6 +146,7 @@ set(ASTEROID_SOURCES
     view/GLWidget.cpp
     view/MainWindow.cpp 
     view/Camera.cpp  
+    datamodel/DataModel.cpp
 )
 set(ASTEROID_MOCS
     view/MainWindow.hpp
