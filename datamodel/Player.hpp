@@ -1,3 +1,5 @@
+#ifndef _PLAYER_HPP_
+#define _PLAYER_HPP_
 /*
  * Player.hpp
  *
@@ -6,21 +8,24 @@
  */
 #include <list>
 #include <string>
-#include "../datamodel/Planet.hpp"
+#include "Planet.hpp"
 
 namespace asteroids
-
 {
+
+class Planet;
+
 class Player
 {
 public:
 
+	Player();
 
-	Player (const int identity, std::list<Planet> m_planets, int rubin = 0, int ships = 0);
+	Player(int identity, int rubin = 0, int ships = 0);
 
 	int getShips();
 
-	std::list<Planet> getPlanets();
+	std::list<Planet*> getPlanets();
 
 	int getIdentity();
 
@@ -36,10 +41,8 @@ private:
 	int m_rubin;
 	//freie Raumschiffe?
 	int m_ships;
-	std::list<Planet> m_planets;
-	//Spacecraft m_spacecraft;
-
-
-
-	};
+	std::list<Planet*> m_planets;
+};
 }
+
+#endif

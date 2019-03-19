@@ -1,3 +1,5 @@
+#ifndef __PLANET_HPP_
+#define __PLANET_HPP_
 /*
  * Planet.hpp
  *
@@ -12,25 +14,28 @@
 
 #include "Player.hpp"
 
-
 namespace asteroids
 {
+
+	class Player;
 
 	class Planet
 	{
 
+	public:
+
 		//liste leer initialisieren, player auch)
-		Planet(const std::string name, int rubin = 0, int mines = 0);
+		Planet(std::string name, int posx, int posy, int rubin = 0, int mines = 0);
 
 		int getShips();
 
 		void addShips(int ships);
 
-		boolean delShips(int ships);
+		bool delShips(int ships);
 
-		void addNeighbour(Planet neighbour);
+		void addNeighbour(Planet* neighbour);
 
-		void setOwner(Player owner);
+		void setOwner(Player* owner);
 
 		int getRubin();
 
@@ -38,18 +43,22 @@ namespace asteroids
 
 		void addMines(int mines); //erhöht rubin
 
-		std::list<Planet> getNeighbours();
+		std::list<Planet*> getNeighbours();
 
 
 
 
 
 	private:
-		const std::string m_name;
-		const std::list<Planet> m_neighbours;
+		std::string m_name;
+		std::list<Planet*> m_neighbours;
 		int m_mines;
 		int m_rubin;
-		Player m_owner;
+		int m_ships;
+		Player* m_owner;
+
+		int m_posx;
+		int m_posy;
 
 
 
@@ -58,4 +67,4 @@ namespace asteroids
 	};
 }
 
-
+#endif

@@ -20,7 +20,7 @@ int main(int argc, char** argv)
         return 1;
     }
 
-    DataModel model(argv[1]);
+    DataModel model(argv[2]);
 
     QApplication a(argc, argv);
 

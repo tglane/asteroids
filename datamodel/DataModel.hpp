@@ -4,6 +4,10 @@
 #include "Planet.hpp"
 #include "Player.hpp"
 
+#include <map>
+
+using std::map;
+
 
 /**
  * NOTE Maybe this class should also provide the servers technology

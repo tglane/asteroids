@@ -13,8 +13,10 @@
 namespace asteroids
 {
 
-Planet::Planet(const std::string name, int rubin = 0; int mines = 0) : m_neighbours(), m_owner() {
+Planet::Planet(std::string name, int posx, int posy, int rubin, int mines) : m_neighbours() {
 
+	m_posx = posx;
+	m_posy = posy;
 	m_name = name;
 	m_rubin = rubin;
 	m_mines = mines;
@@ -29,19 +31,19 @@ void Planet::addShips(int ships) {
 	m_ships += ships;
 }
 
-boolean Planet::delShips(int ships) {
+bool Planet::delShips(int ships) {
 
 	if (ships > m_ships) return false;
 
 		else m_ships -= ships; return true;
 }
 
-void Planet::addNeighbour(Planet neighbour) {
+void Planet::addNeighbour(Planet* neighbour) {
 
 	m_neighbours.push_back(neighbour);
 }
 
-void Planet::setOwner(Player owner) {
+void Planet::setOwner(Player* owner) {
 
 	m_owner = owner;
 }
@@ -60,7 +62,7 @@ void Planet::addMines(int mines) {
 	m_mines += mines;
 }
 
-std::list<Planet> Planet::getNeighbours() {
+std::list<Planet*> Planet::getNeighbours() {
 	return m_neighbours;
 }
 

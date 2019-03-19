@@ -147,6 +147,8 @@ set(ASTEROID_SOURCES
     view/MainWindow.cpp 
     view/Camera.cpp  
     datamodel/DataModel.cpp
+    datamodel/Planet.cpp
+    datamodel/Player.cpp
 )
 set(ASTEROID_MOCS
     view/MainWindow.hpp

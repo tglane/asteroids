@@ -1,22 +1,22 @@
 #include "DataModel.hpp"
+#include <iostream>
+#include <fstream>
 
 namespace asteroids{
 
-DataModel::DataModel(std::string filename)
+DataModel::DataModel(std::string filename) : m_planets()
 {
     // player which runs this programm
-    m_self = new Player(...?);
+    //m_self = new Player(...?);
 
     // enemy/ies that run the programm on other devices
     // information from network is needed
-    m_enemy = new Player(...?);
-
+    //m_enemy = new Player(...?);
     getUniverse(filename);
 }
 
-DataModel::getUniverse(std::string filename)
+void DataModel::getUniverse(std::string filename)
 {
-    m_planets = std::map();
 
     std::ifstream f;
     f.open(filename);
@@ -32,7 +32,7 @@ DataModel::getUniverse(std::string filename)
         for(int i = 0; i < numvertex; i++)
         {
             f >> name >> posx >> posy >> mines;
-            Planet* p = new Planet(name, posx, posy, mines);
+            Planet* p = new Planet(name, posx, posy);
 
             m_planets[i] = p;
         }
@@ -42,25 +42,30 @@ DataModel::getUniverse(std::string filename)
         while(!f.eof())
         {
             f >> from >> to;
-            m_planets[from].addNeighbour(m_planets[to]);
-            m_planets[to].addNeighbour(m_planets[from]);
+            m_planets.at(from)->addNeighbour(m_planets.at(to));
+            m_planets.at(to)->addNeighbour(m_planets.at(from));
         }
 
         f.close();
     }
 }
 
-DataModel::getPlanets()
+std::map<int, Planet*> DataModel::getPlanets()
 {
     return m_planets;
 }
 
-DataModel::endOfRound()
+void DataModel::endOfRound()
 {
     // TODO Update players ressources, money, ships, planets, mines
 
     // TODO make a json-data-package from the data and send it to the server
     //      listen for the response, start fights or next round
+}
+
+DataModel::~DataModel()
+{
+
 }
 
 }
