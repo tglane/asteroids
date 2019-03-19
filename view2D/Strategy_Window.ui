@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QWidget" name="ContextMenue" native="true">
+    <property name="geometry">
+     <rect>
+      <x>580</x>
+      <y>10</y>
+      <width>211</width>
+      <height>541</height>
+     </rect>
+    </property>
+    <widget class="QWidget" name="SpielerInfo" native="true">
+     <property name="geometry">
+      <rect>
+       <x>-1</x>
+       <y>0</y>
+       <width>211</width>
+       <height>251</height>
+      </rect>
+     </property>
+     <widget class="QLabel" name="SpielerInfoLabel">
+      <property name="geometry">
+       <rect>
+        <x>6</x>
+        <y>0</y>
+        <width>201</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Spielerinformation</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="PlanetInfo" native="true">
+     <property name="geometry">
+      <rect>
+       <x>-1</x>
+       <y>249</y>
+       <width>211</width>
+       <height>291</height>
+      </rect>
+     </property>
+     <widget class="QLabel" name="PlanetenInfoLabel">
+      <property name="geometry">
+       <rect>
+        <x>16</x>
+        <y>10</y>
+        <width>191</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Planeteninfo</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="MapWidget" native="true">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>9</y>
+      <width>571</width>
+      <height>541</height>
+     </rect>
+    </property>
+    <widget class="QGraphicsView" name="Map">
+     <property name="geometry">
+      <rect>
+       <x>-5</x>
+       <y>-9</y>
+       <width>581</width>
+       <height>541</height>
+      </rect>
+     </property>
+    </widget>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuHilfe">
+    <property name="title">
+     <string>Hilfe</string>
+    </property>
+   </widget>
+   <addaction name="menuHilfe"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
