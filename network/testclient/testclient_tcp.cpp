@@ -22,7 +22,7 @@ void testclient_tcp::doConnect()
 
     qDebug() << "connecting";
 
-    socket->connectToHost("google.com", 80);
+    socket->connectToHost("131.173.191.196", 1234);
     if(!socket->waitForConnected(10000));
     {
         qDebug() << "Error: " << socket->errorString();
@@ -67,6 +67,10 @@ void testclient_tcp::readyRead()
     QByteArray data(socket->readAll());
     QString s(data);
     QJsonDocument recv_json = QJsonDocument::fromJson(s.toUtf8());
+    // parse id from recv_json
+
+
+    // parse fight_init
 
     qDebug() << s;
 }
