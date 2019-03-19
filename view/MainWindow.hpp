@@ -21,7 +21,8 @@
 
 #include "GLWidget.hpp"
 
-#include "../cmake-build-debug/ui_MainWindow.h"
+// TODO: Besser!
+#include "cmake-build-debug/ui_MainWindow.h"
 
 namespace asteroids
 {

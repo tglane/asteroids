@@ -31,9 +31,9 @@ Asteroid::Asteroid(
     // cout << mass << " " << rotation << " " << speed << " " << accell << " " << radius << endl;
 
     //Randomize Heading
-    rotate(PITCH_LEFT, Randomizer::instance()->getRandomNumber(0, 3.14159265));
-    rotate(YAW_LEFT  , Randomizer::instance()->getRandomNumber(0, 3.14159265));
-    rotate(ROLL_LEFT , Randomizer::instance()->getRandomNumber(0, 3.14159265));
+    rotate(PITCH_DOWN, Randomizer::instance()->getRandomNumber(0, 3.14159265));
+    rotate(YAW_COUNTERCLOCKWISE  , Randomizer::instance()->getRandomNumber(0, 3.14159265));
+    rotate(ROLL_CLOCKWISE , Randomizer::instance()->getRandomNumber(0, 3.14159265));
 
     m_scale     = radius / MODEL_RADIUS;
 

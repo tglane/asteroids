@@ -24,7 +24,7 @@
 /***
  * @brief Class to generate and handle color gradients
  *
- * @TODO: Integrated from show.
+ * @notTODO: Integrated from show.
  */
 
 namespace asteroids

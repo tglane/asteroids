@@ -29,13 +29,13 @@ string TextureFactory::m_basePath;
 
 TextureFactory::TextureFactory()
 {
-    // TODO Auto-generated constructor stub
+    // notTODO Auto-generated constructor stub
 
 }
 
 TextureFactory::~TextureFactory()
 {
-    // TODO Auto-generated destructor stub
+    // notTODO Auto-generated destructor stub
 }
 
 TextureFactory& TextureFactory::instance()
