@@ -14,11 +14,11 @@
 
 int main(int argc, char** argv)
 {
-    if (argc < 2)
+    /*if (argc < 2)
     {
         cerr << "Usage: asteroids <level-file>" << endl;
         return 1;
-    }
+    }*/
 
     QApplication a(argc, argv);
 

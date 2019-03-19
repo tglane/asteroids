@@ -8,8 +8,10 @@
 #include <QMainWindow>
 #include <QGraphicsScene>
 #include <QGraphicsView>
+#include <QPushButton>
 
 #include "../build/ui_MainWindow2D.h"
+#include "view/MainWindow.hpp"
 
 
 namespace strategy
@@ -37,12 +39,14 @@ public:
      */
     ~MainWindow2D();
 
+
     /// Returns the width of the window
     //int width();
 
     /// Returns the height of the windows
     //int height();
-
+public slots:
+    void fight(bool click);
 
 private:
 
@@ -50,6 +54,8 @@ private:
     Ui::MainWindow2D* ui;
 
     QGraphicsScene* scene;
+
+    asteroids::MainWindow* FighterWindow;
 
 };
 
