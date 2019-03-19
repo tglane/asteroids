@@ -10,11 +10,14 @@
 
 class Client
 {
+public:
     QHostAddress address;
     quint16 port;
-
+    uint32_t seq_nr = 0;
     //std::shared_ptr<light_ship> ship;
-    std::vector<QNetworkDatagram> ack_pending;
+    std::map<uint32_t, QByteArray> ack_pending;
+
+    uint32_t next_seq_nr() { return seq_nr++; }
 };
 
 class Server: public QObject
@@ -32,6 +35,10 @@ private:
     asteroids::Vector3f bytes_to_vector(char *bytes);
     void handle_position_packet(QNetworkDatagram &datagram);
     void handle_bullet_packet(QNetworkDatagram &datagram);
+    void send_ack(QNetworkDatagram &datagram);
+    void handle_ack(QNetworkDatagram &datagram);
+    void send_collision(Client &client, uint32_t id1, uint32_t id2);
+    bool check_client_id(QNetworkDatagram &datagram);
 
 public:
     Server();
