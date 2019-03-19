@@ -5,6 +5,7 @@
 #include <QMouseEvent>
 
 #include <SDL2/SDL.h>
+#include <QtGui/QPainter>
 
 GLWidget::GLWidget(QWidget* parent)
     : QOpenGLWidget(parent),
@@ -138,13 +139,16 @@ void GLWidget::paintGL()
     m_physicsEngine->render();
 
     m_actor->render();
+
+    QPixmap hud("../models/cockpit.png");
+    QPainter qPainter(this);
+    qPainter.drawPixmap(0, 0, this->width(), this->height(), hud);
 }
 
 void GLWidget::step(map<Qt::Key, bool>& keyStates)
 {
     // Get keyboard states and handle model movement
-    //m_physicsEngine->process();
-    // erstmal ausgeschaltet weils nervt
+    m_physicsEngine->process();
 
     m_actor->move(Transformable::FORWARD, 3);
     if (keyStates[Qt::Key_L])

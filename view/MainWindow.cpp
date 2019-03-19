@@ -32,10 +32,6 @@ MainWindow::MainWindow(const std::string& file, QWidget* parent) :
     ui->setupUi(this);
     m_widget = ui->openGLWidget;
 
-    // Setup HUD
-    QPixmap hud("../models/test.jpeg");
-    ui->hud->setPixmap(hud);
-
     // Set level
     m_widget->setLevelFile(file);
 
