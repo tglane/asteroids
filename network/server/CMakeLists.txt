@@ -11,7 +11,7 @@ set(SERVER_SRC
     server.cpp)
 
 include_directories(../light_classes/)
-include_directories(../../light_classes/)
+include_directories(../../)
 include_directories(${Qt5Network_INCLUDE_DIRS})
 include_directories(${Qt5Widgets_INCLUDE_DIRS})
 
