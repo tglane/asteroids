@@ -10,6 +10,7 @@
 #include <QTcpServer>
 #include <QAbstractSocket>
 #include <QDebug>
+#include <map>
 
 class testserver_tcp : public QObject {
 
@@ -21,14 +22,19 @@ public:
 
     //void doConnect();
 
+    char id_gen();
+
+    QJsonDocument writeJSON(int option);
+
 signals:
 
 public slots:
-    void doStuff();
+    void onConnect();
     void onReadyRead();
 
 private:
     QTcpServer* q_server;
+    std::map<char, QString> id_name;
 
 };
 

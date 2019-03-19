@@ -12,7 +12,7 @@
 
 testserver_tcp::testserver_tcp(QObject *parent) : QObject(parent) {
     q_server = new QTcpServer(this);
-    connect(q_server, SIGNAL(newConnection()), this, SLOT(doStuff()));
+    connect(q_server, SIGNAL(newConnection()), this, SLOT(onConnect()));
 
     qDebug() << "connecting";
 
@@ -34,35 +34,50 @@ void testserver_tcp::onReadyRead()
 
     QJsonDocument json_doc = QJsonDocument::fromJson(json_String.toUtf8());
 
-    qDebug() << "bumbun: " << json_doc.array();;
+    QJsonArray test = json_doc.array();
+
+    QString ident (test[0].toString().toUtf8());
+
+    if (ident == "id_init")
+    {
+        char id = id_gen();
+        QString name = test[1].toString().toUtf8();
+        id_name.insert(std::pair<char, QString> (id, name));
+        sender->write(id.toUTF8());
+    }
+    else if (ident == "strat_init")
+    {
+        sender->write(writeJSON(2).toJson());
+    }
+    else if (ident == "fight_init")
+    {
+        sender->write(writeJSON(3).toJson());
+    }
+
+
 }
 
-QJsonDocument writeJSON()
+char testserver_tcp::id_gen() {
+    return 'x';
+}
+
+QJsonDocument testserver_tcp::writeJSON(int option)
 {
-
+    switch (option) {
+        case 2:
+            break;
+        case 3:
+            break;
+        default: break;
+    }
 }
 
-void testserver_tcp::doStuff()
+void testserver_tcp::onConnect()
 {
     qDebug() << "connected..";
-
-    QString player_name("Server");
-
-    /* Create Json Document with id_init package*/
-    QJsonObject init_object;
-    init_object.insert("player_name", QJsonValue::fromVariant(player_name));
-
-    QJsonArray init;
-    init.push_back("id_init");
-    init.push_back(init_object);
-
-    QJsonDocument doc(init);
 // need to grab the socket
     QTcpSocket *socket = q_server->nextPendingConnection();
     connect(socket, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
-
-    socket->write(doc.toJson());
-    socket->flush();
 }
 
 
