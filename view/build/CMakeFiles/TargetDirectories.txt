@@ -1,7 +1,0 @@
-/home/twiemann/software/cpp2018/admin/musterloesungen_2018/praktikum/build/CMakeFiles/rebuild_cache.dir
-/home/twiemann/software/cpp2018/admin/musterloesungen_2018/praktikum/build/CMakeFiles/asteroids.dir
-/home/twiemann/software/cpp2018/admin/musterloesungen_2018/praktikum/build/CMakeFiles/edit_cache.dir
-/home/twiemann/software/cpp2018/admin/musterloesungen_2018/praktikum/build/CMakeFiles/asteroids_autogen.dir
-/home/twiemann/software/cpp2018/admin/musterloesungen_2018/praktikum/build/ext/load3ds/CMakeFiles/rebuild_cache.dir
-/home/twiemann/software/cpp2018/admin/musterloesungen_2018/praktikum/build/ext/load3ds/CMakeFiles/c3dsreader.dir
-/home/twiemann/software/cpp2018/admin/musterloesungen_2018/praktikum/build/ext/load3ds/CMakeFiles/edit_cache.dir

@@ -1,0 +1,3 @@
+# Hashes of file build rules.
+2c2fe3059fa079181d4eb59d4b521d18 CMakeFiles/asteroids_autogen
+16ab60f0e3790bbc733fca00c0396269 ui_MainWindow.h

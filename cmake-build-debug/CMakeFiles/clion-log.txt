@@ -1,0 +1,32 @@
+/home/juriv/clion-2018.2.5/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/juriv/cpp_praktikum/praktikum4
+-- Boost version: 1.58.0
+-- Found the following Boost libraries:
+--   program_options
+--   filesystem
+--   system
+--   thread
+--   serialization
+--   chrono
+--   date_time
+--   atomic
+-- /home/juriv/cpp_praktikum/praktikum4/cmake-build-debug/ui_MainWindow.h
+-- Configuring done
+CMake Warning (dev) in CMakeLists.txt:
+  Policy CMP0071 is not set: Let AUTOMOC and AUTOUIC process GENERATED files.
+  Run "cmake --help-policy CMP0071" for policy details.  Use the cmake_policy
+  command to set the policy and suppress this warning.
+
+  For compatibility, CMake is excluding the GENERATED source file(s):
+
+    "/home/juriv/cpp_praktikum/praktikum4/cmake-build-debug/ui_MainWindow.h"
+
+  from processing by AUTOMOC.  If any of the files should be processed, set
+  CMP0071 to NEW.  If any of the files should not be processed, explicitly
+  exclude them by setting the source file property SKIP_AUTOMOC:
+
+    set_property(SOURCE file.h PROPERTY SKIP_AUTOMOC ON)
+
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+-- Generating done
+-- Build files have been written to: /home/juriv/cpp_praktikum/praktikum4/cmake-build-debug
