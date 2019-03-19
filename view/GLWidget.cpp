@@ -140,8 +140,8 @@ void GLWidget::paintGL()
 
     m_actor->render();
 
-    QPixmap hud("../models/cockpit.png");
     QPainter qPainter(this);
+    QPixmap hud("../models/cockpit.png");
     qPainter.drawPixmap(0, 0, this->width(), this->height(), hud);
 }
 
