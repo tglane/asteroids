@@ -11,6 +11,7 @@
 class Client
 {
 public:
+    uint32_t id;
     QHostAddress address;
     quint16 port;
     uint32_t seq_nr = 0;

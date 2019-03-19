@@ -8,8 +8,12 @@
 Server::Server()
 {
     socket = std::unique_ptr<QUdpSocket>(new QUdpSocket(nullptr));
-    socket->bind(QHostAddress::LocalHost, 1234);
+    socket->bind(QHostAddress::LocalHost, 1235);
     connect(socket.get(), &QUdpSocket::readyRead, this, &Server::handle_udp);
+
+    clients[42].id = 42;
+    clients[42].address = QHostAddress::LocalHost;
+    clients[42].port = 1234;
 }
 
 asteroids::Vector3f Server::bytes_to_vector(char *bytes)
