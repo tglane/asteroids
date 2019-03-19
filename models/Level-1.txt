@@ -1,24 +1,24 @@
 20
-1 Thalunia 13 19 
-2 Rigel-III 22 49
-3 Jotunheim 41 31
-4 Chandillar 72 31 
-5 Svartalfheim 61 71
-6 Kyln 40 92
-7 Asgard 25 115
-8 Xandar 112 12
-9 Erde 112 50
-10 Hala 101 78
-11 Zenn-La 78 108
-12 Mekka 138 58
-13 Galador 116 130
-14 Sakaar 129 102
-15 Contraxia 142 31
-16 Titan 173 37
-17 Taa-II 190 99
-18 Gramos 179 131
-19 Interdis 215 75
-20 Knowhere 221 20
+1 Thalunia 13 19 1
+2 Rigel-III 22 49 1
+3 Jotunheim 41 31 1
+4 Chandillar 72 31 1
+5 Svartalfheim 61 71 1
+6 Kyln 40 92 1
+7 Asgard 25 115 1
+8 Xandar 112 12 1
+9 Erde 112 50 1
+10 Hala 101 78 1
+11 Zenn-La 78 108 1
+12 Mekka 138 58 1
+13 Galador 116 130 1
+14 Sakaar 129 102 1
+15 Contraxia 142 31 1
+16 Titan 173 37 1 
+17 Taa-II 190 99 1
+18 Gramos 179 131 1
+19 Interdis 215 75 1
+20 Knowhere 221 20 1
 1 2
 1 3
 2 1
