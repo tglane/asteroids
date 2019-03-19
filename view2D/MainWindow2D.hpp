@@ -49,6 +49,8 @@ private:
     /// QT UI of the window
     Ui::MainWindow2D* ui;
 
+    QGraphicsScene* scene;
+
 };
 
 

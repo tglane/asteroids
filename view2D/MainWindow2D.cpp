@@ -14,8 +14,9 @@ MainWindow2D::MainWindow2D(QWidget* parent) :
 {
     // Setup user interface
     ui->setupUi(this);
+    
        scene = new QGraphicsScene(this);
-       ui->graphicsView->setScene(scene);
+       ui->Map->setScene(scene);
 
        QBrush greenBrush(Qt::green);
        QBrush grayBrush(Qt::gray);
