@@ -1,7 +1,0 @@
-/home/juriv/cpp_praktikum/praktikum4/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/juriv/cpp_praktikum/praktikum4/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/juriv/cpp_praktikum/praktikum4/cmake-build-debug/CMakeFiles/asteroids.dir
-/home/juriv/cpp_praktikum/praktikum4/cmake-build-debug/CMakeFiles/asteroids_autogen.dir
-/home/juriv/cpp_praktikum/praktikum4/cmake-build-debug/ext/load3ds/CMakeFiles/rebuild_cache.dir
-/home/juriv/cpp_praktikum/praktikum4/cmake-build-debug/ext/load3ds/CMakeFiles/edit_cache.dir
-/home/juriv/cpp_praktikum/praktikum4/cmake-build-debug/ext/load3ds/CMakeFiles/c3dsreader.dir
