@@ -1,0 +1,5 @@
+-I/home/tristan/CLionProjects/praktikum4/network/testserver
+-I/home/tristan/CLionProjects/praktikum4/network/testserver/cmake-build-debug
+-o
+/home/tristan/CLionProjects/praktikum4/network/testserver/cmake-build-debug/moc_testserver_tcp.cpp
+/home/tristan/CLionProjects/praktikum4/network/testserver/testserver_tcp.hpp

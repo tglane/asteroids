@@ -1,0 +1,1 @@
+/usr/bin/c++  -g  -rdynamic CMakeFiles/server.dir/server_autogen/mocs_compilation.cpp.o CMakeFiles/server.dir/moc_testserver_tcp.cpp.o CMakeFiles/server.dir/testserver_tcp.cpp.o  -o server /usr/lib/libQt5Network.so.5.12.2 /usr/lib/libQt5Core.so.5.12.2 
