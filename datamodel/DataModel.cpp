@@ -4,10 +4,14 @@ namespace asteroids{
 
 DataModel::DataModel(std::string filename)
 {
-    // TODO initialize Players
+    // player which runs this programm
+    m_self = new Player(...?);
+
+    // enemy/ies that run the programm on other devices
+    // information from network is needed
+    m_enemy = new Player(...?);
 
     getUniverse(filename);
-
 }
 
 DataModel::getUniverse(std::string filename)
@@ -44,6 +48,19 @@ DataModel::getUniverse(std::string filename)
 
         f.close();
     }
+}
+
+DataModel::getPlanets()
+{
+    return m_planets;
+}
+
+DataModel::endOfRound()
+{
+    // TODO Update players ressources, money, ships, planets, mines
+
+    // TODO make a json-data-package from the data and send it to the server
+    //      listen for the response, start fights or next round
 }
 
 }

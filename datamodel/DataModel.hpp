@@ -27,9 +27,20 @@ public:
      */
     DataModel(std::string filename);
 
+    /**
+     * @brief   Frees the memory
+     */
     ~DataModel();
 
     // many getter, setter/update methods for all the games data
+    std::map<int, Planet*> getPlanets();
+
+
+    /**
+     * @brief   Called when a strategy round ends
+     *          Updates all values and send them to the server
+     */
+    void endOfRound();
 
 private:
 
@@ -42,10 +53,10 @@ private:
     std::map<int, Planet*>  m_planets;
 
     // The host Player
-    Player*  host;
+    Player*  m_self;
 
     // The client Player
-    Player*  client;
+    Player*  m_enemy;
 
 };
 
