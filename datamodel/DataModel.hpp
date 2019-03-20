@@ -46,6 +46,8 @@ public:
      */
     void endOfRound();
 
+    std::list<std::pair<int,int>> getEdges();
+
 private:
 
     /**

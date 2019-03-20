@@ -57,6 +57,11 @@ std::map<int, Planet*> DataModel::getPlanets()
     return m_planets;
 }
 
+std::list<std::pair<int,int>> DataModel::getEdges()
+{
+    return m_edges;
+}
+
 void DataModel::endOfRound()
 {
     // TODO Update players ressources, money, ships, planets, mines
