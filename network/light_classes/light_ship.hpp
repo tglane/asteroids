@@ -15,10 +15,10 @@ public:
 
     light_ship(int id) : light_object(id) {}
 
+
     int get_life() { return m_life; }
 
     int get_shield() { return m_shield; }
-
 
 private:
 

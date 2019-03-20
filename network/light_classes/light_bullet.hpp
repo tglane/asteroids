@@ -14,7 +14,6 @@ class light_bullet : public light_object {
 public:
 
     light_bullet(int id): light_object(id) {};
-
 };
 
 

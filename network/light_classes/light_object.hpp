@@ -36,6 +36,9 @@ public:
     const asteroids::Vector3f& get_velocity() { return m_velocity; }
 
 
+
+    std::vector<float> m_direction;
+
 };
 
 

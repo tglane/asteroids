@@ -1,0 +1,84 @@
+Spielbeschreibung Grundversion S1:
+
+Grundlegende Vorgaben:
+Das Spiel findet auf eine Graphenartigen Karte von Planeten statt.
+Jeder Spieler hat eine Währung/Wohlstand in Form von Rubinen.
+	Rubine werden benötigt für:
+		-Raumschiffbau
+		-Minenbau
+	Rubinge werden erhalten durch:
+		-Jede Runde durch Planeten, die eine Mine enthalten
+		-Durch gewonnene Kämpfe
+	Rubine werden verloren durch:
+		-Verlorene Kämpfe
+		
+Jeder Planet:
+	-Kann 1 Mine oder 0 Minen enthalten
+		-Bei keiner Mine wird auch kein Einkommen von diesem Planeten generiert
+	-Kann beliebig viele Raumschiffe enthalten
+	-Kann 1 Raumschiff pro Runde bauen
+	-Gehört einem Spieler oder ist neutral
+	
+Raumschiffe:
+	-Sind immer auf einem Planeten
+	-Können für bestimmte Menge an Geld auf einem Planeten in Auftrag gegeben. 
+	-Können jede Runde über 1 Kante bewegt werden
+	-Werden in Kämpfen als Leben verwendet
+	
+Spieler:
+	-Hat bestimmte Menge an Guthaben
+	-Hat bestimme Schiffe
+	-Besitzt bestimmte Planeten
+	
+Karte:
+	-Enthält Planeten
+	-Gibt an welche Kanten es gibt 
+
+
+Phasen:
+1. Einkommensphase:
+Die Liste von in der vorigen Runde gewonnen/verlorenen Kämpfe wird übertragen (netzwerk)
+Das Einkommen durch die Planeten und die gewonnenen/verlorenen Kämpfe wird berechnet. (lokal)
+Das Einkommen wird auf den Wohlstand der Spieler addiert. (lokal)
+
+2. Aktive Phase:
+Der Spieler kann einen Planeten anwählen folgende Aktionen auswählen:
+-Mine bauen/in Auftrag geben
+-Raumschiff bauen/in Auftrag geben
+-Raumschiffe bewegen 
+	-Zielplanet muss ausgewählt werden
+	-Anzahl von zu bewegenden Schiffen muss angegeben werden
+
+3. Kampfphase:
+
+Die Auftragsliste von Raumschiffbewegungsbefehlen wird übertragen (netzwerk)
+Der Server berechnet wo Kämpfe/Eroberungen stattfinden (server)
+	Eroberungen:
+		-Schiffe werden zu einem neutralen Planeten geschickt
+		-Schiffe werden zu einem feindlichen Planeten geschickt, der keine Schiffe zur verteidigung besitzt enthält
+	Kämpfe: 
+		-Schiffe werden zu einem feindlichen Planeten geschickt, der Schiffe zur Verteidigung enthält
+		-Über eine Kante werden Schiffe von unterschiedlichen Spielern in beide Richtungen geschickt, sodass sie sicht begegnen müssen
+		
+Die Liste der Kämpfe wird vom Client an den Server übertragen
+Die Kämpfe werden nacheinander durchgeführt:	
+	Vor jedem Kampf:
+		-Es öffnet sich ein Fenster mit grundlegenden Informationen: Planet, Schiffe der jeweiligen Spieler
+		-Es gibt zwei Buttons: Kämpfen, Automatisches bestimmen des Kampfes
+			-Automatisches Bestimmen des Kampfes: Siegwahrscheinlichkeit: (Anzahl eigener Schiffe)/(Anzahl aller am Kampf beteiligten Schiffe)
+			-Kämpfen: Kämpfen in 3D
+
+Nach Beendingung eines Kampfes wird zum nächsten übergegangen
+Nachdem alle Kämpfe beendet wurden bekommen beide Spieler eine Übersicht über alle Kämpfe angezeigt.
+
+
+Ende Phasen.
+
+
+Spielbeginn:
+
+Jeder Spieler darf 1 Planeten auswählen. 
+
+Auf diesem Planeten hat derjenige Spieler dann ein Schiff und eine bestimmte Summe an Startguthaben
+
+Dann geht das Spiel in der Aktiven Phase Los.
