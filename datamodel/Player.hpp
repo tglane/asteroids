@@ -8,12 +8,17 @@
  */
 #include <list>
 #include <string>
+#include <memory>
+
 #include "Planet.hpp"
 
 namespace asteroids
 {
 
 class Planet;
+
+
+	//using Planet::Ptr = std::shared_ptr<Planet>;
 
 class Player
 {
@@ -26,7 +31,7 @@ public:
 
 	int getShips();
 
-	std::list<Planet*> getPlanets();
+	std::list<std::shared_ptr<Planet>> getPlanets();
 
 	int getIdentity();
 
@@ -42,7 +47,7 @@ private:
 	int m_rubin;
 	//freie Raumschiffe?
 	int m_ships;
-	std::list<Planet*> m_planets;
+	std::list<std::shared_ptr<Planet>> m_planets;
 };
 }
 

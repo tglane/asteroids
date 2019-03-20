@@ -6,8 +6,8 @@
  * 
  * Represents an order which a player gives during the active phase
  */
-#ifndef __Order_HPP_
-#define __Order_HPP_
+#ifndef __ORDER_HPP_
+#define __ORDER_HPP_
 
 
 #include <string>
@@ -15,6 +15,7 @@
 
 #include "Planet.hpp"
 #define MINE 1
+#define SHIP 1
 
 namespace asteroids
 {

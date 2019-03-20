@@ -36,12 +36,16 @@ int main(int argc, char** argv)
     std::cout << Testplayer->getIdentity() << std::endl;
     std::cout << Testplayer->getRubin() << std::endl;
 
-    Planet* Test = model.getPlanetFromId(5);
+    //Planet* Test = model.getPlanetFromId(5);
     bool buytest;
+<<<<<<< HEAD
     bool buytest2;
     buytest = model.buyShip(Test, Testplayer);
     buytest2 = model.buyMine(Test, Testplayer);
 
+=======
+    //buytest = model.buyShip(Test, Testplayer);
+>>>>>>> e8d1d5f37e7979995ad1a861a990f80787e71c6b
 
 
 

@@ -151,6 +151,7 @@ set(ASTEROID_SOURCES
     datamodel/Planet.cpp
     datamodel/Player.cpp
     datamodel/MineOrder.cpp
+    datamodel/ShipOrder.cpp
 
     view2D/MainWindow2D.cpp
 )

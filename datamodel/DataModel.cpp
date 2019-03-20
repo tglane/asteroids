@@ -132,8 +132,8 @@ Planet::Ptr DataModel::getPlanetFromId(int ID)
 
 DataModel::~DataModel()
 {
-    delete m_self;
-    delete m_enemy;
+    /*delete m_self;
+    delete m_enemy;*/
 }
 
 }

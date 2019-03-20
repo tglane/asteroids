@@ -1,10 +1,10 @@
 /**
- * MineOrder.hpp
+ * MoveOrder.hpp
  *
  *  Created on: 20.03.2019
  *      Author: gvogt
  * 
- * Represents an order to build a mine on a planet a player can give during the active phase
+ * Represents an order to Move a few ships fomr one planet to another
  */
 #ifndef __MINEORDER_HPP_
 #define __MINEORDER_HPP_
@@ -13,7 +13,6 @@
 
 #include <string>
 #include <list>
-#include <memory>
 
 #include "Planet.hpp"
 #include "Order.hpp"
@@ -21,11 +20,10 @@
 namespace asteroids
 {
 
+    using Ptr = std::shared_ptr<MineOrder>;
+
 	class MineOrder : public Order
 	{
-
-        using Ptr = std::shared_ptr<MineOrder>;
-
         public:
         /**
          * @brief Constructor

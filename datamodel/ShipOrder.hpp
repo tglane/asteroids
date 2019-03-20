@@ -1,13 +1,13 @@
 /**
- * MineOrder.hpp
+ * ShipOrder.hpp
  *
  *  Created on: 20.03.2019
  *      Author: gvogt
  * 
- * Represents an order to build a mine on a planet a player can give during the active phase
+ * Represents an order to build a Ship on a planet a player can give during the active phase
  */
-#ifndef __MINEORDER_HPP_
-#define __MINEORDER_HPP_
+#ifndef __SHIPORDER_HPP_
+#define __SHIPORDER_HPP_
 
 
 
@@ -21,20 +21,19 @@
 namespace asteroids
 {
 
-	class MineOrder : public Order
+	class ShipOrder : public Order
 	{
-
-        using Ptr = std::shared_ptr<MineOrder>;
+        using Ptr = std::shared_ptr<ShipOrder>;
 
         public:
         /**
          * @brief Constructor
-         * @param P1 The planeet on which a mine should be built
+         * @param P1 The planeet on which a Ship should be built
          */
-        MineOrder(Planet::Ptr P1);
+        ShipOrder(Planet::Ptr P1);
 
         /**
-         * @brief The planeet on which a mine should be built
+         * @brief The planet on which a ship should be built
          */
         Planet::Ptr P;
 

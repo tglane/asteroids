@@ -37,7 +37,7 @@ namespace asteroids
 
 		void addNeighbour(Planet* neighbour);
 
-		void setOwner(Player* owner);
+		void setOwner(std::shared_ptr<Player> owner);
 
 		int getRubin();
 
@@ -45,7 +45,7 @@ namespace asteroids
 
 		void addMines(int mines); //erhöht rubin
 
-		std::list<Planet*> getNeighbours();
+		std::list<Planet::Ptr> getNeighbours();
 
 		int getPosX();
 
@@ -54,11 +54,11 @@ namespace asteroids
 
 	private:
 		std::string m_name;
-		std::list<Planet*> m_neighbours;
+		std::list<Planet::Ptr> m_neighbours;
 		int m_mines;
 		int m_rubin;
 		int m_ships;
-		Player* m_owner;
+		std::shared_ptr<Player> m_owner;
 
 		int m_posx;
 		int m_posy;	
