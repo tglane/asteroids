@@ -135,7 +135,7 @@ void MainWindow2D::fight(bool click)
 
 void MainWindow2D::choose_planet(int id)
 {
-    std::cout << "ID of clicked planet is: " id << std::endl;
+    std::cout << "ID of clicked planet is: " + id << std::endl;
 
     
 
