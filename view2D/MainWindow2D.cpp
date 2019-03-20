@@ -46,7 +46,20 @@ MainWindow2D::MainWindow2D(DataModel *model, QWidget* parent) :
     outlinePen.setWidth(0);
     //scene->setBackgroundBrush(Qt::black);
 
+    // Map mit den Planeten-Objekten aus dem DataModel
     std::map<int, Planet*> planets = model->getPlanets();
+
+    // Map für die Elipsen-Objekten im QGraphicsScene
+    std::map<int, MyEllipse*> view_planets;
+
+    //Erstelle die Elipsen und füge sie in die Map und in die QGraphicsScene ein 
+    for(int i = 0; i < (int)planets.size(); i++){
+        Planet *p = planets.at(i);
+        view_planets[i] = new MyEllipse(p->getPosX()/position_scale, p->getPosY()/position_scale);
+        scene->addItem(view_planets[i]);
+        QVariant ellipse_ID(i);
+        //view_planets[i]->setData(1, ellipse_ID);
+    }
 
     std::list<std::pair<int,int>> edges = model->getEdges();
 
@@ -60,11 +73,6 @@ MainWindow2D::MainWindow2D(DataModel *model, QWidget* parent) :
         scene->addLine(p1->getPosX()/position_scale+planet_size/2,p1->getPosY()/position_scale+planet_size/2, p2->getPosX()/position_scale+planet_size/2, p2->getPosY()/position_scale+planet_size/2, outlinePenHighlight);
     }
 
-    //Abhängig von Planeten machen
-    for(int i = 0; i < planets.size(); i++){
-        Planet *p = planets.at(i);
-        scene->addEllipse(p->getPosX()/position_scale, p->getPosY()/position_scale, planet_size, planet_size, outlinePen, greenBrush);
-    }
 
     //Öffne das Fighter-Minigame testweise in neuem Fenster
     QPushButton* m_button = ui->Fight;
@@ -82,22 +90,37 @@ MainWindow2D::MainWindow2D(DataModel *model, QWidget* parent) :
     // Add the matching event to the next-round-button
     QPushButton* m_nextRound = ui->NextRound;
     connect(m_nextRound, SIGNAL(clicked(bool)), this, SLOT(endOfRound(bool)));
-}
 
+    // Start colonizing the selected Planet, how we get selected Planet?
+    // Button should only be selectable if a neighbour of the selected Planet is owned
+    QPushButton* m_colonize = ui->Colonize;
+    m_colonize->setEnabled(false);
+    connect(m_colonize, SIGNAL(clicked(bool)), this, SLOT(colonize(bool)));
+
+    // Build a ship on selected Planet
+    // Button should only be selectable if this Planet is owned
+    QPushButton* m_buildShip = ui->BuildShip;
+    connect(m_buildShip, SIGNAL(clicked(bool)), this, SLOT(buildShip(bool)));
+
+    // at the beginning no planet is selected so this widget is not visible
+    // ui->PlanetInfo->setVisible(false);
+
+    // Somehow there's a Segmentation fault if the Fighterwindow is initialized here like
+    // FighterWindow = new asteroids::MainWindow("...")
+    FighterWindow = NULL;
+}
 void MainWindow2D::resizeEvent(QResizeEvent* event){
     ui->Map->fitInView(0, 500, 500, 1, Qt::KeepAspectRatio);
 }
-
 MainWindow2D::~MainWindow2D() 
 {
-    delete ui;
-    if(FighterWindow)
+    if(ui)
+        delete ui;
+    if(FighterWindow != NULL)
         delete FighterWindow;
 }
 
-/*
- * @brief öffnet das Fighter-Minigame in neuem Fenster
- */
+
 void MainWindow2D::fight(bool click)
 {
     std::cout << "Fight" << std::endl;
@@ -105,11 +128,34 @@ void MainWindow2D::fight(bool click)
     FighterWindow->show();
 }
 
+void MainWindow2D::choose_planet()
+{
+    std::cout << "Planet angeklickt" << std::endl;
+}
+
 void MainWindow2D::endOfRound(bool click)
 {
     bool succes = model->endOfRound();
 
+    // fuck this "unused" warnings! :D
+    if(succes);
+
     // TODO wait for response of server, block the window until all players are ready
+}
+
+void MainWindow2D::colonize(bool click /*, Planet* p*/)
+{
+    // TODO start colonization of Planet p
+    //model->colonize(p);
+    std::cout << "Colonize!" << std::endl;
+}
+
+void MainWindow2D::buildShip(bool click /*, Planet* p*/)
+{
+    // Ship should be accessible a round later
+
+    //model->buildShip(p);
+    std::cout << "Build Ship!" << std::endl;
 }
 
 }
