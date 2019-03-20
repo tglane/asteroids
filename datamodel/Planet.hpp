@@ -11,6 +11,7 @@
 
 #include <string>
 #include <list>
+#include <memory>
 
 #include "Player.hpp"
 
@@ -23,6 +24,8 @@ namespace asteroids
 	{
 
 	public:
+
+		using Ptr = std::shared_ptr<Planet>;
 
 		//liste leer initialisieren, player auch)
 		Planet(std::string name, int posx, int posy, int rubin = 0, int mines = 0);
