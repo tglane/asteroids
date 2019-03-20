@@ -13,7 +13,8 @@
 namespace asteroids
 {
 
-Planet::Planet(std::string name, int posx, int posy, int rubin, int mines) : m_neighbours() {
+Planet::Planet(std::string name, int posx, int posy, int rubin, int mines) : m_neighbours() 
+{
 
 	m_posx = posx;
 	m_posy = posy;
@@ -23,50 +24,57 @@ Planet::Planet(std::string name, int posx, int posy, int rubin, int mines) : m_n
 
 }
 
-int Planet::getShips() {
+int Planet::getShips() 
+{
 	return m_ships;
 }
 
-void Planet::addShips(int ships) {
+void Planet::addShips(int ships) 
+{
 	m_ships += ships;
 }
 
-bool Planet::delShips(int ships) {
-
-	if (ships > m_ships) return false;
-
-		else m_ships -= ships; return true;
+bool Planet::delShips(int ships) 
+{
+	if (ships > m_ships)
+	{
+		return false;
+	}
+	else
+	{
+		m_ships -= ships; 
+		return true;
+	} 
 }
 
-void Planet::addNeighbour(Planet* neighbour) {
-
+void Planet::addNeighbour(Planet* neighbour) 
+{
 	m_neighbours.push_back(neighbour);
 }
 
-void Planet::setOwner(Player* owner) {
-
+void Planet::setOwner(Player* owner) 
+{
 	m_owner = owner;
 }
 
-int Planet::getRubin() {
-
+int Planet::getRubin() 
+{
 	return m_rubin;
 }
 
-int Planet::getMines() {
-
+int Planet::getMines() 
+{
 	return m_mines;
 }
 
-void Planet::addMines(int mines) {
+void Planet::addMines(int mines) 
+{
 	m_mines += mines;
 }
 
-std::list<Planet*> Planet::getNeighbours() {
+std::list<Planet*> Planet::getNeighbours() 
+{
 	return m_neighbours;
 }
 
 }
-
-
-

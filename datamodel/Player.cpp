@@ -16,47 +16,48 @@ Player::Player() : m_planets()
 }
 
 
-Player::Player(int identity, int rubin, int ships) : m_planets(){
+Player::Player(int identity, int rubin, int ships) : m_planets()
+{
 	m_identity = identity;
 	m_rubin = rubin;
 	m_ships = ships;
 
 }
 
-int Player::getShips() {
-
+int Player::getShips() 
+{
 	return m_ships;
 }
 
-std::list<Planet*> Player::getPlanets() {
-
+std::list<Planet*> Player::getPlanets() 
+{
 	return m_planets;
-
 }
 
-int Player::getIdentity() {
-
+int Player::getIdentity() 
+{
 	return m_identity;
 }
 
-int Player::getRubin() {
-
+int Player::getRubin() 
+{
 	return m_rubin;
 }
 
-void Player::addRubin(int add) {
-
+void Player::addRubin(int add) 
+{
 	m_rubin += add;
 }
 
-bool Player::delRubin(int del) {
-
-	if (del > m_rubin) return false;
-	else m_rubin -= del; return true;
+bool Player::delRubin(int del) 
+{
+	if (del > m_rubin) {
+		return false;
+	}
+	else
+	{
+		m_rubin -= del; 
+		return true;
+	}
 }
-
-
-
 }
-
-

@@ -7,11 +7,11 @@ namespace asteroids{
 DataModel::DataModel(std::string filename) : m_planets()
 {
     // player which runs this programm
-    //m_self = new Player(...?);
+    m_self = new Player();
 
     // enemy/ies that run the programm on other devices
     // information from network is needed
-    //m_enemy = new Player(...?);
+    m_enemy = new Player();
     getUniverse(filename);
 }
 
