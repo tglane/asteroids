@@ -41,6 +41,9 @@
          <height>601</height>
         </rect>
        </property>
+       <property name="lineWidth">
+        <number>0</number>
+       </property>
       </widget>
       <widget class="QPushButton" name="Fight">
        <property name="geometry">
