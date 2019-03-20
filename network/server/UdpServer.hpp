@@ -6,6 +6,7 @@
 #include <QNetworkDatagram>
 #include <QTimer>
 #include <math/Vector.hpp>
+#include <math/Quaternion.hpp>
 #include <memory>
 #include <light_object.hpp>
 #include <light_ship.hpp>
@@ -40,6 +41,7 @@ private:
     std::map<uint32_t, UdpClient> clients;
 
     asteroids::Vector3f bytes_to_vector(char *bytes);
+    asteroids::Quaternion bytes_to_quaternion(char *bytes);
     void handle_position_packet(QNetworkDatagram &datagram);
     void handle_bullet_packet(QNetworkDatagram &datagram);
     void set_position_from_packet(QNetworkDatagram &datagram, light_object &obj);

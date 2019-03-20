@@ -37,24 +37,37 @@ asteroids::Vector3f UdpServer::bytes_to_vector(char *bytes)
     return vec;
 }
 
+asteroids::Quaternion UdpServer::bytes_to_quaternion(char *bytes)
+{
+    float x;
+    float y;
+    float z;
+    float w;
+    x = *((float *)(bytes + 1 * 4));
+    y = *((float *)(bytes + 2 * 4));
+    z = *((float *)(bytes + 3 * 4));
+    w = *((float *)(bytes + 4 * 4));
+    return asteroids::Quaternion(x, y, z, w);
+}
+
 void UdpServer::set_position_from_packet(QNetworkDatagram &datagram, light_object &obj)
 {
     std::cout << "received position data:" << std::endl;
     QByteArray data = datagram.data();
-    if (data.length() < 9 + 9 * 4) {
+    if (data.length() < 9 + 10 * 4) {
         std::cout << "packet to short" << std::endl;
         return;
     }
     asteroids::Vector3f position = bytes_to_vector(data.data() + 9);
     asteroids::Vector3f velocity = bytes_to_vector(data.data() + 9 + 3 * 4);
-    asteroids::Vector3f rotation = bytes_to_vector(data.data() + 9 + 6 * 4);
+    asteroids::Quaternion rotation = bytes_to_quaternion(data.data() + 9 + 6 * 4);
     obj.set_position(position);
     obj.set_velocity(velocity);
     obj.set_rotation(rotation);
     std::cout << "id: " << obj.get_id()
               << " p: " << position[0] << ", " <<  position[1] << ", " <<  position[2]
               << " v: " << velocity[0] << ", " <<  velocity[1] << ", " <<  velocity[2]
-              << " o: " << rotation[0] << ", " <<  rotation[1] << ", " <<  rotation[2] << std::endl;
+              << " o: " << rotation.getX() << ", " <<  rotation.getY() << ", " <<  rotation.getZ() << rotation.getW() << std::endl;
 }
 
 void UdpServer::handle_position_packet(QNetworkDatagram &datagram)
@@ -125,7 +138,7 @@ void UdpServer::send_collision(UdpClient &client, uint32_t obj_id1, uint32_t obj
 void UdpServer::send_position_or_bullet(char type, UdpClient &client, light_object &obj)
 {
     uint32_t seq_nr = client.next_seq_nr();
-    std::cout << "ASDSFSADF " << client.id << " " << seq_nr << std::endl;
+    std::cout << "sending  " << type << " to " << client.id << " seq_nr " << seq_nr << std::endl;
     QByteArray data;
     uint32_t obj_id = obj.get_id();
 
@@ -135,7 +148,8 @@ void UdpServer::send_position_or_bullet(char type, UdpClient &client, light_obje
 
     asteroids::Vector3f position = obj.get_position();
     asteroids::Vector3f velocity = obj.get_velocity();
-    asteroids::Vector3f rotation = obj.get_rotation();
+
+    asteroids::Quaternion rotation = obj.get_rotation();
 
     data.append((char *)(&position[0]), 4);
     data.append((char *)(&position[1]), 4);
@@ -143,9 +157,14 @@ void UdpServer::send_position_or_bullet(char type, UdpClient &client, light_obje
     data.append((char *)(&velocity[0]), 4);
     data.append((char *)(&velocity[1]), 4);
     data.append((char *)(&velocity[2]), 4);
-    data.append((char *)(&rotation[0]), 4);
-    data.append((char *)(&rotation[1]), 4);
-    data.append((char *)(&rotation[2]), 4);
+
+    float tmp[4];
+    tmp[0] = rotation.getX();
+    tmp[1] = rotation.getY();
+    tmp[2] = rotation.getZ();
+    tmp[3] = rotation.getW();
+
+    data.append((char *)tmp, sizeof(tmp));
 
     socket->writeDatagram(data, client.address, client.port);
     if (type == 'B') {
@@ -235,7 +254,6 @@ void UdpServer::tick()
 
         // send ship positions
         for (auto& k: clients) {
-            std::cout << k.first << " " << k.second.id << std::endl;
             UdpClient& dest = k.second;
             send_position_or_bullet('P', dest, client.ship);
         }

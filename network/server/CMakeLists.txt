@@ -8,7 +8,8 @@ set(CMAKE_AUTOMOC ON)
 
 
 set(SERVER_SRC
-    UdpServer.cpp)
+    UdpServer.cpp
+    ../../math/Quaternion.cpp)
 
 set(SERVER_HDR
     UdpServer.hpp)
