@@ -162,7 +162,7 @@ void GLWidget::step(map<Qt::Key, bool>& keyStates)
     {
         m_actor->rotate(Transformable::ROLL_RIGHT, m_rotationSpeed);
     }
-   
+
     if (keyStates[Qt::Key_W])
     {
         m_actor->move(Transformable::FORWARD, m_moveSpeed);
