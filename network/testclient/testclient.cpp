@@ -23,7 +23,7 @@ testclient::testclient(QObject *parent) : QObject(parent) {
 void testclient::hello_udp() {
     QByteArray data;
     char target[sizeof(seq_number)];
-    float x, y, z;
+    float x, y, z, w;
     int typ = rand() % 3;
     switch(typ) {
         case 0:
@@ -56,6 +56,7 @@ void testclient::hello_udp() {
             x = rand() / (RAND_MAX + 1.);
             y = rand() / (RAND_MAX + 1.);
             z = rand() / (RAND_MAX + 1.);
+            w = rand() / (RAND_MAX + 1.);
             char coords[sizeof(float)];
             mempcpy(coords, &x , sizeof(float));
             data.append(coords, sizeof(coords));
@@ -77,6 +78,8 @@ void testclient::hello_udp() {
             mempcpy(coords, &y , sizeof(float));
             data.append(coords, sizeof(coords));
             mempcpy(coords, &z , sizeof(float));
+            data.append(coords, sizeof(coords));
+            mempcpy(coords, &w , sizeof(float));
             data.append(coords, sizeof(coords));
             break;
         case 2:
