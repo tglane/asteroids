@@ -20,6 +20,8 @@
 namespace asteroids
 {
 
+    using Ptr = std::shared_ptr<MineOrder>;
+
 	class MineOrder : public Order
 	{
         public:
