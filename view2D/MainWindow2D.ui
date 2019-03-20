@@ -32,19 +32,27 @@
     </property>
     <item row="0" column="0">
      <widget class="QWidget" name="MapWidget" native="true">
-      <widget class="QGraphicsView" name="Map">
-       <property name="geometry">
-        <rect>
-         <x>-15</x>
-         <y>-9</y>
-         <width>591</width>
-         <height>611</height>
-        </rect>
-       </property>
-       <property name="lineWidth">
+      <layout class="QGridLayout" name="gridLayout_2">
+       <property name="leftMargin">
         <number>0</number>
        </property>
-      </widget>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item row="0" column="0">
+        <widget class="QGraphicsView" name="Map">
+         <property name="lineWidth">
+          <number>0</number>
+         </property>
+        </widget>
+       </item>
+      </layout>
       <widget class="QPushButton" name="Fight">
        <property name="geometry">
         <rect>
