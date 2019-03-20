@@ -53,25 +53,6 @@ public:
     virtual void move();
 
     /**
-     * @brief Sets a new flight direction
-     * @param dir   The new direction
-     */
-    void setDirection(Vector<float> dir)
-    {
-        m_direction = dir;
-    }
-
-
-    /**
-     * @brief Return the current flight direction
-     */
-    Vector<float> getDirection()
-    {
-       return m_direction;
-    }
-
-
-    /**
      * @brief gives the current position
      * @return the current position
      */
@@ -122,6 +103,12 @@ public:
      */
     Vector<float> getZAxis() { return m_zAxis;}
 
+    void setXAxis(const Vector<float> &m_xAxis);
+
+    void setYAxis(const Vector<float> &m_yAxis);
+
+    void setZAxis(const Vector<float> &m_zAxis);
+
 protected:
 
     /**
@@ -154,17 +141,6 @@ protected:
      * @brief   The current position of the mesh object
      */
     Vector<float>    m_position;
-
-    /**
-     * @brief   A quaternion representing the current rotation
-     */
-    Quaternion  m_rotation;
-
-
-    /**
-     * @brief   The current moving direction
-     */
-    Vector<float>   m_direction;
 
     /**
      * @brief   The current moving speed

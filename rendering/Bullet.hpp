@@ -41,7 +41,7 @@ public:
      * @param   fighter_position   Position of the fighter that shoots this bullet
      * @param   fighter_axis   Axis the bullet will move on
      */
-    Bullet(const Vector3f& fighter_position, const Vector3f fighter_axis);
+    Bullet(const Vector3f& fighter_position, const Vector3f fighter_axis, int shooter_id);
 
     ~Bullet() = default;
 
@@ -49,8 +49,10 @@ public:
      * @brief Moves the bullet until it's lifetime is over.
      */
 	void run();
-    
-    /**
+
+	int get_shooter_id() const;
+
+	/**
      * @brief Renders the bullet via glutSolidSphere.
      */
 	void render() override;
@@ -76,6 +78,8 @@ private:
     Sphere m_sphere;
 
     size_t m_iterations;
+
+    int m_shooter_id;
 };
 
 } // namespace asteroids

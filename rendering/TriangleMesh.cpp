@@ -163,4 +163,4 @@ void TriangleMesh::fixArrow()
 	}
 }
 
-} // namespace asteroids 
+}

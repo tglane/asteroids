@@ -26,7 +26,7 @@ Skybox::Skybox(int width, string files[6])
     }
 }
 
-void Skybox::render(Camera& cam)
+void Skybox::render()
 {
     // Enable/Disable features
 

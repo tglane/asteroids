@@ -12,7 +12,7 @@
 #ifndef __CAMERA_HPP__
 #define __CAMERA_HPP__
 
-#include "physics/Transformable.hpp"
+#include "physics/Hittable.hpp"
 #include "math/Vector.hpp"
 
 namespace asteroids
@@ -22,9 +22,12 @@ namespace asteroids
  * @brief Class to represent a virtual camera using gluLookAt
  * 
  */
-class Camera : public Transformable
+class Camera : public Hittable
 {
 public:
+
+    using Ptr = std::shared_ptr<Camera>;
+
     /**
      * @brief Construct a new Camera object at (0, 0, 0) with
      *        upward orientation and lookAt at (0, 0, -1)

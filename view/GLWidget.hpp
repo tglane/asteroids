@@ -64,10 +64,10 @@ private:
     string                      m_levelFile;
 
     /// The virtual camera
-    Camera						m_camera;
+    Camera::Ptr					m_camera;
 
     /// A pointer to the Actor
-    SpaceCraft::Ptr  	        m_actor;
+    SpaceCraft::Ptr  	        m_enemy;
 
     /// A skybox for the scene
     Skybox::Ptr			        m_skybox;
@@ -86,6 +86,11 @@ private:
 
     /// Last set mouse position
     QPoint                      m_mousePos;
+
+    int m_cooldown_enemy;
+
+    int m_cooldown_player;
+
 };
 
 #endif

@@ -131,6 +131,7 @@ set(ASTEROID_SOURCES
     physics/PhysicalObject.cpp
     physics/PhysicsEngine.cpp
     physics/ParticleEngine.cpp
+    physics/Hittable.cpp
     rendering/Bullet.cpp
     rendering/ParticleEffect.cpp
     rendering/Sphere.cpp
@@ -145,7 +146,7 @@ set(ASTEROID_SOURCES
     util/Util.cpp
     view/GLWidget.cpp
     view/MainWindow.cpp 
-    view/Camera.cpp  
+    view/Camera.cpp
 )
 set(ASTEROID_MOCS
     view/MainWindow.hpp

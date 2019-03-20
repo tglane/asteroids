@@ -25,8 +25,6 @@ Transformable::Transformable()
     m_zAxis         = Vector<float>(0.0, 0.0, 1.0);
     m_position      = Vector<float>(0.0, 0.0, 0.0);
 
-    m_rotation.fromAxis(Vector<float>(0.0, 0.0, 1.0), 0.0f);
-
     // Set tranformation matrix to unit matrix
     for(int i = 0; i < 16; i++)
     {
@@ -36,13 +34,11 @@ Transformable::Transformable()
     m_transformation[5 ] = 1.0f;
     m_transformation[10] = 1.0f;
     m_transformation[15] = 1.0f;
-
-    m_direction = m_xAxis * 1.0;
 }
 
 void Transformable::move()
 {
-    m_position = m_position + m_direction * m_speed;
+    m_position = m_position + m_xAxis * m_speed;
 }
 
 void Transformable::move(MoveTransform axis)
@@ -97,10 +93,6 @@ void Transformable::rotate(RotationTransfrom axis, float s)
             m_yAxis = nq * m_yAxis;
             break;
     }
-
-    // Update mesh rotation
-    m_rotation = m_rotation * nq;
-    m_direction = m_xAxis * 1.0;
 }
 
 void Transformable::move(MoveTransform axis, float speed)
@@ -158,5 +150,16 @@ void Transformable::computeMatrix()
 
 }
 
+void Transformable::setXAxis(const Vector<float> &m_xAxis) {
+    Transformable::m_xAxis = m_xAxis;
+}
+
+void Transformable::setYAxis(const Vector<float> &m_yAxis) {
+    Transformable::m_yAxis = m_yAxis;
+}
+
+void Transformable::setZAxis(const Vector<float> &m_zAxis) {
+    Transformable::m_zAxis = m_zAxis;
+}
 
 }

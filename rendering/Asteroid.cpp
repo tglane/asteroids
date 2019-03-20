@@ -61,13 +61,11 @@ void Asteroid::copy(const Asteroid& other)
     TexturedMesh *mesh = static_cast<TexturedMesh *>(other.m_renderable.get());
     m_renderable = TexturedMesh::Ptr(new TexturedMesh(*mesh));
     m_radius = other.m_radius;
-    m_rotation = other.m_rotation;
     m_xAxis = other.m_xAxis;
     m_yAxis = other.m_yAxis;
     m_zAxis = other.m_zAxis;
     m_scale = other.m_scale;
     m_speed = other.m_speed;
-    m_direction = other.m_direction;
 }
 
 void Asteroid::render()
