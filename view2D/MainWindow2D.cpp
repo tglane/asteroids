@@ -15,7 +15,7 @@ MainWindow2D::MainWindow2D(DataModel *model, QWidget* parent) :
 {
     model = model;
     int planet_size = 20;
-    float position_scale = 0.5f;
+    float position_scale = 1;
     // Setup user interface
     ui->setupUi(this);
     

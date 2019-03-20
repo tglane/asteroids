@@ -1,24 +1,24 @@
 20
-Thalunia 13 19 1
-Rigel-III 22 49 1
-Jotunheim 41 31 1
-Chandillar 72 31 1
-Svartalfheim 61 71 1
-Kyln 40 92 1
-Asgard 25 115 1
-Xandar 112 12 1
-Erde 112 50 1
-Hala 101 78 1
-Zenn-La 78 108 1
-Mekka 138 58 1
-Galador 116 130 1
-Sakaar 129 102 1
-Contraxia 142 31 1
-Titan 173 37 1 
-Taa-II 190 99 1
-Gramos 179 131 1
-Interdis 215 75 1
-Knowhere 221 20 1
+Thalunia 26 38 1
+Rigel-III 44 98 1
+Jotunheim 82 62 1
+Chandillar 144 62 1
+Svartalfheim 122 142 1
+Kyln 80 184 1
+Asgard 50 230 1
+Xandar 224 24 1
+Erde 224 100 1
+Hala 202 156 1
+Zenn-La 156 216 1
+Mekka 276 116 1
+Galador 232 260 1
+Sakaar 258 204 1
+Contraxia 284 62 1
+Titan 346 74 1 
+Taa-II 380 198 1
+Gramos 358 262 1
+Interdis 430 150 1
+Knowhere 442 40 1
 1 2
 1 3
 2 3
