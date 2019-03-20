@@ -11,7 +11,7 @@ GLWidget::GLWidget(QWidget* parent)
     : QOpenGLWidget(parent),
       m_camera()
 {
-    m_camera.rotate(Transformable::YAW_CLOCKWISE, 3.14);
+    m_camera.rotate(Transformable::YAW_CLOCKWISE, 3.141592);
 }
 
 void GLWidget::setLevelFile(const std::string& file)
