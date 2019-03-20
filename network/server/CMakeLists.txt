@@ -9,6 +9,7 @@ set(CMAKE_AUTOMOC ON)
 
 set(SERVER_SRC
     UdpServer.cpp
+    ../light_classes/light_object.cpp
     ../../math/Quaternion.cpp)
 
 set(SERVER_HDR

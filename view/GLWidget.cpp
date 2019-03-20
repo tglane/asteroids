@@ -230,7 +230,7 @@ void GLWidget::step(map<Qt::Key, bool>& keyStates)
     }
 
     /* Send own position to the server */
-    m_client.send_position(m_camera.getPosition(), m_camera.getXAxis(), m_camera.getYAxis(), m_camera.getZAxis());
+    m_client.send_position(m_camera.getPosition(), m_camera.getDirection(), m_camera.getXAxis(), m_camera.getYAxis(), m_camera.getZAxis());
 
     // Add a bullet to physics engine
     if(keyStates[Qt::Key_Space])

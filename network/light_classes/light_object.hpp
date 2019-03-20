@@ -24,7 +24,7 @@ protected:
 
 
 public:
-    light_object(uint32_t id): m_id(id) {}
+    explicit light_object(uint32_t id);
 
     void move();
 

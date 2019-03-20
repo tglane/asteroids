@@ -1,9 +1,13 @@
 
 #include "udpclient.hpp"
+#include <iostream>
 
 udpclient::udpclient(QObject *parent)
  : QObject(parent)
 {
+    // enter id -- only for testing
+    std::cout << "Enter player_id (int):" << std::endl;
+    std::cin >> m_id;
 
     socket = new QUdpSocket(this);
     seq_number = 1;
@@ -13,7 +17,7 @@ udpclient::udpclient(QObject *parent)
     connect(socket, SIGNAL(readyRead()), this, SLOT(readyRead()));
 }
 
-void udpclient::send_position(asteroids::Vector<float> position, asteroids::Vector<float> xAxis, asteroids::Vector<float> yAxis, asteroids::Vector<float> zAxis)
+void udpclient::send_position(asteroids::Vector<float> position, asteroids::Vector<float> velocity, asteroids::Vector<float> xAxis, asteroids::Vector<float> yAxis, asteroids::Vector<float> zAxis)
 {
     QByteArray data;
     /* Append type of packet */
@@ -26,7 +30,7 @@ void udpclient::send_position(asteroids::Vector<float> position, asteroids::Vect
     seq_number++;
 
     /* Append id of player to packet */
-    int id = 42 << 24;
+    int id = m_id << 24;
     char id_char[sizeof(int)];
     memcpy(id_char, &id, sizeof(id_char));
     data.append(id_char, sizeof(id_char));
@@ -38,6 +42,14 @@ void udpclient::send_position(asteroids::Vector<float> position, asteroids::Vect
     memcpy(vec_char, &position[1], sizeof(vec_char));
     data.append(vec_char, sizeof(vec_char));
     memcpy(vec_char, &position[2], sizeof(vec_char));
+    data.append(vec_char, sizeof(vec_char));
+
+    /* Append velocity to package */
+    memcpy(vec_char, &velocity[0], sizeof(vec_char));
+    data.append(vec_char, sizeof(vec_char));
+    memcpy(vec_char, &velocity[1], sizeof(vec_char));
+    data.append(vec_char, sizeof(vec_char));
+    memcpy(vec_char, &velocity[2], sizeof(vec_char));
     data.append(vec_char, sizeof(vec_char));
 
     /* Append rotation to packet */
@@ -109,7 +121,7 @@ void udpclient::readyRead()
 void udpclient::setPosFromPackage(int recv_id, char *data)
 {
     int id = recv_id >> 24;
-    if(id != 42) {
+    if(id != m_id) {
         float x, y, z;
 
         /* Set position of enemy fighter */
@@ -120,6 +132,15 @@ void udpclient::setPosFromPackage(int recv_id, char *data)
         memcpy(&z, data, sizeof(float));
         data += sizeof(float);
         m_otherFighter->setPosition(asteroids::Vector<float>(x, y, z));
+
+        /* Set direction/velocity of enemy fighter */
+        memcpy(&x, data, sizeof(float));
+        data += sizeof(float);
+        memcpy(&y, data, sizeof(float));
+        data += sizeof(float);
+        memcpy(&z, data, sizeof(float));
+        data += sizeof(float);
+        //m_otherFighter->setDirection(asteroids::Vector<float>(x, y, z));
 
         /* Set rotation of enemy fighter */
         memcpy(&x, data, sizeof(float));

@@ -124,9 +124,9 @@ public:
 
     void setXAxis(Vector3f x) { m_xAxis = x; }
 
-    void setYAxis(Vector3f y) { m_xAxis = y; }
+    void setYAxis(Vector3f y) { m_yAxis = y; }
 
-    void setZAxis(Vector3f z) { m_xAxis = z; }
+    void setZAxis(Vector3f z) { m_zAxis = z; }
 
 protected:
 

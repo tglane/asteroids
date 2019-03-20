@@ -21,7 +21,7 @@ public:
     /**
      * @brief Sends own position, flight direction and rotation to the server
      */
-    void send_position(asteroids::Vector<float> position, asteroids::Vector<float> xAxis, asteroids::Vector<float> yAxis, asteroids::Vector<float> zAxis);
+    void send_position(asteroids::Vector<float> position, asteroids::Vector<float> velocity, asteroids::Vector<float> xAxis, asteroids::Vector<float> yAxis, asteroids::Vector<float> zAxis);
 
     /**
      * @brief Sends position and flight direction of a new bullet to the server
@@ -46,6 +46,8 @@ private:
     void setPosFromPackage(int id, char* data);
 
     QUdpSocket *socket;
+
+    int m_id;
 
     unsigned int seq_number;
 
