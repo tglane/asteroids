@@ -33,7 +33,7 @@ void DataModel::getUniverse(std::string filename)
         for(int i = 0; i < numvertex; i++)
         {
             f >> name >> posx >> posy >> mines;
-            Planet* p = new Planet(name, posx, posy);
+            Planet::Ptr p = new Planet(name, posx, posy);
 
             m_planets[i] = p;
         }
@@ -54,7 +54,7 @@ void DataModel::getUniverse(std::string filename)
     }
 }
 
-std::map<int, Planet*> DataModel::getPlanets()
+std::map<int, Planet::Ptr> DataModel::getPlanets()
 {
     return m_planets;
 }
@@ -78,8 +78,8 @@ bool DataModel::endOfRound()
 
 DataModel::~DataModel()
 {
-    delete m_self;
-    delete m_enemy;
+    /*delete m_self;
+    delete m_enemy;*/
 }
 
 }

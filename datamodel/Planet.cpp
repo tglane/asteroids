@@ -47,7 +47,7 @@ bool Planet::delShips(int ships)
 	} 
 }
 
-void Planet::addNeighbour(Planet* neighbour) 
+void Planet::addNeighbour(Planet::Ptr neighbour)
 {
 	m_neighbours.push_back(neighbour);
 }
@@ -72,7 +72,7 @@ void Planet::addMines(int mines)
 	m_mines += mines;
 }
 
-std::list<Planet*> Planet::getNeighbours() 
+std::list<Planet::Ptr> Planet::getNeighbours()
 {
 	return m_neighbours;
 }

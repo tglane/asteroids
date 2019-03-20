@@ -29,7 +29,7 @@ int Player::getShips()
 	return m_ships;
 }
 
-std::list<Planet*> Player::getPlanets() 
+std::list<Planet::Ptr> Player::getPlanets()
 {
 	return m_planets;
 }

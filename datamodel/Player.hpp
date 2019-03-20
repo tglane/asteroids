@@ -27,7 +27,7 @@ public:
 
 	int getShips();
 
-	std::list<Planet*> getPlanets();
+	std::list<Planet::Ptr> getPlanets();
 
 	int getIdentity();
 
@@ -43,7 +43,7 @@ private:
 	int m_rubin;
 	//freie Raumschiffe?
 	int m_ships;
-	std::list<Planet*> m_planets;
+	std::list<Planet::Ptr> m_planets;
 };
 }
 
