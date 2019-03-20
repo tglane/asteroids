@@ -38,7 +38,7 @@
          <x>-15</x>
          <y>-9</y>
          <width>591</width>
-         <height>571</height>
+         <height>601</height>
         </rect>
        </property>
       </widget>
@@ -74,7 +74,7 @@
       <widget class="QWidget" name="SpielerInfo" native="true">
        <property name="geometry">
         <rect>
-         <x>0</x>
+         <x>40</x>
          <y>0</y>
          <width>211</width>
          <height>251</height>
@@ -188,10 +188,10 @@
       <widget class="QWidget" name="PlanetInfo" native="true">
        <property name="geometry">
         <rect>
-         <x>0</x>
-         <y>310</y>
+         <x>40</x>
+         <y>320</y>
          <width>211</width>
-         <height>251</height>
+         <height>281</height>
         </rect>
        </property>
        <widget class="QLabel" name="PlanetenInfoLabel">
@@ -331,7 +331,7 @@
       <widget class="QPushButton" name="NextRound">
        <property name="geometry">
         <rect>
-         <x>10</x>
+         <x>40</x>
          <y>260</y>
          <width>99</width>
          <height>41</height>
@@ -344,7 +344,7 @@
       <widget class="QLabel" name="Date">
        <property name="geometry">
         <rect>
-         <x>110</x>
+         <x>160</x>
          <y>260</y>
          <width>91</width>
          <height>41</height>
@@ -357,22 +357,6 @@
      </widget>
     </item>
    </layout>
-  </widget>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>800</width>
-     <height>22</height>
-    </rect>
-   </property>
-   <widget class="QMenu" name="menuHilfe">
-    <property name="title">
-     <string>Hilfe</string>
-    </property>
-   </widget>
-   <addaction name="menuHilfe"/>
   </widget>
  </widget>
  <resources/>
