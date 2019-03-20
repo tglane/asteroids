@@ -6,7 +6,9 @@
 #include "datamodel/Planet.hpp"
 #include "datamodel/DataModel.hpp"
 #include <QGraphicsOpacityEffect>
+#include <QGraphicsView>
 #include <iostream>
+#include <QLine>
 
 namespace strategy {
 
@@ -110,9 +112,10 @@ MainWindow2D::MainWindow2D(DataModel *model, QWidget* parent) :
     // Somehow there's a Segmentation fault if the Fighterwindow is initialized here like
     // FighterWindow = new asteroids::MainWindow("...")
     FighterWindow = NULL;
-
 }
-
+void MainWindow2D::resizeEvent(QResizeEvent* event){
+    ui->Map->fitInView(0, 500, 500, 1, Qt::KeepAspectRatio);
+}
 MainWindow2D::~MainWindow2D() 
 {
     if(ui)

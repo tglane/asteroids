@@ -65,6 +65,10 @@ public slots:
      */
     void endOfRound(bool click);
 
+    /**
+     * @brief Change the scale if Window schanges the Size
+     */
+    void resizeEvent(QResizeEvent* event);
 
     /**
      * @brief   Is called when the colonization button is pressed
