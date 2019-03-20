@@ -152,6 +152,7 @@ set(ASTEROID_SOURCES
     datamodel/Player.cpp
 
     view2D/MainWindow2D.cpp
+    view2D/MyEllipse.cpp
 )
 set(ASTEROID_MOCS
     view/MainWindow.hpp

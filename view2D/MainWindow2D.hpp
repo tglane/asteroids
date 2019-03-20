@@ -9,9 +9,12 @@
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QPushButton>
+#include <QGraphicsEllipseItem>
+#include <QMouseEvent>
 
 #include "../build/ui_MainWindow2D.h"
 #include "view/MainWindow.hpp"
+#include "view2D/MyEllipse.hpp"
 
 #include "datamodel/DataModel.hpp"
 
@@ -49,6 +52,8 @@ public:
     //int height();
 public slots:
     void fight(bool click);
+
+    void choose_planet();
 
 private:
 
