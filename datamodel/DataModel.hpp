@@ -56,6 +56,8 @@ private:
     // Map to hold all planets, filled by getUniverse()
     std::map<int, Planet*>  m_planets;
 
+    std::list<std::pair<int, int>> m_edges;
+
     // The host Player
     Player*  m_self;
 

@@ -59,7 +59,7 @@ namespace asteroids
 		Player* m_owner;
 
 		int m_posx;
-		int m_posy;
+		int m_posy;	
 
 	};
 }

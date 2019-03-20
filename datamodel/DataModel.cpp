@@ -1,10 +1,11 @@
 #include "DataModel.hpp"
 #include <iostream>
 #include <fstream>
+#include <utility>
 
 namespace asteroids{
 
-DataModel::DataModel(std::string filename) : m_planets()
+DataModel::DataModel(std::string filename) : m_planets(), m_edges()
 {
     // player which runs this programm
     m_self = new Player();
@@ -42,6 +43,7 @@ void DataModel::getUniverse(std::string filename)
         while(!f.eof())
         {
             f >> from >> to;
+            m_edges.push_back(std::make_pair(from, to));
             m_planets.at(from)->addNeighbour(m_planets.at(to));
             m_planets.at(to)->addNeighbour(m_planets.at(from));
         }
