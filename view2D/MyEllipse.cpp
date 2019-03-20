@@ -1,4 +1,4 @@
-/*
+/**
  * MyEllipse.cpp
  */
 #include "view2D/MyEllipse.hpp"
@@ -10,7 +10,6 @@ MyEllipse::MyEllipse(int x, int y)
 {
     this->x = x;
     this->y = y;
-    setFlag(ItemIsMovable);
 }
 
 QRectF MyEllipse::boundingRect() const

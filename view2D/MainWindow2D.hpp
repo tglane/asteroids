@@ -100,7 +100,6 @@ private:
 
     DataModel* model;
 
-    std::map<int, Planet*> planets;
 
 };
 
