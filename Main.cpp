@@ -11,6 +11,7 @@
 
 #include "view/MainWindow.hpp"
 #include "datamodel/DataModel.hpp"
+#include "view2D/MainWindow2D.hpp"
 
 int main(int argc, char** argv)
 {
@@ -24,8 +25,11 @@ int main(int argc, char** argv)
 
     QApplication a(argc, argv);
 
-    asteroids::MainWindow mainWindow(argv[1]);
-    mainWindow.show();
+    /*asteroids::MainWindow mainWindow(argv[1]);
+    mainWindow.show();*/
+
+    strategy::MainWindow2D mainWindow2D;
+    mainWindow2D.show();
 
     return a.exec();
 }
