@@ -18,6 +18,7 @@ class Planet;
 class Player
 {
 public:
+	using Ptr = std::shared_ptr<Player>;
 
 	Player();
 
