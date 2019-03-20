@@ -116,6 +116,7 @@ MainWindow2D::MainWindow2D(DataModel *model, QWidget* parent) :
 void MainWindow2D::resizeEvent(QResizeEvent* event){
     ui->Map->fitInView(0, 500, 500, 1, Qt::KeepAspectRatio);
 }
+
 MainWindow2D::~MainWindow2D() 
 {
     if(ui)
@@ -134,7 +135,17 @@ void MainWindow2D::fight(bool click)
 
 void MainWindow2D::choose_planet(int id)
 {
-    std::cout << "Planet angeklickt" << std::endl;
+    std::cout << "ID of clicked planet is " << id << std::endl;
+    
+    // TODO: Planeteninfo ausfüllen
+    ui->PlanetName->setText("???");
+
+    ui->Info->setText("???");
+
+    ui->MineNumber->setText("???");
+
+    ui->ShipNumber->setText("???");
+
 }
 
 void MainWindow2D::endOfRound(bool click)
