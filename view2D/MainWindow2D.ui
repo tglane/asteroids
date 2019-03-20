@@ -263,7 +263,7 @@
        </rect>
       </property>
       <property name="text">
-       <string> </string>
+       <string/>
       </property>
      </widget>
      <widget class="QLabel" name="ShipNumber">
@@ -283,7 +283,7 @@
     <widget class="QPushButton" name="NextRound">
      <property name="geometry">
       <rect>
-       <x>0</x>
+       <x>10</x>
        <y>260</y>
        <width>99</width>
        <height>41</height>
