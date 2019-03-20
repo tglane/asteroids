@@ -14,7 +14,7 @@
 #include <list>
 
 #include "Planet.hpp"
-#define MINE 2
+#define MINE 1
 
 namespace asteroids
 {
