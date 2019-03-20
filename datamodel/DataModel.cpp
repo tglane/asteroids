@@ -65,7 +65,8 @@ void DataModel::endOfRound()
 
 DataModel::~DataModel()
 {
-
+    delete m_self;
+    delete m_enemy;
 }
 
 }
