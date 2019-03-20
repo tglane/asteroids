@@ -48,6 +48,10 @@ public:
     /// Returns the height of the windows
     //int height();
 public slots:
+
+    /**
+     * @brief   Switches to the starting window
+     */
     void fight(bool click);
 
     /**
@@ -56,6 +60,20 @@ public slots:
      *          blocks until all players have finished their rounds
      */
     void endOfRound(bool click);
+
+
+    /**
+     * @brief   Is called when the colonization button is pressed
+     *          Starts an attemp to colonize the new Planet between the rounds
+     *          
+     */
+    void colonize(bool click/*, Planet* p*/);
+
+    /**
+     * @brief   Is called when the Ship building Button is pressed
+     *          A new ship is accessible on this Planet one round later
+     */
+    void buildShip(bool click/*, Planet* p*/);
 
 private:
 
