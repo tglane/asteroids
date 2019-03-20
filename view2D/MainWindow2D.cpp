@@ -6,7 +6,9 @@
 #include "datamodel/Planet.hpp"
 #include "datamodel/DataModel.hpp"
 #include <QGraphicsOpacityEffect>
+#include <QGraphicsView>
 #include <iostream>
+#include <QLine>
 
 namespace strategy {
 
@@ -62,7 +64,6 @@ MainWindow2D::MainWindow2D(DataModel *model, QWidget* parent) :
     for(int i = 0; i < planets.size(); i++){
         Planet *p = planets.at(i);
         scene->addEllipse(p->getPosX()/position_scale, p->getPosY()/position_scale, planet_size, planet_size, outlinePen, greenBrush);
-        
     }
 
     //Öffne das Fighter-Minigame testweise in neuem Fenster
@@ -81,7 +82,10 @@ MainWindow2D::MainWindow2D(DataModel *model, QWidget* parent) :
     // Add the matching event to the next-round-button
     QPushButton* m_nextRound = ui->NextRound;
     connect(m_nextRound, SIGNAL(clicked(bool)), this, SLOT(endOfRound(bool)));
+}
 
+void MainWindow2D::resizeEvent(QResizeEvent* event){
+    ui->Map->fitInView(0, 500, 500, 1, Qt::KeepAspectRatio);
 }
 
 MainWindow2D::~MainWindow2D() 

@@ -57,6 +57,8 @@ public slots:
      */
     void endOfRound(bool click);
 
+    void resizeEvent(QResizeEvent* event);
+
 private:
 
     /// QT UI of the window
