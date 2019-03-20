@@ -10,7 +10,6 @@ MyEllipse::MyEllipse(int x, int y)
 {
     this->x = x;
     this->y = y;
-    setFlag(ItemIsMovable);
 }
 
 QRectF MyEllipse::boundingRect() const
@@ -22,12 +21,9 @@ QRectF MyEllipse::boundingRect() const
 void MyEllipse::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     QRectF rect = boundingRect();
-
-    
     QPen pen(Qt::red, 3);
     painter->setPen(pen);
     painter->drawEllipse(rect);
-    
 }
 
 void MyEllipse::mousePressEvent(QGraphicsSceneMouseEvent *event)

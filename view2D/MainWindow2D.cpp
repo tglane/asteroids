@@ -9,6 +9,7 @@
 #include <QGraphicsView>
 #include <iostream>
 #include <QLine>
+#include <QObject>
 
 namespace strategy {
 
@@ -35,16 +36,8 @@ MainWindow2D::MainWindow2D(DataModel *model, QWidget* parent) :
     effect = new QGraphicsOpacityEffect(ui->Fight);
     effect->setOpacity(0.7);
     ui->Fight->setGraphicsEffect(effect);
-
-    QBrush greenBrush(Qt::green);
-    QBrush grayBrush(Qt::gray);
-    QBrush redBrush(Qt::red);
     QPen outlinePenHighlight(Qt::white);
-    outlinePenHighlight.setWidth(2);
-
-    QPen outlinePen(Qt::black);
-    outlinePen.setWidth(0);
-    //scene->setBackgroundBrush(Qt::black);
+    outlinePenHighlight.setWidth(1);;
 
     // Map mit den Planeten-Objekten aus dem DataModel
     planets = model->getPlanets();
@@ -136,8 +129,6 @@ void MainWindow2D::fight(bool click)
 void MainWindow2D::choose_planet(int id)
 {
     std::cout << "ID of clicked planet is: " + id << std::endl;
-
-    
 
 }
 
