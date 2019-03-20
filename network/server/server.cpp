@@ -4,28 +4,39 @@
 #include <thread>
 #include <memory>
 #include <chrono>
+#include <light_bullet.hpp>
 
-Server::Server()
+UdpServer::UdpServer()
 {
     socket = std::unique_ptr<QUdpSocket>(new QUdpSocket(nullptr));
     socket->bind(QHostAddress::LocalHost, 1235);
-    connect(socket.get(), &QUdpSocket::readyRead, this, &Server::handle_udp);
+    connect(socket.get(), &QUdpSocket::readyRead, this, &UdpServer::handle_udp);
 
-    clients[42].id = 42;
+    timer = std::unique_ptr<QTimer>(new QTimer(nullptr));
+    connect(timer.get(), &QTimer::timeout, this, &UdpServer::tick);
+    timer->start(1000);
+
+    clients[42] = UdpClient(42);
     clients[42].address = QHostAddress::LocalHost;
     clients[42].port = 1234;
+
+    clients[43] = UdpClient(43);
+    clients[43].address = QHostAddress::LocalHost;
+    clients[43].port = 1233;
 }
 
-asteroids::Vector3f Server::bytes_to_vector(char *bytes)
+
+
+asteroids::Vector3f UdpServer::bytes_to_vector(char *bytes)
 {
     asteroids::Vector3f vec;
     for (int i = 0; i < 3; i++) {
-        vec[i] = *(float *)(bytes + i * 4);
+        vec[i] = *((float *)(bytes + i * 4));
     }
     return vec;
 }
 
-void Server::handle_position_packet(QNetworkDatagram &datagram)
+void UdpServer::set_position_from_packet(QNetworkDatagram &datagram, light_object &obj)
 {
     std::cout << "received position data:" << std::endl;
     QByteArray data = datagram.data();
@@ -33,33 +44,54 @@ void Server::handle_position_packet(QNetworkDatagram &datagram)
         std::cout << "packet to short" << std::endl;
         return;
     }
-    uint32_t obj_id = *(data.data() + 1);
-    obj_id &= 0xff000000;
-    if (objects.count(obj_id) != 1) {
-        std::cout << "invalid obj_id" << std::endl;
-        //return;
-    }
-    //light_object &obj = objects.at(obj_id);
     asteroids::Vector3f position = bytes_to_vector(data.data() + 9);
     asteroids::Vector3f velocity = bytes_to_vector(data.data() + 9 + 3 * 4);
-    asteroids::Vector3f orientation = bytes_to_vector(data.data() + 9 + 6 * 4);
-    // obj.set_position(position);
-    // obj.set_velocity(velocity);
-    // obj.set_orientation(orientation);
-    std::cout << "id: " << obj_id 
+    asteroids::Vector3f rotation = bytes_to_vector(data.data() + 9 + 6 * 4);
+    obj.set_position(position);
+    obj.set_velocity(velocity);
+    obj.set_rotation(rotation);
+    std::cout << "id: " << obj.get_id()
               << " p: " << position[0] << ", " <<  position[1] << ", " <<  position[2]
               << " v: " << velocity[0] << ", " <<  velocity[1] << ", " <<  velocity[2]
-              << " o: " << orientation[0] << ", " <<  orientation[1] << ", " <<  orientation[2] << std::endl;
+              << " o: " << rotation[0] << ", " <<  rotation[1] << ", " <<  rotation[2] << std::endl;
 }
 
-void Server::handle_bullet_packet(QNetworkDatagram &datagram)
+void UdpServer::handle_position_packet(QNetworkDatagram &datagram)
 {
     QByteArray data = datagram.data();
-    handle_position_packet(datagram);
-    uint32_t obj_id = *(data.data() + 1);
+    if (data.length() < 9 + 9 * 4) {
+        std::cout << "packet to short" << std::endl;
+        return;
+    }
+    uint32_t client_id = *((uint32_t*)(data.data() + 5));
+    client_id = client_id >> 24;
+    if (clients.count(client_id) != 1) {
+        std::cout << "invalid client_id: " << client_id << std::endl;
+        return;
+    }
+
+    set_position_from_packet(datagram, clients[client_id].ship);
 }
 
-void Server::send_ack(QNetworkDatagram &datagram)
+void UdpServer::handle_bullet_packet(QNetworkDatagram &datagram)
+{
+    QByteArray data = datagram.data();
+    if (data.length() < 9 + 9 * 4) {
+        std::cout << "packet to short" << std::endl;
+        return;
+    }
+    uint32_t obj_id = *((uint32_t*)(data.data() + 5));
+    objects[obj_id] = std::unique_ptr<light_object>(new light_bullet(obj_id));
+    std::cout << "created bullet: " << obj_id << std::endl;
+    set_position_from_packet(datagram, *objects[obj_id]);
+
+    for (auto& i: clients) {
+        UdpClient& dest = i.second;
+        send_position_or_bullet('B', dest, *objects[obj_id]);
+    }
+}
+
+void UdpServer::send_ack(QNetworkDatagram &datagram)
 {
 
     if (datagram.data().length() < 5) {
@@ -73,49 +105,79 @@ void Server::send_ack(QNetworkDatagram &datagram)
     reply_data.append('A');
     reply_data.append((char *)(&seq_nr), 4);
 
-    //sprintf(target, "%04d", seq_number++ );
-    //double r = rand() / (RAND_MAX + 1.);
-    //sprintf(target, "%04d", seq_number++ );
-
     socket->writeDatagram(datagram.makeReply(reply_data));
 }
 
-void Server::send_collision(Client &client, uint32_t obj_id1, uint32_t obj_id2)
+void UdpServer::send_collision(UdpClient &client, uint32_t obj_id1, uint32_t obj_id2)
 {
     uint32_t seq_nr = client.next_seq_nr();
     QByteArray &data = client.ack_pending[seq_nr];
+    uint32_t client_id = 0;
     data.append('C');
     data.append((char *)(&seq_nr), 4);
+    data.append((char *)(&client_id), 4);
     data.append((char *)(&obj_id1), 4);
     data.append((char *)(&obj_id2), 4);
     socket->writeDatagram(data, client.address, client.port);
 }
 
-void Server::handle_ack(QNetworkDatagram &datagram)
+void UdpServer::send_position_or_bullet(char type, UdpClient &client, light_object &obj)
 {
-    QByteArray data = datagram.data();
-    uint32_t client_id = *(data.data() + 5) >> 24;
-    Client &client = clients[client_id];
-    uint32_t seq_nr = *(data.data() + 1);
-    if (client.ack_pending.erase(seq_nr) != 1) {
-        std::cout << "invalid seq_nr" << std::endl;
-        return;
+    uint32_t seq_nr = client.next_seq_nr();
+    std::cout << "ASDSFSADF " << client.id << " " << seq_nr << std::endl;
+    QByteArray data;
+    uint32_t obj_id = obj.get_id();
+
+    data.append(type);
+    data.append((char *)(&seq_nr), 4);
+    data.append((char *)(&obj_id), 4);
+
+    asteroids::Vector3f position = obj.get_position();
+    asteroids::Vector3f velocity = obj.get_velocity();
+    asteroids::Vector3f rotation = obj.get_rotation();
+
+    data.append((char *)(&position[0]), 4);
+    data.append((char *)(&position[1]), 4);
+    data.append((char *)(&position[2]), 4);
+    data.append((char *)(&velocity[0]), 4);
+    data.append((char *)(&velocity[1]), 4);
+    data.append((char *)(&velocity[2]), 4);
+    data.append((char *)(&rotation[0]), 4);
+    data.append((char *)(&rotation[1]), 4);
+    data.append((char *)(&rotation[2]), 4);
+
+    socket->writeDatagram(data, client.address, client.port);
+    if (type == 'B') {
+        client.ack_pending[seq_nr] = data;
     }
 }
 
-bool Server::check_client_id(QNetworkDatagram &datagram)
+void UdpServer::handle_ack(QNetworkDatagram &datagram)
+{
+    QByteArray data = datagram.data();
+    uint32_t client_id = *((uint32_t*)(data.data() + 5)) >> 24;
+    UdpClient &client = clients[client_id];
+    uint32_t seq_nr = *((uint32_t*)(data.data() + 1));
+    if (client.ack_pending.erase(seq_nr) != 1) {
+        std::cout << "invalid seq_nr" << std::endl;
+    } else {
+        std::cout << "seq_nr: " << seq_nr << std::endl;
+    }
+}
+
+bool UdpServer::check_client_id(QNetworkDatagram &datagram)
 {
     QByteArray data = datagram.data();
     if (data.length() < 9) {
-        std::cout << "packet to short" << std::endl;
+        std::cout << "packet to short: " << data.length() << std::endl;
         return false;
     }
-    uint32_t client_id = *(data.data() + 5) >> 24;
+    uint32_t client_id = *((uint32_t*)(data.data() + 5)) >> 24;
     if (clients.count(client_id) != 1) {
-        std::cout << "invalid client_id" << std::endl;
+        std::cout << "invalid client_id: " << std::hex << client_id << std::dec << std::endl;
         return false;
     }
-    Client &client = clients[client_id];
+    UdpClient &client = clients[client_id];
     if (client.address != datagram.senderAddress() || client.port != datagram.senderPort()) {
         std::cout << "wrong client_id" << std::endl;
         return false;
@@ -124,10 +186,11 @@ bool Server::check_client_id(QNetworkDatagram &datagram)
 }
 
 
-void Server::handle_udp()
+void UdpServer::handle_udp()
 {
     while(socket->hasPendingDatagrams())
     {
+        std::cout << "============ handle_udp =============" << std::endl;
         QNetworkDatagram datagram = socket->receiveDatagram();
         QByteArray data = datagram.data();
 
@@ -135,30 +198,50 @@ void Server::handle_udp()
             continue;
         }
 
-        if (data[0] == 'A') {
-            handle_ack(datagram);
-            continue;
-        }
-
-        send_ack(datagram);
-
-        // TODO send acks
         switch (data[0]) {
+        case 'A':
+            std::cout << "received A" << std::endl;
+            handle_ack(datagram);
+            break;
         case 'P':
-            std::cout << "received POS" << std::endl;
+            std::cout << "received P" << std::endl;
             handle_position_packet(datagram);
             break;
         case 'B':
+            std::cout << "received B" << std::endl;
+            send_ack(datagram);
             handle_bullet_packet(datagram);
             break;
         default:
-            std::cout << "received unknown packet" << std::endl;
+            std::cout << "received unknown packet: " << data[0] << std::endl;
         }
     }
 }
 
+void UdpServer::tick()
+{
+    std::cout << "============ tick =============" << std::endl;
+    //send_collision(clients[42], 12, 21);
+    for (auto& i: clients) {
+        uint32_t client_id = i.first;
+        UdpClient& client = i.second;
 
-void Server::run()
+        // resend unacknowledged messages
+        for (auto j: client.ack_pending) {
+            QByteArray &data = j.second;
+            socket->writeDatagram(data, client.address, client.port);
+        }
+
+        // send ship positions
+        for (auto& k: clients) {
+            std::cout << k.first << " " << k.second.id << std::endl;
+            UdpClient& dest = k.second;
+            send_position_or_bullet('P', dest, client.ship);
+        }
+    }
+}
+
+void UdpServer::run()
 {
 }
 
@@ -166,6 +249,6 @@ void Server::run()
 int main(int argc, char** argv)
 {
     QApplication app(argc, argv);
-    Server server;
+    UdpServer server;
     return app.exec();
 }
