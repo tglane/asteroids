@@ -2,13 +2,15 @@
 #ifndef CPP18_ASTEROIDS_UDPCLIENT_HPP
 #define CPP18_ASTEROIDS_UDPCLIENT_HPP
 
+#include <GL/glew.h>
+
 #include <QObject>
 #include <QUdpSocket>
 #include <memory>
 
 #include "math/Vector.hpp"
 #include "math/Quaternion.hpp"
-//#include "physics/PhysicsEngine.hpp" //TODO -> include error when including PhysicsEngine.hpp
+#include "physics/PhysicsEngine.hpp"
 #include "rendering/SpaceCraft.hpp"
 
 class udpclient: public QObject {
@@ -51,7 +53,7 @@ private:
 
     unsigned int seq_number;
 
-    //asteroids::PhysicsEngine::Ptr m_physicsEngine;
+    asteroids::PhysicsEngine::Ptr m_physicsEngine;
 
     asteroids::SpaceCraft::Ptr m_otherFighter;
 };
