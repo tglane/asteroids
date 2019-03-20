@@ -28,7 +28,7 @@ int main(int argc, char** argv)
     /*asteroids::MainWindow mainWindow(argv[1]);
     mainWindow.show();*/
 
-    strategy::MainWindow2D mainWindow2D;
+    strategy::MainWindow2D mainWindow2D(&model);
     mainWindow2D.show();
 
     return a.exec();

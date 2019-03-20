@@ -77,4 +77,14 @@ std::list<Planet*> Planet::getNeighbours()
 	return m_neighbours;
 }
 
+int Planet::getPosX()
+{
+	return m_posx;
+}
+
+int Planet::getPosY()
+{
+	return m_posy;
+}
+
 }

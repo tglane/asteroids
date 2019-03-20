@@ -3,16 +3,16 @@
  */
 
 #include "MainWindow2D.hpp"
+#include "datamodel/Planet.hpp"
 #include <iostream>
-
-
 
 namespace strategy {
 
-MainWindow2D::MainWindow2D(QWidget* parent) :
+MainWindow2D::MainWindow2D(DataModel *model, QWidget* parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow2D())
 {
+    model = model;
     // Setup user interface
     ui->setupUi(this);
     
@@ -29,9 +29,12 @@ MainWindow2D::MainWindow2D(QWidget* parent) :
     outlinePen.setWidth(0);
     scene->setBackgroundBrush(Qt::black);
 
+    std::map<int, Planet*> planets = model->getPlanets();
+
     //Abhängig von Planeten machen
-    for(int i=0;i<20;i++){
-        scene->addEllipse(rand()%100, rand()%100, 20, 20, outlinePen, greenBrush);
+    for(int i = 0; i < planets.size(); i++){
+        Planet *p = planets.at(i);
+        scene->addEllipse(p->getPosX()/25, p->getPosY()/25, 20, 20, outlinePen, greenBrush);
     }
 
     //Öffne das Fighter-Minigame testweise in neuem Fenster

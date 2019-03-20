@@ -13,6 +13,8 @@
 #include "../build/ui_MainWindow2D.h"
 #include "view/MainWindow.hpp"
 
+#include "datamodel/DataModel.hpp"
+
 
 namespace strategy
 {
@@ -31,7 +33,7 @@ public:
      * @brief Construct a new Main Window object
      *
      */
-     MainWindow2D(QWidget* parent = NULL);
+     MainWindow2D(DataModel *model, QWidget* parent = NULL);
 
     /**
      * @brief Destroys the Main Window object
@@ -56,6 +58,8 @@ private:
     QGraphicsScene* scene;
 
     asteroids::MainWindow* FighterWindow;
+
+    DataModel* model;
 
 };
 

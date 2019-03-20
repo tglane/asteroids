@@ -45,8 +45,9 @@ namespace asteroids
 
 		std::list<Planet*> getNeighbours();
 
+		int getPosX();
 
-
+		int getPosY();
 
 
 	private:
@@ -59,10 +60,6 @@ namespace asteroids
 
 		int m_posx;
 		int m_posy;
-
-
-
-
 
 	};
 }
