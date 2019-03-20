@@ -82,12 +82,14 @@ MainWindow2D::MainWindow2D(DataModel *model, QWidget* parent) :
     QPushButton* m_nextRound = ui->NextRound;
     connect(m_nextRound, SIGNAL(clicked(bool)), this, SLOT(endOfRound(bool)));
 
+
+    FighterWindow = NULL;
 }
 
 MainWindow2D::~MainWindow2D() 
 {
     delete ui;
-    if(FighterWindow)
+    if(FighterWindow != NULL)
         delete FighterWindow;
 }
 

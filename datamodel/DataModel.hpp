@@ -5,7 +5,6 @@
 #include "Player.hpp"
 
 #include <map>
-#include <memory>
 
 using std::map;
 
@@ -25,9 +24,6 @@ class DataModel
 {
 
 public:
-
-
-
     /**
      * @brief   Initilizes a new data model
      * 
@@ -41,7 +37,7 @@ public:
     ~DataModel();
 
     // many getter, setter/update methods for all the games data
-    std::map<int, Planet::Ptr> getPlanets();
+    std::map<int, Planet*> getPlanets();
 
 
     /**
@@ -50,25 +46,33 @@ public:
      */
     bool endOfRound();
 
+    /*Code von Kay Bauer*/
+    bool buyShip(Planet* selectedPlanet, Player* Player1);
+
+    Planet* getPlanetFromId(int ID);
+
     std::list<std::pair<int,int>> getEdges();
 
 private:
+    /*Variablen von Kay*/
+    int Player_Rubin_Number;
 
+    int Shipcost = 500;
     /**
      * @brief   Loads all the planets from the given file
      */
     void getUniverse(std::string filename);
 
     // Map to hold all planets, filled by getUniverse()
-    std::map<int, Planet::Ptr>  m_planets;
+    std::map<int, Planet*>  m_planets;
 
     std::list<std::pair<int, int>> m_edges;
 
     // The host Player
-    Player::Ptr  m_self;
+    Player*  m_self;
 
     // The client Player
-    Player::Ptr  m_enemy;
+    Player*  m_enemy;
 
 };
 

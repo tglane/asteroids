@@ -24,7 +24,6 @@ namespace asteroids
 	{
 
 	public:
-
 		using Ptr = std::shared_ptr<Planet>;
 
 		//liste leer initialisieren, player auch)
