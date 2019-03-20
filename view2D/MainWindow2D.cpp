@@ -5,6 +5,7 @@
 #include "MainWindow2D.hpp"
 #include "datamodel/Planet.hpp"
 #include "datamodel/DataModel.hpp"
+#include <QGraphicsOpacityEffect>
 #include <iostream>
 
 namespace strategy {
@@ -21,7 +22,17 @@ MainWindow2D::MainWindow2D(DataModel *model, QWidget* parent) :
     
     scene = new QGraphicsScene(this);
     ui->Map->setScene(scene);
-    ui->ContextMenue->setStyleSheet("background-color:white;");
+
+    
+    ui->ContextMenue->setStyleSheet("background-color:#331155; border-radius:10px; color:#FFFFFF;");
+    ui->Fight->setStyleSheet("background-color:#331155; color:#FFFFFF; border-radius:10px;");
+
+    QGraphicsOpacityEffect * effect = new QGraphicsOpacityEffect(ui->ContextMenue);
+    effect->setOpacity(0.7);
+    ui->ContextMenue->setGraphicsEffect(effect);
+    effect = new QGraphicsOpacityEffect(ui->Fight);
+    effect->setOpacity(0.7);
+    ui->Fight->setGraphicsEffect(effect);
 
     QBrush greenBrush(Qt::green);
     QBrush grayBrush(Qt::gray);
@@ -51,6 +62,7 @@ MainWindow2D::MainWindow2D(DataModel *model, QWidget* parent) :
     for(int i = 0; i < planets.size(); i++){
         Planet *p = planets.at(i);
         scene->addEllipse(p->getPosX()/position_scale, p->getPosY()/position_scale, planet_size, planet_size, outlinePen, greenBrush);
+        
     }
 
     //Öffne das Fighter-Minigame testweise in neuem Fenster
