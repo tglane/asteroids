@@ -76,7 +76,7 @@ bool DataModel::endOfRound()
     return true;
 }
 /*Code von Kay Bauer*/
-bool DataModel::buyShip(Planet* selectedPlanet, Player* Player1)
+bool DataModel::buyShip(Planet::Ptr selectedPlanet, Player::Ptr Player1)
 {
     /*test druck*/
     std::cout << "Test für buyShip" << std::endl;
@@ -98,7 +98,7 @@ bool DataModel::buyShip(Planet* selectedPlanet, Player* Player1)
 
 }
 
-Planet* DataModel::getPlanetFromId(int ID)
+Planet::Ptr DataModel::getPlanetFromId(int ID)
 {
     return m_planets.at(ID);
 }
