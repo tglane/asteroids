@@ -111,6 +111,7 @@ void GLWidget::initializeGL()
     // Load level
     LevelParser lp(m_levelFile, m_actor, m_skybox, m_asteroidField);
     m_actor->fixArrow();
+    m_client.setOtherFighter(m_actor);
 
     // Setup physics
     m_physicsEngine = make_shared<PhysicsEngine>();
@@ -176,7 +177,7 @@ void GLWidget::step(map<Qt::Key, bool>& keyStates)
         m_actor->rotate(Transformable::YAW_CLOCKWISE, 0.05);
     }
 
-    m_camera.move(Transformable::FORWARD, 3);
+    //m_camera.move(Transformable::FORWARD, 3);
     if (keyStates[Qt::Key_D])
     {
         m_camera.rotate(Transformable::ROLL_CLOCKWISE, 0.05);
@@ -228,7 +229,8 @@ void GLWidget::step(map<Qt::Key, bool>& keyStates)
         m_camera.move(Transformable::LIFT_DOWN, 5);
     }
 
-    m_client.send_position(m_camera.getPosition(), m_camera.getDirection(), m_camera.getRotation());
+    /* Send own position to the server */
+    m_client.send_position(m_camera.getPosition(), m_camera.getXAxis(), m_camera.getYAxis(), m_camera.getZAxis());
 
     // Add a bullet to physics engine
     if(keyStates[Qt::Key_Space])

@@ -120,12 +120,13 @@ public:
     /**
      * @brief   Returns the orientation of the z in the global coordinate system
      */
-    Vector<float> getZAxis() { return m_zAxis;}
+    Vector<float> getZAxis() { return m_zAxis; }
 
-    /**
-     * @brief Returns the rotation of the transformable by returning a Quaternion
-     */
-    Quaternion getRotation() { return m_rotation; }
+    void setXAxis(Vector3f x) { m_xAxis = x; }
+
+    void setYAxis(Vector3f y) { m_xAxis = y; }
+
+    void setZAxis(Vector3f z) { m_xAxis = z; }
 
 protected:
 
