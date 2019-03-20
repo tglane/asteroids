@@ -10,20 +10,20 @@
 UdpServer::UdpServer()
 {
     socket = std::unique_ptr<QUdpSocket>(new QUdpSocket(nullptr));
-    socket->bind(QHostAddress::LocalHost, 1235);
+    socket->bind(QHostAddress(QString("0.0.0.0")), 1235);
     connect(socket.get(), &QUdpSocket::readyRead, this, &UdpServer::handle_udp);
 
     timer = std::unique_ptr<QTimer>(new QTimer(nullptr));
     connect(timer.get(), &QTimer::timeout, this, &UdpServer::tick);
-    timer->start(1000);
+    timer->start(1000/10);
 
     clients[42] = UdpClient(42);
     clients[42].address = QHostAddress::LocalHost;
     clients[42].port = 1234;
 
     clients[43] = UdpClient(43);
-    clients[43].address = QHostAddress::LocalHost;
-    clients[43].port = 1233;
+    clients[43].address = QHostAddress(QString("192.168.43.103"));
+    clients[43].port = 1234;
 }
 
 
