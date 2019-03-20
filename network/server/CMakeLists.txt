@@ -8,14 +8,17 @@ set(CMAKE_AUTOMOC ON)
 
 
 set(SERVER_SRC
-    server.cpp)
+    UdpServer.cpp)
+
+set(SERVER_HDR
+    UdpServer.hpp)
 
 include_directories(../light_classes/)
 include_directories(../../)
 include_directories(${Qt5Network_INCLUDE_DIRS})
 include_directories(${Qt5Widgets_INCLUDE_DIRS})
 
-qt5_wrap_cpp(SERVER_HDR_MOC server.h)
+qt5_wrap_cpp(SERVER_HDR_MOC ${SERVER_HDR})
 
 add_executable(server ${SERVER_SRC} ${SERVER_HDR_MOC})
 

@@ -51,8 +51,7 @@ private:
 
 public:
     UdpServer();
-    void run();
-
+    void add_client(uint32_t id, asteroids::Vector3f position);
 };
 
 #endif

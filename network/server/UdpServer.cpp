@@ -1,4 +1,5 @@
-#include "server.h"
+#include "UdpServer.hpp"
+
 #include <QNetworkDatagram>
 #include <iostream>
 #include <thread>
@@ -240,11 +241,6 @@ void UdpServer::tick()
         }
     }
 }
-
-void UdpServer::run()
-{
-}
-
 
 int main(int argc, char** argv)
 {
