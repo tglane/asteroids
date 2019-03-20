@@ -5,12 +5,11 @@
 #include <QMouseEvent>
 
 #include <SDL2/SDL.h>
+#include <QtGui/QPainter>
 
 GLWidget::GLWidget(QWidget* parent)
     : QOpenGLWidget(parent),
-      m_camera(Vector3f(0.0f, 0.0f, -700.0f), 0.05f, 5.0f),
-      m_rotationSpeed(0.02),
-      m_moveSpeed(1.0)
+      m_camera()
 {
 }
 
@@ -111,6 +110,7 @@ void GLWidget::initializeGL()
 
     // Load level
     LevelParser lp(m_levelFile, m_actor, m_skybox, m_asteroidField);
+    m_actor->fixArrow();
 
     // Setup physics
     m_physicsEngine = make_shared<PhysicsEngine>();
@@ -139,6 +139,10 @@ void GLWidget::paintGL()
     m_physicsEngine->render();
 
     m_actor->render();
+
+    QPainter qPainter(this);
+    QPixmap hud("../models/cockpit.png");
+    qPainter.drawPixmap(0, 0, this->width(), this->height(), hud);
 }
 
 void GLWidget::step(map<Qt::Key, bool>& keyStates)
@@ -146,38 +150,81 @@ void GLWidget::step(map<Qt::Key, bool>& keyStates)
     // Get keyboard states and handle model movement
     m_physicsEngine->process();
 
-    if (keyStates[Qt::Key_Up])
+    m_actor->move(Transformable::FORWARD, 3);
+    if (keyStates[Qt::Key_L])
     {
-        m_actor->rotate(Transformable::YAW_LEFT, m_rotationSpeed);
+        m_actor->rotate(Transformable::ROLL_CLOCKWISE, 0.05);
     }
-    if (keyStates[Qt::Key_Down])
+    if (keyStates[Qt::Key_J])
     {
-        m_actor->rotate(Transformable::YAW_RIGHT, m_rotationSpeed);
+        m_actor->rotate(Transformable::ROLL_COUNTERCLOCKWISE, 0.05);
     }
-       if (keyStates[Qt::Key_Left])
+    if (keyStates[Qt::Key_I])
     {
-        m_actor->rotate(Transformable::ROLL_LEFT, m_rotationSpeed);
+        m_actor->rotate(Transformable::PITCH_DOWN, 0.05);
     }
-    if (keyStates[Qt::Key_Right])
+    if (keyStates[Qt::Key_K])
     {
-        m_actor->rotate(Transformable::ROLL_RIGHT, m_rotationSpeed);
+        m_actor->rotate(Transformable::PITCH_UP, 0.05);
     }
-   
-    if (keyStates[Qt::Key_W])
+    if (keyStates[Qt::Key_U])
     {
-        m_actor->move(Transformable::FORWARD, m_moveSpeed);
+        m_actor->rotate(Transformable::YAW_COUNTERCLOCKWISE, 0.05);
     }
-    if (keyStates[Qt::Key_S])
+    if (keyStates[Qt::Key_O])
     {
-        m_actor->move(Transformable::BACKWARD, m_moveSpeed);
+        m_actor->rotate(Transformable::YAW_CLOCKWISE, 0.05);
+    }
+
+    m_camera.move(Transformable::FORWARD, 3);
+    if (keyStates[Qt::Key_D])
+    {
+        m_camera.rotate(Transformable::ROLL_CLOCKWISE, 0.05);
     }
     if (keyStates[Qt::Key_A])
     {
-        m_actor->move(Transformable::STRAFE_LEFT, m_moveSpeed);
+        m_camera.rotate(Transformable::ROLL_COUNTERCLOCKWISE, 0.05);
     }
-    if (keyStates[Qt::Key_D])
+    if (keyStates[Qt::Key_W])
     {
-        m_actor->move(Transformable::STRAFE_RIGHT, m_moveSpeed);
+        m_camera.rotate(Transformable::PITCH_DOWN, 0.05);
+    }
+    if (keyStates[Qt::Key_S])
+    {
+        m_camera.rotate(Transformable::PITCH_UP, 0.05);
+    }
+    if (keyStates[Qt::Key_Q])
+    {
+        m_camera.rotate(Transformable::YAW_COUNTERCLOCKWISE, 0.05);
+    }
+    if (keyStates[Qt::Key_E])
+    {
+        m_camera.rotate(Transformable::YAW_CLOCKWISE, 0.05);
+    }
+
+    if (keyStates[Qt::Key_T])
+    {
+        m_camera.move(Transformable::FORWARD, 5);
+    }
+    if (keyStates[Qt::Key_G])
+    {
+        m_camera.move(Transformable::BACKWARD, 5);
+    }
+    if (keyStates[Qt::Key_F])
+    {
+        m_camera.move(Transformable::STRAFE_LEFT, 5);
+    }
+    if (keyStates[Qt::Key_H])
+    {
+        m_camera.move(Transformable::STRAFE_RIGHT, 5);
+    }
+    if (keyStates[Qt::Key_R])
+    {
+        m_camera.move(Transformable::LIFT_UP, 5);
+    }
+    if (keyStates[Qt::Key_Z])
+    {
+        m_camera.move(Transformable::LIFT_DOWN, 5);
     }
 
     // Add a bullet to physics engine
@@ -193,55 +240,7 @@ void GLWidget::step(map<Qt::Key, bool>& keyStates)
 
 void GLWidget::mouseMoveEvent(QMouseEvent* event)
 {
-    bool l_pressed = (event->buttons() & Qt::LeftButton) != 0;
-    bool r_pressed = (event->buttons() & Qt::RightButton) != 0;
-
-    QPoint delta = event->pos() - m_mousePos;
-    m_mousePos = event->pos();
-
-    // Handle motion for pressed L button while R is not
-    // pressed
-    if (l_pressed & !r_pressed)
-    {
-        if (delta.x() > -3)
-        {
-            m_camera.turn(Camera::RIGHT);
-        }
-        if (delta.x() < 3)
-        {
-            m_camera.turn(Camera::LEFT);
-        }
-        if (delta.y() > 3)
-        {
-            m_camera.turn(Camera::UP);
-        }
-        if (delta.y() < -3)
-        {
-            m_camera.turn(Camera::DOWN);
-        }
-    }
-
-    // Handle motion for pressed R button while L is not
-    // pressed
-    if (r_pressed & !l_pressed)
-    {
-        if (delta.x() > 3)
-        {
-            m_camera.move(Camera::LEFT);
-        }
-        if (delta.x() < -3)
-        {
-            m_camera.move(Camera::RIGHT);
-        }
-        if (delta.y() > 3)
-        {
-            m_camera.move(Camera::FORWARD);
-        }
-        if (delta.y() < -3)
-        {
-            m_camera.move(Camera::BACKWARD);
-        }
-    }
+    // Bei Maus Events passiert nichts
 }
 
 void GLWidget::resizeGL(int w, int h)
@@ -251,6 +250,5 @@ void GLWidget::resizeGL(int w, int h)
     glLoadIdentity();
     glViewport(0, 0, width(), height());
     gluPerspective(45, ratio, 1, 10000);
-
     glMatrixMode(GL_MODELVIEW);
 }

@@ -16,6 +16,7 @@
 
 #include <GL/glew.h>
 #include <QOpenGLWidget>
+#include <QtGui/QPainter>
 
 #include "view/Camera.hpp"
 #include "rendering/SpaceCraft.hpp"

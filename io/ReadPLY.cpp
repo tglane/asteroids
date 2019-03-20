@@ -883,7 +883,7 @@ void ReadPLY::readVerticesBinary(ifstream &in, PLYElement* descr)
 		if(i % 100000 == 0) cout << "Reading points: " << i << endl;
 		for(it = descr->getFirstProperty(); it != descr->getLastProperty(); it++)
 		{
-			// TODO: Calculate buffer position only once.
+			// notTODO: Calculate buffer position only once.
 			Property* p = *it;
 			if(p->getName() == "x")
 			{
@@ -946,7 +946,7 @@ void ReadPLY::readNormalsBinary(ifstream &in, PLYElement* descr)
 	{
 		for(it = descr->getFirstProperty(); it != descr->getLastProperty(); it++)
 		{
-			// TODO: Calculate buffer position only once.
+			// notTODO: Calculate buffer position only once.
 			Property* p = *it;
 			if( (p->getName() == "x") || (p->getName() == "nx") )
 			{
@@ -996,7 +996,7 @@ void ReadPLY::readNormalsASCII(ifstream &in, PLYElement* descr)
 	}
 }
 
-// TODO: Maybe we can write some kind of template implementation???
+// notTODO: Maybe we can write some kind of template implementation???
 void ReadPLY::copyElementToVertexBuffer(ifstream &in, Property* p, float* buffer, size_t position)
 {
 	if(p->getElementTypeStr() == "char")
@@ -1276,7 +1276,7 @@ bool ReadPLY::isSupported(string element_name)
 
 void ReadPLY::writeFacesBinary(ofstream &out, PLYElement* e)
 {
-	// TODO: Remember to change this value for different kind of
+	// notTODO: Remember to change this value for different kind of
 	// list properties.
 	int N_VERTICES_PER_FACE = 3;
 

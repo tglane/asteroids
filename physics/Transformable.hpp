@@ -27,7 +27,7 @@ class Transformable
 {
 public:
     enum MoveTransform {FORWARD, BACKWARD, STRAFE_LEFT, STRAFE_RIGHT, LIFT_UP, LIFT_DOWN};
-    enum RotationTransfrom{YAW_LEFT, YAW_RIGHT, PITCH_LEFT, PITCH_RIGHT, ROLL_LEFT, ROLL_RIGHT};
+    enum RotationTransfrom{YAW_COUNTERCLOCKWISE, YAW_CLOCKWISE, PITCH_DOWN, PITCH_UP, ROLL_CLOCKWISE, ROLL_COUNTERCLOCKWISE};
 
     Transformable();
     virtual ~Transformable() = default;

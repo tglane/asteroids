@@ -62,6 +62,8 @@ public:
      */
     bool hasMesh() const;
 
+    void fixArrow();
+
 private:
     TriangleMesh::Ptr m_mesh;
 
