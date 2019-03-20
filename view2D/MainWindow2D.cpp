@@ -21,6 +21,7 @@ MainWindow2D::MainWindow2D(DataModel *model, QWidget* parent) :
     
     scene = new QGraphicsScene(this);
     ui->Map->setScene(scene);
+    ui->ContextMenue->setStyleSheet("background-color:white;");
 
     QBrush greenBrush(Qt::green);
     QBrush grayBrush(Qt::gray);
