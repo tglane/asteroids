@@ -7,6 +7,8 @@
 #include <chrono>
 #include <light_bullet.hpp>
 
+using namespace asteroids;
+
 UdpServer::UdpServer()
 {
     socket = std::unique_ptr<QUdpSocket>(new QUdpSocket(nullptr));
@@ -50,7 +52,7 @@ asteroids::Quaternion UdpServer::bytes_to_quaternion(char *bytes)
     return asteroids::Quaternion(x, y, z, w);
 }
 
-void UdpServer::set_position_from_packet(QNetworkDatagram &datagram, light_object &obj)
+void UdpServer::set_position_from_packet(QNetworkDatagram &datagram, Transformable &obj)
 {
     std::cout << "received position data:" << std::endl;
     QByteArray data = datagram.data();
@@ -61,10 +63,10 @@ void UdpServer::set_position_from_packet(QNetworkDatagram &datagram, light_objec
     asteroids::Vector3f position = bytes_to_vector(data.data() + 9);
     asteroids::Vector3f velocity = bytes_to_vector(data.data() + 9 + 3 * 4);
     asteroids::Quaternion rotation = bytes_to_quaternion(data.data() + 9 + 6 * 4);
-    obj.set_position(position);
-    obj.set_velocity(velocity);
-    obj.set_rotation(rotation);
-    std::cout << "id: " << obj.get_id()
+    obj.setPosition(position);
+    obj.setDirection(velocity);
+     obj.setRotation(rotation);
+    std::cout << "id: " << "?"
               << " p: " << position[0] << ", " <<  position[1] << ", " <<  position[2]
               << " v: " << velocity[0] << ", " <<  velocity[1] << ", " <<  velocity[2]
               << " o: " << rotation.getX() << ", " <<  rotation.getY() << ", " <<  rotation.getZ() << rotation.getW() << std::endl;
@@ -94,14 +96,15 @@ void UdpServer::handle_bullet_packet(QNetworkDatagram &datagram)
         std::cout << "packet to short" << std::endl;
         return;
     }
-    uint32_t obj_id = *((uint32_t*)(data.data() + 5));
-    objects[obj_id] = std::unique_ptr<light_object>(new light_bullet(obj_id));
+    uint32_t obj_id = *((int32_t*)(data.data() + 5));
+    // TODO use positons
+    bullets[obj_id] = PhysicsBullet::Ptr(new PhysicsBullet(asteroids::Vector3f(), asteroids::Vector3f()));
     std::cout << "created bullet: " << obj_id << std::endl;
-    set_position_from_packet(datagram, *objects[obj_id]);
+    set_position_from_packet(datagram, *bullets[obj_id]);
 
     for (auto& i: clients) {
         UdpClient& dest = i.second;
-        send_position_or_bullet('B', dest, *objects[obj_id]);
+        send_position_or_bullet('B', dest, *bullets[obj_id], obj_id);
     }
 }
 
@@ -135,21 +138,20 @@ void UdpServer::send_collision(UdpClient &client, uint32_t obj_id1, uint32_t obj
     socket->writeDatagram(data, client.address, client.port);
 }
 
-void UdpServer::send_position_or_bullet(char type, UdpClient &client, light_object &obj)
+void UdpServer::send_position_or_bullet(char type, UdpClient &client, Transformable& obj, uint32_t obj_id)
 {
     uint32_t seq_nr = client.next_seq_nr();
     std::cout << "sending  " << type << " to " << client.id << " seq_nr " << seq_nr << std::endl;
     QByteArray data;
-    uint32_t obj_id = obj.get_id();
 
     data.append(type);
     data.append((char *)(&seq_nr), 4);
     data.append((char *)(&obj_id), 4);
 
-    asteroids::Vector3f position = obj.get_position();
-    asteroids::Vector3f velocity = obj.get_velocity();
+    asteroids::Vector3f position = obj.getPosition();
+    asteroids::Vector3f velocity = obj.getDirection();
 
-    asteroids::Quaternion rotation = obj.get_rotation();
+    asteroids::Quaternion rotation = obj.getRotation();
 
     data.append((char *)(&position[0]), 4);
     data.append((char *)(&position[1]), 4);
@@ -255,7 +257,7 @@ void UdpServer::tick()
         // send ship positions
         for (auto& k: clients) {
             UdpClient& dest = k.second;
-            send_position_or_bullet('P', dest, client.ship);
+            send_position_or_bullet('P', dest, client.ship, client.id << 24);
         }
     }
 }

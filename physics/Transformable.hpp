@@ -70,6 +70,17 @@ public:
        return m_direction;
     }
 
+    void setRotation(Quaternion rot)
+    {
+        m_rotation = rot;
+    }
+
+
+   Quaternion getRotation()
+    {
+       return m_rotation;
+    }
+
 
     /**
      * @brief gives the current position

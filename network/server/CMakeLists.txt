@@ -9,7 +9,11 @@ set(CMAKE_AUTOMOC ON)
 
 set(SERVER_SRC
     UdpServer.cpp
-    ../../math/Quaternion.cpp)
+    ../../math/Quaternion.cpp
+    ../../math/Matrix.cpp
+    ../../physics/Transformable.cpp
+    ../../physics/PhysicalObject.cpp
+    ../../physics/PhysicsBullet.cpp)
 
 set(SERVER_HDR
     UdpServer.hpp)

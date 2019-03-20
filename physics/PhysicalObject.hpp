@@ -27,7 +27,7 @@ namespace asteroids
 /**
  * @brief   Object with pyhsical properties.
  */
-class PhysicalObject : public Transformable, public Renderable
+class PhysicalObject : public Transformable
 {
 public:
 
@@ -43,8 +43,7 @@ public:
      * @param accel
      * @param radius the collision ball
      */
-    PhysicalObject(
-        Renderable::Ptr r, 
+    PhysicalObject( 
         Vector<float> direction, 
         Vector<float> position, 
         float mass, float momentum, float speed, 
@@ -84,8 +83,6 @@ public:
      * */
     bool alive();
 
-    virtual void render() override;
-
 
 protected:
 
@@ -124,8 +121,6 @@ protected:
      * alive
      */
     bool m_alive;
-
-    Renderable::Ptr m_renderable;
 
 };
 

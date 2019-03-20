@@ -5,11 +5,11 @@
 #ifndef CPP18_ASTEROIDS_LIGHT_SHIP_HPP
 #define CPP18_ASTEROIDS_LIGHT_SHIP_HPP
 
-#include <vector>
+#include <physics/Transformable.hpp>
 
 #include "light_object.hpp"
 
-class light_ship : public light_object {
+class light_ship : public light_object, public asteroids::Transformable {
 
 public:
 

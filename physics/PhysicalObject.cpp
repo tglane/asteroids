@@ -24,10 +24,9 @@
 namespace asteroids
 {
 
-PhysicalObject::PhysicalObject(Renderable::Ptr r, Vector<float> direction, Vector<float> position, float mass,
+PhysicalObject::PhysicalObject(Vector<float> direction, Vector<float> position, float mass,
         float momentum, float speed, float accel, float radius)
 {
-    this->m_renderable = r;
     this->m_accel = accel;
     this->m_direction = direction;
     this->m_position = position;
@@ -71,18 +70,6 @@ bool PhysicalObject::collision(Vector<float> p, float r)
     return (pow(dist[0], 2) + pow(dist[1], 2) + pow(dist[2], 2)) <= pow((m_radius + r), 2);
 }
 
-void PhysicalObject::render()
-{
-    // Compute transformation matrix
-    computeMatrix();
-    glPushMatrix();
-    glMultMatrixf(m_transformation.getData());
-    if(m_renderable)
-    {
-        m_renderable->render();
-    }
-    glPopMatrix();
-}
 
 /**
  * multiply the speed by factor

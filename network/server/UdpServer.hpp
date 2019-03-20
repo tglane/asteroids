@@ -7,6 +7,8 @@
 #include <QTimer>
 #include <math/Vector.hpp>
 #include <math/Quaternion.hpp>
+#include <physics/PhysicsBullet.hpp>
+#include <physics/Transformable.hpp>
 #include <memory>
 #include <light_object.hpp>
 #include <light_ship.hpp>
@@ -35,7 +37,7 @@ private slots:
     void tick();
 
 private:
-    std::map<uint32_t, std::unique_ptr<light_object>> objects;
+    std::map<uint32_t, asteroids::PhysicsBullet::Ptr> bullets;
     std::unique_ptr<QUdpSocket> socket;
     std::unique_ptr<QTimer> timer;
     std::map<uint32_t, UdpClient> clients;
@@ -44,11 +46,11 @@ private:
     asteroids::Quaternion bytes_to_quaternion(char *bytes);
     void handle_position_packet(QNetworkDatagram &datagram);
     void handle_bullet_packet(QNetworkDatagram &datagram);
-    void set_position_from_packet(QNetworkDatagram &datagram, light_object &obj);
+    void set_position_from_packet(QNetworkDatagram &datagram, asteroids::Transformable &obj);
     void send_ack(QNetworkDatagram &datagram);
     void handle_ack(QNetworkDatagram &datagram);
     void send_collision(UdpClient &client, uint32_t id1, uint32_t id2);
-    void send_position_or_bullet(char type, UdpClient &client, light_object &object);
+    void send_position_or_bullet(char type, UdpClient &client, asteroids::Transformable &obj, uint32_t obj_id);
     bool check_client_id(QNetworkDatagram &datagram);
 
 public:
