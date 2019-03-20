@@ -57,7 +57,11 @@ public slots:
      */
     void fight(bool click);
 
-    void choose_planet();
+    /**
+     * @brief   Fills in the information about a planet 
+     */
+    void choose_planet(int id);
+
     /**
      * @brief   Is called when button NextRound is clicked
      *          Calls the synchronizing function in the data model,
@@ -89,6 +93,8 @@ private:
     asteroids::MainWindow* FighterWindow;
 
     DataModel* model;
+
+    std::map<int, Planet*> planets;
 
 };
 
