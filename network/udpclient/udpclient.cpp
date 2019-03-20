@@ -12,7 +12,7 @@ udpclient::udpclient(QObject *parent)
     socket = new QUdpSocket(this);
     seq_number = 1;
 
-    socket->bind(QHostAddress::LocalHost, 1234);
+    socket->bind(QHostAddress(QString("0.0.0.0")), 1234);
 
     connect(socket, SIGNAL(readyRead()), this, SLOT(readyRead()));
 }
@@ -75,7 +75,7 @@ void udpclient::send_position(asteroids::Vector<float> position, asteroids::Vect
     data.append(vec_char, sizeof(vec_char));
 
     /* Send own position data to server */
-    socket->writeDatagram(data, QHostAddress::LocalHost, 1235);
+    socket->writeDatagram(data, QHostAddress(QString("192.168.43.83")), 1235);
 }
 
 void udpclient::readyRead()
