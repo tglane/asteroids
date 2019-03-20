@@ -14,6 +14,7 @@
 #include <string>
 #include <list>
 
+#include "Planet.hpp"
 #include "Order.hpp"
 
 namespace asteroids
@@ -26,12 +27,12 @@ namespace asteroids
          * @brief Constructor
          * @param P1 The planeet on which a mine should be built
          */
-        MineOrder(Planet P1);
+        MineOrder(Planet::Ptr P1);
 
         /**
          * @brief The planeet on which a mine should be built
          */
-        Planet P;
+        Planet::Ptr P;
 
         /**
          * @brief Can give the information of which type this Order is
