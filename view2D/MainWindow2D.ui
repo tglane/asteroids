@@ -348,6 +348,19 @@
          </rect>
         </property>
        </widget>
+       <widget class="QPushButton" name="ExitGame">
+        <property name="geometry">
+         <rect>
+          <x>160</x>
+          <y>270</y>
+          <width>89</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Exit Game</string>
+        </property>
+       </widget>
       </widget>
       <widget class="QPushButton" name="NextRound">
        <property name="geometry">

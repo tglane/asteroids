@@ -30,6 +30,7 @@ int main(int argc, char** argv)
 
     strategy::MainWindow2D mainWindow2D(&model);
     mainWindow2D.show();
+    mainWindow2D.showFullScreen();
 
     return a.exec();
 }

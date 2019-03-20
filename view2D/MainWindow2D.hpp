@@ -69,6 +69,10 @@ public slots:
      */
     void endOfRound(bool click);
 
+    /**
+     * @brief Change the scale if Window schanges the Size
+     */
+    void resizeEvent(QResizeEvent* event);
 
     /**
      * @brief   Is called when the colonization button is pressed
@@ -82,6 +86,8 @@ public slots:
      *          A new ship is accessible on this Planet one round later
      */
     void buildShip(bool click/*, Planet* p*/);
+
+    void exitGame(bool click);
 
 private:
 

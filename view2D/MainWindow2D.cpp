@@ -6,7 +6,9 @@
 #include "datamodel/Planet.hpp"
 #include "datamodel/DataModel.hpp"
 #include <QGraphicsOpacityEffect>
+#include <QGraphicsView>
 #include <iostream>
+#include <QLine>
 
 namespace strategy {
 
@@ -93,6 +95,7 @@ MainWindow2D::MainWindow2D(DataModel *model, QWidget* parent) :
     // Start colonizing the selected Planet, how we get selected Planet?
     // Button should only be selectable if a neighbour of the selected Planet is owned
     QPushButton* m_colonize = ui->Colonize;
+    m_colonize->setEnabled(false);
     connect(m_colonize, SIGNAL(clicked(bool)), this, SLOT(colonize(bool)));
 
     // Build a ship on selected Planet
@@ -101,14 +104,19 @@ MainWindow2D::MainWindow2D(DataModel *model, QWidget* parent) :
     connect(m_buildShip, SIGNAL(clicked(bool)), this, SLOT(buildShip(bool)));
 
     // at the beginning no planet is selected so this widget is not visible
-    //ui->PlanetInfo->setVisible(false);
+    // ui->PlanetInfo->setVisible(false);
+
+    QPushButton* m_exit = ui->ExitGame;
+    connect(m_exit, SIGNAL(clicked(bool)), this, SLOT(exitGame(bool)));
+
 
     // Somehow there's a Segmentation fault if the Fighterwindow is initialized here like
     // FighterWindow = new asteroids::MainWindow("...")
     FighterWindow = NULL;
-
 }
-
+void MainWindow2D::resizeEvent(QResizeEvent* event){
+    ui->Map->fitInView(0, 500, 500, 1, Qt::KeepAspectRatio);
+}
 MainWindow2D::~MainWindow2D() 
 {
     if(ui)
@@ -156,6 +164,11 @@ void MainWindow2D::buildShip(bool click /*, Planet* p*/)
 
     //model->buildShip(p);
     std::cout << "Build Ship!" << std::endl;
+}
+
+void MainWindow2D::exitGame(bool click)
+{
+    QCoreApplication::quit();
 }
 
 }
