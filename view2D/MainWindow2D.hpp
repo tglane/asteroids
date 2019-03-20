@@ -54,6 +54,12 @@ public slots:
     void fight(bool click);
 
     void choose_planet();
+    /**
+     * @brief   Is called when button NextRound is clicked
+     *          Calls the synchronizing function in the data model,
+     *          blocks until all players have finished their rounds
+     */
+    void endOfRound(bool click);
 
 private:
 

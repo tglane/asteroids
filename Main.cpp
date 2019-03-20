@@ -15,13 +15,13 @@
 
 int main(int argc, char** argv)
 {
-    if (argc < 3)
+    /*if (argc < 3)
     {
         cerr << "Usage: asteroids <level-file> <map-file>" << endl;
         return 1;
-    }
+    }*/
 
-    DataModel model(argv[2]);
+    DataModel model("../models/Level-1.txt");
 
     QApplication a(argc, argv);
 

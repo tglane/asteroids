@@ -16,7 +16,7 @@ MyEllipse::MyEllipse(int x, int y)
 QRectF MyEllipse::boundingRect() const
 {
     // outer most edges
-    return QRectF(x/25,y/25,20,20);
+    return QRectF(x,y,20,20);
 }
 
 void MyEllipse::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)

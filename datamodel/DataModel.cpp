@@ -1,10 +1,11 @@
 #include "DataModel.hpp"
 #include <iostream>
 #include <fstream>
+#include <utility>
 
 namespace asteroids{
 
-DataModel::DataModel(std::string filename) : m_planets()
+DataModel::DataModel(std::string filename) : m_planets(), m_edges()
 {
     // player which runs this programm
     m_self = new Player();
@@ -42,6 +43,9 @@ void DataModel::getUniverse(std::string filename)
         while(!f.eof())
         {
             f >> from >> to;
+            from--;
+            to--;
+            m_edges.push_back(std::make_pair(from, to));
             m_planets.at(from)->addNeighbour(m_planets.at(to));
             m_planets.at(to)->addNeighbour(m_planets.at(from));
         }
@@ -55,17 +59,27 @@ std::map<int, Planet*> DataModel::getPlanets()
     return m_planets;
 }
 
-void DataModel::endOfRound()
+std::list<std::pair<int,int>> DataModel::getEdges()
 {
+    return m_edges;
+}
+
+bool DataModel::endOfRound()
+{
+    std::cout << "End of Round!" << std::endl;
     // TODO Update players ressources, money, ships, planets, mines
 
     // TODO make a json-data-package from the data and send it to the server
     //      listen for the response, start fights or next round
+
+    // return if network response was succesful
+    return true;
 }
 
 DataModel::~DataModel()
 {
-
+    delete m_self;
+    delete m_enemy;
 }
 
 }

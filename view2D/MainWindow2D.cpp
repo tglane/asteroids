@@ -4,6 +4,8 @@
 
 #include "MainWindow2D.hpp"
 #include "datamodel/Planet.hpp"
+#include "datamodel/DataModel.hpp"
+#include <QGraphicsOpacityEffect>
 #include <iostream>
 
 namespace strategy {
@@ -13,11 +15,24 @@ MainWindow2D::MainWindow2D(DataModel *model, QWidget* parent) :
     ui(new Ui::MainWindow2D())
 {
     model = model;
+    int planet_size = 20;
+    float position_scale = 1;
     // Setup user interface
     ui->setupUi(this);
     
     scene = new QGraphicsScene(this);
     ui->Map->setScene(scene);
+
+    
+    ui->ContextMenue->setStyleSheet("background-color:#331155; border-radius:10px; color:#FFFFFF;");
+    ui->Fight->setStyleSheet("background-color:#331155; color:#FFFFFF; border-radius:10px;");
+
+    QGraphicsOpacityEffect * effect = new QGraphicsOpacityEffect(ui->ContextMenue);
+    effect->setOpacity(0.7);
+    ui->ContextMenue->setGraphicsEffect(effect);
+    effect = new QGraphicsOpacityEffect(ui->Fight);
+    effect->setOpacity(0.7);
+    ui->Fight->setGraphicsEffect(effect);
 
     QBrush greenBrush(Qt::green);
     QBrush grayBrush(Qt::gray);
@@ -27,7 +42,7 @@ MainWindow2D::MainWindow2D(DataModel *model, QWidget* parent) :
 
     QPen outlinePen(Qt::black);
     outlinePen.setWidth(0);
-    scene->setBackgroundBrush(Qt::black);
+    //scene->setBackgroundBrush(Qt::black);
 
     // Map mit den Planeten-Objekten aus dem DataModel
     std::map<int, Planet*> planets = model->getPlanets();
@@ -36,26 +51,53 @@ MainWindow2D::MainWindow2D(DataModel *model, QWidget* parent) :
     std::map<int, MyEllipse*> view_planets;
 
     //Erstelle die Elipsen und füge sie in die Map und in die QGraphicsScene ein 
-    for(int i = 0; i < planets.size(); i++){
+    for(int i = 0; i < (int)planets.size(); i++){
         Planet *p = planets.at(i);
-        view_planets[i] = new MyEllipse(p->getPosX(), p->getPosY());
+        view_planets[i] = new MyEllipse(p->getPosX()/position_scale, p->getPosY()/position_scale);
         scene->addItem(view_planets[i]);
         QVariant ellipse_ID(i);
         //view_planets[i]->setData(1, ellipse_ID);
     }
 
+    std::list<std::pair<int,int>> edges = model->getEdges();
+
+    //Linien einzeichnen
+    for(std::list<std::pair<int,int>>::iterator it=edges.begin(); it != edges.end(); ++it){
+        std::pair<int,int> coordinates = *it;
+        int pos_1 = coordinates.first;
+        int pos_2 = coordinates.second;
+        Planet *p1 = planets.at(pos_1);
+        Planet *p2 = planets.at(pos_2);
+        scene->addLine(p1->getPosX()/position_scale+planet_size/2,p1->getPosY()/position_scale+planet_size/2, p2->getPosX()/position_scale+planet_size/2, p2->getPosY()/position_scale+planet_size/2, outlinePenHighlight);
+    }
+
+    
 
 
     //Öffne das Fighter-Minigame testweise in neuem Fenster
     QPushButton* m_button = ui->Fight;
     connect(m_button, SIGNAL(clicked(bool)), this, SLOT(fight(bool)));
+    
+    //Löschen für nicht transparent
+    ui->Map->setStyleSheet("background: transparent");
+    QPixmap bkgnd("../models/box1.jpg");
+    bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
+    QPalette palette;
+    palette.setBrush(QPalette::Background, bkgnd);
+    this->setPalette(palette);
+    //Einfach kopiert
+
+    // Add the matching event to the next-round-button
+    QPushButton* m_nextRound = ui->NextRound;
+    connect(m_nextRound, SIGNAL(clicked(bool)), this, SLOT(endOfRound(bool)));
 
 }
 
 MainWindow2D::~MainWindow2D() 
 {
     delete ui;
-    delete FighterWindow;
+    if(FighterWindow)
+        delete FighterWindow;
 }
 
 /*
@@ -71,6 +113,13 @@ void MainWindow2D::fight(bool click)
 void MainWindow2D::choose_planet()
 {
     std::cout << "Planet angeklickt" << std::endl;
+}
+
+void MainWindow2D::endOfRound(bool click)
+{
+    bool succes = model->endOfRound();
+
+    // TODO wait for response of server, block the window until all players are ready
 }
 
 }
