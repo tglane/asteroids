@@ -36,9 +36,9 @@ int main(int argc, char** argv)
     std::cout << Testplayer->getIdentity() << std::endl;
     std::cout << Testplayer->getRubin() << std::endl;
 
-    Planet* Test = model.getPlanetFromId(5);
+    //Planet* Test = model.getPlanetFromId(5);
     bool buytest;
-    buytest = model.buyShip(Test, Testplayer);
+    //buytest = model.buyShip(Test, Testplayer);
 
 
 

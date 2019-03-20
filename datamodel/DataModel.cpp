@@ -8,11 +8,11 @@ namespace asteroids{
 DataModel::DataModel(std::string filename) : m_planets(), m_edges()
 {
     // player which runs this programm
-    m_self = new Player();
+    m_self = Player::Ptr(new Player());
 
     // enemy/ies that run the programm on other devices
     // information from network is needed
-    m_enemy = new Player();
+    m_enemy = Player::Ptr(new Player());
     getUniverse(filename);
 }
 
@@ -33,7 +33,7 @@ void DataModel::getUniverse(std::string filename)
         for(int i = 0; i < numvertex; i++)
         {
             f >> name >> posx >> posy >> mines;
-            Planet::Ptr p = new Planet(name, posx, posy);
+            Planet* p = new Planet(name, posx, posy);
 
             m_planets[i] = p;
         }
@@ -54,7 +54,7 @@ void DataModel::getUniverse(std::string filename)
     }
 }
 
-std::map<int, Planet::Ptr> DataModel::getPlanets()
+std::map<int, Planet*> DataModel::getPlanets()
 {
     return m_planets;
 }
@@ -98,7 +98,7 @@ bool DataModel::buyShip(Planet::Ptr selectedPlanet, Player::Ptr Player1)
 
 }
 
-Planet::Ptr DataModel::getPlanetFromId(int ID)
+Planet* DataModel::getPlanetFromId(int ID)
 {
     return m_planets.at(ID);
 }

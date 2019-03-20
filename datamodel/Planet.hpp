@@ -35,9 +35,9 @@ namespace asteroids
 
 		bool delShips(int ships);
 
-		void addNeighbour(Planet::Ptr neighbour);
+		void addNeighbour(Planet* neighbour);
 
-		void setOwner(Planet::Ptr owner);
+		void setOwner(std::shared_ptr<Player> owner);
 
 		int getRubin();
 
@@ -58,7 +58,7 @@ namespace asteroids
 		int m_mines;
 		int m_rubin;
 		int m_ships;
-		Player* m_owner;
+		std::shared_ptr<Player> m_owner;
 
 		int m_posx;
 		int m_posy;	

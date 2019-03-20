@@ -37,7 +37,7 @@ public:
     ~DataModel();
 
     // many getter, setter/update methods for all the games data
-    std::map<int, Planet::Ptr> getPlanets();
+    std::map<int, Planet*> getPlanets();
 
 
     /**
@@ -49,7 +49,7 @@ public:
     /*Code von Kay Bauer*/
     bool buyShip(Planet::Ptr selectedPlanet, Player::Ptr Player1);
 
-    Planet::Ptr getPlanetFromId(int ID);
+    Planet* getPlanetFromId(int ID);
 
     std::list<std::pair<int,int>> getEdges();
 
@@ -64,7 +64,7 @@ private:
     void getUniverse(std::string filename);
 
     // Map to hold all planets, filled by getUniverse()
-    std::map<int, Planet::Ptr>  m_planets;
+    std::map<int, Planet*>  m_planets;
 
     std::list<std::pair<int, int>> m_edges;
 
