@@ -50,7 +50,8 @@ MainWindow2D::MainWindow2D(DataModel *model, QWidget* parent) :
 MainWindow2D::~MainWindow2D() 
 {
     delete ui;
-    delete FighterWindow;
+    if(FighterWindow)
+        delete FighterWindow;
 }
 
 /*
