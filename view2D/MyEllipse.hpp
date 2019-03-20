@@ -11,8 +11,9 @@
 
 namespace strategy
 {
-class MyEllipse : public QGraphicsItem
+class MyEllipse : public QObject, public QGraphicsItem
 {
+    Q_OBJECT
 public:
     MyEllipse(int x, int y);
 
@@ -23,6 +24,8 @@ public:
                const QStyleOptionGraphicsItem * option,
                QWidget * widget);
 
+signals:
+    void show_planetInfo(int id);
     
 protected:
     // overriding mouse events
