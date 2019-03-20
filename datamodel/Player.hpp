@@ -19,8 +19,6 @@ class Player
 {
 public:
 
-	using Ptr = std::shared_ptr<Player>;
-
 	Player();
 
 	Player(int identity, int rubin = 0, int ships = 0);
