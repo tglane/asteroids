@@ -44,7 +44,20 @@ MainWindow2D::MainWindow2D(DataModel *model, QWidget* parent) :
     outlinePen.setWidth(0);
     //scene->setBackgroundBrush(Qt::black);
 
+    // Map mit den Planeten-Objekten aus dem DataModel
     std::map<int, Planet*> planets = model->getPlanets();
+
+    // Map für die Elipsen-Objekten im QGraphicsScene
+    std::map<int, MyEllipse*> view_planets;
+
+    //Erstelle die Elipsen und füge sie in die Map und in die QGraphicsScene ein 
+    for(int i = 0; i < (int)planets.size(); i++){
+        Planet *p = planets.at(i);
+        view_planets[i] = new MyEllipse(p->getPosX()/position_scale, p->getPosY()/position_scale);
+        scene->addItem(view_planets[i]);
+        QVariant ellipse_ID(i);
+        //view_planets[i]->setData(1, ellipse_ID);
+    }
 
     std::list<std::pair<int,int>> edges = model->getEdges();
 
@@ -58,12 +71,6 @@ MainWindow2D::MainWindow2D(DataModel *model, QWidget* parent) :
         scene->addLine(p1->getPosX()/position_scale+planet_size/2,p1->getPosY()/position_scale+planet_size/2, p2->getPosX()/position_scale+planet_size/2, p2->getPosY()/position_scale+planet_size/2, outlinePenHighlight);
     }
 
-    //Abhängig von Planeten machen
-    for(int i = 0; i < (int)planets.size(); i++){
-        Planet *p = planets.at(i);
-        scene->addEllipse(p->getPosX()/position_scale, p->getPosY()/position_scale, planet_size, planet_size, outlinePen, greenBrush);
-        
-    }
 
     //Öffne das Fighter-Minigame testweise in neuem Fenster
     QPushButton* m_button = ui->Fight;
@@ -115,6 +122,11 @@ void MainWindow2D::fight(bool click)
     std::cout << "Fight" << std::endl;
     FighterWindow = new asteroids::MainWindow("../models/level.xml");
     FighterWindow->show();
+}
+
+void MainWindow2D::choose_planet()
+{
+    std::cout << "Planet angeklickt" << std::endl;
 }
 
 void MainWindow2D::endOfRound(bool click)

@@ -9,9 +9,12 @@
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QPushButton>
+#include <QGraphicsEllipseItem>
+#include <QMouseEvent>
 
 #include "../build/ui_MainWindow2D.h"
 #include "view/MainWindow.hpp"
+#include "view2D/MyEllipse.hpp"
 
 #include "datamodel/DataModel.hpp"
 
@@ -54,6 +57,7 @@ public slots:
      */
     void fight(bool click);
 
+    void choose_planet();
     /**
      * @brief   Is called when button NextRound is clicked
      *          Calls the synchronizing function in the data model,
