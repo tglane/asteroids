@@ -217,6 +217,7 @@ void GLWidget::step(map<Qt::Key, bool>& keyStates)
     if (keyStates[Qt::Key_H])
     {
         m_camera.move(Transformable::STRAFE_RIGHT, 5);
+
     }
     if (keyStates[Qt::Key_R])
     {
@@ -226,6 +227,8 @@ void GLWidget::step(map<Qt::Key, bool>& keyStates)
     {
         m_camera.move(Transformable::LIFT_DOWN, 5);
     }
+
+    m_client.send_position(m_camera.getPosition(), m_camera.getDirection(), m_camera.getRotation());
 
     // Add a bullet to physics engine
     if(keyStates[Qt::Key_Space])

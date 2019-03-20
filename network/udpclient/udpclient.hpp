@@ -8,12 +8,19 @@
 #include <QObject>
 #include <QUdpSocket>
 
+#include "math/Vector.hpp"
+#include "math/Quaternion.hpp"
+
 class udpclient: public QObject {
 Q_OBJECT
 
 public:
+
     explicit udpclient(QObject *parent = 0);
-    void send_udp();
+
+    void send_position(asteroids::Vector<float> position, asteroids::Vector<float> direction, asteroids::Quaternion rotation);
+
+    void send_bullet();
 
 signals:
 
@@ -22,7 +29,7 @@ public slots:
 
 private:
     QUdpSocket *socket;
-    int seq_number;
+    unsigned int seq_number;
 };
 
 

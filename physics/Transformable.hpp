@@ -122,6 +122,11 @@ public:
      */
     Vector<float> getZAxis() { return m_zAxis;}
 
+    /**
+     * @brief Returns the rotation of the transformable by returning a Quaternion
+     */
+    Quaternion getRotation() { return m_rotation; }
+
 protected:
 
     /**
