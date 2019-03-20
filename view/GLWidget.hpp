@@ -22,6 +22,7 @@
 #include "rendering/Skybox.hpp"
 #include "util/AsteroidField.hpp"
 #include "physics/PhysicsEngine.hpp"
+#include "network/udpclient/udpclient.hpp"
 
 using namespace asteroids;
 using std::shared_ptr;
@@ -85,6 +86,9 @@ private:
 
     /// Last set mouse position
     QPoint                      m_mousePos;
+
+    /// UdpClient
+    udpclient                   m_client;
 };
 
 #endif

@@ -90,10 +90,12 @@ find_package( Qt5
     Core
     Widgets
     OpenGL
+    Network
     REQUIRED
 )
 
 include_directories(${Qt5Widgets_INCLUDE_DIRS})
+include_directories(${Qt5Network_INCLUDE_DIRS})
 include_directories(${Qt5Core_INCLUDE_DIRS})
 include_directories(${Qt5OpenGL_INCLUDE_DIRS})
 
@@ -145,7 +147,8 @@ set(ASTEROID_SOURCES
     util/Util.cpp
     view/GLWidget.cpp
     view/MainWindow.cpp 
-    view/Camera.cpp  
+    view/Camera.cpp
+    network/udpclient/udpclient.cpp
 )
 set(ASTEROID_MOCS
     view/MainWindow.hpp

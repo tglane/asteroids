@@ -160,7 +160,7 @@ void testclient::readyRead() {
 int main(int argc, char *argv[]){
     QCoreApplication a(argc, argv);
     testclient client;
-    client.seq_numbher = 0;
+    client.seq_number = 0;
     srand (time(NULL));
     return a.exec();
 }
