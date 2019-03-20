@@ -47,7 +47,7 @@ bool Planet::delShips(int ships)
 	} 
 }
 
-void Planet::addNeighbour(Planet neighbour) 
+void Planet::addNeighbour(Planet* neighbour) 
 {
 	m_neighbours.push_back(neighbour);
 }
