@@ -5,6 +5,7 @@
 #include "Player.hpp"
 
 #include <map>
+#include <memory>
 
 using std::map;
 
@@ -24,6 +25,10 @@ class DataModel
 {
 
 public:
+
+
+	using PtrPlanet =  std::shared_ptr<Planet>;
+	using PtrPlayer = std::shared_ptr<Player>;
     /**
      * @brief   Initilizes a new data model
      * 
@@ -37,7 +42,7 @@ public:
     ~DataModel();
 
     // many getter, setter/update methods for all the games data
-    std::map<int, Planet*> getPlanets();
+    std::map<int, PtrPlanet> getPlanets();
 
 
     /**
@@ -56,15 +61,15 @@ private:
     void getUniverse(std::string filename);
 
     // Map to hold all planets, filled by getUniverse()
-    std::map<int, Planet*>  m_planets;
+    std::map<int, PtrPlanet>  m_planets;
 
     std::list<std::pair<int, int>> m_edges;
 
     // The host Player
-    Player*  m_self;
+    PtrPlayer  m_self;
 
     // The client Player
-    Player*  m_enemy;
+    PtrPlayer  m_enemy;
 
 };
 
