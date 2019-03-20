@@ -79,6 +79,8 @@ public slots:
      */
     void buildShip(bool click/*, Planet* p*/);
 
+    void exitGame(bool click);
+
 private:
 
     /// QT UI of the window

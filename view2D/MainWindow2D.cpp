@@ -103,6 +103,10 @@ MainWindow2D::MainWindow2D(DataModel *model, QWidget* parent) :
     // at the beginning no planet is selected so this widget is not visible
     // ui->PlanetInfo->setVisible(false);
 
+    QPushButton* m_exit = ui->ExitGame;
+    connect(m_exit, SIGNAL(clicked(bool)), this, SLOT(exitGame(bool)));
+
+
     // Somehow there's a Segmentation fault if the Fighterwindow is initialized here like
     // FighterWindow = new asteroids::MainWindow("...")
     FighterWindow = NULL;
@@ -153,6 +157,11 @@ void MainWindow2D::buildShip(bool click /*, Planet* p*/)
 
     //model->buildShip(p);
     std::cout << "Build Ship!" << std::endl;
+}
+
+void MainWindow2D::exitGame(bool click)
+{
+    QCoreApplication::quit();
 }
 
 }
