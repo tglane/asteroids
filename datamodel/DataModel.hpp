@@ -44,7 +44,7 @@ public:
      * @brief   Called when a strategy round ends
      *          Updates all values and send them to the server
      */
-    void endOfRound();
+    bool endOfRound();
 
 private:
 

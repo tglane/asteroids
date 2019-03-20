@@ -57,12 +57,16 @@ std::map<int, Planet*> DataModel::getPlanets()
     return m_planets;
 }
 
-void DataModel::endOfRound()
+bool DataModel::endOfRound()
 {
+    std::cout << "End of Round!" << std::endl;
     // TODO Update players ressources, money, ships, planets, mines
 
     // TODO make a json-data-package from the data and send it to the server
     //      listen for the response, start fights or next round
+
+    // return if network response was succesful
+    return true;
 }
 
 DataModel::~DataModel()
