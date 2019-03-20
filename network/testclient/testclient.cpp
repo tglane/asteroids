@@ -45,7 +45,7 @@ void testclient::hello_udp() {
     memcpy(target, &seq_number, sizeof(seq_number));
     data.append(target, sizeof(target));
     //ID
-    int id = 1;
+    int id = (42 << 24) | (seq_number & 0xffffff);
     char idchar[sizeof(int)];
     memcpy(idchar, &id, sizeof(int));
     data.append(idchar, sizeof(idchar));
@@ -91,7 +91,7 @@ void testclient::hello_udp() {
             break;
     }
 
-    socket->writeDatagram(data, QHostAddress::LocalHost, 1234);
+    socket->writeDatagram(data, QHostAddress::LocalHost, 1235);
 }
 
 void testclient::readyRead() {
@@ -147,12 +147,12 @@ void testclient::readyRead() {
     //Seqnr
     char seqnchar[sizeof(int)];
     memcpy(seqnchar, &newseqn, sizeof(int));
-    response.append(seqnchar);
+    response.append(seqnchar, sizeof(seqnchar));
     //Id
     char idchar[sizeof(int)];
-    id = 1;
+    id = 42 << 24;
     memcpy(idchar, &id, sizeof(int));
-    response.append(idchar);
+    response.append(idchar, sizeof(idchar));
 
     socket->writeDatagram(response, QHostAddress::LocalHost, 1235);
 }
