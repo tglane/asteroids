@@ -75,6 +75,33 @@ bool DataModel::endOfRound()
     // return if network response was succesful
     return true;
 }
+/*Code von Kay Bauer*/
+bool DataModel::buyShip(Planet* selectedPlanet, Player* Player1)
+{
+    /*test druck*/
+    std::cout << "Test für buyShip" << std::endl;
+    std::cout << Player1->getRubin() << std::endl;
+    /*test druck ende*/
+
+    Player_Rubin_Number = Player1->getRubin();
+    if(Player_Rubin_Number >= Shipcost)
+    {
+        Player1->delRubin(Shipcost);
+        /*test druck*/
+        std::cout << Player1->getRubin() << std::endl;
+        /*test druck ende*/
+
+
+    }
+    
+    return false;
+
+}
+
+Planet* DataModel::getPlanetFromId(int ID)
+{
+    return m_planets.at(ID);
+}
 
 DataModel::~DataModel()
 {
