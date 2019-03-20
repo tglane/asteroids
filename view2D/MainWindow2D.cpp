@@ -65,12 +65,17 @@ MainWindow2D::MainWindow2D(DataModel *model, QWidget* parent) :
     this->setPalette(palette);
     //Einfach kopiert
 
+    // Add the matching event to the next-round-button
+    QPushButton* m_nextRound = ui->NextRound;
+    connect(m_nextRound, SIGNAL(clicked(bool)), this, SLOT(endOfRound(bool)));
+
 }
 
 MainWindow2D::~MainWindow2D() 
 {
     delete ui;
-    delete FighterWindow;
+    if(FighterWindow)
+        delete FighterWindow;
 }
 
 /*
@@ -81,6 +86,13 @@ void MainWindow2D::fight(bool click)
     std::cout << "Fight" << std::endl;
     FighterWindow = new asteroids::MainWindow("../models/level.xml");
     FighterWindow->show();
+}
+
+void MainWindow2D::endOfRound(bool click)
+{
+    bool succes = model->endOfRound();
+
+    // TODO wait for response of server, block the window until all players are ready
 }
 
 }
