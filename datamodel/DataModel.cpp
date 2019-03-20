@@ -43,6 +43,8 @@ void DataModel::getUniverse(std::string filename)
         while(!f.eof())
         {
             f >> from >> to;
+            from--;
+            to--;
             m_edges.push_back(std::make_pair(from, to));
             m_planets.at(from)->addNeighbour(m_planets.at(to));
             m_planets.at(to)->addNeighbour(m_planets.at(from));
