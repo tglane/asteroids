@@ -37,7 +37,7 @@ public:
     ~DataModel();
 
     // many getter, setter/update methods for all the games data
-    std::map<int, Planet*> getPlanets();
+    std::map<int, Planet::Ptr> getPlanets();
 
 
     /**
@@ -47,32 +47,35 @@ public:
     bool endOfRound();
 
     /*Code von Kay Bauer*/
-    bool buyShip(Planet* selectedPlanet, Player* Player1);
+    bool buyShip(Planet::Ptr selectedPlanet, Player::Ptr Player1);
 
-    Planet* getPlanetFromId(int ID);
+    bool buyMine(Planet::Ptr selectedPlanet, Player::Ptr Player1);
+
+    Planet::Ptr getPlanetFromId(int ID);
 
     std::list<std::pair<int,int>> getEdges();
 
 private:
     /*Variablen von Kay*/
-    int Player_Rubin_Number;
 
     int Shipcost = 500;
+
+    int Minecost = 1000;
     /**
      * @brief   Loads all the planets from the given file
      */
     void getUniverse(std::string filename);
 
     // Map to hold all planets, filled by getUniverse()
-    std::map<int, Planet*>  m_planets;
+    std::map<int, Planet::Ptr>  m_planets;
 
     std::list<std::pair<int, int>> m_edges;
 
     // The host Player
-    Player*  m_self;
+    Player::Ptr  m_self;
 
     // The client Player
-    Player*  m_enemy;
+    Player::Ptr  m_enemy;
 
 };
 
