@@ -23,10 +23,19 @@ namespace asteroids
 	class Order
 	{
         public:
+
+        using Ptr = std::shared_ptr<Order>;
+
+        virtual int getType()
+        {
+                return m_type;
+        }
+
+        private:
         /**
          * @brief Can give the information of which type this Order is
          */
-        int type;
+        int m_type;
         
 
 	};

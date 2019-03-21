@@ -15,16 +15,15 @@
 #include <list>
 
 #include "Planet.hpp"
-#include "Order.hpp"
 
 namespace asteroids
 {
 
-    using Ptr = std::shared_ptr<MoveOrder>;
-
-	class MoveOrder : public Order
+	class MoveOrder
 	{
         public:
+        using Ptr = std::shared_ptr<MoveOrder>;
+
         /**
          * @brief Constructor
          * @param origin1 The planet from which the ships are coming
@@ -34,24 +33,47 @@ namespace asteroids
         MoveOrder(Planet::Ptr origin1, Planet::Ptr destination1, int numberShips1);
 
         /**
+         * @brief returns the origin planet
+         * @return The planet from which the moved ships are coming
+         */
+        Planet::Ptr getOrigin()
+        {
+                return m_origin;
+        }
+
+        /**
+         * @brief returns the destination planet
+         * @return The planet to which the moved ships are going
+         */
+        Planet::Ptr getDestination()
+        {
+                return m_destination;
+        }
+
+        /**
+         * @brief returns the originally moved number of ships
+         * @return the originally ordered number of shhips to be moved
+         */
+        int getNumberShips()
+        {
+                return m_numberShips;
+        }
+
+        private:
+        /**
          * @brief The Planet to which the ships are moving
          */
-        Planet::Ptr destination;
+        Planet::Ptr m_destination;
 
         /**
          * @brief The planet from which the ships are coming
          */
-        Planet::Ptr origin;
+        Planet::Ptr m_origin;
 
         /**
          * @brief number of ships to be moved 
          */
-        int numberShips;
-
-        /**
-         * @brief Can give the information of which type this Order is
-         */
-        int type;
+        int m_numberShips;
 
 	};
 }
