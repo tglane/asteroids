@@ -9,6 +9,7 @@
 #include <QGraphicsView>
 #include <iostream>
 #include <QLine>
+#include <QObject>
 
 namespace strategy {
 
@@ -35,16 +36,8 @@ MainWindow2D::MainWindow2D(DataModel *model, QWidget* parent) :
     effect = new QGraphicsOpacityEffect(ui->Fight);
     effect->setOpacity(0.7);
     ui->Fight->setGraphicsEffect(effect);
-
-    QBrush greenBrush(Qt::green);
-    QBrush grayBrush(Qt::gray);
-    QBrush redBrush(Qt::red);
     QPen outlinePenHighlight(Qt::white);
-    outlinePenHighlight.setWidth(2);
-
-    QPen outlinePen(Qt::black);
-    outlinePen.setWidth(0);
-    //scene->setBackgroundBrush(Qt::black);
+    outlinePenHighlight.setWidth(1);;
 
     // Map mit den Planeten-Objekten aus dem DataModel
     std::map<int, Planet*> planets = model->getPlanets();
@@ -58,7 +51,8 @@ MainWindow2D::MainWindow2D(DataModel *model, QWidget* parent) :
         view_planets[i] = new MyEllipse(p->getPosX()/position_scale, p->getPosY()/position_scale);
         scene->addItem(view_planets[i]);
         QVariant ellipse_ID(i);
-        //view_planets[i]->setData(1, ellipse_ID);
+        view_planets[i]->setData(1, ellipse_ID);
+        connect(view_planets[i], SIGNAL(show_planetInfo(int)), this, SLOT(choose_planet(int)));
     }
 
     std::list<std::pair<int,int>> edges = model->getEdges();
@@ -136,7 +130,7 @@ void MainWindow2D::fight(bool click)
 
 void MainWindow2D::choose_planet(int id)
 {
-    std::cout << "ID of clicked planet is " << id << std::endl;
+    cout << "ID of clicked planet is " << id << endl;
     
     // TODO: Planeteninfo ausfüllen
     ui->PlanetName->setText("???");
