@@ -235,6 +235,7 @@ void GLWidget::step(map<Qt::Key, bool>& keyStates)
     {
         Bullet::Ptr bullet = make_shared<Bullet>(Bullet(m_camera->getPosition() - m_camera->getZAxis() * 42,
                                                         m_camera->getXAxis(), m_camera->getId()));
+        m_client.send_bullet(m_camera->getPosition(), m_camera->getXAxis()); //added
         m_physicsEngine->addBullet(bullet);
         m_cooldown_player = 10;
     }
@@ -271,13 +272,6 @@ void GLWidget::step(map<Qt::Key, bool>& keyStates)
     /* Send own position and not acknowledged packages to the server */
     m_client.send_position(m_camera->getPosition(), Vector3f(), m_camera->getXAxis(), m_camera->getYAxis(), m_camera->getZAxis());
     m_client.send_not_acknowledged();
-
-    // Add a bullet to physics engine
-    if(keyStates[Qt::Key_Space])
-    {
-        Bullet::Ptr bullet = make_shared<Bullet>(Bullet(m_camera->getPosition(), Vector3f(), m_client.get_id(), m_physicsEngine->get_curr_bull_id() + 1)); //changed
-        m_client.send_bullet(m_camera->getPosition(), m_camera->getXAxis()); //added        m_physicsEngine->addBullet(bullet);
-    }
 
     // Trigger update, i.e., redraw via paintGL()
     this->update();

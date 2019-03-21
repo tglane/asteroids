@@ -9,7 +9,7 @@ udpclient::udpclient(QObject *parent)
     std::cout << "Enter player_id (int):" << std::endl;
     std::cin >> m_id;
 
-    m_ip = "127.0.0.1";
+    m_ip = "192.168.0.42";
 
     socket = new QUdpSocket(this);
     seq_number = 1;
@@ -214,7 +214,6 @@ void udpclient::send_bullet(asteroids::Vector3f position, asteroids::Vector3f ve
 
     /* Send own position data to server */
     socket->writeDatagram(data, QHostAddress(m_ip), 1235);
-    std::cout << "send bullet" << std::endl;
 
     /* Add new bullet to not acknowledged */
     m_not_acknowledged.insert(std::pair<int, QByteArray>(seq_number, data));
@@ -280,7 +279,7 @@ void udpclient::send_not_acknowledged()
         {
             m_not_acknowledged.erase(it->first);
         }
-        std::cout << "ack send" << it->first << std::endl;
+
         //socket->writeDatagram(it->second, QHostAddress(m_ip), 1235);
     }
 }

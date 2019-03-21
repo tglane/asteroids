@@ -57,30 +57,25 @@ void PhysicsEngine::process()
         b->run();
 
         // Check for collisions with present objects
-        p_it = m_objects.begin();
+        /**p_it = m_objects.begin();
         while (p_it != m_objects.end())
         {
 
             if ((*p_it).second->collision(b->getPosition(), b->radius()))
             {
-                //std::cout << "dest" << std::endl;
                 // Mark bulled as killed
                 b->destroy();
 
                 // Delete destroyed object
                 p_it = m_objects.erase(p_it);
 
-
-                //std::cout << 3 << std::endl;
                 // Add explosion
                 m_particles.addEffect(ParticleEffect::createExplosionSphere(b->getPosition()));
 
-                //std::cout << 4 << std::endl;
             } else {
                 p_it++;
             }
         }
-        //td::cout << 4.5 << std::endl;
 
         h_it = m_hittables.begin();
         while (h_it != m_hittables.end())
@@ -90,7 +85,7 @@ void PhysicsEngine::process()
                 std::cout << "Treffer an Spieler " << (*h_it).second->getId() << std::endl;
             }
             h_it++;
-        }
+        }*/
 
         // Check if bullet is dead. If it is, remove from
         // bullet list. Otherwise continue with next bullet.
