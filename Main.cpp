@@ -34,9 +34,13 @@ int main(int argc, char** argv)
     /*Test für buyShip und buyMine*/
     Player::Ptr Testplayer = Player::Ptr(new Player(1,2000,0));
     std::cout << Testplayer->getIdentity() << std::endl;
+    std::cout << Testplayer->getPlayerName() << std::endl;
+    Testplayer->setPlayerName("Huber van Windrad");
     std::cout << Testplayer->getRubin() << std::endl;
+    std::cout << Testplayer->getPlayerName() << std::endl;
 
     Planet::Ptr Test = model.getPlanetFromId(5);
+    std::cout << Test->getName() << std::endl;
     bool buytest;
 
     bool buytest2;

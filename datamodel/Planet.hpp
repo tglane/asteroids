@@ -51,6 +51,8 @@ namespace asteroids
 
 		int getPosY();
 
+		std::string getName();
+
 
 	private:
 		std::string m_name;
