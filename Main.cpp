@@ -32,18 +32,18 @@ int main(int argc, char** argv)
     mainWindow.show();*/
 
     /*Test für buyShip und buyMine*/
-    //Player::Ptr Testplayer = new Player(1,2000,0);
-    //std::cout << Testplayer->getIdentity() << std::endl;
-    //std::cout << Testplayer->getRubin() << std::endl;
+    Player::Ptr Testplayer = Player::Ptr(new Player(1,2000,0));
+    std::cout << Testplayer->getIdentity() << std::endl;
+    std::cout << Testplayer->getRubin() << std::endl;
 
-    //Planet* Test = model.getPlanetFromId(5);
+    Planet::Ptr Test = model.getPlanetFromId(5);
     bool buytest;
 
     bool buytest2;
-    //buytest = model.buyShip(Test, Testplayer);
-    //buytest2 = model.buyMine(Test, Testplayer);
+    buytest = model.buyShip(Test, Testplayer);
+    buytest2 = model.buyMine(Test, Testplayer);
 
-    //buytest = model.buyShip(Test, Testplayer);
+    buytest = model.buyShip(Test, Testplayer);
 
 
 

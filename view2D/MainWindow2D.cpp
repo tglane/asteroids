@@ -44,7 +44,7 @@ MainWindow2D::MainWindow2D(DataModel *model, QWidget* parent) :
     outlinePen.setWidth(0);
     //scene->setBackgroundBrush(Qt::black);
 
-    std::map<int, Planet*> planets = model->getPlanets();
+    std::map<int, Planet::Ptr> planets = model->getPlanets();
 
     std::list<std::pair<int,int>> edges = model->getEdges();
 
@@ -53,14 +53,14 @@ MainWindow2D::MainWindow2D(DataModel *model, QWidget* parent) :
         std::pair<int,int> coordinates = *it;
         int pos_1 = coordinates.first;
         int pos_2 = coordinates.second;
-        Planet *p1 = planets.at(pos_1);
-        Planet *p2 = planets.at(pos_2);
+        Planet::Ptr p1 = planets.at(pos_1);
+        Planet::Ptr p2 = planets.at(pos_2);
         scene->addLine(p1->getPosX()/position_scale+planet_size/2,p1->getPosY()/position_scale+planet_size/2, p2->getPosX()/position_scale+planet_size/2, p2->getPosY()/position_scale+planet_size/2, outlinePenHighlight);
     }
 
     //Abhängig von Planeten machen
     for(int i = 0; i < planets.size(); i++){
-        Planet *p = planets.at(i);
+        Planet::Ptr p = planets.at(i);
         scene->addEllipse(p->getPosX()/position_scale, p->getPosY()/position_scale, planet_size, planet_size, outlinePen, greenBrush);
         
     }

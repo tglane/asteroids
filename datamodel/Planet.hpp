@@ -35,7 +35,7 @@ namespace asteroids
 
 		bool delShips(int ships);
 
-		void addNeighbour(Planet* neighbour);
+		void addNeighbour(Planet::Ptr neighbour);
 
 		void setOwner(std::shared_ptr<Player> owner);
 
