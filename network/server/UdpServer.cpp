@@ -12,20 +12,20 @@ using namespace asteroids;
 UdpServer::UdpServer()
 {
     socket = std::unique_ptr<QUdpSocket>(new QUdpSocket(nullptr));
-    socket->bind(QHostAddress::LocalHost, 1235);
+    socket->bind(QHostAddress(QString("0.0.0.0")), 1235);
     connect(socket.get(), &QUdpSocket::readyRead, this, &UdpServer::handle_udp);
 
     timer = std::unique_ptr<QTimer>(new QTimer(nullptr));
     connect(timer.get(), &QTimer::timeout, this, &UdpServer::tick);
-    timer->start(1000);
+    timer->start(1000/10);
 
     clients[42] = UdpClient(42);
     clients[42].address = QHostAddress::LocalHost;
     clients[42].port = 1234;
 
     clients[43] = UdpClient(43);
-    clients[43].address = QHostAddress::LocalHost;
-    clients[43].port = 1233;
+    clients[43].address = QHostAddress(QString("192.168.43.103"));
+    clients[43].port = 1234;
 }
 
 
@@ -39,37 +39,33 @@ asteroids::Vector3f UdpServer::bytes_to_vector(char *bytes)
     return vec;
 }
 
-asteroids::Quaternion UdpServer::bytes_to_quaternion(char *bytes)
-{
-    float x;
-    float y;
-    float z;
-    float w;
-    x = *((float *)(bytes + 1 * 4));
-    y = *((float *)(bytes + 2 * 4));
-    z = *((float *)(bytes + 3 * 4));
-    w = *((float *)(bytes + 4 * 4));
-    return asteroids::Quaternion(x, y, z, w);
-}
 
 void UdpServer::set_position_from_packet(QNetworkDatagram &datagram, Transformable &obj)
 {
     std::cout << "received position data:" << std::endl;
     QByteArray data = datagram.data();
-    if (data.length() < 9 + 10 * 4) {
+    if (data.length() < 9 + 15 * 4) {
         std::cout << "packet to short" << std::endl;
         return;
     }
     asteroids::Vector3f position = bytes_to_vector(data.data() + 9);
     asteroids::Vector3f velocity = bytes_to_vector(data.data() + 9 + 3 * 4);
-    asteroids::Quaternion rotation = bytes_to_quaternion(data.data() + 9 + 6 * 4);
+
+    asteroids::Vector3f x_axis = bytes_to_vector(data.data() + 9 + 6 * 4);
+    asteroids::Vector3f y_axis = bytes_to_vector(data.data() + 9 + 9 * 4);
+    asteroids::Vector3f z_axis = bytes_to_vector(data.data() + 9 + 12 * 4);
     obj.setPosition(position);
-    obj.setDirection(velocity);
-     obj.setRotation(rotation);
-    std::cout << "id: " << "?"
-              << " p: " << position[0] << ", " <<  position[1] << ", " <<  position[2]
-              << " v: " << velocity[0] << ", " <<  velocity[1] << ", " <<  velocity[2]
-              << " o: " << rotation.getX() << ", " <<  rotation.getY() << ", " <<  rotation.getZ() << rotation.getW() << std::endl;
+    //obj.setVelocity(velocity);
+    obj.setXAxis(x_axis);
+    obj.setYAxis(y_axis);
+    obj.setZAxis(z_axis);
+    std::cout << "id: " << obj.get_id()
+              << " p: " << position[0] << ", " <<  position[1] << ", " <<  position[2] << std::endl
+              << " v: " << velocity[0] << ", " <<  velocity[1] << ", " <<  velocity[2] << std::endl
+              << " x: " << x_axis[0] << ", " <<  x_axis[1] << ", " <<  x_axis[2] << std::endl
+              << " y: " << y_axis[0] << ", " <<  y_axis[1] << ", " <<  y_axis[2] << std::endl
+              << " z: " << z_axis[0] << ", " <<  z_axis[1] << ", " <<  z_axis[2] << std::endl;
+
 }
 
 void UdpServer::handle_position_packet(QNetworkDatagram &datagram)
@@ -149,24 +145,31 @@ void UdpServer::send_position_or_bullet(char type, UdpClient &client, Transforma
     data.append((char *)(&obj_id), 4);
 
     asteroids::Vector3f position = obj.getPosition();
-    asteroids::Vector3f velocity = obj.getDirection();
+    asteroids::Vector3f velocity() //obj.getVelocity();
+    asteroids::Vector3f x_axis = obj.getXAxis();
+    asteroids::Vector3f y_axis = obj.getYAxis();
+    asteroids::Vector3f z_axis = obj.getZAxis();
 
-    asteroids::Quaternion rotation = obj.getRotation();
 
     data.append((char *)(&position[0]), 4);
     data.append((char *)(&position[1]), 4);
     data.append((char *)(&position[2]), 4);
+
     data.append((char *)(&velocity[0]), 4);
     data.append((char *)(&velocity[1]), 4);
     data.append((char *)(&velocity[2]), 4);
 
-    float tmp[4];
-    tmp[0] = rotation.getX();
-    tmp[1] = rotation.getY();
-    tmp[2] = rotation.getZ();
-    tmp[3] = rotation.getW();
+    data.append((char *)(&x_axis[0]), 4);
+    data.append((char *)(&x_axis[1]), 4);
+    data.append((char *)(&x_axis[2]), 4);
 
-    data.append((char *)tmp, sizeof(tmp));
+    data.append((char *)(&y_axis[0]), 4);
+    data.append((char *)(&y_axis[1]), 4);
+    data.append((char *)(&y_axis[2]), 4);
+
+    data.append((char *)(&z_axis[0]), 4);
+    data.append((char *)(&z_axis[1]), 4);
+    data.append((char *)(&z_axis[2]), 4);
 
     socket->writeDatagram(data, client.address, client.port);
     if (type == 'B') {
