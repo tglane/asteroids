@@ -39,7 +39,7 @@ public:
      * @param   fighter_position   Position of the fighter that shoots this bullet
      * @param   fighter_axis   Axis the bullet will move on
      */
-    PhysicalBullet(const Vector3f& fighter_position, const Vector3f fighter_axis, unsigned int shooter_id, unsigned int id);
+    PhysicalBullet(const Vector3f& fighter_position, const Vector3f fighter_axis, int shooter_id, int id);
 
     ~PhysicalBullet() = default;
 
@@ -49,13 +49,13 @@ public:
 	void run();
     
     /// Returns the radius of the bullet
-    int radius();
+    int radius() { return m_radius; } const
 
     static int lifetime() { return m_lifetime;}
 
-    Vector3f direction() {return m_fighterAxis;}
+    Vector3f direction() const {return m_fighterAxis;}
 
-	int get_shooter_id() const;
+	int get_shooter_id() const { return m_shooter_id; } 
 
 private:
 

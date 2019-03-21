@@ -27,7 +27,7 @@ namespace asteroids
 /**
  * @brief   Object with pyhsical properties.
  */
-class PhysicalObject : public Transformable
+class PhysicalObject : public Transformable, public Renderable
 {
 public:
 
@@ -49,6 +49,7 @@ public:
         float mass, float momentum, float speed, 
         float accel, float radius);
 
+    PhysicalObject(int id): m_id(id) {}
     PhysicalObject();
 
     /**

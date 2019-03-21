@@ -82,7 +82,7 @@ void UdpServer::handle_position_packet(QNetworkDatagram &datagram)
         return;
     }
 
-    set_position_from_packet(datagram, clients[client_id].ship);
+    //set_position_from_packet(datagram, clients[client_id].ship);
 }
 
 void UdpServer::handle_bullet_packet(QNetworkDatagram &datagram)
@@ -94,13 +94,13 @@ void UdpServer::handle_bullet_packet(QNetworkDatagram &datagram)
     }
     uint32_t obj_id = *((int32_t*)(data.data() + 5));
     // TODO use positons
-    bullets[obj_id] = PhysicalBullet::Ptr(new PhysicalBullet(asteroids::Vector3f(), asteroids::Vector3f()));
+    //bullets[obj_id] = PhysicalBullet::Ptr(new PhysicalBullet(asteroids::Vector3f(), asteroids::Vector3f()));
     std::cout << "created bullet: " << obj_id << std::endl;
     set_position_from_packet(datagram, *bullets[obj_id]);
 
     for (auto& i: clients) {
         UdpClient& dest = i.second;
-        send_position_or_bullet('B', dest, *bullets[obj_id], obj_id);
+        //send_position_or_bullet('B', dest, *bullets[obj_id], obj_id);
     }
 }
 
@@ -145,7 +145,7 @@ void UdpServer::send_position_or_bullet(char type, UdpClient &client, PhysicalOb
     data.append((char *)(&obj_id), 4);
 
     asteroids::Vector3f position = obj.getPosition();
-    asteroids::Vector3f velocity() //obj.getVelocity();
+    asteroids::Vector3f velocity(); //obj.getVelocity();
     asteroids::Vector3f x_axis = obj.getXAxis();
     asteroids::Vector3f y_axis = obj.getYAxis();
     asteroids::Vector3f z_axis = obj.getZAxis();
@@ -155,9 +155,9 @@ void UdpServer::send_position_or_bullet(char type, UdpClient &client, PhysicalOb
     data.append((char *)(&position[1]), 4);
     data.append((char *)(&position[2]), 4);
 
-    data.append((char *)(&velocity[0]), 4);
-    data.append((char *)(&velocity[1]), 4);
-    data.append((char *)(&velocity[2]), 4);
+    data.append((char *)(0), 4);
+    data.append((char *)(0), 4);
+    data.append((char *)(0), 4);
 
     data.append((char *)(&x_axis[0]), 4);
     data.append((char *)(&x_axis[1]), 4);
@@ -260,7 +260,7 @@ void UdpServer::tick()
         // send ship positions
         for (auto& k: clients) {
             UdpClient& dest = k.second;
-            send_position_or_bullet('P', dest, client.ship, client.id << 24);
+            //send_position_or_bullet('P', dest, client.ship, client.id << 24);
         }
     }
 }

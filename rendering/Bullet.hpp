@@ -15,7 +15,7 @@
 
 #include "TriangleMesh.hpp"
 #include "Sphere.hpp"
-#include "physics/PhysicsBullet.hpp"
+#include "physics/PhysicalBullet.hpp"
 
 #include <thread>
 #include <chrono>
@@ -27,7 +27,7 @@ namespace asteroids
 /**
  * @brief Renders a Bullet
  */
-class Bullet: public Renderable, public PhysicsBullet
+class Bullet: public PhysicalBullet
 {
 
 public:
@@ -41,8 +41,8 @@ public:
      * @param   fighter_position   Position of the fighter that shoots this bullet
      * @param   fighter_axis   Axis the bullet will move on
      */
-    Bullet(const Vector3f& fighter_position, const Vector3f fighter_axis, int shooter_id)
-        : PhysicsBullet(fighter_position, fighter_axis, shooter_id) {}
+    Bullet(const Vector3f& fighter_position, const Vector3f fighter_axis, int shooter_id, int id)
+        : PhysicalBullet(fighter_position, fighter_axis, shooter_id, id), m_sphere(Vector3f(0,0,0), 10) {}
 
     ~Bullet() = default;
 
