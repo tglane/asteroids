@@ -46,11 +46,11 @@ private:
     asteroids::Quaternion bytes_to_quaternion(char *bytes);
     void handle_position_packet(QNetworkDatagram &datagram);
     void handle_bullet_packet(QNetworkDatagram &datagram);
-    void set_position_from_packet(QNetworkDatagram &datagram, asteroids::Transformable &obj);
+    void set_position_from_packet(QNetworkDatagram &datagram, asteroids::PhysicalObject &obj);
     void send_ack(QNetworkDatagram &datagram);
     void handle_ack(QNetworkDatagram &datagram);
     void send_collision(UdpClient &client, uint32_t id1, uint32_t id2);
-    void send_position_or_bullet(char type, UdpClient &client, asteroids::Transformable &obj, uint32_t obj_id);
+    void send_position_or_bullet(char type, UdpClient &client, asteroids::PhysicalObject &obj, uint32_t obj_id);
     bool check_client_id(QNetworkDatagram &datagram);
 
 public:

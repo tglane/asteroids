@@ -40,7 +40,7 @@ asteroids::Vector3f UdpServer::bytes_to_vector(char *bytes)
 }
 
 
-void UdpServer::set_position_from_packet(QNetworkDatagram &datagram, Transformable &obj)
+void UdpServer::set_position_from_packet(QNetworkDatagram &datagram, PhysicalObject &obj)
 {
     std::cout << "received position data:" << std::endl;
     QByteArray data = datagram.data();
@@ -134,7 +134,7 @@ void UdpServer::send_collision(UdpClient &client, uint32_t obj_id1, uint32_t obj
     socket->writeDatagram(data, client.address, client.port);
 }
 
-void UdpServer::send_position_or_bullet(char type, UdpClient &client, Transformable& obj, uint32_t obj_id)
+void UdpServer::send_position_or_bullet(char type, UdpClient &client, PhysicalObject& obj, uint32_t obj_id)
 {
     uint32_t seq_nr = client.next_seq_nr();
     std::cout << "sending  " << type << " to " << client.id << " seq_nr " << seq_nr << std::endl;

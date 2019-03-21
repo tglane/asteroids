@@ -39,7 +39,7 @@ public:
      * @param   fighter_position   Position of the fighter that shoots this bullet
      * @param   fighter_axis   Axis the bullet will move on
      */
-    PhysicalBullet(const Vector3f& fighter_position, const Vector3f fighter_axis, int shooter_id);
+    PhysicalBullet(const Vector3f& fighter_position, const Vector3f fighter_axis, unsigned int shooter_id, unsigned int id);
 
     ~PhysicalBullet() = default;
 

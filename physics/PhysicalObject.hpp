@@ -83,8 +83,12 @@ public:
      * */
     bool alive();
 
+    int get_id() { return m_id; };
+
 
 protected:
+    unsigned int id;
+
 
     /**
      * the rotation
@@ -121,6 +125,8 @@ protected:
      * alive
      */
     bool m_alive;
+
+    int m_id;
 
 };
 
