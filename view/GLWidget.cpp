@@ -123,6 +123,7 @@ void GLWidget::initializeGL()
     m_physicsEngine->addHittable(player_ptr);
 
     // Add asteroids to physics engine
+    //TODO get asteroids from server via tcpclient
     std::list<Asteroid::Ptr> asteroids;
     m_asteroidField->getAsteroids(asteroids);
     for (auto it = asteroids.begin(); it != asteroids.end(); it++)
@@ -133,6 +134,10 @@ void GLWidget::initializeGL()
 
     m_cooldown_enemy = 0;
     m_cooldown_player = 0;
+
+    //TODO start udpclient
+    m_client.setOtherFighter(m_enemy); //added
+    m_client.setPhysicsPtr(m_physicsEngine); //added
 }
 
 void GLWidget::paintGL()
@@ -263,14 +268,15 @@ void GLWidget::step(map<Qt::Key, bool>& keyStates)
         m_camera->move(Transformable::LIFT_DOWN, 5);
     }
 
-    /* Send own position to the server */
+    /* Send own position and not acknowledged packages to the server */
     m_client.send_position(m_camera->getPosition(), Vector3f(), m_camera->getXAxis(), m_camera->getYAxis(), m_camera->getZAxis());
+    m_client.send_not_acknowledged();
 
     // Add a bullet to physics engine
     if(keyStates[Qt::Key_Space])
     {
-        Bullet::Ptr bullet = make_shared<Bullet>(Bullet(m_enemy->getPosition(), m_enemy->getXAxis(), m_client->get_id(), m_physicsEngine->get_curr_bull_id() + 1));
-        m_physicsEngine->addBullet(bullet);
+        Bullet::Ptr bullet = make_shared<Bullet>(Bullet(m_camera->getPosition(), Vector3f(), m_client.get_id(), m_physicsEngine->get_curr_bull_id() + 1)); //changed
+        m_client.send_bullet(m_camera->getPosition(), m_camera->getXAxis()); //added        m_physicsEngine->addBullet(bullet);
     }
 
     // Trigger update, i.e., redraw via paintGL()

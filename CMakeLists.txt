@@ -135,6 +135,7 @@ set(ASTEROID_SOURCES
     physics/PhysicsEngine.cpp
     physics/ParticleEngine.cpp
     physics/Hittable.cpp
+    physics/PhysicalBullet.cpp
     rendering/Bullet.cpp
     rendering/ParticleEffect.cpp
     rendering/Sphere.cpp
