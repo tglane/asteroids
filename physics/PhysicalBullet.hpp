@@ -41,7 +41,7 @@ public:
      */
     PhysicalBullet(const Vector3f& fighter_position, const Vector3f fighter_axis, int shooter_id, int id);
 
-    ~PhysicalBullet() = default;
+    virtual ~PhysicalBullet() = default;
 
     /**
      * @brief Moves the bullet until it's lifetime is over.

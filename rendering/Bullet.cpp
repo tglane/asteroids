@@ -39,4 +39,5 @@ void Bullet::render() {
 	glPopMatrix();
 }
 
+
 }
