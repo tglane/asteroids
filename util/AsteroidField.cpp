@@ -44,6 +44,11 @@ void AsteroidField::getAsteroids(std::list<Asteroid::Ptr>& out)
   }
 }
 
+void AsteroidField::addAsteroid(asteroids::Asteroid::Ptr asteroid)
+{
+	m_asteroids.push_back(asteroid);
+}
+
 AsteroidField::~AsteroidField()
 {
 	//asteroids.for_each(deleteAsteroid);

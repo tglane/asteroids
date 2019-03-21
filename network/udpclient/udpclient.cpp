@@ -115,6 +115,7 @@ void udpclient::readyRead()
             createNewBulletFromPackage(recv_seq_nr, recv_id, data);
             break;
         case 'C':
+            recv_collision(recv_seq_nr, data);
             break;
         case 'A':
             recv_ack(recv_seq_nr, recv_id);
@@ -217,6 +218,36 @@ void udpclient::send_bullet(asteroids::Vector3f position, asteroids::Vector3f ve
 
     /* Add new bullet to not acknowledged */
     m_not_acknowledged.insert(std::pair<int, QByteArray>(seq_number, data));
+}
+
+void udpclient::recv_collision(int recv_seq_nr, QByteArray data)
+{
+    std::cout << "collision received" << std::endl;
+
+    /* Parse recevived IDs of colliding objects and process collisions */
+    int id_one, id_two;
+    memcpy(&id_one, data, sizeof(int));
+    data += sizeof(int);
+    memcpy(&id_two, data, sizeof(int));
+    data += sizeof(int);
+    //TODO parse health from package
+
+    m_physicsEngine->process_collisions(id_one, id_two);
+
+    /* Send acknowledge to server */
+    QByteArray ack;
+    ack.append('A');
+
+    char seqn_char[sizeof(int)];
+    memcpy(seqn_char, &recv_seq_nr, sizeof(seqn_char));
+    ack.append(seqn_char, sizeof(seqn_char));
+
+    int id = m_id << 24;
+    char id_char[sizeof(int)];
+    memcpy(id_char, &id, sizeof(id_char));
+    ack.append(id_char, sizeof(id_char));
+
+    socket->writeDatagram(data, QHostAddress(m_ip), 1235);
 }
 
 void udpclient::createNewBulletFromPackage(int recv_seq_nr, int recv_id, char* data) {

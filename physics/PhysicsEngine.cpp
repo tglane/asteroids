@@ -129,4 +129,30 @@ void PhysicsEngine::render()
     //cout << m_bullets.size() << endl;
 }
 
+void PhysicsEngine::process_collisions(int id_one, int id_two)
+{
+    check_id_type(id_one);
+    check_id_type(id_two);
+    m_particles.update();
+}
+
+void PhysicsEngine::check_id_type(int id_to_check)
+{
+    //TODO add particles by collision
+    if((id_to_check >> 24) == 0)
+    {
+        m_objects.erase(id_to_check);
+    } else
+    {
+        if((id_to_check & 0xFFFFFF) != 0)
+        {
+            m_bullets[id_to_check]->destroy();
+            m_bullets.erase(id_to_check);
+        }else
+        {
+            //TODO change health of spaceship if collision with spaceship
+        }
+    }
+}
+
 } /* namespace asteroids */

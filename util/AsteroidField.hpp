@@ -45,6 +45,8 @@ public:
 
 	void getAsteroids(std::list<Asteroid::Ptr>& asteroids);
 
+	void addAsteroid(asteroids::Asteroid::Ptr asteroid);
+
 private:
 
    /// The asteroids in the field

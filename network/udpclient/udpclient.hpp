@@ -30,6 +30,8 @@ public:
      */
     void send_bullet(asteroids::Vector3f position, asteroids::Vector3f velocity);
 
+    void recv_collision(int recv_seq_nr, QByteArray data);
+
     void recv_ack(int recv_seq_nr, int recv_id);
 
     void send_not_acknowledged();
