@@ -21,13 +21,10 @@ Planet::Planet(std::string name, int posx, int posy, int rubin, int mines) : m_n
 	m_name = name;
 	m_rubin = rubin;
 	m_mines = mines;
+	m_ships = 0;
 
 }
 
-std::string Planet::getName()
-{
-	return m_name;
-}
 
 int Planet::getShips() 
 {
@@ -57,13 +54,13 @@ void Planet::addNeighbour(Planet::Ptr neighbour)
 	m_neighbours.push_back(Planet::Ptr(neighbour));
 }
 
-void Planet::setOwner(Player::Ptr owner) 
+void Planet::setOwner(std::shared_ptr<Player> owner) 
 {
 	m_owner = owner;
 }
 
-Player Planet::getOwner(){
-	return *m_owner;
+std::shared_ptr<Player> Planet::getOwner(){
+	return m_owner;
 }
 
 int Planet::getRubin() 
@@ -94,6 +91,12 @@ int Planet::getPosX()
 int Planet::getPosY()
 {
 	return m_posy;
+}
+
+std::string Planet::getName()
+{
+    return m_name;
+
 }
 
 }

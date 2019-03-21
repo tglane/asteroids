@@ -13,11 +13,13 @@
 
 namespace strategy {
 
-MainWindow2D::MainWindow2D(DataModel *model, QWidget* parent) :
+MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow2D())
 {
     m_model = model;
+    m_model->addWindow(DataModel::MAIN2D, this);
+
     int planet_size = 20;
     float position_scale = 1;
     // Setup user interface
@@ -131,7 +133,7 @@ void MainWindow2D::fight(bool click)
 
 void MainWindow2D::choose_planet(int id)
 {
-    cout << "ID of clicked planet is " << id << endl;
+    Planet::Ptr p = m_model->getPlanetFromId(id);
 
     std::map<int, Planet::Ptr> planets = m_model->getPlanets();
 
@@ -146,6 +148,9 @@ void MainWindow2D::choose_planet(int id)
         ellipse->myPen = QPen(Qt::black,1);
     }else{
         if(currentPlanet!=-1){
+            if(planets.at(id)->getOwner()==m_model->getSelfPlayer()){
+                cout<<"ist mein planet"<<endl;
+            }
             MyEllipse* otherEllipse = getEllipseById(currentPlanet);
             QPixmap otherpix("../models/surface/neutral2.jpg");
             otherEllipse->myBrush = QBrush(otherpix);
@@ -157,17 +162,32 @@ void MainWindow2D::choose_planet(int id)
         currentPlanet = id;
         ellipse->myPen = QPen(Qt::white,1);
     }
-    // TODO: überall shared_Ptr
-    //Planet::Ptr p = model->getPlanetFromId(id);
-    
-    // TODO: Planeteninfo ausfüllen
-    ui->PlanetName->setText("???");
 
+    // Planeteninfo ausfüllen
+    ui->PlanetName->setText(QString::fromStdString(p->getName()));
     ui->Info->setText("???");
+    ui->MineNumber->setText(QString::number(p->getMines()));
+    ui->ShipNumber->setText(QString::number(p->getShips()));
 
-    ui->MineNumber->setText("???");
+    std::list<Planet::Ptr> neighbour_list = p->getNeighbours();
 
-    ui->ShipNumber->setText("???");
+    // Lösche die Anzahl der Schiffe des zuletzt ausgewählten Planeten aus der QComboBox
+    ui->SendShipNumber->clear();
+    // Fülle die QComboBox mit der aktuellen Anzahl an Schiffen
+    for(int i = 0; i < p->getShips(); i++)
+    {
+        ui->SendShipNumber->addItem(QString::number(i + 1));
+    }    
+
+    // Lösche die Nachbarplaneten des zuletzt ausgewählten Planeten aus der QComboBox
+    ui->DestionationPlanet->clear();
+    // Fülle die QComboBox mit den aktuellen Nachbarn
+    int j = neighbour_list.size();
+    for(int i = 1; i <= j; i++)
+    {
+        ui->DestionationPlanet->addItem(QString::fromStdString(neighbour_list.front()->getName()));
+        neighbour_list.pop_front();
+    }
 
 }
 
@@ -184,7 +204,7 @@ void MainWindow2D::endOfRound(bool click)
 void MainWindow2D::colonize(bool click /*, Planet* p*/)
 {
     // TODO start colonization of Planet p
-    //model->colonize(p);
+    //m_model->colonize(p);
     std::cout << "Colonize!" << std::endl;
 }
 
@@ -192,7 +212,7 @@ void MainWindow2D::buildShip(bool click /*, Planet* p*/)
 {
     // Ship should be accessible a round later
 
-    //model->buildShip(p);
+    //m_model->buildShip(p);
     std::cout << "Build Ship!" << std::endl;
 }
 

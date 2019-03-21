@@ -9,9 +9,10 @@
 
 namespace asteroids{
 
-    MineOrder::MineOrder(Planet::Ptr P1):P(P1)
+    MineOrder::MineOrder(Planet::Ptr P1):
+    m_P(P1)
     {
-        type = MINE;
+        
     }
 
 }

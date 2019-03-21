@@ -11,14 +11,17 @@
 #include <memory>
 
 #include "Planet.hpp"
+#include "MoveOrder.hpp"
+#include "MineOrder.hpp"
+#include "ShipOrder.hpp"
 
 namespace asteroids
 {
 
 class Planet;
-
-
-	//using Planet::Ptr = std::shared_ptr<Planet>;
+class MineOrder;
+class ShipOrder;
+class MoveOrder;
 
 class Player
 {
@@ -41,13 +44,23 @@ public:
 
 	bool delRubin(int rubin);
 
+	void setPlayerName(std::string name);
+
+	std::string getPlayerName();
+
 private:
 
+	std::string m_name;
 	int m_identity;
 	int m_rubin;
 	//freie Raumschiffe?
 	int m_ships;
 	std::list<std::shared_ptr<Planet>> m_planets;
+
+	std::list<std::shared_ptr<MoveOrder>> m_moveOrders;
+	std::list<std::shared_ptr<MineOrder>> m_mineOrders;
+	std::list<std::shared_ptr<ShipOrder>> m_shipOrders;
+
 };
 }
 
