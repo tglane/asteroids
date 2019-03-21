@@ -21,6 +21,7 @@ Planet::Planet(std::string name, int posx, int posy, int rubin, int mines) : m_n
 	m_name = name;
 	m_rubin = rubin;
 	m_mines = mines;
+	m_ships = 0;
 
 }
 

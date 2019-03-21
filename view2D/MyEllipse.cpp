@@ -32,7 +32,7 @@ void MyEllipse::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 }
 
 void MyEllipse::mousePressEvent(QGraphicsSceneMouseEvent *event)
-{
+{    
     emit show_planetInfo(this->data(1).toInt());
     QGraphicsItem::mousePressEvent(event);
     update();

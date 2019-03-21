@@ -131,11 +131,8 @@ void MainWindow2D::fight(bool click)
 
 void MainWindow2D::choose_planet(int id)
 {
-    // Debug-Ausgabe
-    cout << "ID of clicked planet is " << id << endl;
-
     Planet::Ptr p = m_model->getPlanetFromId(id);
-    
+
     MyEllipse* ellipse = getEllipseById(id);
     if(id == currentPlanet){
         QPixmap pix("../models/surface/neutral1.jpg");
@@ -155,9 +152,7 @@ void MainWindow2D::choose_planet(int id)
         currentPlanet = id;
         ellipse->myPen = QPen(Qt::white,1);
     }
-    // TODO: überall shared_Ptr
-    //Planet::Ptr p = model->getPlanetFromId(id);
-    
+
     // Planeteninfo ausfüllen
     ui->PlanetName->setText(QString::fromStdString(p->getName()));
     ui->Info->setText("???");
@@ -165,25 +160,20 @@ void MainWindow2D::choose_planet(int id)
     ui->ShipNumber->setText(QString::number(p->getShips()));
 
     std::list<Planet::Ptr> neighbour_list = p->getNeighbours();
-    
+
     // Lösche die Anzahl der Schiffe des zuletzt ausgewählten Planeten aus der QComboBox
-    int j = ui->SendShipNumber->count();
-    for(int i = 0; i < j; i++) {
-        ui->SendShipNumber->removeItem(i);
-    }
+    ui->SendShipNumber->clear();
     // Fülle die QComboBox mit der aktuellen Anzahl an Schiffen
     for(int i = 0; i < p->getShips(); i++)
     {
         ui->SendShipNumber->addItem(QString::number(i + 1));
-    }
+    }    
+
     // Lösche die Nachbarplaneten des zuletzt ausgewählten Planeten aus der QComboBox
-    j = ui->DestionationPlanet->count();
-    for(int i = 0; i < j; i++) {
-        ui->SendShipNumber->removeItem(i);
-        std::cout << i << std::endl;
-    }
+    ui->DestionationPlanet->clear();
     // Fülle die QComboBox mit den aktuellen Nachbarn
-    for(int i = 1; i <= (int)neighbour_list.size(); i ++)
+    int j = neighbour_list.size();
+    for(int i = 1; i <= j; i++)
     {
         ui->DestionationPlanet->addItem(QString::fromStdString(neighbour_list.front()->getName()));
         neighbour_list.pop_front();
