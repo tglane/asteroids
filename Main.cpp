@@ -13,6 +13,7 @@
 #include "datamodel/DataModel.hpp"
 #include "datamodel/Player.hpp"
 #include "view2D/MainWindow2D.hpp"
+#include "view2D/StartingDialog.hpp"
 
 
 
@@ -28,12 +29,18 @@ int main(int argc, char** argv)
 
     QApplication a(argc, argv);
 
-    /*asteroids::MainWindow mainWindow(argv[1]);
-    mainWindow.show();*/
-
     strategy::MainWindow2D mainWindow2D(&model);
-    mainWindow2D.show();
-    mainWindow2D.showFullScreen();
+
+    //asteroids::MainWindow mainWindow("../models/level.xml");
+    //mainWindow.show();
+
+    strategy::StartingDialog startWindow(&model);
+
+
+    //mainWindow2D.showFullScreen();
+    startWindow.show();
+
 
     return a.exec();
 }
+

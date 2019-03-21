@@ -101,7 +101,7 @@ private:
 
     asteroids::MainWindow* FighterWindow;
 
-    DataModel* model;
+    DataModel* m_model;
 
 
 };

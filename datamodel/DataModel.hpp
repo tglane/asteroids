@@ -23,7 +23,10 @@ namespace asteroids{
 class DataModel
 {
 
+enum { START, MAIN2D, MAIN3D };
+
 public:
+
     /**
      * @brief   Initilizes a new data model
      * 
