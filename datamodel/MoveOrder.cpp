@@ -10,7 +10,7 @@
 namespace asteroids{
 
     MoveOrder::MoveOrder(Planet::Ptr orig, Planet::Ptr dest, int numShip):
-    origin(orig), destination(dest), numberShips(numShip), type(MOVE)
+    m_origin(orig), m_destination(dest), m_numberShips(numShip)
     {
         
     }

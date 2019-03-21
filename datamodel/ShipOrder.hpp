@@ -32,15 +32,21 @@ namespace asteroids
          */
         ShipOrder(Planet::Ptr P1);
 
+
+        /**
+         * @brief returns Planet
+         * @return The planet on which a ship should be built
+         */
+        Planet::Ptr getPlanet()
+        {
+                return m_P;
+        }
+
+        private:
         /**
          * @brief The planet on which a ship should be built
          */
-        Planet::Ptr P;
-
-        /**
-         * @brief Can give the information of which type this Order is
-         */
-        int type;
+        Planet::Ptr m_P;
 
 	};
 }

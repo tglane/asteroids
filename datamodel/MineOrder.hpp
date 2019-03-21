@@ -16,12 +16,11 @@
 #include <memory>
 
 #include "Planet.hpp"
-#include "Order.hpp"
 
 namespace asteroids
 {
 
-	class MineOrder : public Order
+	class MineOrder
 	{
 
         using Ptr = std::shared_ptr<MineOrder>;
@@ -34,14 +33,20 @@ namespace asteroids
         MineOrder(Planet::Ptr P1);
 
         /**
+         * @brief returns Planet
+         * @return The planet on which a mine should be built
+         */
+        Planet::Ptr getPlanet()
+        {
+                return m_P;
+        }
+
+        private:
+        /**
          * @brief The planeet on which a mine should be built
          */
-        Planet::Ptr P;
+        Planet::Ptr m_P;
 
-        /**
-         * @brief Can give the information of which type this Order is
-         */
-        int type;
 
 	};
 }
