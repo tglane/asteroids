@@ -89,7 +89,9 @@ int Planet::getPosY()
 
 std::string Planet::getName()
 {
-	return m_name;
+    return m_name;
+
+}
 
 }
 
