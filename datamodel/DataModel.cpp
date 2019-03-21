@@ -203,6 +203,14 @@ void DataModel::startGame()
 
 }
 
+void DataModel::setStartPlanet(std::shared_ptr<Planet> startplanet)
+{
+	startplanet->setOwner(m_self);
+	startplanet->addShips(1);
+	m_self->addPlanet(startplanet);
+	startplanet->addShips(1);
+}
+
 void DataModel::addWindow(int Id, QMainWindow* Window)
 {
     m_Window[Id] = Window;
