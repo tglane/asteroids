@@ -137,28 +137,50 @@ void MainWindow2D::choose_planet(int id)
 
     std::map<int, Planet::Ptr> planets = m_model->getPlanets();
 
+    //Higlighting of the planets
     MyEllipse* ellipse = getEllipseById(id);
+    //wieder entmarkieren 
     if(id == currentPlanet){
         if(planets.at(id)->getOwner()==m_model->getSelfPlayer()){
-            cout<<"ist mein planet"<<endl;
+            QPixmap pix("../models/surface/my1.jpg");
+            ellipse->myBrush = QBrush(pix);
+        } else if (planets.at(id)->getOwner()==m_model->getEnemyPlayer()){
+            QPixmap pix("../models/surface/other1.jpg");
+            ellipse->myBrush = QBrush(pix);
+        } else{
+            QPixmap pix("../models/surface/neutral1.jpg");
+            ellipse->myBrush = QBrush(pix);  
         }
-        QPixmap pix("../models/surface/neutral1.jpg");
-        ellipse->myBrush = QBrush(pix);
         currentPlanet = -1;
         ellipse->myPen = QPen(Qt::black,1);
     }else{
+        //Vorherigen Planet enhighliten
         if(currentPlanet!=-1){
-            if(planets.at(id)->getOwner()==m_model->getSelfPlayer()){
-                cout<<"ist mein planet"<<endl;
-            }
             MyEllipse* otherEllipse = getEllipseById(currentPlanet);
-            QPixmap otherpix("../models/surface/neutral2.jpg");
-            otherEllipse->myBrush = QBrush(otherpix);
+            if(planets.at(currentPlanet)->getOwner()==m_model->getSelfPlayer()){
+                QPixmap otherpix("../models/surface/my1.jpg");
+                ellipse->myBrush = QBrush(otherpix);
+            } else if (planets.at(currentPlanet)->getOwner()==m_model->getEnemyPlayer()){
+                QPixmap otherpix("../models/surface/other1.jpg");
+                ellipse->myBrush = QBrush(otherpix);
+            } else{
+                QPixmap otherpix("../models/surface/neutral1.jpg");
+                ellipse->myBrush = QBrush(otherpix);  
+            }
             otherEllipse->myPen = QPen(Qt::black,1);
             otherEllipse->update();
         }
-        QPixmap pix("../models/surface/neutral2.jpg");
-        ellipse->myBrush = QBrush(pix);
+        //Anklicken und highlighten
+        if(planets.at(id)->getOwner()==m_model->getSelfPlayer()){
+            QPixmap pix("../models/surface/my2.jpg");
+            ellipse->myBrush = QBrush(pix);
+        } else if (planets.at(id)->getOwner()==m_model->getEnemyPlayer()){
+            QPixmap pix("../models/surface/other2.jpg");
+            ellipse->myBrush = QBrush(pix);
+        } else{
+            QPixmap pix("../models/surface/neutral2.jpg");
+            ellipse->myBrush = QBrush(pix);  
+        }
         currentPlanet = id;
         ellipse->myPen = QPen(Qt::white,1);
     }
