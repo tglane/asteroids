@@ -151,15 +151,15 @@ void GLWidget::paintGL()
     m_enemy->render();
 
     // TODO: tut so noch nicht
-    // QPainter qPainter(this);
-    // QPixmap hud("../models/cockpit.png");
-    // qPainter.drawPixmap(0, 0, this->width(), this->height(), hud);
+//     QPainter qPainter(this);
+//     QPixmap hud("../models/cockpit.png");
+//     qPainter.drawPixmap(0, 0, this->width(), this->height(), hud);
 }
 
 void GLWidget::step(map<Qt::Key, bool>& keyStates)
 {
     int elapsed_time = m_timer.restart();
-    
+
     // Get keyboard states and handle model movement
     m_physicsEngine->process(elapsed_time);
 

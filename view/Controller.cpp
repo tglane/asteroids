@@ -35,16 +35,18 @@ void Controller::keyControl(std::map<Qt::Key, bool> &keyStates, Hittable::Ptr& p
         enemy->rotate(Transformable::YAW_CLOCKWISE, 0.05);
     }
     // Add a bullet to physics engine
+    if (m_cooldown_enemy > 0)
+    {
+        m_cooldown_enemy -= elapsed_time;
+        if (m_cooldown_enemy < 0)
+            m_cooldown_enemy = 0;
+    }
     if (m_cooldown_enemy == 0 && keyStates[Qt::Key_M])
     {
         Bullet::Ptr bullet = make_shared<Bullet>(Bullet(enemy->getPosition() - enemy->getZAxis() * 42,
                                                         enemy->getXAxis(), enemy->getId()));
         physicsEngine->addBullet(bullet);
-        m_cooldown_enemy = 10;
-    }
-    if (m_cooldown_enemy > 0)
-    {
-        m_cooldown_enemy--;
+        m_cooldown_enemy = 300;
     }
 
     player->move(Transformable::FORWARD, 300 * elapsed_time / 1000.0);
@@ -72,16 +74,18 @@ void Controller::keyControl(std::map<Qt::Key, bool> &keyStates, Hittable::Ptr& p
     {
         player->rotate(Transformable::YAW_CLOCKWISE, 0.05);
     }
+    if (m_cooldown_player > 0)
+    {
+        m_cooldown_player -= elapsed_time;
+        if (m_cooldown_player < 0)
+            m_cooldown_player = 0;
+    }
     if (m_cooldown_player == 0 && keyStates[Qt::Key_Space])
     {
         Bullet::Ptr bullet = make_shared<Bullet>(Bullet(player->getPosition() - player->getZAxis() * 42,
                                                         player->getXAxis(), player->getId()));
         physicsEngine->addBullet(bullet);
-        m_cooldown_player = 10;
-    }
-    if (m_cooldown_player > 0)
-    {
-        m_cooldown_player--;
+        m_cooldown_player = 300;
     }
 
     if (keyStates[Qt::Key_T])
