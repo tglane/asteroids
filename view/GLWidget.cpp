@@ -132,6 +132,7 @@ void GLWidget::initializeGL()
     }
 
     m_controller = Controller();
+    m_timer.start();
 }
 
 void GLWidget::paintGL()
@@ -150,19 +151,21 @@ void GLWidget::paintGL()
     m_enemy->render();
 
     // TODO: tut so noch nicht
-    //QPainter qPainter(this);
-    //QPixmap hud("../models/cockpit.png");
-    //qPainter.drawPixmap(0, 0, this->width(), this->height(), hud);
+    // QPainter qPainter(this);
+    // QPixmap hud("../models/cockpit.png");
+    // qPainter.drawPixmap(0, 0, this->width(), this->height(), hud);
 }
 
 void GLWidget::step(map<Qt::Key, bool>& keyStates)
 {
+    int elapsed_time = m_timer.restart();
+    
     // Get keyboard states and handle model movement
-    m_physicsEngine->process();
+    m_physicsEngine->process(elapsed_time);
 
     Hittable::Ptr player_ptr = std::static_pointer_cast<Hittable>(m_camera);
     Hittable::Ptr enemy_ptr = std::static_pointer_cast<Hittable>(m_enemy);
-    m_controller.keyControl(keyStates, player_ptr, enemy_ptr, m_physicsEngine);
+    m_controller.keyControl(keyStates, player_ptr, enemy_ptr, m_physicsEngine, elapsed_time);
 
     // Trigger update, i.e., redraw via paintGL()
     this->update();

@@ -17,6 +17,8 @@
 #include <GL/glew.h>
 #include <QOpenGLWidget>
 #include <QtGui/QPainter>
+#include <QtCore/QTimer>
+#include <QtCore/QTime>
 
 #include "view/Camera.hpp"
 #include "rendering/SpaceCraft.hpp"
@@ -79,8 +81,10 @@ private:
     /// Physics 
     PhysicsEngine::Ptr          m_physicsEngine;
 
-    Controller                  m_controller;
+    /// timer for correct speed with low fps
+    QTime                       m_timer;
 
+    Controller                  m_controller;
 };
 
 #endif

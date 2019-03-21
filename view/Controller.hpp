@@ -16,7 +16,8 @@ public:
 
     Controller();
 
-    void keyControl(std::map<Qt::Key, bool> &keyStates, Hittable::Ptr& player, Hittable::Ptr& enemy, PhysicsEngine::Ptr& physicsEngine);
+    void keyControl(std::map<Qt::Key, bool> &keyStates, Hittable::Ptr& player, Hittable::Ptr& enemy,
+                    PhysicsEngine::Ptr& physicsEngine, int elapsed_time);
 
 private:
 

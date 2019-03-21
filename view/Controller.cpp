@@ -13,9 +13,10 @@ Controller::Controller() : m_cooldownPlayer(0), m_cooldownEnemy(0)
     }
 }
 
-void Controller::keyControl(std::map<Qt::Key, bool> &keyStates, Hittable::Ptr& player, Hittable::Ptr& enemy, PhysicsEngine::Ptr& physicsEngine)
+void Controller::keyControl(std::map<Qt::Key, bool> &keyStates, Hittable::Ptr& player, Hittable::Ptr& enemy,
+                            PhysicsEngine::Ptr& physicsEngine, int elapsed_time)
 {
-    enemy->move(Transformable::FORWARD, 5);
+    enemy->move(Transformable::FORWARD, 300 * elapsed_time / 1000.0);
     if (keyStates[Qt::Key_L])
     {
         enemy->rotate(Transformable::ROLL_CLOCKWISE, 0.05);
@@ -53,7 +54,7 @@ void Controller::keyControl(std::map<Qt::Key, bool> &keyStates, Hittable::Ptr& p
         m_cooldownEnemy--;
     }
 
-    player->move(Transformable::FORWARD, 5);
+    player->move(Transformable::FORWARD, 300 * elapsed_time / 1000.0);
     if (keyStates[Qt::Key_D])
     {
         player->rotate(Transformable::ROLL_CLOCKWISE, 0.05);
