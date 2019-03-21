@@ -107,6 +107,8 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
 
     currentPlanet = -1;
 
+    ui->PlanetInfo->setVisible(false);
+
 }
 
 void MainWindow2D::resizeEvent(QResizeEvent* event){
@@ -131,6 +133,7 @@ void MainWindow2D::fight(bool click)
 
 void MainWindow2D::choose_planet(int id)
 {
+
     Planet::Ptr p = m_model->getPlanetFromId(id);
 
     std::map<int, Planet::Ptr> planets = m_model->getPlanets();
@@ -139,6 +142,7 @@ void MainWindow2D::choose_planet(int id)
     MyEllipse* ellipse = getEllipseById(id);
     //wieder entmarkieren 
     if(id == currentPlanet){
+        ui->PlanetInfo->setVisible(false);
         if(planets.at(id)->getOwner()==m_model->getSelfPlayer()){
             QPixmap pix("../models/surface/my1.jpg");
             ellipse->myBrush = QBrush(pix);
@@ -152,6 +156,7 @@ void MainWindow2D::choose_planet(int id)
         currentPlanet = -1;
         ellipse->myPen = QPen(Qt::black,1);
     }else{
+        ui->PlanetInfo->setVisible(true);
         //Vorherigen Planet enhighliten
         if(currentPlanet!=-1){
             MyEllipse* otherEllipse = getEllipseById(currentPlanet);

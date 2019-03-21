@@ -66,16 +66,16 @@ public:
     Planet::Ptr getPlanetFromId(int ID);
 
     std::list<std::pair<int,int>> getEdges();
-
-    Player::Ptr getSelfPlayer();
-
-    Player::Ptr getEnemyPlayer();
     
     void startGame();
 
     void addWindow(int Id, QMainWindow* Window);
 
     void switchWindow(int Id);
+
+    Player::Ptr getSelfPlayer();
+
+    Player::Ptr getEnemyPlayer();
 
 private:
     /*Variablen von Kay*/

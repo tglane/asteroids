@@ -150,13 +150,6 @@ Planet::Ptr DataModel::getPlanetFromId(int ID)
     return m_planets.at(ID);
 }
 
-Player::Ptr DataModel::getSelfPlayer(){
-    return m_self;
-}
-
-Player::Ptr DataModel::getEnemyPlayer(){
-    return m_enemy;
-} 
   
 void DataModel::startGame()
 {
@@ -175,6 +168,16 @@ void DataModel::switchWindow(int Id)
     QMainWindow* Active = m_Window[Id];
     Active->showFullScreen();
     
+}
+
+Player::Ptr DataModel::getSelfPlayer()
+{
+    return m_self;
+}
+
+Player::Ptr DataModel::getEnemyPlayer()
+{
+    return m_enemy;
 }
 
 DataModel::~DataModel()

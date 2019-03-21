@@ -17,8 +17,8 @@
    <widget class="QPushButton" name="StartGame">
     <property name="geometry">
      <rect>
-      <x>210</x>
-      <y>440</y>
+      <x>310</x>
+      <y>430</y>
       <width>89</width>
       <height>25</height>
      </rect>
@@ -30,8 +30,8 @@
    <widget class="QPushButton" name="ExitGame">
     <property name="geometry">
      <rect>
-      <x>410</x>
-      <y>440</y>
+      <x>430</x>
+      <y>430</y>
       <width>89</width>
       <height>25</height>
      </rect>
@@ -123,6 +123,22 @@
       <width>86</width>
       <height>25</height>
      </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="ChooseMapLabel">
+    <property name="geometry">
+     <rect>
+      <x>226</x>
+      <y>360</y>
+      <width>181</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Choose a map:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
   </widget>

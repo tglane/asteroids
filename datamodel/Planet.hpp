@@ -14,8 +14,6 @@
 #include <memory>
 #include <iostream>
 
-#include "Player.hpp"
-
 namespace asteroids
 {
 	class Player;

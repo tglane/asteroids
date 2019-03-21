@@ -19,11 +19,6 @@
 
 int main(int argc, char** argv)
 {
-    /*if (argc < 3)
-    {
-        cerr << "Usage: asteroids <level-file> <map-file>" << endl;
-        return 1;
-    }*/
 
     DataModel::Ptr model = DataModel::Ptr(new DataModel("../models/Level-1.txt"));
 

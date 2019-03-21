@@ -18,7 +18,6 @@
 namespace asteroids
 {
 
-class Planet;
 class MineOrder;
 class ShipOrder;
 class MoveOrder;

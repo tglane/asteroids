@@ -72,22 +72,22 @@
      <widget class="QWidget" name="ContextMenue" native="true">
       <property name="minimumSize">
        <size>
-        <width>250</width>
+        <width>300</width>
         <height>0</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
-        <width>250</width>
+        <width>300</width>
         <height>16777215</height>
        </size>
       </property>
       <widget class="QWidget" name="SpielerInfo" native="true">
        <property name="geometry">
         <rect>
-         <x>0</x>
+         <x>10</x>
          <y>0</y>
-         <width>251</width>
+         <width>291</width>
          <height>251</height>
         </rect>
        </property>
@@ -199,9 +199,9 @@
       <widget class="QWidget" name="PlanetInfo" native="true">
        <property name="geometry">
         <rect>
-         <x>0</x>
+         <x>10</x>
          <y>300</y>
-         <width>251</width>
+         <width>291</width>
          <height>301</height>
         </rect>
        </property>
@@ -365,7 +365,7 @@
       <widget class="QPushButton" name="NextRound">
        <property name="geometry">
         <rect>
-         <x>40</x>
+         <x>50</x>
          <y>260</y>
          <width>99</width>
          <height>41</height>
@@ -378,7 +378,7 @@
       <widget class="QLabel" name="Date">
        <property name="geometry">
         <rect>
-         <x>160</x>
+         <x>190</x>
          <y>260</y>
          <width>91</width>
          <height>41</height>
