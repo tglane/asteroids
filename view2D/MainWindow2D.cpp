@@ -59,7 +59,7 @@ MainWindow2D::MainWindow2D(DataModel *model, QWidget* parent) :
     }
 
     //Abhängig von Planeten machen
-    for(int i = 0; i < planets.size(); i++){
+    for(uint i = 0; i < planets.size(); i++){
         Planet::Ptr p = planets.at(i);
         scene->addEllipse(p->getPosX()/position_scale, p->getPosY()/position_scale, planet_size, planet_size, outlinePen, greenBrush);
         
@@ -105,7 +105,7 @@ void MainWindow2D::fight(bool click)
 
 void MainWindow2D::endOfRound(bool click)
 {
-    bool succes = model->endOfRound();
+    //bool succes = model->endOfRound();
 
     // TODO wait for response of server, block the window until all players are ready
 }

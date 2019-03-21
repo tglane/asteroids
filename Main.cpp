@@ -41,13 +41,13 @@ int main(int argc, char** argv)
 
     Planet::Ptr Test = model.getPlanetFromId(5);
     std::cout << Test->getName() << std::endl;
-    bool buytest;
+    //bool buytest;
 
-    bool buytest2;
-    buytest = model.buyShip(Test, Testplayer);
-    buytest2 = model.buyMine(Test, Testplayer);
+    //bool buytest2;
+    //buytest = model.buyShip(Test, Testplayer);
+    //buytest2 = model.buyMine(Test, Testplayer);
 
-    buytest = model.buyShip(Test, Testplayer);
+    //buytest = model.buyShip(Test, Testplayer);
 
 
 
