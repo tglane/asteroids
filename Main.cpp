@@ -41,6 +41,8 @@ int main(int argc, char** argv)
 
     Planet::Ptr Test = model.getPlanetFromId(5);
     std::cout << Test->getName() << std::endl;
+    std::cout << Test->getShips() << std::endl;
+    std::cout << Test->getMines() << std::endl;
     bool buytest;
 
     bool buytest2;
@@ -48,6 +50,21 @@ int main(int argc, char** argv)
     buytest2 = model.buyMine(Test, Testplayer);
 
     buytest = model.buyShip(Test, Testplayer);
+    model.TransaktionShip(Testplayer);
+    model.TransaktionMine(Testplayer);
+    std::cout << Test->getName() << std::endl;
+    std::cout << Test->getShips() << std::endl;
+    std::cout << Test->getMines() << std::endl;
+    model.clearOrderList(Testplayer);
+    model.TransaktionShip(Testplayer);
+    model.TransaktionMine(Testplayer);
+    std::cout << Test->getName() << std::endl;
+    std::cout << Test->getShips() << std::endl;
+    std::cout << Test->getMines() << std::endl;
+
+    
+
+
 
 
 

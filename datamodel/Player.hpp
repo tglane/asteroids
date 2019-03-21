@@ -48,6 +48,16 @@ public:
 
 	std::string getPlayerName();
 
+	std::list<std::shared_ptr<ShipOrder>> getListShipOrder();
+
+	void putListShipOrder(std::shared_ptr<ShipOrder> NewShipOrder);
+
+	std::list<std::shared_ptr<MineOrder>> getListMineOrder();
+
+	void putListMineOrder(std::shared_ptr<MineOrder> NewMineOrder);
+
+	void ClearOrderListInPlayer();
+
 private:
 
 	std::string m_name;
