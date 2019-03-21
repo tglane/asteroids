@@ -25,7 +25,7 @@ int main(int argc, char** argv)
         return 1;
     }*/
 
-    DataModel model("../models/Level-1.txt");
+    DataModel::Ptr model = DataModel::Ptr(new DataModel("../models/Level-1.txt"));
 
     QApplication a(argc, argv);
 
@@ -35,9 +35,6 @@ int main(int argc, char** argv)
     //mainWindow.show();
 
     strategy::StartingDialog startWindow(&model);
-
-
-    //mainWindow2D.showFullScreen();
     startWindow.show();
 
 

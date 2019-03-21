@@ -14,6 +14,7 @@
 #include <string>
 #include <list>
 #include <memory>
+#include <iostream>
 
 #include "Player.hpp"
 
@@ -48,6 +49,8 @@ namespace asteroids
 		 * @return number of ships
 		 */
 		int getShips();
+
+		std::string getName();
 
 		/**
 		 * @brief add ships to the planet

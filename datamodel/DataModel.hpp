@@ -28,6 +28,7 @@ class DataModel
 public:
 
     enum { START, MAIN2D, MAIN3D };
+    using Ptr = std::shared_ptr<DataModel>;
 
     /**
      * @brief   Initilizes a new data model

@@ -13,7 +13,7 @@
 
 namespace strategy {
 
-MainWindow2D::MainWindow2D(DataModel *model, QWidget* parent) :
+MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow2D())
 {
@@ -41,22 +41,22 @@ MainWindow2D::MainWindow2D(DataModel *model, QWidget* parent) :
     QPen outlinePenHighlight(Qt::white);
     outlinePenHighlight.setWidth(1);;
 
-    std::map<int, Planet::Ptr> planets = model->getPlanets();
+    std::map<int, Planet::Ptr> planets = m_model->getPlanets();
 
-    // Map für die Elipsen-Objekten im QGraphicsScene
-    std::map<int, MyEllipse*> view_planets;
+    // // Map für die Elipsen-Objekten im QGraphicsScene
 
     //Erstelle die Elipsen und füge sie in die Map und in die QGraphicsScene ein 
     for(int i = 0; i < (int)planets.size(); i++){
         Planet::Ptr p = planets.at(i);
         view_planets[i] = new MyEllipse(p->getPosX()/position_scale, p->getPosY()/position_scale);
+        view_planets[i]->setZValue(1);
         scene->addItem(view_planets[i]);
         QVariant ellipse_ID(i);
         view_planets[i]->setData(1, ellipse_ID);
         connect(view_planets[i], SIGNAL(show_planetInfo(int)), this, SLOT(choose_planet(int)));
     }
 
-    std::list<std::pair<int,int>> edges = model->getEdges();
+    std::list<std::pair<int,int>> edges = m_model->getEdges();
 
     //Linien einzeichnen
     for(std::list<std::pair<int,int>>::iterator it=edges.begin(); it != edges.end(); ++it){
@@ -106,6 +106,9 @@ MainWindow2D::MainWindow2D(DataModel *model, QWidget* parent) :
     // Somehow there's a Segmentation fault if the Fighterwindow is initialized here like
     // FighterWindow = new asteroids::MainWindow("...")
     FighterWindow = NULL;
+
+    currentPlanet = -1;
+
 }
 
 void MainWindow2D::resizeEvent(QResizeEvent* event){
@@ -130,16 +133,63 @@ void MainWindow2D::fight(bool click)
 
 void MainWindow2D::choose_planet(int id)
 {
+    // Debug-Ausgabe
     cout << "ID of clicked planet is " << id << endl;
+
+    Planet::Ptr p = m_model->getPlanetFromId(id);
     
-    // TODO: Planeteninfo ausfüllen
-    ui->PlanetName->setText("???");
-
+    MyEllipse* ellipse = getEllipseById(id);
+    if(id == currentPlanet){
+        QPixmap pix("../models/surface/neutral1.jpg");
+        ellipse->myBrush = QBrush(pix);
+        currentPlanet = -1;
+        ellipse->myPen = QPen(Qt::black,1);
+    }else{
+        if(currentPlanet!=-1){
+        MyEllipse* otherEllipse = getEllipseById(currentPlanet);
+        QPixmap otherpix("../models/surface/neutral2.jpg");
+        otherEllipse->myBrush = QBrush(otherpix);
+        otherEllipse->myPen = QPen(Qt::black,1);
+        otherEllipse->update();
+        }
+        QPixmap pix("../models/surface/neutral2.jpg");
+        ellipse->myBrush = QBrush(pix);
+        currentPlanet = id;
+        ellipse->myPen = QPen(Qt::white,1);
+    }
+    // TODO: überall shared_Ptr
+    //Planet::Ptr p = model->getPlanetFromId(id);
+    
+    // Planeteninfo ausfüllen
+    ui->PlanetName->setText(QString::fromStdString(p->getName()));
     ui->Info->setText("???");
+    ui->MineNumber->setText(QString::number(p->getMines()));
+    ui->ShipNumber->setText(QString::number(p->getShips()));
 
-    ui->MineNumber->setText("???");
-
-    ui->ShipNumber->setText("???");
+    std::list<Planet::Ptr> neighbour_list = p->getNeighbours();
+    
+    // Lösche die Anzahl der Schiffe des zuletzt ausgewählten Planeten aus der QComboBox
+    int j = ui->SendShipNumber->count();
+    for(int i = 0; i < j; i++) {
+        ui->SendShipNumber->removeItem(i);
+    }
+    // Fülle die QComboBox mit der aktuellen Anzahl an Schiffen
+    for(int i = 0; i < p->getShips(); i++)
+    {
+        ui->SendShipNumber->addItem(QString::number(i + 1));
+    }
+    // Lösche die Nachbarplaneten des zuletzt ausgewählten Planeten aus der QComboBox
+    j = ui->DestionationPlanet->count();
+    for(int i = 0; i < j; i++) {
+        ui->SendShipNumber->removeItem(i);
+        std::cout << i << std::endl;
+    }
+    // Fülle die QComboBox mit den aktuellen Nachbarn
+    for(int i = 1; i <= (int)neighbour_list.size(); i ++)
+    {
+        ui->DestionationPlanet->addItem(QString::fromStdString(neighbour_list.front()->getName()));
+        neighbour_list.pop_front();
+    }
 
 }
 
@@ -156,7 +206,7 @@ void MainWindow2D::endOfRound(bool click)
 void MainWindow2D::colonize(bool click /*, Planet* p*/)
 {
     // TODO start colonization of Planet p
-    //model->colonize(p);
+    //m_model->colonize(p);
     std::cout << "Colonize!" << std::endl;
 }
 
@@ -164,13 +214,19 @@ void MainWindow2D::buildShip(bool click /*, Planet* p*/)
 {
     // Ship should be accessible a round later
 
-    //model->buildShip(p);
+    //m_model->buildShip(p);
     std::cout << "Build Ship!" << std::endl;
 }
 
 void MainWindow2D::exitGame(bool click)
 {
     QCoreApplication::quit();
+}
+
+MyEllipse* MainWindow2D::getEllipseById(int id)
+{
+    MyEllipse* ellipse = view_planets.at(id);
+    return ellipse;
 }
 
 }

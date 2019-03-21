@@ -36,7 +36,7 @@ public:
      * @brief Construct a new Main Window object
      *
      */
-     MainWindow2D(DataModel *model, QWidget* parent = NULL);
+     MainWindow2D(DataModel::Ptr model, QWidget* parent = NULL);
 
     /**
      * @brief Destroys the Main Window object
@@ -92,6 +92,8 @@ public slots:
      */
     void exitGame(bool click);
 
+    MyEllipse* getEllipseById(int id);
+
 private:
 
     /// QT UI of the window
@@ -101,9 +103,11 @@ private:
 
     asteroids::MainWindow* FighterWindow;
 
-    DataModel* m_model;
+    DataModel::Ptr m_model;
 
+    std::map<int, MyEllipse*> view_planets;
 
+    int currentPlanet;
 };
 
 
