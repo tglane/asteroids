@@ -59,18 +59,39 @@ namespace asteroids
 		/**
 		 * @brief deletes ships on the planet
 		 * @param ships number of ships
-		 *
+		 * @return boolean if deleting given number of ships was successful or not
 		 */
 		bool delShips(int ships);
 
+		/**
+		 * @brief adds given Planet as Neighbour
+		 * @param neighbour: in Planet defined sharedPointer pointing our Neighbour
+		 * @return void
+		 */
 		void addNeighbour(Planet::Ptr neighbour);
 
+		/**
+		 * @brief sets an Player as the Owner of this planet
+		 * @param owner shared Pointer to our new owner
+		 * @return void
+		 */
 		void setOwner(std::shared_ptr<Player> owner);
 
+		/**
+		 * @brief returns the number of rubin the owner earn from this planet
+		 * @return int number of rubin
+		 */
 		int getRubin();
 
+		/**
+		 * @brief return the number of mines on this planet
+		 * @return int number of mines
+		 */
 		int getMines();
 
+		/**
+		 * @brief adds Mines to this Planet if the owner have enough rubin
+		 */
 		void addMines(int mines); //erhöht rubin
 
 		std::list<Planet::Ptr> getNeighbours();
