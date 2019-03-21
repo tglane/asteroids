@@ -131,7 +131,6 @@ void GLWidget::initializeGL()
         m_physicsEngine->addDestroyable(p);
     }
 
-    m_controller = Controller();
     m_timer.start();
 }
 

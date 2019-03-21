@@ -21,6 +21,12 @@ public:
 
 private:
 
+    static const vector<Qt::Key> mapToQt;
+
+    static const vector<Transformable::RotationTransform> mapToAngle;
+
+    std::vector<int> m_keys;
+
     int m_cooldownPlayer;
 
     int m_cooldownEnemy;
