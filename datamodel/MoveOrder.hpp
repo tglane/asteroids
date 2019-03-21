@@ -6,8 +6,8 @@
  * 
  * Represents an order to Move a few ships fomr one planet to another
  */
-#ifndef __MINEORDER_HPP_
-#define __MINEORDER_HPP_
+#ifndef __MOVEORDER_HPP_
+#define __MOVEORDER_HPP_
 
 
 
@@ -20,21 +20,33 @@
 namespace asteroids
 {
 
-    using Ptr = std::shared_ptr<MineOrder>;
+    using Ptr = std::shared_ptr<MoveOrder>;
 
-	class MineOrder : public Order
+	class MoveOrder : public Order
 	{
         public:
         /**
          * @brief Constructor
-         * @param P1 The planeet on which a mine should be built
+         * @param origin1 The planet from which the ships are coming
+         * @param destination1 The planet to which the ships are going
+         * @param numberShips1 The number of ships that is supposed to move to the planet
          */
-        MineOrder(Planet::Ptr P1);
+        MoveOrder(Planet::Ptr origin1, Planet::Ptr destination1, int numberShips1);
 
         /**
-         * @brief The planeet on which a mine should be built
+         * @brief The Planet to which the ships are moving
          */
-        Planet::Ptr P;
+        Planet::Ptr destination;
+
+        /**
+         * @brief The planet from which the ships are coming
+         */
+        Planet::Ptr origin;
+
+        /**
+         * @brief number of ships to be moved 
+         */
+        int numberShips;
 
         /**
          * @brief Can give the information of which type this Order is

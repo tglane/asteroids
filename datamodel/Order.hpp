@@ -15,7 +15,8 @@
 
 #include "Planet.hpp"
 #define MINE 1
-#define SHIP 1
+#define SHIP 2
+#define MOVE 3
 
 namespace asteroids
 {
