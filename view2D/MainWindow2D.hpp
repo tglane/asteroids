@@ -9,9 +9,12 @@
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QPushButton>
+#include <QGraphicsEllipseItem>
+#include <QMouseEvent>
 
 #include "../build/ui_MainWindow2D.h"
 #include "view/MainWindow.hpp"
+#include "view2D/MyEllipse.hpp"
 
 #include "datamodel/DataModel.hpp"
 
@@ -33,7 +36,7 @@ public:
      * @brief Construct a new Main Window object
      *
      */
-     MainWindow2D(DataModel *model, QWidget* parent = NULL);
+     MainWindow2D(DataModel::Ptr model, QWidget* parent = NULL);
 
     /**
      * @brief Destroys the Main Window object
@@ -41,14 +44,19 @@ public:
      */
     ~MainWindow2D();
 
+    void updatePlayerInfo();
 
-    /// Returns the width of the window
-    //int width();
-
-    /// Returns the height of the windows
-    //int height();
 public slots:
+
+    /**
+     * @brief   Switches to the starting window
+     */
     void fight(bool click);
+
+    /**
+     * @brief   Fills in the information about a planet 
+     */
+    void choose_planet(int id);
 
     /**
      * @brief   Is called when button NextRound is clicked
@@ -56,6 +64,31 @@ public slots:
      *          blocks until all players have finished their rounds
      */
     void endOfRound(bool click);
+
+    /**
+     * @brief Change the scale if Window schanges the Size
+     */
+    void resizeEvent(QResizeEvent* event);
+
+    /**
+     * @brief   Is called when the colonization button is pressed
+     *          Starts an attemp to colonize the new Planet between the rounds
+     *          
+     */
+    void colonize(bool click/*, Planet* p*/);
+
+    /**
+     * @brief   Is called when the Ship building Button is pressed
+     *          A new ship is accessible on this Planet one round later
+     */
+    void buildShip(bool click);
+
+    /**
+     * @brief   Is calle when exit Button is pressed, 
+     */
+    void exitGame(bool click);
+
+    MyEllipse* getEllipseById(int id);
 
 private:
 
@@ -66,8 +99,11 @@ private:
 
     asteroids::MainWindow* FighterWindow;
 
-    DataModel* model;
+    DataModel::Ptr m_model;
 
+    std::map<int, MyEllipse*> view_planets;
+
+    int currentPlanet;
 };
 
 

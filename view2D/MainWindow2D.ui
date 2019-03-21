@@ -72,22 +72,22 @@
      <widget class="QWidget" name="ContextMenue" native="true">
       <property name="minimumSize">
        <size>
-        <width>250</width>
+        <width>300</width>
         <height>0</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
-        <width>250</width>
+        <width>300</width>
         <height>16777215</height>
        </size>
       </property>
       <widget class="QWidget" name="SpielerInfo" native="true">
        <property name="geometry">
         <rect>
-         <x>40</x>
+         <x>10</x>
          <y>0</y>
-         <width>211</width>
+         <width>291</width>
          <height>251</height>
         </rect>
        </property>
@@ -199,18 +199,18 @@
       <widget class="QWidget" name="PlanetInfo" native="true">
        <property name="geometry">
         <rect>
-         <x>40</x>
-         <y>320</y>
-         <width>211</width>
-         <height>281</height>
+         <x>10</x>
+         <y>300</y>
+         <width>291</width>
+         <height>301</height>
         </rect>
        </property>
        <widget class="QLabel" name="PlanetenInfoLabel">
         <property name="geometry">
          <rect>
-          <x>10</x>
+          <x>0</x>
           <y>0</y>
-          <width>191</width>
+          <width>241</width>
           <height>20</height>
          </rect>
         </property>
@@ -221,12 +221,12 @@
          <set>Qt::AlignCenter</set>
         </property>
        </widget>
-       <widget class="QComboBox" name="comboBox">
+       <widget class="QComboBox" name="DestionationPlanet">
         <property name="geometry">
          <rect>
-          <x>80</x>
+          <x>140</x>
           <y>150</y>
-          <width>121</width>
+          <width>101</width>
           <height>31</height>
          </rect>
         </property>
@@ -244,7 +244,7 @@
          <string>Colonize</string>
         </property>
        </widget>
-       <widget class="QPushButton" name="BuiltShip">
+       <widget class="QPushButton" name="BuildShip">
         <property name="geometry">
          <rect>
           <x>110</x>
@@ -254,7 +254,7 @@
          </rect>
         </property>
         <property name="text">
-         <string>Built Ship</string>
+         <string>Build Ship</string>
         </property>
        </widget>
        <widget class="QLabel" name="SendShip">
@@ -289,9 +289,9 @@
        <widget class="QLabel" name="Info">
         <property name="geometry">
          <rect>
-          <x>10</x>
+          <x>0</x>
           <y>40</y>
-          <width>161</width>
+          <width>171</width>
           <height>41</height>
          </rect>
         </property>
@@ -317,12 +317,12 @@
          <rect>
           <x>140</x>
           <y>90</y>
-          <width>31</width>
+          <width>91</width>
           <height>27</height>
          </rect>
         </property>
         <property name="text">
-         <string/>
+         <string>Build Mine</string>
         </property>
        </widget>
        <widget class="QLabel" name="ShipNumber">
@@ -338,11 +338,34 @@
          <string>&lt;Num of Ships&gt;</string>
         </property>
        </widget>
+       <widget class="QComboBox" name="SendShipNumber">
+        <property name="geometry">
+         <rect>
+          <x>80</x>
+          <y>150</y>
+          <width>51</width>
+          <height>31</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="ExitGame">
+        <property name="geometry">
+         <rect>
+          <x>160</x>
+          <y>270</y>
+          <width>89</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Exit Game</string>
+        </property>
+       </widget>
       </widget>
       <widget class="QPushButton" name="NextRound">
        <property name="geometry">
         <rect>
-         <x>40</x>
+         <x>50</x>
          <y>260</y>
          <width>99</width>
          <height>41</height>
@@ -355,7 +378,7 @@
       <widget class="QLabel" name="Date">
        <property name="geometry">
         <rect>
-         <x>160</x>
+         <x>190</x>
          <y>260</y>
          <width>91</width>
          <height>41</height>

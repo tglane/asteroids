@@ -13,31 +13,21 @@
 #include "datamodel/DataModel.hpp"
 #include "datamodel/Player.hpp"
 #include "view2D/MainWindow2D.hpp"
+#include "view2D/StartingDialog.hpp"
 
 
 
 int main(int argc, char** argv)
 {
-    /*if (argc < 3)
-    {
-        cerr << "Usage: asteroids <level-file> <map-file>" << endl;
-        return 1;
-    }*/
 
-    DataModel model("../models/Level-1.txt");
+    DataModel::Ptr model = DataModel::Ptr(new DataModel("../models/Level-1.txt"));
 
     QApplication a(argc, argv);
 
-    /*asteroids::MainWindow mainWindow(argv[1]);
-    mainWindow.show();*/
+    strategy::MainWindow2D mainWindow2D(model);
 
-    /*Test für buyShip und buyMine*/
-    Player::Ptr Testplayer = Player::Ptr(new Player(1,2000,0));
-    std::cout << Testplayer->getIdentity() << std::endl;
-    std::cout << Testplayer->getPlayerName() << std::endl;
-    Testplayer->setPlayerName("Huber van Windrad");
-    std::cout << Testplayer->getRubin() << std::endl;
-    std::cout << Testplayer->getPlayerName() << std::endl;
+    //asteroids::MainWindow mainWindow("../models/level.xml");
+    //mainWindow.show();
 
     Planet::Ptr Test = model.getPlanetFromId(5);
     std::cout << Test->getName() << std::endl;
@@ -68,8 +58,11 @@ int main(int argc, char** argv)
 
 
 
-    strategy::MainWindow2D mainWindow2D(&model);
-    mainWindow2D.show();
+    strategy::StartingDialog startWindow(model);
+    startWindow.show();
+
+    //mainWindow2D.showFullScreen();
 
     return a.exec();
 }
+

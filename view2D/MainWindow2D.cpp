@@ -6,15 +6,20 @@
 #include "datamodel/Planet.hpp"
 #include "datamodel/DataModel.hpp"
 #include <QGraphicsOpacityEffect>
+#include <QGraphicsView>
 #include <iostream>
+#include <QLine>
+#include <QObject>
 
 namespace strategy {
 
-MainWindow2D::MainWindow2D(DataModel *model, QWidget* parent) :
+MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow2D())
 {
-    model = model;
+    m_model = model;
+    m_model->addWindow(DataModel::MAIN2D, this);
+
     int planet_size = 20;
     float position_scale = 1;
     // Setup user interface
@@ -33,20 +38,23 @@ MainWindow2D::MainWindow2D(DataModel *model, QWidget* parent) :
     effect = new QGraphicsOpacityEffect(ui->Fight);
     effect->setOpacity(0.7);
     ui->Fight->setGraphicsEffect(effect);
-
-    QBrush greenBrush(Qt::green);
-    QBrush grayBrush(Qt::gray);
-    QBrush redBrush(Qt::red);
     QPen outlinePenHighlight(Qt::white);
-    outlinePenHighlight.setWidth(2);
+    outlinePenHighlight.setWidth(1);
 
-    QPen outlinePen(Qt::black);
-    outlinePen.setWidth(0);
-    //scene->setBackgroundBrush(Qt::black);
+    std::map<int, Planet::Ptr> planets = m_model->getPlanets();
 
-    std::map<int, Planet::Ptr> planets = model->getPlanets();
+    //Erstelle die Elipsen und füge sie in die Map und in die QGraphicsScene ein 
+    for(int i = 0; i < (int)planets.size(); i++){
+        Planet::Ptr p = planets.at(i);
+        view_planets[i] = new MyEllipse(p->getPosX()/position_scale, p->getPosY()/position_scale);
+        view_planets[i]->setZValue(1);
+        scene->addItem(view_planets[i]);
+        QVariant ellipse_ID(i);
+        view_planets[i]->setData(1, ellipse_ID);
+        connect(view_planets[i], SIGNAL(show_planetInfo(int)), this, SLOT(choose_planet(int)));
+    }
 
-    std::list<std::pair<int,int>> edges = model->getEdges();
+    std::list<std::pair<int,int>> edges = m_model->getEdges();
 
     //Linien einzeichnen
     for(std::list<std::pair<int,int>>::iterator it=edges.begin(); it != edges.end(); ++it){
@@ -56,13 +64,6 @@ MainWindow2D::MainWindow2D(DataModel *model, QWidget* parent) :
         Planet::Ptr p1 = planets.at(pos_1);
         Planet::Ptr p2 = planets.at(pos_2);
         scene->addLine(p1->getPosX()/position_scale+planet_size/2,p1->getPosY()/position_scale+planet_size/2, p2->getPosX()/position_scale+planet_size/2, p2->getPosY()/position_scale+planet_size/2, outlinePenHighlight);
-    }
-
-    //Abhängig von Planeten machen
-    for(uint i = 0; i < planets.size(); i++){
-        Planet::Ptr p = planets.at(i);
-        scene->addEllipse(p->getPosX()/position_scale, p->getPosY()/position_scale, planet_size, planet_size, outlinePen, greenBrush);
-        
     }
 
     //Öffne das Fighter-Minigame testweise in neuem Fenster
@@ -82,20 +83,47 @@ MainWindow2D::MainWindow2D(DataModel *model, QWidget* parent) :
     QPushButton* m_nextRound = ui->NextRound;
     connect(m_nextRound, SIGNAL(clicked(bool)), this, SLOT(endOfRound(bool)));
 
+    // Start colonizing the selected Planet, how we get selected Planet?
+    // Button should only be selectable if a neighbour of the selected Planet is owned
+    QPushButton* m_colonize = ui->Colonize;
+    m_colonize->setEnabled(false);
+    connect(m_colonize, SIGNAL(clicked(bool)), this, SLOT(colonize(bool)));
 
+    // Build a ship on selected Planet
+    // Button should only be selectable if this Planet is owned
+    QPushButton* m_buildShip = ui->BuildShip;
+    connect(m_buildShip, SIGNAL(clicked(bool)), this, SLOT(buildShip(bool)));
+
+    // at the beginning no planet is selected so this widget is not visible
+    // ui->PlanetInfo->setVisible(false);
+
+    QPushButton* m_exit = ui->ExitGame;
+    connect(m_exit, SIGNAL(clicked(bool)), this, SLOT(exitGame(bool)));
+
+
+    // Somehow there's a Segmentation fault if the Fighterwindow is initialized here like
+    // FighterWindow = new asteroids::MainWindow("...")
     FighterWindow = NULL;
+
+    currentPlanet = -1;
+
+    ui->PlanetInfo->setVisible(false);
+
+}
+
+void MainWindow2D::resizeEvent(QResizeEvent* event){
+    ui->Map->fitInView(0, 500, 500, 1, Qt::KeepAspectRatio);
 }
 
 MainWindow2D::~MainWindow2D() 
 {
-    delete ui;
+    if(ui)
+        delete ui;
     if(FighterWindow != NULL)
         delete FighterWindow;
 }
 
-/*
- * @brief öffnet das Fighter-Minigame in neuem Fenster
- */
+
 void MainWindow2D::fight(bool click)
 {
     std::cout << "Fight" << std::endl;
@@ -103,11 +131,147 @@ void MainWindow2D::fight(bool click)
     FighterWindow->show();
 }
 
+void MainWindow2D::choose_planet(int id)
+{
+
+    Planet::Ptr p = m_model->getPlanetFromId(id);
+
+    std::map<int, Planet::Ptr> planets = m_model->getPlanets();
+
+    //Higlighting of the planets
+    MyEllipse* ellipse = getEllipseById(id);
+    //wieder entmarkieren 
+    if(id == currentPlanet){
+        ui->PlanetInfo->setVisible(false);
+        if(planets.at(id)->getOwner()==m_model->getSelfPlayer()){
+            QPixmap pix("../models/surface/my1.jpg");
+            ellipse->myBrush = QBrush(pix);
+        } else if (planets.at(id)->getOwner()==m_model->getEnemyPlayer()){
+            QPixmap pix("../models/surface/other1.jpg");
+            ellipse->myBrush = QBrush(pix);
+        } else{
+            QPixmap pix("../models/surface/neutral1.jpg");
+            ellipse->myBrush = QBrush(pix);  
+        }
+        currentPlanet = -1;
+        ellipse->myPen = QPen(Qt::black,1);
+    }else{
+        ui->PlanetInfo->setVisible(true);
+        //Vorherigen Planet enhighliten
+        if(currentPlanet!=-1){
+            MyEllipse* otherEllipse = getEllipseById(currentPlanet);
+            if(planets.at(currentPlanet)->getOwner()==m_model->getSelfPlayer()){
+                QPixmap otherpix("../models/surface/my1.jpg");
+                ellipse->myBrush = QBrush(otherpix);
+            } else if (planets.at(currentPlanet)->getOwner()==m_model->getEnemyPlayer()){
+                QPixmap otherpix("../models/surface/other1.jpg");
+                ellipse->myBrush = QBrush(otherpix);
+            } else{
+                QPixmap otherpix("../models/surface/neutral1.jpg");
+                ellipse->myBrush = QBrush(otherpix);  
+            }
+            otherEllipse->myPen = QPen(Qt::black,1);
+            otherEllipse->update();
+        }
+        //Anklicken und highlighten
+        if(planets.at(id)->getOwner()==m_model->getSelfPlayer()){
+            QPixmap pix("../models/surface/my2.jpg");
+            ellipse->myBrush = QBrush(pix);
+        } else if (planets.at(id)->getOwner()==m_model->getEnemyPlayer()){
+            QPixmap pix("../models/surface/other2.jpg");
+            ellipse->myBrush = QBrush(pix);
+        } else{
+            QPixmap pix("../models/surface/neutral2.jpg");
+            ellipse->myBrush = QBrush(pix);  
+        }
+        currentPlanet = id;
+        ellipse->myPen = QPen(Qt::white,1);
+    }
+
+    // Planeteninfo ausfüllen
+    ui->PlanetName->setText(QString::fromStdString(p->getName()));
+    ui->Info->setText("???");
+    ui->MineNumber->setText(QString::number(p->getMines()));
+    ui->ShipNumber->setText(QString::number(p->getShips()));
+    if (p->getOwner() == NULL)
+    {
+        ui->Info->setText("Niemand besitzt diesen Planeten!");
+    }
+    else
+    {
+        ui->Info->setText(QString::fromStdString(p->getOwner()->getPlayerName()));
+    }
+
+    std::list<Planet::Ptr> neighbour_list = p->getNeighbours();
+
+    // Lösche die Anzahl der Schiffe des zuletzt ausgewählten Planeten aus der QComboBox
+    ui->SendShipNumber->clear();
+    // Fülle die QComboBox mit der aktuellen Anzahl an Schiffen
+    for(int i = 0; i < p->getShips(); i++)
+    {
+        ui->SendShipNumber->addItem(QString::number(i + 1));
+    }    
+
+    // Lösche die Nachbarplaneten des zuletzt ausgewählten Planeten aus der QComboBox
+    ui->DestionationPlanet->clear();
+    // Fülle die QComboBox mit den aktuellen Nachbarn
+    int j = neighbour_list.size();
+    for(int i = 1; i <= j; i++)
+    {
+        ui->DestionationPlanet->addItem(QString::fromStdString(neighbour_list.front()->getName()));
+        neighbour_list.pop_front();
+    }
+
+}
+
 void MainWindow2D::endOfRound(bool click)
 {
-    //bool succes = model->endOfRound();
+    bool succes = m_model->endOfRound();
+
+    // fuck this "unused" warnings! :D
+    if(succes);
 
     // TODO wait for response of server, block the window until all players are ready
+}
+
+void MainWindow2D::colonize(bool click /*, Planet* p*/)
+{
+    // TODO start colonization of Planet p
+    //m_model->colonize(p);
+    std::cout << "Colonize!" << std::endl;
+}
+
+void MainWindow2D::buildShip(bool click)
+{
+    // Ship should be accessible a round later
+    Planet::Ptr p = m_model->getPlanetFromId(currentPlanet);
+
+    // TODO: Fehlerbehandlung
+    if (p->getOwner() == NULL)
+    {
+        std::cout << "Planet wird nicht besessen!" << std::endl;
+        return;
+    }
+
+    m_model->buyShip(p, p->getOwner());
+    std::cout << "Build Ship!" << std::endl;
+}
+
+void MainWindow2D::exitGame(bool click)
+{
+    QCoreApplication::quit();
+}
+
+MyEllipse* MainWindow2D::getEllipseById(int id)
+{
+    MyEllipse* ellipse = view_planets.at(id);
+    return ellipse;
+}
+
+void MainWindow2D::updatePlayerInfo()
+{
+    ui->SpielerInfoTable->setCellWidget(0, 1, 
+        new QLabel(QString::fromStdString(m_model->getSelfPlayer()->getPlayerName())));
 }
 
 }

@@ -30,6 +30,10 @@ class DataModel
 {
 
 public:
+
+    enum { START, MAIN2D, MAIN3D };
+    using Ptr = std::shared_ptr<DataModel>;
+
     /**
      * @brief   Initilizes a new data model
      * 
@@ -72,12 +76,16 @@ public:
     Planet::Ptr getPlanetFromId(int ID);
 
     std::list<std::pair<int,int>> getEdges();
-
+    
     void startGame();
 
     void addWindow(int Id, QMainWindow* Window);
 
     void switchWindow(int Id);
+
+    Player::Ptr getSelfPlayer();
+
+    Player::Ptr getEnemyPlayer();
 
 private:
     /*Variablen von Kay*/

@@ -10,7 +10,7 @@ Xandar 224 24 1
 Erde 224 100 1
 Hala 202 156 1
 Zenn-La 156 216 1
-Mekka 276 116 1
+Mekka 116 276 1
 Galador 232 260 1
 Sakaar 258 204 1
 Contraxia 284 62 1
@@ -42,8 +42,8 @@ Knowhere 442 40 1
 13 14
 13 18
 14 17
+14 18
 15 16
 16 19
 16 20
 17 19
-18 14
