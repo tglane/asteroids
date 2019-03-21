@@ -74,4 +74,34 @@ std::string Player::getPlayerName()
 
 }
 
+std::list<std::shared_ptr<ShipOrder>> Player::getListShipOrder()
+{
+	return m_shipOrders;
+
+}
+
+void Player::putListShipOrder(std::shared_ptr<ShipOrder> NewShipOrder)
+{
+	m_shipOrders.push_back(NewShipOrder);
+
+}
+std::list<std::shared_ptr<MineOrder>> Player::getListMineOrder()
+{
+	return m_mineOrders;
+
+}
+
+void Player::putListMineOrder(std::shared_ptr<MineOrder> NewMineOrder)
+{
+	m_mineOrders.push_back(NewMineOrder);
+
+}
+
+void Player::ClearOrderListInPlayer()
+{
+	m_shipOrders.clear();
+	m_mineOrders.clear();
+
+}
+
 }
