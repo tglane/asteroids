@@ -150,6 +150,8 @@ set(ASTEROID_SOURCES
     datamodel/DataModel.cpp
     datamodel/Planet.cpp
     datamodel/Player.cpp
+    datamodel/MineOrder.cpp
+    datamodel/ShipOrder.cpp
 
     view2D/MainWindow2D.cpp
     view2D/MyEllipse.cpp
