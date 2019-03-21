@@ -16,12 +16,11 @@
 #include <memory>
 
 #include "Planet.hpp"
-#include "Order.hpp"
 
 namespace asteroids
 {
 
-	class ShipOrder : public Order
+	class ShipOrder
 	{
         using Ptr = std::shared_ptr<ShipOrder>;
 
