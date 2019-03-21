@@ -92,6 +92,8 @@ public slots:
      */
     void exitGame(bool click);
 
+    MyEllipse* getEllipseById(int id);
+
 private:
 
     /// QT UI of the window
@@ -103,7 +105,9 @@ private:
 
     DataModel* model;
 
+    std::map<int, MyEllipse*> view_planets;
 
+    int currentPlanet;
 };
 
 
