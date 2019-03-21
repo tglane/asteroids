@@ -85,6 +85,8 @@ private:
     QTime                       m_timer;
 
     Controller                  m_controller;
+
+    bool                        m_gameOver;
 };
 
 #endif

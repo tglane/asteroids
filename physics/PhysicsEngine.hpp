@@ -71,7 +71,7 @@ public:
     /**
      * @brief   The engine's main loop
      */
-    void process(int elapsed_time);
+    bool process(int elapsed_time);
 
 private:
 
