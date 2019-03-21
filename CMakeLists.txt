@@ -90,6 +90,7 @@ find_package( Qt5
     Core
     Widgets
     OpenGL
+        Gamepad
     REQUIRED
 )
 
@@ -148,7 +149,9 @@ set(ASTEROID_SOURCES
     view/MainWindow.cpp 
     view/Camera.cpp
     view/Controller.cpp
+    Gamepad.cpp
 )
+
 set(ASTEROID_MOCS
     view/MainWindow.hpp
 )
@@ -193,4 +196,4 @@ add_executable(asteroids
 # External library dependencys
 ###############################################################################
 
-target_link_libraries(asteroids ${ASTEROID_DEPENDS})
+target_link_libraries(asteroids Qt5::Gamepad ${ASTEROID_DEPENDS})

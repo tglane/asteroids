@@ -167,8 +167,8 @@ void GLWidget::step(map<Qt::Key, bool>& keyStates)
 
     if (!m_gameOver) {
         Hittable::Ptr player_ptr = std::static_pointer_cast<Hittable>(m_camera);
-        Hittable::Ptr enemy_ptr = std::static_pointer_cast<Hittable>(m_enemy);
-        m_controller.keyControl(keyStates, player_ptr, enemy_ptr, m_physicsEngine, elapsed_time);
+        //m_controller.keyControl(keyStates, player_ptr, m_physicsEngine, elapsed_time);
+        m_controller.gamepadControl(player_ptr, m_physicsEngine, elapsed_time);
 
         Vector3f player_pos = m_camera->getPosition();
         if (player_pos[0] > 4500 || player_pos[1] > 4500 || player_pos[2] > 4500) {

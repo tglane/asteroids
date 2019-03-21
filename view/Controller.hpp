@@ -3,6 +3,7 @@
 
 #include <QtCore/Qt>
 #include <map>
+#include "Gamepad.hpp"
 #include "physics/Hittable.hpp"
 #include "physics/PhysicsEngine.hpp"
 
@@ -16,8 +17,10 @@ public:
 
     Controller();
 
-    void keyControl(std::map<Qt::Key, bool> &keyStates, Hittable::Ptr& player, Hittable::Ptr& enemy,
+    void keyControl(std::map<Qt::Key, bool> &keyStates, Hittable::Ptr& player,
                     PhysicsEngine::Ptr& physicsEngine, int elapsed_time);
+
+    void gamepadControl(Hittable::Ptr& player, PhysicsEngine::Ptr& physicsEngine, int elapsed_time);
 
 private:
 
@@ -30,6 +33,10 @@ private:
     int m_cooldownPlayer;
 
     int m_cooldownEnemy;
+
+    bool m_gamepadAvailable;
+
+    Gamepad m_gamepad;
 
 };
 
