@@ -24,6 +24,8 @@ class DataModel
 {
 
 public:
+    using Ptr = std::shared_ptr<DataModel>;
+
     /**
      * @brief   Initilizes a new data model
      * 

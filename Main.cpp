@@ -24,7 +24,7 @@ int main(int argc, char** argv)
         return 1;
     }*/
 
-    DataModel model("../models/Level-1.txt");
+    DataModel::Ptr model = DataModel::Ptr(new DataModel("../models/Level-1.txt"));
 
     QApplication a(argc, argv);
 
@@ -32,7 +32,7 @@ int main(int argc, char** argv)
     mainWindow.show();*/
 
     /*Test für buyShip und buyMine*/
-    Player::Ptr Testplayer = Player::Ptr(new Player(1,2000,0));
+    /*Player::Ptr Testplayer = Player::Ptr(new Player(1,2000,0));
     std::cout << Testplayer->getIdentity() << std::endl;
     std::cout << Testplayer->getRubin() << std::endl;
 
@@ -44,10 +44,9 @@ int main(int argc, char** argv)
     buytest2 = model.buyMine(Test, Testplayer);
 
     buytest = model.buyShip(Test, Testplayer);
+    */
 
-
-
-    strategy::MainWindow2D mainWindow2D(&model);
+    strategy::MainWindow2D mainWindow2D(model);
     mainWindow2D.show();
     mainWindow2D.showFullScreen();
 
