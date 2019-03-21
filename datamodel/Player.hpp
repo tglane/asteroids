@@ -48,6 +48,12 @@ public:
 	int getShips();
 
 	/**
+	 * @brief adds planet to the planetslist of the player
+	 * @param shared ptr planet to add
+	 */
+	void addPlanet(std::shared_ptr<Planet> planet);
+
+	/**
 	 * @brief returns a list with the planets this player owns
 	 * @return std::list which contains shared_ptr to the planets
 	 */

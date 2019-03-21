@@ -155,6 +155,7 @@ set(ASTEROID_SOURCES
     datamodel/MineOrder.cpp
     datamodel/ShipOrder.cpp
     datamodel/MoveOrder.cpp
+    datamodel/Battle.cpp
     view2D/StartingDialog.cpp
     view2D/MainWindow2D.cpp
     view2D/MyEllipse.cpp

@@ -25,6 +25,11 @@ Player::Player(int identity, int rubin, int ships) : m_planets()
 
 }
 
+void Player::addPlanet(std::shared_ptr<Planet> planet)
+{
+	m_planets.push_back(planet);
+}
+
 int Player::getShips() 
 {
 	return m_ships;
