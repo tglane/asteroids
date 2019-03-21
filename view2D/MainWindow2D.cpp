@@ -18,6 +18,8 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
     ui(new Ui::MainWindow2D())
 {
     m_model = model;
+    m_model->addWindow(DataModel::MAIN2D, this);
+
     int planet_size = 20;
     float position_scale = 1;
     // Setup user interface

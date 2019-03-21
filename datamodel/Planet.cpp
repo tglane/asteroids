@@ -25,10 +25,6 @@ Planet::Planet(std::string name, int posx, int posy, int rubin, int mines) : m_n
 
 }
 
-std::string Planet::getName()
-{
-	return m_name;
-}
 
 int Planet::getShips() 
 {
@@ -91,6 +87,12 @@ int Planet::getPosX()
 int Planet::getPosY()
 {
 	return m_posy;
+}
+
+std::string Planet::getName()
+{
+    return m_name;
+
 }
 
 }
