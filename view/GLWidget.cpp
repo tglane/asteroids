@@ -152,7 +152,7 @@ void GLWidget::step(map<Qt::Key, bool>& keyStates)
     // Get keyboard states and handle model movement
     m_physicsEngine->process();
 
-    m_actor->move(Transformable::FORWARD, 3);
+    //m_actor->move(Transformable::FORWARD, 3);
     if (keyStates[Qt::Key_L])
     {
         m_actor->rotate(Transformable::ROLL_CLOCKWISE, 0.05);
