@@ -155,9 +155,9 @@ void UdpServer::send_position_or_bullet(char type, UdpClient &client, Transforma
     data.append((char *)(&position[1]), 4);
     data.append((char *)(&position[2]), 4);
 
-    data.append((char *)(0), 4);
-    data.append((char *)(0), 4);
-    data.append((char *)(0), 4);
+    for (int i = 0; i < 12; i++) {
+        data.append('\0');
+    }
 
     data.append((char *)(&x_axis[0]), 4);
     data.append((char *)(&x_axis[1]), 4);
@@ -170,6 +170,13 @@ void UdpServer::send_position_or_bullet(char type, UdpClient &client, Transforma
     data.append((char *)(&z_axis[0]), 4);
     data.append((char *)(&z_axis[1]), 4);
     data.append((char *)(&z_axis[2]), 4);
+
+
+    std::cout << " senging position: " << std::endl
+              << " p: " << position[0] << ", " <<  position[1] << ", " <<  position[2] << std::endl
+              << " x: " << x_axis[0] << ", " <<  x_axis[1] << ", " <<  x_axis[2] << std::endl
+              << " y: " << y_axis[0] << ", " <<  y_axis[1] << ", " <<  y_axis[2] << std::endl
+              << " z: " << z_axis[0] << ", " <<  z_axis[1] << ", " <<  z_axis[2] << std::endl;
 
     socket->writeDatagram(data, client.address, client.port);
     if (type == 'B') {
@@ -260,7 +267,9 @@ void UdpServer::tick()
         // send ship positions
         for (auto& k: clients) {
             UdpClient& dest = k.second;
-            //send_position_or_bullet('P', dest, client.ship, client.id << 24);
+            if (client.id != dest.id) {
+                send_position_or_bullet('P', dest, client.ship, client.id << 24);
+            }
         }
     }
 }
