@@ -73,6 +73,10 @@ public:
 
     void switchWindow(int Id);
 
+    Player::Ptr getSelfPlayer();
+
+    Player::Ptr getEnemyPlayer();
+
 private:
     /*Variablen von Kay*/
 

@@ -109,6 +109,8 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
 
     currentPlanet = -1;
 
+    ui->PlanetInfo->setVisible(false);
+
 }
 
 void MainWindow2D::resizeEvent(QResizeEvent* event){
@@ -133,6 +135,9 @@ void MainWindow2D::fight(bool click)
 
 void MainWindow2D::choose_planet(int id)
 {
+    if(!ui->PlanetInfo->isVisible())
+        ui->PlanetInfo->setVisible(true);
+
     Planet::Ptr p = m_model->getPlanetFromId(id);
 
     MyEllipse* ellipse = getEllipseById(id);

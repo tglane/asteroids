@@ -16,6 +16,7 @@ StartingDialog::StartingDialog(DataModel::Ptr model, QWidget* parent) :
     ui->Title->setStyleSheet("QLabel { color: white }");
     ui->NameLabel->setStyleSheet("QLabel { color: white }");
     ui->ServerAddressLabel->setStyleSheet("QLabel { color: white }");
+    ui->ChooseMapLabel->setStyleSheet("QLabel { color: white}");
 
     QPixmap bkgnd("../models/box1.jpg");
     bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
@@ -46,7 +47,7 @@ void StartingDialog::startGame(bool click)
     std::string name = ui->Name->text().toStdString();
     if(name != "")
     {
-        //m_model->getThisPlayer()->setPlayerName(name);
+        m_model->getSelfPlayer()->setPlayerName(name);
         // Call switching mechanism of datamodel
         m_model->switchWindow(DataModel::MAIN2D);
         this->setVisible(false);

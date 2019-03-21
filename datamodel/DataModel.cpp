@@ -169,6 +169,16 @@ void DataModel::switchWindow(int Id)
     
 }
 
+Player::Ptr DataModel::getSelfPlayer()
+{
+    return m_self;
+}
+
+Player::Ptr DataModel::getEnemyPlayer()
+{
+    return m_enemy;
+}
+
 DataModel::~DataModel()
 {
     /*delete m_self;
