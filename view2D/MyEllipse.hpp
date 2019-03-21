@@ -41,6 +41,8 @@ protected:
 private:
     int x;
     int y;
+    QBrush outer_brush;
+    QBrush inner_brush;
 };
 
 }
