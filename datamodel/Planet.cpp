@@ -94,5 +94,3 @@ std::string Planet::getName()
 }
 
 }
-
-}
