@@ -3,8 +3,10 @@
 
 #include "Planet.hpp"
 #include "Player.hpp"
+#include "MoveOrder.hpp"
 
 #include <map>
+#include <QMainWindow>
 
 using std::map;
 
@@ -23,9 +25,9 @@ namespace asteroids{
 class DataModel
 {
 
-enum { START, MAIN2D, MAIN3D };
-
 public:
+
+    enum { START, MAIN2D, MAIN3D };
 
     /**
      * @brief   Initilizes a new data model
@@ -40,7 +42,8 @@ public:
     ~DataModel();
 
     // many getter, setter/update methods for all the games data
-    std::map<int, Planet*> getPlanets();
+    std::map<int, Planet::Ptr> getPlanets();
+
 
 
     /**
@@ -50,13 +53,24 @@ public:
     bool endOfRound();
 
     /*Code von Kay Bauer*/
+
+    /*Kauf Methoden start*/
     bool buyShip(Planet::Ptr selectedPlanet, Player::Ptr Player1);
 
     bool buyMine(Planet::Ptr selectedPlanet, Player::Ptr Player1);
 
-    Planet* getPlanetFromId(int ID);
+    /*Kauf Methoden ende*/
+    bool moveShips(Planet::Ptr from, Planet::Ptr to, int numShips);
+
+    Planet::Ptr getPlanetFromId(int ID);
 
     std::list<std::pair<int,int>> getEdges();
+
+    void startGame();
+
+    void addWindow(int Id, QMainWindow* Window);
+
+    void switchWindow(int Id);
 
 private:
     /*Variablen von Kay*/
@@ -70,7 +84,7 @@ private:
     void getUniverse(std::string filename);
 
     // Map to hold all planets, filled by getUniverse()
-    std::map<int, Planet*>  m_planets;
+    std::map<int, Planet::Ptr>  m_planets;
 
     std::list<std::pair<int, int>> m_edges;
 
@@ -79,6 +93,9 @@ private:
 
     // The client Player
     Player::Ptr  m_enemy;
+
+    // Map of Windows
+    std::map<int, QMainWindow*> m_Window;
 
 };
 

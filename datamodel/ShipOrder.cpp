@@ -9,9 +9,10 @@
 
 namespace asteroids{
 
-    ShipOrder::ShipOrder(Planet::Ptr P1):P(P1)
+    ShipOrder::ShipOrder(Planet::Ptr P1):
+    m_P(P1)
     {
-        type = SHIP;
+        
     }
 
 }

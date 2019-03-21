@@ -47,7 +47,7 @@ bool Planet::delShips(int ships)
 	} 
 }
 
-void Planet::addNeighbour(Planet* neighbour)
+void Planet::addNeighbour(Planet::Ptr neighbour)
 {
 	m_neighbours.push_back(Planet::Ptr(neighbour));
 }
@@ -85,6 +85,12 @@ int Planet::getPosX()
 int Planet::getPosY()
 {
 	return m_posy;
+}
+
+std::string Planet::getName()
+{
+    return m_name;
+
 }
 
 }

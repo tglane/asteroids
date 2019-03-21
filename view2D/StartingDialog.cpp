@@ -49,6 +49,7 @@ void StartingDialog::startGame(bool click)
         //m_model->getThisPlayer()->setPlayerName(name);
         // Call switching mechanism of datamodel
         m_model->switchWindow(DataModel::MAIN2D);
+        this->setVisible(false);
     }
     else
     {

@@ -33,7 +33,7 @@ void DataModel::getUniverse(std::string filename)
         for(int i = 0; i < numvertex; i++)
         {
             f >> name >> posx >> posy >> mines;
-            Planet* p = new Planet(name, posx, posy);
+            Planet::Ptr p = Planet::Ptr(new Planet(name, posx, posy));
 
             m_planets[i] = p;
         }
@@ -54,7 +54,7 @@ void DataModel::getUniverse(std::string filename)
     }
 }
 
-std::map<int, Planet*> DataModel::getPlanets()
+std::map<int, Planet::Ptr> DataModel::getPlanets()
 {
     return m_planets;
 }
@@ -97,7 +97,27 @@ bool DataModel::buyShip(Planet::Ptr selectedPlanet, Player::Ptr Player1)
     return false;
 
 }
+//TODO: MoveOrder in entsprechende Liste
+bool DataModel::moveShips(Planet::Ptr from, Planet::Ptr to, int numShips) {
 
+	std::cout << "Moveorder " << numShips << " Ships from Planet " << from->getName() << " to Planet " << to->getName() << std::endl;
+
+	if(from->getShips() >= numShips)
+	{
+		MoveOrder::Ptr move = MoveOrder::Ptr(new MoveOrder(from, to, numShips));
+		std::cout << "MoveOrder successful"<< std::endl;
+
+		return true;
+	}
+
+	else {
+
+		std::cout << "MoveOrder not successful"<< std::endl;
+		return false;
+	}
+
+
+}
 bool DataModel::buyMine(Planet::Ptr selectedPlanet, Player::Ptr Player1)
 {
     /*test druck*/
@@ -125,9 +145,28 @@ bool DataModel::buyMine(Planet::Ptr selectedPlanet, Player::Ptr Player1)
 
 }
 
-Planet* DataModel::getPlanetFromId(int ID)
+Planet::Ptr DataModel::getPlanetFromId(int ID)
 {
     return m_planets.at(ID);
+}
+
+void DataModel::startGame()
+{
+
+
+}
+
+void DataModel::addWindow(int Id, QMainWindow* Window)
+{
+    m_Window[Id] = Window;
+
+}
+
+void DataModel::switchWindow(int Id)
+{
+    QMainWindow* Active = m_Window[Id];
+    Active->showFullScreen();
+    
 }
 
 DataModel::~DataModel()
