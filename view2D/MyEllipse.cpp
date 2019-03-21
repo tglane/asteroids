@@ -11,7 +11,8 @@ MyEllipse::MyEllipse(int x, int y)
     this->x = x;
     this->y = y;
     QPixmap pix("../models/surface/neutral1.jpg");
-    outer_brush = QBrush(pix);
+    myBrush = QBrush(pix);
+    myPen = QPen(Qt::black,1);
 }
 
 QRectF MyEllipse::boundingRect() const
@@ -23,10 +24,9 @@ QRectF MyEllipse::boundingRect() const
 void MyEllipse::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     QRectF rect = boundingRect();
-    QPen myPen = QPen(Qt::black,2);
     QPainterPath myPath;
     myPath.addEllipse(rect);
-    painter->setBrush(outer_brush);
+    painter->setBrush(myBrush);
     painter->setPen(myPen);
     painter->drawPath(myPath);
 }
@@ -34,14 +34,9 @@ void MyEllipse::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 void MyEllipse::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     emit show_planetInfo(this->data(1).toInt());
-    update();
     QGraphicsItem::mousePressEvent(event);
-    QPixmap pix("../models/surface/my1.jpg");
-    outer_brush = QBrush(pix);
     update();
 }
-
-
 
 void MyEllipse::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {

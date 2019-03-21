@@ -20,6 +20,9 @@ class MyEllipse : public QGraphicsObject
 {
     Q_OBJECT
 public:
+
+    QBrush myBrush;
+    QPen myPen;
     MyEllipse(int x, int y);
 
     QRectF boundingRect() const;
@@ -41,8 +44,6 @@ protected:
 private:
     int x;
     int y;
-    QBrush outer_brush;
-    QBrush inner_brush;
 };
 
 }
