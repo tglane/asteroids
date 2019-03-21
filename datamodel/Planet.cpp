@@ -7,6 +7,7 @@
 
 
 #include "Planet.hpp"
+#include "Player.hpp"
 #include <string>
 
 
@@ -15,14 +16,15 @@ namespace asteroids
 
 Planet::Planet(std::string name, int posx, int posy, int rubin, int mines) : m_neighbours() 
 {
-
 	m_posx = posx;
 	m_posy = posy;
 	m_name = name;
 	m_rubin = rubin;
 	m_mines = mines;
-
+	m_ships = 0;
+	m_owner = NULL;
 }
+
 
 int Planet::getShips() 
 {
@@ -49,10 +51,10 @@ bool Planet::delShips(int ships)
 
 void Planet::addNeighbour(Planet::Ptr neighbour)
 {
-	m_neighbours.push_back(Planet::Ptr(neighbour));
+	m_neighbours.push_back(neighbour);
 }
 
-void Planet::setOwner(Player::Ptr owner) 
+void Planet::setOwner(std::shared_ptr<Player> owner) 
 {
 	m_owner = owner;
 }
@@ -115,7 +117,6 @@ int Planet::getPosY()
 std::string Planet::getName()
 {
     return m_name;
-
 }
 
 }

@@ -9,19 +9,14 @@
  *  Represents a player
  */
 
-
-
 #include <string>
 #include <list>
 #include <memory>
-
-#include "Player.hpp"
+#include <iostream>
 
 namespace asteroids
 {
-
 	class Player;
-
 	class Planet
 	{
 
