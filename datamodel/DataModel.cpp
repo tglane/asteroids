@@ -150,6 +150,24 @@ Planet::Ptr DataModel::getPlanetFromId(int ID)
     return m_planets.at(ID);
 }
 
+void DataModel::startGame()
+{
+
+
+}
+
+void DataModel::addWindow(int Id, QMainWindow* Window)
+{
+    m_Window[Id] = Window;
+
+}
+
+void DataModel::switchWindow(int Id)
+{
+    QMainWindow* Active = m_Window[Id];
+    
+}
+
 DataModel::~DataModel()
 {
     /*delete m_self;

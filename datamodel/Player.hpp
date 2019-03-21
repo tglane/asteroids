@@ -44,8 +44,13 @@ public:
 
 	bool delRubin(int rubin);
 
+	void setPlayerName(std::string name);
+
+	std::string getPlayerName();
+
 private:
 
+	std::string m_name;
 	int m_identity;
 	int m_rubin;
 	//freie Raumschiffe?

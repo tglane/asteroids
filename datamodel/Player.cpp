@@ -21,6 +21,7 @@ Player::Player(int identity, int rubin, int ships) : m_planets()
 	m_identity = identity;
 	m_rubin = rubin;
 	m_ships = ships;
+	m_name = "Slave of the Universe";
 
 }
 
@@ -60,4 +61,17 @@ bool Player::delRubin(int del)
 		return true;
 	}
 }
+
+void Player::setPlayerName(std::string name)
+{
+	m_name = name;
+
+}
+
+std::string Player::getPlayerName()
+{
+	return m_name;
+
+}
+
 }

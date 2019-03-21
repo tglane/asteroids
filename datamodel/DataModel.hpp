@@ -6,6 +6,7 @@
 #include "MoveOrder.hpp"
 
 #include <map>
+#include <QMainWindow>
 
 using std::map;
 
@@ -41,6 +42,7 @@ public:
     std::map<int, Planet::Ptr> getPlanets();
 
 
+
     /**
      * @brief   Called when a strategy round ends
      *          Updates all values and send them to the server
@@ -48,17 +50,24 @@ public:
     bool endOfRound();
 
     /*Code von Kay Bauer*/
+
+    /*Kauf Methoden start*/
     bool buyShip(Planet::Ptr selectedPlanet, Player::Ptr Player1);
 
     bool buyMine(Planet::Ptr selectedPlanet, Player::Ptr Player1);
 
+    /*Kauf Methoden ende*/
     bool moveShips(Planet::Ptr from, Planet::Ptr to, int numShips);
 
     Planet::Ptr getPlanetFromId(int ID);
 
     std::list<std::pair<int,int>> getEdges();
 
+    void startGame();
 
+    void addWindow(int Id, QMainWindow* Window);
+
+    void switchWindow(int Id);
 
 private:
     /*Variablen von Kay*/
@@ -81,6 +90,9 @@ private:
 
     // The client Player
     Player::Ptr  m_enemy;
+
+    // Map of Windows
+    std::map<int, QMainWindow*> m_Window;
 
 };
 
