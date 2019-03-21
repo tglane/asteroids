@@ -129,6 +129,8 @@ set(ASTEROID_SOURCES
     math/Randomizer.cpp
     physics/Transformable.cpp
     physics/PhysicalObject.cpp
+    physics/PhysicalBullet.cpp
+    physics/PhysicalSpaceCraft.cpp
     physics/PhysicsEngine.cpp
     physics/ParticleEngine.cpp
     physics/Hittable.cpp

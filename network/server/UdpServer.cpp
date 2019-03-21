@@ -40,7 +40,7 @@ asteroids::Vector3f UdpServer::bytes_to_vector(char *bytes)
 }
 
 
-void UdpServer::set_position_from_packet(QNetworkDatagram &datagram, PhysicalObject &obj)
+void UdpServer::set_position_from_packet(QNetworkDatagram &datagram, Transformable &obj)
 {
     std::cout << "received position data:" << std::endl;
     QByteArray data = datagram.data();
@@ -59,8 +59,7 @@ void UdpServer::set_position_from_packet(QNetworkDatagram &datagram, PhysicalObj
     obj.setXAxis(x_axis);
     obj.setYAxis(y_axis);
     obj.setZAxis(z_axis);
-    std::cout << "id: " << obj.get_id()
-              << " p: " << position[0] << ", " <<  position[1] << ", " <<  position[2] << std::endl
+    std::cout << " p: " << position[0] << ", " <<  position[1] << ", " <<  position[2] << std::endl
               << " v: " << velocity[0] << ", " <<  velocity[1] << ", " <<  velocity[2] << std::endl
               << " x: " << x_axis[0] << ", " <<  x_axis[1] << ", " <<  x_axis[2] << std::endl
               << " y: " << y_axis[0] << ", " <<  y_axis[1] << ", " <<  y_axis[2] << std::endl
@@ -82,7 +81,7 @@ void UdpServer::handle_position_packet(QNetworkDatagram &datagram)
         return;
     }
 
-    //set_position_from_packet(datagram, clients[client_id].ship);
+    set_position_from_packet(datagram, clients[client_id].ship);
 }
 
 void UdpServer::handle_bullet_packet(QNetworkDatagram &datagram)
@@ -93,14 +92,15 @@ void UdpServer::handle_bullet_packet(QNetworkDatagram &datagram)
         return;
     }
     uint32_t obj_id = *((int32_t*)(data.data() + 5));
+    uint32_t client_id = obj_id >> 24;
     // TODO use positons
-    //bullets[obj_id] = PhysicalBullet::Ptr(new PhysicalBullet(asteroids::Vector3f(), asteroids::Vector3f()));
+    bullets[obj_id] = PhysicalBullet::Ptr(new PhysicalBullet(asteroids::Vector3f(), asteroids::Vector3f(), client_id, obj_id));
     std::cout << "created bullet: " << obj_id << std::endl;
     set_position_from_packet(datagram, *bullets[obj_id]);
 
     for (auto& i: clients) {
         UdpClient& dest = i.second;
-        //send_position_or_bullet('B', dest, *bullets[obj_id], obj_id);
+        send_position_or_bullet('B', dest, *bullets[obj_id], obj_id);
     }
 }
 
@@ -134,7 +134,7 @@ void UdpServer::send_collision(UdpClient &client, uint32_t obj_id1, uint32_t obj
     socket->writeDatagram(data, client.address, client.port);
 }
 
-void UdpServer::send_position_or_bullet(char type, UdpClient &client, PhysicalObject& obj, uint32_t obj_id)
+void UdpServer::send_position_or_bullet(char type, UdpClient &client, Transformable& obj, uint32_t obj_id)
 {
     uint32_t seq_nr = client.next_seq_nr();
     std::cout << "sending  " << type << " to " << client.id << " seq_nr " << seq_nr << std::endl;

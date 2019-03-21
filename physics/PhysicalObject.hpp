@@ -47,7 +47,7 @@ public:
         Vector<float> direction, 
         Vector<float> position, 
         float mass, float momentum, float speed, 
-        float accel, float radius);
+        float accel, float radius, int id);
 
     PhysicalObject(int id): m_id(id) {}
     PhysicalObject();

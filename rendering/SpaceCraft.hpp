@@ -14,7 +14,7 @@
 
 #include "Renderable.hpp"
 #include "TriangleMesh.hpp"
-#include "physics/Hittable.hpp"
+#include "physics/PhysicalSpaceCraft.hpp"
 #include "math/Vector.hpp"
 
 #include <memory>
@@ -25,31 +25,18 @@ namespace asteroids
  * @brief A class to render a cicle to the screen
  * 
  */
-class SpaceCraft : public Renderable, public Hittable
+class SpaceCraft : public Renderable, public PhysicalSpaceCraft
 {
 public:
-
     using Ptr = std::shared_ptr<SpaceCraft>;
 
-    /**
-     * @brief Construct a new SpaceCraft object
-     * 
-     * @param filename the filename of the Trianglemesh
-     * @param position the start position
-     * @param movespeed movespeed for the key handling
-     * @param rotatespeed rotatespeed for the key handling
-     */
     SpaceCraft(const std::string& filename, const Vector3f& position, float movespeed, float rotatespeed);
-
-    /// dtor
-    virtual ~SpaceCraft();
 
     /**
      * @brief moves and rotates the mesh
      * 
      * @param keyStates the SDL Keyinput
      */
-   // void handleKeyInput(const Uint8* keyStates);
 
     /// renders the SpaceCraft
     virtual void render() override;

@@ -57,6 +57,7 @@ public:
 
 	int get_shooter_id() const { return m_shooter_id; } 
 
+    void render() {};
 private:
 
     // Lifetime, i.e., how many timesteps the bullet visible

@@ -24,7 +24,7 @@ Asteroid::Asteroid(
     float speed,
     float accell,
     float radius)
-    : PhysicalObject(mesh, startDirection, startPosition, mass, rotation, speed, accell, radius)
+    : PhysicalObject(startDirection, startPosition, mass, rotation, speed, accell, radius, 0), m_renderable(mesh)
 {
     // cout << startDirection << endl;
     // cout << startPosition << endl;

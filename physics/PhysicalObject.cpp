@@ -25,7 +25,7 @@ namespace asteroids
 {
 
 PhysicalObject::PhysicalObject(Vector<float> direction, Vector<float> position, float mass,
-        float momentum, float speed, float accel, float radius)
+                               float momentum, float speed, float accel, float radius, int id)
 {
     this->m_accel = accel;
     this->m_position = position;
@@ -35,6 +35,7 @@ PhysicalObject::PhysicalObject(Vector<float> direction, Vector<float> position, 
     this->m_radius = radius;
     this->m_alive = true;
     this->m_angle=0.01f;
+    this->m_id = id;
 }
 
 PhysicalObject::PhysicalObject() :
@@ -44,7 +45,8 @@ PhysicalObject::PhysicalObject() :
     m_accel(0),
     m_radius(0),
     m_angle(0),
-    m_alive(true)
+    m_alive(true),
+    m_id(0)
 {
 
 }

@@ -8,11 +8,13 @@
 #include <math/Vector.hpp>
 #include <math/Quaternion.hpp>
 #include <physics/PhysicalBullet.hpp>
+#include <physics/PhysicalSpaceCraft.hpp>
 #include <physics/Transformable.hpp>
 #include <memory>
 #include <light_object.hpp>
 #include <light_ship.hpp>
 
+using namespace asteroids;
 class UdpClient
 {
 public:
@@ -20,11 +22,11 @@ public:
     QHostAddress address;
     quint16 port;
     uint32_t seq_nr = 0;
-    light_ship ship;
+    PhysicalSpaceCraft ship;
     std::map<uint32_t, QByteArray> ack_pending;
 
-    UdpClient(): ship(0), id(0) {}
-    UdpClient(uint32_t id): ship(id << 24), id(id) {}
+    UdpClient(): ship(Vector3f(), 1, 1), id(0) {}
+    UdpClient(uint32_t id): ship(Vector3f(), 1, 1), id(id) {}
     uint32_t next_seq_nr() { return seq_nr++; }
 };
 
@@ -37,25 +39,25 @@ private slots:
     void tick();
 
 private:
-    std::map<uint32_t, asteroids::PhysicalBullet::Ptr> bullets;
+    std::map<uint32_t, PhysicalBullet::Ptr> bullets;
     std::unique_ptr<QUdpSocket> socket;
     std::unique_ptr<QTimer> timer;
     std::map<uint32_t, UdpClient> clients;
 
-    asteroids::Vector3f bytes_to_vector(char *bytes);
-    asteroids::Quaternion bytes_to_quaternion(char *bytes);
+    Vector3f bytes_to_vector(char *bytes);
+    Quaternion bytes_to_quaternion(char *bytes);
     void handle_position_packet(QNetworkDatagram &datagram);
     void handle_bullet_packet(QNetworkDatagram &datagram);
-    void set_position_from_packet(QNetworkDatagram &datagram, asteroids::PhysicalObject &obj);
+    void set_position_from_packet(QNetworkDatagram &datagram, Transformable &obj);
     void send_ack(QNetworkDatagram &datagram);
     void handle_ack(QNetworkDatagram &datagram);
     void send_collision(UdpClient &client, uint32_t id1, uint32_t id2);
-    void send_position_or_bullet(char type, UdpClient &client, asteroids::PhysicalObject &obj, uint32_t obj_id);
+    void send_position_or_bullet(char type, UdpClient &client, Transformable &obj, uint32_t obj_id);
     bool check_client_id(QNetworkDatagram &datagram);
 
 public:
     UdpServer();
-    void add_client(uint32_t id, asteroids::Vector3f position);
+    void add_client(uint32_t id, Vector3f position);
 };
 
 #endif
