@@ -46,33 +46,45 @@ void PhysicsEngine::process()
 
     //Move bullets and test for hits
     b_it = m_bullets.begin();
+    std::cout << "process bullets" << std::endl;
     while (b_it != m_bullets.end())
     {
         Bullet::Ptr b = (*b_it).second;
         b->run();
-
+        std::cout << 1 << std::endl;
         // Check for collisions with present objects
         p_it = m_objects.begin();
         while (p_it != m_objects.end())
         {
+            std::cout << "if" << std::endl;
             if ((*p_it).second->collision(b->getPosition(), b->radius()))
             {
+                std::cout << "dest" << std::endl;
                 // Mark bulled as killed
                 b->destroy();
+
+
+                std::cout << 2 << std::endl;
 
                 // Delete destroyed object
                 p_it = m_objects.erase(p_it);
 
+
+                std::cout << 3 << std::endl;
                 // Add explosion
                 m_particles.addEffect(ParticleEffect::createExplosionSphere(b->getPosition()));
+
+                std::cout << 4 << std::endl;
             }
             p_it++;
         }
-
+        std::cout << 5 << std::endl;
         // Check if bullet is dead. If it is, remove from
         // bullet list. Otherwise continue with next bullet.
         if (!b->alive())
         {
+
+            std::cout << 6 << std::endl;
             b_it = m_bullets.erase(b_it);
         }
         else
@@ -82,6 +94,7 @@ void PhysicsEngine::process()
     }
 
     m_particles.update();
+    std::cout << "process ende lol" << std::endl;
 }
 
 void PhysicsEngine::render()

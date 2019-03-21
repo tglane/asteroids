@@ -240,7 +240,7 @@ void GLWidget::step(map<Qt::Key, bool>& keyStates)
     // Add a bullet to physics engine
     if(keyStates[Qt::Key_Space])
     {
-        Bullet::Ptr bullet = make_shared<Bullet>(Bullet(m_camera.getPosition(), m_camera.getDirection(), m_client.get_id(), m_physicsEngine->get_curr_bull_id() + 1)); //changed
+        Bullet::Ptr bullet = make_shared<Bullet>(Bullet(m_camera.getPosition(), m_camera.getDirection(), m_client.get_id(), m_physicsEngine->get_curr_bull_id())); //changed
         m_client.send_bullet(m_camera.getPosition(), m_camera.getDirection()); //added
         m_physicsEngine->addBullet(bullet);
     }
