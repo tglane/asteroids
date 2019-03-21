@@ -11,7 +11,7 @@
 
 #include "Read3DS.hpp"
 
-#include "SDL.h"
+#include "SDL/SDL.h"
 #include "C3DSMaterialReader.h"
 #include "C3DSMeshReader.h"
 #include "C3DSMeshNormalCalculator.h"
