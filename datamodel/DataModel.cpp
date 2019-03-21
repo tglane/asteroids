@@ -97,7 +97,17 @@ bool DataModel::buyShip(Planet::Ptr selectedPlanet, Player::Ptr Player1)
     return false;
 
 }
+//TODO: MoveOrder in entsprechende Liste
+bool DataModel::moveShips(Planet::Ptr from, Planet::Ptr to, int numShips) {
 
+	if(from->getShips() >= numShips)
+	{
+		MoveOrder::Ptr move = MoveOrder::Ptr(new MoveOrder(from, to, numShips));
+		return true;
+	}
+
+	else return false;
+}
 bool DataModel::buyMine(Planet::Ptr selectedPlanet, Player::Ptr Player1)
 {
     /*test druck*/
