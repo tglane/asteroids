@@ -41,7 +41,7 @@
 
 #include "C3DSFormat.h"
 
-#include "SDL_rwops.h"
+#include "SDL/SDL_rwops.h"
 #include <string>
 
 /******************************************************************************/

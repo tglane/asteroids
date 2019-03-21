@@ -13,11 +13,13 @@
 
 #include <string>
 #include <list>
+#include <memory>
 
 #include "Planet.hpp"
 
 namespace asteroids
 {
+
 
 	class MoveOrder
 	{
