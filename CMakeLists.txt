@@ -132,6 +132,7 @@ set(ASTEROID_SOURCES
     physics/PhysicalObject.cpp
     physics/PhysicsEngine.cpp
     physics/ParticleEngine.cpp
+    physics/PhysicalBullet.cpp
     rendering/Bullet.cpp
     rendering/ParticleEffect.cpp
     rendering/Sphere.cpp

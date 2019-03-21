@@ -30,9 +30,15 @@ public:
      */
     void send_bullet(asteroids::Vector3f position, asteroids::Vector3f velocity);
 
+    void recv_ack(int recv_seq_nr, int recv_id);
+
+    void send_not_acknowledged();
+
     void setPhysicsPtr(asteroids::PhysicsEngine::Ptr phyEng) { m_physicsEngine = std::move(phyEng); }
 
     void setOtherFighter(asteroids::SpaceCraft::Ptr other_fighter) { m_otherFighter = std::move(other_fighter); }
+
+    int get_id() { return m_id; }
 
 signals:
 
@@ -52,6 +58,8 @@ private:
     QUdpSocket *socket;
 
     int m_id;
+
+    char* m_ip;
 
     unsigned int seq_number;
 

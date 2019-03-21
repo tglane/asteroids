@@ -15,7 +15,7 @@
 
 #include "TriangleMesh.hpp"
 #include "Sphere.hpp"
-#include "physics/PhysicalObject.hpp"
+#include "physics/PhysicalBullet.hpp"
 
 #include <thread>
 #include <chrono>
@@ -27,7 +27,7 @@ namespace asteroids
 /**
  * @brief Renders a Bullet
  */
-class Bullet: public PhysicalObject
+class Bullet: public PhysicalBullet
 {
 
 public:
@@ -41,41 +41,19 @@ public:
      * @param   fighter_position   Position of the fighter that shoots this bullet
      * @param   fighter_axis   Axis the bullet will move on
      */
-    Bullet(const Vector3f& fighter_position, const Vector3f fighter_axis);
+    Bullet(const Vector3f& fighter_position, const Vector3f fighter_axis, int shooter_id, int id)
+        : PhysicalBullet(fighter_position, fighter_axis, shooter_id, id), m_sphere(Vector3f(0,0,0), 10) {}
 
     ~Bullet() = default;
 
-    /**
-     * @brief Moves the bullet until it's lifetime is over.
-     */
-	void run();
-    
+
     /**
      * @brief Renders the bullet via glutSolidSphere.
      */
 	void render() override;
-
-    /// Returns the radius of the bullet
-    int radius();
-
-    static int lifetime() { return m_lifetime;}
-
-    Vector3f direction() {return m_fighterAxis;}
 private:
-
-    // Lifetime, i.e., how many timesteps the bullet visible
-	static const int m_lifetime = 80;
-
-	// True, if the bullet's lifetime isn't over yet
-	bool m_alive;
-
-	// Flight direction of the bullet
-    Vector3f m_fighterAxis;
-
-    /// Sphere objet to render the bullet
     Sphere m_sphere;
 
-    size_t m_iterations;
 };
 
 } // namespace asteroids

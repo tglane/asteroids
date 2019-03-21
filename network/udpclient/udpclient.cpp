@@ -9,6 +9,9 @@ udpclient::udpclient(QObject *parent)
     std::cout << "Enter player_id (int):" << std::endl;
     std::cin >> m_id;
 
+    std::cout << "Enter server_ip (QString):" << std::endl;
+    std::cin >> m_ip;
+
     socket = new QUdpSocket(this);
     seq_number = 1;
 
@@ -75,7 +78,7 @@ void udpclient::send_position(asteroids::Vector<float> position, asteroids::Vect
     data.append(vec_char, sizeof(vec_char));
 
     /* Send own position data to server */
-    socket->writeDatagram(data, QHostAddress(QString("192.168.43.83")), 1235);
+    socket->writeDatagram(data, QHostAddress(QString(m_ip)), 1235);
 }
 
 void udpclient::readyRead()
@@ -115,7 +118,7 @@ void udpclient::readyRead()
         case 'C':
             break;
         case 'A':
-
+            recv_ack(recv_seq_nr, recv_id);
             break;
         default:
             break;
@@ -211,7 +214,10 @@ void udpclient::send_bullet(asteroids::Vector3f position, asteroids::Vector3f ve
     data.append(vec_char, sizeof(vec_char));
 
     /* Send own position data to server */
-    socket->writeDatagram(data, QHostAddress(QString("192.168.43.83")), 1235);
+    socket->writeDatagram(data, QHostAddress(QString(m_ip)), 1235);
+
+    /* Add new bullet to not acknowledged */
+    m_not_acknowledged.insert(std::pair<int, QByteArray>(seq_number, data));
 }
 
 void udpclient::createNewBulletFromPackage(int recv_seq_nr, int recv_id, char* data) {
@@ -237,7 +243,7 @@ void udpclient::createNewBulletFromPackage(int recv_seq_nr, int recv_id, char* d
         data += sizeof(float);
         asteroids::Vector3f bull_vel(x, y, z);
 
-        asteroids::Bullet::Ptr bull = std::make_shared<asteroids::Bullet>(asteroids::Bullet(bull_pos, bull_vel));
+        asteroids::Bullet::Ptr bull = std::make_shared<asteroids::Bullet>(asteroids::Bullet(bull_pos, bull_vel, m_id, m_physicsEngine->get_curr_bull_id()));
         m_physicsEngine->addBullet(bull);
 
         /* Send acknowledge to server */
@@ -253,6 +259,24 @@ void udpclient::createNewBulletFromPackage(int recv_seq_nr, int recv_id, char* d
         memcpy(id_char, &id, sizeof(id_char));
         data.append(id_char, sizeof(id_char));
 
-        socket->writeDatagram(data, QHostAddress(QString("192.168.43.83")), 1235);
+        socket->writeDatagram(data, QHostAddress(QString(m_ip)), 1235);
+    }
+}
+
+void udpclient::recv_ack(int recv_seq_nr, int recv_id)
+{
+    recv_id = recv_id >> 24;
+    if(recv_id == m_id)
+    {
+        m_not_acknowledged.erase(recv_seq_nr);
+    }
+}
+
+void udpclient::send_not_acknowledged()
+{
+    for(auto it = m_not_acknowledged.begin(); it != m_not_acknowledged.end(); it++)
+    {
+        std::cout << "ack send" << it->first << std::endl;
+        socket->writeDatagram(it->second, QHostAddress(QString(m_ip)), 1235);
     }
 }

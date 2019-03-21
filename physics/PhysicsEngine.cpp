@@ -27,7 +27,7 @@ void PhysicsEngine::addDestroyable(PhysicalObject::Ptr& obj)
 
 void PhysicsEngine::addBullet(Bullet::Ptr& bullet)
 {
-    m_particles.addEffect(ParticleEffect::createBulletTail(bullet->getPosition(), bullet->direction(), bullet->lifetime()));
+    //m_particles.addEffect(ParticleEffect::createBulletTail(bullet->getPosition(), bullet->direction(), bullet->lifetime()));
     m_bullets.insert(std::pair<int, Bullet::Ptr >(curr_bull_id++, bullet));
 }
 

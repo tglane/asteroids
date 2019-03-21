@@ -68,6 +68,8 @@ private:
 
     float  m_scale;
 
+    Renderable::Ptr m_renderable;
+
 };
 
 }

@@ -233,13 +233,14 @@ void GLWidget::step(map<Qt::Key, bool>& keyStates)
         m_camera.move(Transformable::LIFT_DOWN, 5);
     }
 
-    /* Send own position to the server */
+    /* Send own position and not acknowledged packages to the server */
     m_client.send_position(m_camera.getPosition(), m_camera.getDirection(), m_camera.getXAxis(), m_camera.getYAxis(), m_camera.getZAxis());
+    m_client.send_not_acknowledged();
 
     // Add a bullet to physics engine
     if(keyStates[Qt::Key_Space])
     {
-        Bullet::Ptr bullet = make_shared<Bullet>(Bullet(m_camera.getPosition(), m_camera.getDirection())); //changed
+        Bullet::Ptr bullet = make_shared<Bullet>(Bullet(m_camera.getPosition(), m_camera.getDirection(), m_client.get_id(), m_physicsEngine->get_curr_bull_id() + 1)); //changed
         m_client.send_bullet(m_camera.getPosition(), m_camera.getDirection()); //added
         m_physicsEngine->addBullet(bullet);
     }
