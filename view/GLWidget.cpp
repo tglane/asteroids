@@ -200,7 +200,7 @@ void GLWidget::step(map<Qt::Key, bool>& keyStates)
         m_cooldown_enemy--;
     }
 
-    //m_camera.move(Transformable::FORWARD, 5);
+    //m_camera->move(Transformable::FORWARD, 5);
 
     if (keyStates[Qt::Key_D])
     {
@@ -264,12 +264,12 @@ void GLWidget::step(map<Qt::Key, bool>& keyStates)
     }
 
     /* Send own position to the server */
-    m_client.send_position(m_camera.getPosition(), m_camera.getDirection(), m_camera.getXAxis(), m_camera.getYAxis(), m_camera.getZAxis());
+    m_client.send_position(m_camera->getPosition(), Vector3f(), m_camera->getXAxis(), m_camera->getYAxis(), m_camera->getZAxis());
 
     // Add a bullet to physics engine
     if(keyStates[Qt::Key_Space])
     {
-        Bullet::Ptr bullet = make_shared<Bullet>(Bullet(m_actor->getPosition(), m_actor->getDirection()));
+        Bullet::Ptr bullet = make_shared<Bullet>(Bullet(m_enemy->getPosition(), m_enemy->getXAxis(), m_client->get_id(), m_physicsEngine->get_curr_bull_id() + 1));
         m_physicsEngine->addBullet(bullet);
     }
 

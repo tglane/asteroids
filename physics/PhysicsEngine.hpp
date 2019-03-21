@@ -73,6 +73,10 @@ public:
      */
     void process();
 
+    /// Getter for current highest IDs
+    int get_curr_bull_id() { return curr_bull_id; }
+    int get_curr_dest_id() { return curr_dest_id; }
+
 private:
 
     /// List of destroyable objects
