@@ -317,12 +317,12 @@
          <rect>
           <x>140</x>
           <y>90</y>
-          <width>31</width>
+          <width>91</width>
           <height>27</height>
          </rect>
         </property>
         <property name="text">
-         <string/>
+         <string>Build Mine</string>
         </property>
        </widget>
        <widget class="QLabel" name="ShipNumber">

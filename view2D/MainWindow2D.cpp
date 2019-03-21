@@ -160,6 +160,14 @@ void MainWindow2D::choose_planet(int id)
     ui->Info->setText("???");
     ui->MineNumber->setText(QString::number(p->getMines()));
     ui->ShipNumber->setText(QString::number(p->getShips()));
+    if (p->getOwner() == NULL)
+    {
+        ui->Info->setText("Niemand besitzt diesen Planeten!");
+    }
+    else
+    {
+        ui->Info->setText(QString::fromStdString(p->getOwner()->getPlayerName()));
+    }
 
     std::list<Planet::Ptr> neighbour_list = p->getNeighbours();
 
@@ -200,11 +208,18 @@ void MainWindow2D::colonize(bool click /*, Planet* p*/)
     std::cout << "Colonize!" << std::endl;
 }
 
-void MainWindow2D::buildShip(bool click /*, Planet* p*/)
+void MainWindow2D::buildShip(bool click)
 {
     // Ship should be accessible a round later
+    Planet::Ptr p = m_model->getPlanetFromId(currentPlanet);
 
-    //m_model->buildShip(p);
+    if (p->getOwner() == NULL)
+    {
+        std::cout << "Planet wird nicht besessen!" << std::endl;
+        return;
+    }
+
+    m_model->buyShip(p, p->getOwner());
     std::cout << "Build Ship!" << std::endl;
 }
 
