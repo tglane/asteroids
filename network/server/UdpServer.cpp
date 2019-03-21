@@ -98,7 +98,7 @@ void UdpServer::handle_bullet_packet(QNetworkDatagram &datagram)
     }
     uint32_t obj_id = *((int32_t*)(data.data() + 5));
     // TODO use positons
-    bullets[obj_id] = PhysicsBullet::Ptr(new PhysicsBullet(asteroids::Vector3f(), asteroids::Vector3f()));
+    bullets[obj_id] = PhysicalBullet::Ptr(new PhysicalBullet(asteroids::Vector3f(), asteroids::Vector3f()));
     std::cout << "created bullet: " << obj_id << std::endl;
     set_position_from_packet(datagram, *bullets[obj_id]);
 

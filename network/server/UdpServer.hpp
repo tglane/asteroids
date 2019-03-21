@@ -7,7 +7,7 @@
 #include <QTimer>
 #include <math/Vector.hpp>
 #include <math/Quaternion.hpp>
-#include <physics/PhysicsBullet.hpp>
+#include <physics/PhysicalBullet.hpp>
 #include <physics/Transformable.hpp>
 #include <memory>
 #include <light_object.hpp>
@@ -37,7 +37,7 @@ private slots:
     void tick();
 
 private:
-    std::map<uint32_t, asteroids::PhysicsBullet::Ptr> bullets;
+    std::map<uint32_t, asteroids::PhysicalBullet::Ptr> bullets;
     std::unique_ptr<QUdpSocket> socket;
     std::unique_ptr<QTimer> timer;
     std::map<uint32_t, UdpClient> clients;

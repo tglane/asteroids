@@ -13,7 +13,7 @@ set(SERVER_SRC
     ../../math/Matrix.cpp
     ../../physics/Transformable.cpp
     ../../physics/PhysicalObject.cpp
-    ../../physics/PhysicsBullet.cpp)
+    ../../physics/PhysicalBullet.cpp)
 
 set(SERVER_HDR
     UdpServer.hpp)

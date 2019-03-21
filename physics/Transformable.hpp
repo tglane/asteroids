@@ -52,6 +52,7 @@ public:
 
     virtual void move();
 
+    /**
      * @brief gives the current position
      * @return the current position
      */
@@ -68,6 +69,7 @@ public:
     {
         m_position = pos;
     }
+
 
     /**
      * @brief gives the current speed

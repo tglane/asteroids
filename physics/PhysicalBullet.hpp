@@ -23,14 +23,14 @@ namespace asteroids
 {
 
 /**
- * @brief Renders a PhysicsBullet
+ * @brief Renders a PhysicalBullet
  */
-class PhysicsBullet: public PhysicalObject
+class PhysicalBullet: public PhysicalObject
 {
 
 public:
 
-    using Ptr = std::shared_ptr<PhysicsBullet>;
+    using Ptr = std::shared_ptr<PhysicalBullet>;
 
     /**
      * @brief Contructor. Build a bullet on the given Fighter's
@@ -39,9 +39,9 @@ public:
      * @param   fighter_position   Position of the fighter that shoots this bullet
      * @param   fighter_axis   Axis the bullet will move on
      */
-    PhysicsBullet(const Vector3f& fighter_position, const Vector3f fighter_axis, int shooter_id);
+    PhysicalBullet(const Vector3f& fighter_position, const Vector3f fighter_axis, int shooter_id);
 
-    ~PhysicsBullet() = default;
+    ~PhysicalBullet() = default;
 
     /**
      * @brief Moves the bullet until it's lifetime is over.

@@ -11,7 +11,7 @@
 
 
 
-#include "PhysicsBullet.hpp"
+#include "PhysicalBullet.hpp"
 
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
@@ -23,7 +23,7 @@
 namespace asteroids
 {
 
-Bullet::Bullet(const Vector3f &fighter_position, const Vector3f fighter_axis, int shooter_id)
+PhysicalBullet::Bullet(const Vector3f &fighter_position, const Vector3f fighter_axis, int shooter_id)
 		: m_alive(true), m_sphere(Vector3f(0, 0, 0), 10), m_shooter_id(shooter_id) {
 	// the bullet will move on this axis, it has to be reversed for the direction to be right
 	this->m_fighterAxis = fighter_axis;
@@ -34,7 +34,7 @@ Bullet::Bullet(const Vector3f &fighter_position, const Vector3f fighter_axis, in
 	m_position = fighter_position;
 }
 
-void Bullet::run() {
+void PhysicalBullet::run() {
 	m_position = m_fighterAxis * m_speed + m_position;
 	//cout << m_position << endl;
 	m_iterations++;
@@ -46,12 +46,12 @@ void Bullet::run() {
 
 }
 
-int PhysicsBullet::radius()
+int PhysicalBullet::radius()
 {
 	return m_radius;
 }
 
-int PhysicsBullet::get_shooter_id() const {
+int PhysicalBullet::get_shooter_id() const {
 	return m_shooter_id;
 }
 
