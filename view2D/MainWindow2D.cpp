@@ -17,7 +17,7 @@ MainWindow2D::MainWindow2D(DataModel *model, QWidget* parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow2D())
 {
-    model = model;
+    m_model = model;
     int planet_size = 20;
     float position_scale = 1;
     // Setup user interface
@@ -37,9 +37,9 @@ MainWindow2D::MainWindow2D(DataModel *model, QWidget* parent) :
     effect->setOpacity(0.7);
     ui->Fight->setGraphicsEffect(effect);
     QPen outlinePenHighlight(Qt::white);
-    outlinePenHighlight.setWidth(1);;
+    outlinePenHighlight.setWidth(1);
 
-    std::map<int, Planet::Ptr> planets = model->getPlanets();
+    std::map<int, Planet::Ptr> planets = m_model->getPlanets();
 
     // // Map für die Elipsen-Objekten im QGraphicsScene
 
@@ -54,7 +54,7 @@ MainWindow2D::MainWindow2D(DataModel *model, QWidget* parent) :
         connect(view_planets[i], SIGNAL(show_planetInfo(int)), this, SLOT(choose_planet(int)));
     }
 
-    std::list<std::pair<int,int>> edges = model->getEdges();
+    std::list<std::pair<int,int>> edges = m_model->getEdges();
 
     //Linien einzeichnen
     for(std::list<std::pair<int,int>>::iterator it=edges.begin(); it != edges.end(); ++it){
@@ -133,19 +133,24 @@ void MainWindow2D::choose_planet(int id)
 {
     cout << "ID of clicked planet is " << id << endl;
 
+    std::map<int, Planet::Ptr> planets = m_model->getPlanets();
+
     MyEllipse* ellipse = getEllipseById(id);
     if(id == currentPlanet){
+        if(planets.at(id)->getOwner()==m_model->getSelfPlayer()){
+            cout<<"ist mein planet"<<endl;
+        }
         QPixmap pix("../models/surface/neutral1.jpg");
         ellipse->myBrush = QBrush(pix);
         currentPlanet = -1;
         ellipse->myPen = QPen(Qt::black,1);
     }else{
         if(currentPlanet!=-1){
-        MyEllipse* otherEllipse = getEllipseById(currentPlanet);
-        QPixmap otherpix("../models/surface/neutral2.jpg");
-        otherEllipse->myBrush = QBrush(otherpix);
-        otherEllipse->myPen = QPen(Qt::black,1);
-        otherEllipse->update();
+            MyEllipse* otherEllipse = getEllipseById(currentPlanet);
+            QPixmap otherpix("../models/surface/neutral2.jpg");
+            otherEllipse->myBrush = QBrush(otherpix);
+            otherEllipse->myPen = QPen(Qt::black,1);
+            otherEllipse->update();
         }
         QPixmap pix("../models/surface/neutral2.jpg");
         ellipse->myBrush = QBrush(pix);
@@ -168,7 +173,7 @@ void MainWindow2D::choose_planet(int id)
 
 void MainWindow2D::endOfRound(bool click)
 {
-    bool succes = model->endOfRound();
+    bool succes = m_model->endOfRound();
 
     // fuck this "unused" warnings! :D
     if(succes);

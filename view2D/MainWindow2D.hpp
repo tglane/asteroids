@@ -103,7 +103,7 @@ private:
 
     asteroids::MainWindow* FighterWindow;
 
-    DataModel* model;
+    DataModel* m_model;
 
     std::map<int, MyEllipse*> view_planets;
 

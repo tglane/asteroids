@@ -54,6 +54,8 @@ namespace asteroids
 
 		int getPosY();
 
+		Player getOwner();
+
 
 	private:
 		std::string m_name;

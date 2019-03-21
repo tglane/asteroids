@@ -55,6 +55,10 @@ public:
 
     std::list<std::pair<int,int>> getEdges();
 
+    Player::Ptr getSelfPlayer();
+
+    Player::Ptr getEnemyPlayer();
+
 private:
     /*Variablen von Kay*/
 

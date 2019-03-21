@@ -62,6 +62,10 @@ void Planet::setOwner(Player::Ptr owner)
 	m_owner = owner;
 }
 
+Player Planet::getOwner(){
+	return *m_owner;
+}
+
 int Planet::getRubin() 
 {
 	return m_rubin;
