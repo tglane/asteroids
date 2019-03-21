@@ -9,8 +9,6 @@
  *  Represents a player
  */
 
-
-
 #include <string>
 #include <list>
 #include <memory>
@@ -20,9 +18,7 @@
 
 namespace asteroids
 {
-
 	class Player;
-
 	class Planet
 	{
 
@@ -80,8 +76,9 @@ namespace asteroids
 
 		int getPosY();
 
-		std::string getName();
+		std::shared_ptr<Player> getOwner();
 
+		std::string getName();
 
 	private:
 		std::string m_name;

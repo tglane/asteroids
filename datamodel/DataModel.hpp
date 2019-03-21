@@ -67,6 +67,10 @@ public:
 
     std::list<std::pair<int,int>> getEdges();
 
+    Player::Ptr getSelfPlayer();
+
+    Player::Ptr getEnemyPlayer();
+    
     void startGame();
 
     void addWindow(int Id, QMainWindow* Window);
