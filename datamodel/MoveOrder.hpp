@@ -19,7 +19,7 @@
 
 namespace asteroids
 {
-
+        class Planet;
 
 	class MoveOrder
 	{
@@ -32,13 +32,13 @@ namespace asteroids
          * @param destination1 The planet to which the ships are going
          * @param numberShips1 The number of ships that is supposed to move to the planet
          */
-        MoveOrder(Planet::Ptr origin1, Planet::Ptr destination1, int numberShips1);
+        MoveOrder(std::shared_ptr<Planet> origin1, std::shared_ptr<Planet> destination1, int numberShips1);
 
         /**
          * @brief returns the origin planet
          * @return The planet from which the moved ships are coming
          */
-        Planet::Ptr getOrigin()
+        std::shared_ptr<Planet> getOrigin()
         {
                 return m_origin;
         }
@@ -47,7 +47,7 @@ namespace asteroids
          * @brief returns the destination planet
          * @return The planet to which the moved ships are going
          */
-        Planet::Ptr getDestination()
+        std::shared_ptr<Planet> getDestination()
         {
                 return m_destination;
         }
@@ -65,12 +65,12 @@ namespace asteroids
         /**
          * @brief The Planet to which the ships are moving
          */
-        Planet::Ptr m_destination;
+        std::shared_ptr<Planet> m_destination;
 
         /**
          * @brief The planet from which the ships are coming
          */
-        Planet::Ptr m_origin;
+        std::shared_ptr<Planet> m_origin;
 
         /**
          * @brief number of ships to be moved 

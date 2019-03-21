@@ -20,23 +20,25 @@
 namespace asteroids
 {
 
+        class Planet; 
+        
 	class MineOrder
 	{
 
+        public:
         using Ptr = std::shared_ptr<MineOrder>;
 
-        public:
         /**
          * @brief Constructor
          * @param P1 The planeet on which a mine should be built
          */
-        MineOrder(Planet::Ptr P1);
+        MineOrder(std::shared_ptr<Planet> P1);
 
         /**
          * @brief returns Planet
          * @return The planet on which a mine should be built
          */
-        Planet::Ptr getPlanet()
+        std::shared_ptr<Planet> getPlanet()
         {
                 return m_P;
         }
@@ -45,7 +47,7 @@ namespace asteroids
         /**
          * @brief The planeet on which a mine should be built
          */
-        Planet::Ptr m_P;
+        std::shared_ptr<Planet> m_P;
 
 
 	};
