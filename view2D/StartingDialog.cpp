@@ -5,7 +5,7 @@
 
 namespace strategy{
 
-StartingDialog::StartingDialog(DataModel *model, QWidget* parent) : 
+StartingDialog::StartingDialog(DataModel::Ptr model, QWidget* parent) : 
     QMainWindow(parent), ui(new Ui::StartingDialog())
 {
     m_model = model;

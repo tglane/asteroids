@@ -35,7 +35,7 @@ public:
      * @brief Construct a new Main Window object
      *
      */
-    StartingDialog(DataModel *model, QWidget* parent = NULL);
+    StartingDialog(DataModel::Ptr model, QWidget* parent = NULL);
 
     /**
      * @brief Destroys the Main Window object
@@ -64,7 +64,7 @@ private:
     Ui::StartingDialog* ui;
 
     // The model which manages the round based data
-    DataModel* m_model;
+    DataModel::Ptr m_model;
 };
 
 

@@ -29,12 +29,12 @@ int main(int argc, char** argv)
 
     QApplication a(argc, argv);
 
-    strategy::MainWindow2D mainWindow2D(&model);
+    strategy::MainWindow2D mainWindow2D(model);
 
     //asteroids::MainWindow mainWindow("../models/level.xml");
     //mainWindow.show();
 
-    strategy::StartingDialog startWindow(&model);
+    strategy::StartingDialog startWindow(model);
     startWindow.show();
 
 

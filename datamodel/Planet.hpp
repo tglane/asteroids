@@ -50,8 +50,6 @@ namespace asteroids
 		 */
 		int getShips();
 
-		std::string getName();
-
 		/**
 		 * @brief add ships to the planet
 		 * @param ships number of ships
