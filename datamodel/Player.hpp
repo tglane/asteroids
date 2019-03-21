@@ -105,6 +105,8 @@ public:
 
 	void putListMineOrder(std::shared_ptr<MineOrder> NewMineOrder);
 
+	void putListMoveOrder(std::shared_ptr<MoveOrder> newMoveOrder);
+
 	void ClearOrderListInPlayer();
 
 private:

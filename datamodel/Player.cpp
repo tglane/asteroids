@@ -102,10 +102,16 @@ void Player::putListMineOrder(std::shared_ptr<MineOrder> NewMineOrder)
 
 }
 
+void Player::putListMoveOrder(std::shared_ptr<MoveOrder> newMoveOrder)
+{
+	m_moveOrders.push_back(newMoveOrder);
+}
+
 void Player::ClearOrderListInPlayer()
 {
 	m_shipOrders.clear();
 	m_mineOrders.clear();
+	m_moveOrders.clear();
 
 }
 

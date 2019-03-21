@@ -108,6 +108,7 @@ bool DataModel::moveShips(Planet::Ptr from, Planet::Ptr to, int numShips) {
 	if(from->getShips() >= numShips)
 	{
 		MoveOrder::Ptr move = MoveOrder::Ptr(new MoveOrder(from, to, numShips));
+		m_self->putListMoveOrder(move);
 		std::cout << "MoveOrder successful"<< std::endl;
 
 		return true;
