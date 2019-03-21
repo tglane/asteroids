@@ -50,38 +50,40 @@ void PhysicsEngine::process()
 
     //Move bullets and test for hits
     b_it = m_bullets.begin();
-    std::cout << "process bullets" << std::endl;
+    //std::cout << "process bullets" << std::endl;
     while (b_it != m_bullets.end())
     {
         Bullet::Ptr b = (*b_it).second;
         b->run();
-        std::cout << 1 << std::endl;
+        //std::cout << 1 << std::endl;
         // Check for collisions with present objects
         p_it = m_objects.begin();
         while (p_it != m_objects.end())
         {
-            std::cout << "if" << std::endl;
+            //std::cout << "if" << std::endl;
             if ((*p_it).second->collision(b->getPosition(), b->radius()))
             {
-                std::cout << "dest" << std::endl;
+                //std::cout << "dest" << std::endl;
                 // Mark bulled as killed
                 b->destroy();
 
 
-                std::cout << 2 << std::endl;
+                //std::cout << 2 << std::endl;
 
                 // Delete destroyed object
                 p_it = m_objects.erase(p_it);
 
 
-                std::cout << 3 << std::endl;
+                //std::cout << 3 << std::endl;
                 // Add explosion
                 m_particles.addEffect(ParticleEffect::createExplosionSphere(b->getPosition()));
 
-                std::cout << 4 << std::endl;
+                //std::cout << 4 << std::endl;
+            } else {
+                p_it++;
             }
-            p_it++;
         }
+        //td::cout << 4.5 << std::endl;
 
         h_it = m_hittables.begin();
         while (h_it != m_hittables.end())
@@ -98,7 +100,7 @@ void PhysicsEngine::process()
         if (!b->alive())
         {
 
-            std::cout << 6 << std::endl;
+            //std::cout << 6 << std::endl;
             b_it = m_bullets.erase(b_it);
         }
         else
@@ -108,7 +110,7 @@ void PhysicsEngine::process()
     }
 
     m_particles.update();
-    std::cout << "process ende lol" << std::endl;
+    //std::cout << "process ende lol" << std::endl;
 }
 
 void PhysicsEngine::render()
