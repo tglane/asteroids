@@ -148,7 +148,10 @@ void GLWidget::paintGL()
     // Render all physical objects
     m_physicsEngine->render();
 
-    m_enemy->render();
+    if (m_enemy->getHealth() > 0)
+    {
+        m_enemy->render();
+    }
 
     // TODO: tut so noch nicht
     // QPainter qPainter(this);

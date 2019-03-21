@@ -10,7 +10,6 @@
  *  No unauthorized distribution.
  */
 
-
 #include "PhysicsEngine.hpp"
 
 #include <iostream>
@@ -80,6 +79,15 @@ void PhysicsEngine::process(int elapsed_time)
             if (b->get_shooter_id() != (*h_it)->getId() && (*h_it)->hit(*b))
             {
                 b->destroy();
+                if (m_hittables.size() > 1)
+                {
+                    (*h_it)->setHealth((*h_it)->getHealth() - 1);
+                    if ((*h_it)->getHealth() == 0)
+                    {
+                        m_particles.addEffect(ParticleEffect::createExplosionSphere((*h_it)->getPosition()));
+                        h_it = m_hittables.erase(h_it);
+                    }
+                }
             }
             h_it++;
         }

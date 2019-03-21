@@ -19,6 +19,8 @@ public:
 
     void setHealth(int health);
 
+    int getHealth();
+
     bool hit(Bullet b);
 
 private:

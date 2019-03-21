@@ -20,6 +20,11 @@ void Hittable::setHealth(int health)
     m_health = health;
 }
 
+int Hittable::getHealth()
+{
+    return m_health;
+}
+
 bool Hittable::hit(Bullet b)
 {
     float length = 200;
@@ -47,16 +52,7 @@ bool Hittable::hit(Bullet b)
     float x = std::max(boxMinX, std::min(bx, boxMaxX));
     float y = std::max(boxMinY, std::min(by, boxMaxY));
     float z = std::max(boxMinZ, std::min(bz, boxMaxZ));
-    if (magnitude(Vector3f(x - bx, y - by, z - bz)) < b.radius())
-    {
-        if (m_health > 0)
-        {
-            m_health--;
-            std::cout << "Leben Spieler " << m_id << ": " << m_health << std::endl;
-        }
-        return true;
-    }
-    return false;
+    return magnitude(Vector3f(x - bx, y - by, z - bz)) < b.radius();
 }
 
 float Hittable::signedDistanceToPlane(Vector3f x, Vector3f b, Vector3f e1, Vector3f e2)

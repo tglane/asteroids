@@ -21,8 +21,6 @@ public:
 
 private:
 
-    std::vector<int> m_keysPlayer;
-
     int m_cooldownPlayer;
 
     int m_cooldownEnemy;
