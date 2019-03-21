@@ -79,6 +79,8 @@ public:
 
     void switchWindow(int Id);
 
+     
+
 private:
     /*Variablen von Kay*/
 
