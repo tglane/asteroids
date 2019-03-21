@@ -90,13 +90,14 @@ find_package( Qt5
     Core
     Widgets
     OpenGL
+    Network
     REQUIRED
 )
 
 include_directories(${Qt5Widgets_INCLUDE_DIRS})
 include_directories(${Qt5Core_INCLUDE_DIRS})
 include_directories(${Qt5OpenGL_INCLUDE_DIRS})
-
+include_directories(${Qt5Network_INCLUDE_DIRS})
 
 ###############################################################################
 # Compile external libraries
@@ -149,6 +150,7 @@ set(ASTEROID_SOURCES
     view/GLWidget.cpp
     view/MainWindow.cpp 
     view/Camera.cpp
+    network/udpclient/udpclient.cpp
 )
 set(ASTEROID_MOCS
     view/MainWindow.hpp
@@ -177,6 +179,7 @@ set(ASTEROID_DEPENDS
     ${SDL2_LIBRARY}
     ${JPEG_LIBRARIES}
     ${Qt5Widgets_LIBRARIES}
+    ${Qt5Network_LIBRARIES}
     c3dsreader
 )
 

@@ -102,7 +102,13 @@ public:
     /**
      * @brief   Returns the orientation of the z in the global coordinate system
      */
-    Vector<float> getZAxis() { return m_zAxis;}
+    Vector<float> getZAxis() { return m_zAxis; }
+
+    void setXAxis(Vector3f x) { m_xAxis = x; }
+
+    void setYAxis(Vector3f y) { m_yAxis = y; }
+
+    void setZAxis(Vector3f z) { m_zAxis = z; }
 
     void setXAxis(const Vector<float> &m_xAxis);
 

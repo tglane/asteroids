@@ -106,6 +106,7 @@ void GLWidget::initializeGL()
     LevelParser lp(m_levelFile, m_enemy, m_skybox, m_asteroidField);
     m_enemy->fixArrow();
     m_enemy->setId(1);
+    m_client.setOtherFighter(m_enemy);
 
     // Setup physics
     m_physicsEngine = make_shared<PhysicsEngine>();
@@ -160,7 +161,8 @@ void GLWidget::step(map<Qt::Key, bool>& keyStates)
     // Get keyboard states and handle model movement
     m_physicsEngine->process();
 
-    m_enemy->move(Transformable::FORWARD, 5);
+    //m_enemy->move(Transformable::FORWARD, 5);
+
     if (keyStates[Qt::Key_L])
     {
         m_enemy->rotate(Transformable::ROLL_CLOCKWISE, 0.05);
@@ -198,7 +200,8 @@ void GLWidget::step(map<Qt::Key, bool>& keyStates)
         m_cooldown_enemy--;
     }
 
-    m_camera->move(Transformable::FORWARD, 5);
+    //m_camera.move(Transformable::FORWARD, 5);
+
     if (keyStates[Qt::Key_D])
     {
         m_camera->rotate(Transformable::ROLL_CLOCKWISE, 0.05);
@@ -258,6 +261,16 @@ void GLWidget::step(map<Qt::Key, bool>& keyStates)
     if (keyStates[Qt::Key_Z])
     {
         m_camera->move(Transformable::LIFT_DOWN, 5);
+    }
+
+    /* Send own position to the server */
+    m_client.send_position(m_camera.getPosition(), m_camera.getDirection(), m_camera.getXAxis(), m_camera.getYAxis(), m_camera.getZAxis());
+
+    // Add a bullet to physics engine
+    if(keyStates[Qt::Key_Space])
+    {
+        Bullet::Ptr bullet = make_shared<Bullet>(Bullet(m_actor->getPosition(), m_actor->getDirection()));
+        m_physicsEngine->addBullet(bullet);
     }
 
     // Trigger update, i.e., redraw via paintGL()
