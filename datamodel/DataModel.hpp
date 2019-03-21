@@ -3,6 +3,7 @@
 
 #include "Planet.hpp"
 #include "Player.hpp"
+#include "MoveOrder.hpp"
 
 #include <map>
 
@@ -51,9 +52,13 @@ public:
 
     bool buyMine(Planet::Ptr selectedPlanet, Player::Ptr Player1);
 
+    bool moveShips(Planet::Ptr from, Planet::Ptr to, int numShips);
+
     Planet::Ptr getPlanetFromId(int ID);
 
     std::list<std::pair<int,int>> getEdges();
+
+
 
 private:
     /*Variablen von Kay*/

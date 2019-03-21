@@ -13,6 +13,7 @@
 
 #include <string>
 #include <list>
+#include <memory>
 
 #include "Planet.hpp"
 #include "Order.hpp"
@@ -20,11 +21,14 @@
 namespace asteroids
 {
 
-    using Ptr = std::shared_ptr<MoveOrder>;
+
 
 	class MoveOrder : public Order
 	{
         public:
+
+
+		using Ptr = std::shared_ptr<MoveOrder>;
         /**
          * @brief Constructor
          * @param origin1 The planet from which the ships are coming
