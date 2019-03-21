@@ -11,6 +11,9 @@
 #include <memory>
 
 #include "Planet.hpp"
+#include "MoveOrder.hpp"
+#include "MineOrder.hpp"
+#include "ShipOrder.hpp"
 
 namespace asteroids
 {
@@ -49,7 +52,10 @@ private:
 	int m_ships;
 	std::list<std::shared_ptr<Planet>> m_planets;
 
-	//std::list<Order::Ptr> m_orders;
+	std::list<MoveOrder::Ptr> m_moveOrders;
+	std::list<MineOrder::Ptr> m_mineOrders;
+	std::list<ShipOrder::Ptr> m_shipOrders;
+
 };
 }
 
