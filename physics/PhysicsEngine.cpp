@@ -35,7 +35,7 @@ void PhysicsEngine::addBullet(Bullet::Ptr& bullet)
     m_bullets.push_back(bullet);
 }
 
-void PhysicsEngine::process()
+void PhysicsEngine::process(int elapsed_time)
 {
     //list<PhysicalObject::Ptr>::iterator p_it;
     list<PhysicalObject::Ptr>::iterator p_it;
@@ -54,7 +54,7 @@ void PhysicsEngine::process()
     while (b_it != m_bullets.end())
     {
         Bullet::Ptr b = *b_it;
-        b->run();
+        b->run(elapsed_time);
 
         // Check for collisions with present objects
         p_it = m_objects.begin();
@@ -79,7 +79,7 @@ void PhysicsEngine::process()
         {
             if (b->get_shooter_id() != (*h_it)->getId() && (*h_it)->hit(*b))
             {
-                std::cout << "Treffer an Spieler " << (*h_it)->getId() << std::endl;
+                b->destroy();
             }
             h_it++;
         }

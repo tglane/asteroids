@@ -17,6 +17,8 @@ public:
 
     int getId() const;
 
+    void setHealth(int health);
+
     bool hit(Bullet b);
 
 private:
@@ -26,6 +28,8 @@ private:
     static float magnitude(Vector3f v);
 
     int m_id;
+
+    int m_health;
 
 };
 

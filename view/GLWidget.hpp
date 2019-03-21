@@ -25,6 +25,7 @@
 #include "rendering/Skybox.hpp"
 #include "util/AsteroidField.hpp"
 #include "physics/PhysicsEngine.hpp"
+#include "view/Controller.hpp"
 
 using namespace asteroids;
 using std::shared_ptr;
@@ -80,22 +81,10 @@ private:
     /// Physics 
     PhysicsEngine::Ptr          m_physicsEngine;
 
-    /// Rotation speed of the actor
-    float                       m_rotationSpeed;
-
-    /// Translation speed of the actor
-    float                       m_moveSpeed;
-
-    /// Last set mouse position
-    QPoint                      m_mousePos;
-
     /// timer for correct speed with low fps
     QTime                       m_timer;
 
-    int m_cooldown_enemy;
-
-    int m_cooldown_player;
-
+    Controller                  m_controller;
 };
 
 #endif

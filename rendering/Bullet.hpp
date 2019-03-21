@@ -46,9 +46,9 @@ public:
     ~Bullet() = default;
 
     /**
-     * @brief Moves the bullet until it's lifetime is over.
+     * @brief Moves the bullet until its lifetime is over.
      */
-	void run();
+	void run(int elapsed_time);
 
 	int get_shooter_id() const;
 
