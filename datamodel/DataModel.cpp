@@ -103,7 +103,7 @@ bool DataModel::buyShip(Planet::Ptr selectedPlanet, Player::Ptr Player1)
 //TODO: MoveOrder in entsprechende Liste
 bool DataModel::moveShips(Planet::Ptr from, Planet::Ptr to, int numShips) {
 
-	std::cout << "Moveorder " << numShips << " Ships from Planet " << from->getName() << " to Planet " << to->getName() << std::endl;
+	std::cout << "MoveOrder " << numShips << " Ships from Planet " << from->getName() << " to Planet " << to->getName() << std::endl;
 
 	if(from->getShips() >= numShips)
 	{
@@ -211,7 +211,7 @@ void DataModel::addWindow(int Id, QMainWindow* Window)
 
 void DataModel::switchWindow(int Id)
 {
-    QMainWindow* Active = m_Window[Id];
+    //QMainWindow* Active = m_Window[Id];
     
 }
 

@@ -45,9 +45,9 @@ int main(int argc, char** argv)
     std::cout << Test->getMines() << std::endl;
     bool buytest;
 
-    bool buytest2;
-    buytest = model.buyShip(Test, Testplayer);
-    buytest2 = model.buyMine(Test, Testplayer);
+    //bool buytest2;
+    //buytest = model.buyShip(Test, Testplayer);
+    //buytest2 = model.buyMine(Test, Testplayer);
 
     buytest = model.buyShip(Test, Testplayer);
     model.TransaktionShip(Testplayer);
