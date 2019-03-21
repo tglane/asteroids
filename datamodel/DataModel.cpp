@@ -150,6 +150,7 @@ Planet::Ptr DataModel::getPlanetFromId(int ID)
     return m_planets.at(ID);
 }
 
+  
 void DataModel::startGame()
 {
 

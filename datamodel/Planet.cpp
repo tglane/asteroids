@@ -54,9 +54,13 @@ void Planet::addNeighbour(Planet::Ptr neighbour)
 	m_neighbours.push_back(neighbour);
 }
 
-void Planet::setOwner(Player::Ptr owner) 
+void Planet::setOwner(std::shared_ptr<Player> owner) 
 {
 	m_owner = owner;
+}
+
+std::shared_ptr<Player> Planet::getOwner(){
+	return m_owner;
 }
 
 int Planet::getRubin() 

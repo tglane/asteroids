@@ -66,7 +66,7 @@ public:
     Planet::Ptr getPlanetFromId(int ID);
 
     std::list<std::pair<int,int>> getEdges();
-
+    
     void startGame();
 
     void addWindow(int Id, QMainWindow* Window);
