@@ -28,9 +28,9 @@ public:
     /**
      * @brief Sends position and flight direction of a new bullet to the server
      */
-    void send_bullet(asteroids::Vector3f position, asteroids::Vector3f velocity);
+    void send_bullet(asteroids::Vector3f position, asteroids::Vector3f xAxis, asteroids::Vector3f zAxis);
 
-    void recv_collision(int recv_seq_nr, QByteArray data);
+    void recv_collision(int recv_seq_nr, char* data);
 
     void recv_ack(int recv_seq_nr, int recv_id);
 

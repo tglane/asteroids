@@ -20,6 +20,7 @@ AsteroidField::AsteroidField(int quantity, const std::string& filename, float ra
 {
 	TexturedMesh::Ptr mesh = std::static_pointer_cast<TexturedMesh>(TriangleMeshFactory::instance().getMesh(filename));
  	// Generate asteroids
+ 	addAsteroid(std::make_shared<Asteroid>(Asteroid(mesh, Vector3f(), Vector3f(2500, 0, 0), 0, 0, 0, 0, 100)));
 	for(int i = 0; i < quantity; i++)
 	{
 	  Asteroid::Ptr p = make_shared<Asteroid>(Asteroid(

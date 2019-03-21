@@ -233,10 +233,10 @@ void GLWidget::step(map<Qt::Key, bool>& keyStates)
     }
     if (m_cooldown_player == 0 && keyStates[Qt::Key_Space])
     {
-        Bullet::Ptr bullet = make_shared<Bullet>(Bullet(m_camera->getPosition() - m_camera->getZAxis() * 42,
-                                                        m_camera->getXAxis(), m_camera->getId()));
-        m_client.send_bullet(m_camera->getPosition(), m_camera->getXAxis()); //added
-        m_physicsEngine->addBullet(bullet);
+
+        m_client.send_bullet(m_camera->getPosition(), m_camera->getXAxis(), m_camera->getZAxis()); //added
+
+
         m_cooldown_player = 10;
     }
     if (m_cooldown_player > 0)

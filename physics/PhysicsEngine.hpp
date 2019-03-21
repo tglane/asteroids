@@ -95,6 +95,7 @@ private:
     /// Current highest id of asteroids and bullets
     int curr_bull_id = 1;
     int curr_dest_id = 1;
+    int curr_player_id = 1;
 
 };
 

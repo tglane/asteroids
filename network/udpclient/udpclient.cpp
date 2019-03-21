@@ -177,7 +177,7 @@ void udpclient::setPosFromPackage(int recv_id, char *data)
     }
 }
 
-void udpclient::send_bullet(asteroids::Vector3f position, asteroids::Vector3f velocity)
+void udpclient::send_bullet(asteroids::Vector3f position, asteroids::Vector3f xAxis, asteroids::Vector3f zAxis)
 {
     QByteArray data;
     /* Append type of packet */
@@ -196,6 +196,10 @@ void udpclient::send_bullet(asteroids::Vector3f position, asteroids::Vector3f ve
     memcpy(id_char, &id, sizeof(id_char));
     data.append(id_char, sizeof(id_char));
 
+    asteroids::Bullet::Ptr bullet = make_shared<asteroids::Bullet>(asteroids::Bullet(position - zAxis * 42,
+                                                    xAxis, id));
+    m_physicsEngine->addBullet(bullet);
+
     /* Append position to packet */
     char vec_char[sizeof(float)];
     memcpy(vec_char, &position[0], sizeof(vec_char));
@@ -206,11 +210,11 @@ void udpclient::send_bullet(asteroids::Vector3f position, asteroids::Vector3f ve
     data.append(vec_char, sizeof(vec_char));
 
     /* Append velocity to package */
-    memcpy(vec_char, &velocity[0], sizeof(vec_char));
+    memcpy(vec_char, &xAxis[0], sizeof(vec_char));
     data.append(vec_char, sizeof(vec_char));
-    memcpy(vec_char, &velocity[1], sizeof(vec_char));
+    memcpy(vec_char, &xAxis[1], sizeof(vec_char));
     data.append(vec_char, sizeof(vec_char));
-    memcpy(vec_char, &velocity[2], sizeof(vec_char));
+    memcpy(vec_char, &xAxis[2], sizeof(vec_char));
     data.append(vec_char, sizeof(vec_char));
 
     /* Send own position data to server */
@@ -220,18 +224,18 @@ void udpclient::send_bullet(asteroids::Vector3f position, asteroids::Vector3f ve
     m_not_acknowledged.insert(std::pair<int, QByteArray>(seq_number, data));
 }
 
-void udpclient::recv_collision(int recv_seq_nr, QByteArray data)
+void udpclient::recv_collision(int recv_seq_nr, char* data)
 {
     std::cout << "collision received" << std::endl;
 
     /* Parse recevived IDs of colliding objects and process collisions */
+
     int id_one, id_two;
     memcpy(&id_one, data, sizeof(int));
     data += sizeof(int);
     memcpy(&id_two, data, sizeof(int));
     data += sizeof(int);
     //TODO parse health from package
-
     m_physicsEngine->process_collisions(id_one, id_two);
 
     /* Send acknowledge to server */
@@ -273,7 +277,7 @@ void udpclient::createNewBulletFromPackage(int recv_seq_nr, int recv_id, char* d
         data += sizeof(float);
         asteroids::Vector3f bull_vel(x, y, z);
 
-        asteroids::Bullet::Ptr bull = std::make_shared<asteroids::Bullet>(asteroids::Bullet(bull_pos, bull_vel, m_id, m_physicsEngine->get_curr_bull_id()));
+        asteroids::Bullet::Ptr bull = std::make_shared<asteroids::Bullet>(asteroids::Bullet(bull_pos, bull_vel, m_id, recv_id));
         m_physicsEngine->addBullet(bull);
 
         /* Send acknowledge to server */

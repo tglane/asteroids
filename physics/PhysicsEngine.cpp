@@ -26,13 +26,13 @@ void PhysicsEngine::addDestroyable(PhysicalObject::Ptr& obj)
 
 void PhysicsEngine::addHittable(Hittable::Ptr& h)
 {
-    m_hittables.insert(std::pair<int, Hittable::Ptr>(curr_dest_id++, h));
+    m_hittables.insert(std::pair<int, Hittable::Ptr>(curr_player_id++, h));
 }
 
 void PhysicsEngine::addBullet(Bullet::Ptr& bullet)
 {
     //m_particles.addEffect(ParticleEffect::createBulletTail(bullet->getPosition(), bullet->direction(), bullet->lifetime()));
-    m_bullets.insert(std::pair<int, Bullet::Ptr >(curr_bull_id++, bullet));
+    m_bullets.insert(std::pair<int, Bullet::Ptr >(bullet->get_id(), bullet));
 }
 
 void PhysicsEngine::process()
@@ -146,8 +146,11 @@ void PhysicsEngine::check_id_type(int id_to_check)
     {
         if((id_to_check & 0xFFFFFF) != 0)
         {
-            m_bullets[id_to_check]->destroy();
-            m_bullets.erase(id_to_check);
+
+            if(m_bullets.count(id_to_check) == 1) {
+                m_bullets[id_to_check]->destroy();
+                m_bullets.erase(id_to_check);
+            }
         }else
         {
             //TODO change health of spaceship if collision with spaceship
