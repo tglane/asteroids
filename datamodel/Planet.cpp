@@ -87,4 +87,10 @@ int Planet::getPosY()
 	return m_posy;
 }
 
+std::string Planet::getName()
+{
+    return m_name;
+
+}
+
 }

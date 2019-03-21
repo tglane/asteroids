@@ -100,13 +100,23 @@ bool DataModel::buyShip(Planet::Ptr selectedPlanet, Player::Ptr Player1)
 //TODO: MoveOrder in entsprechende Liste
 bool DataModel::moveShips(Planet::Ptr from, Planet::Ptr to, int numShips) {
 
+	std::cout << "Moveorder " << numShips << " Ships from Planet " << from->getName() << " to Planet " << to->getName() << std::endl;
+
 	if(from->getShips() >= numShips)
 	{
 		MoveOrder::Ptr move = MoveOrder::Ptr(new MoveOrder(from, to, numShips));
+		std::cout << "MoveOrder successful"<< std::endl;
+
 		return true;
 	}
 
-	else return false;
+	else {
+
+		std::cout << "MoveOrder not successful"<< std::endl;
+		return false;
+	}
+
+
 }
 bool DataModel::buyMine(Planet::Ptr selectedPlanet, Player::Ptr Player1)
 {
