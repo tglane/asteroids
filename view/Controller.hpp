@@ -20,9 +20,11 @@ public:
 
 private:
 
-    int m_cooldown_player;
+    std::vector<int> m_keysPlayer;
 
-    int m_cooldown_enemy;
+    int m_cooldownPlayer;
+
+    int m_cooldownEnemy;
 
 };
 

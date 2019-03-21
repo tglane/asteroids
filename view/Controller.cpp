@@ -4,7 +4,14 @@
 namespace asteroids
 {
 
-Controller::Controller() : m_cooldown_player(0), m_cooldown_enemy(0) {}
+Controller::Controller() : m_cooldownPlayer(0), m_cooldownEnemy(0)
+{
+    m_keysPlayer = std::vector<int>(6);
+    for (int i = 0; i < 6; i++)
+    {
+        m_keysPlayer[i] = 0;
+    }
+}
 
 void Controller::keyControl(std::map<Qt::Key, bool> &keyStates, Hittable::Ptr& player, Hittable::Ptr& enemy, PhysicsEngine::Ptr& physicsEngine)
 {
@@ -34,16 +41,16 @@ void Controller::keyControl(std::map<Qt::Key, bool> &keyStates, Hittable::Ptr& p
         enemy->rotate(Transformable::YAW_CLOCKWISE, 0.05);
     }
     // Add a bullet to physics engine
-    if (m_cooldown_enemy == 0 && keyStates[Qt::Key_M])
+    if (m_cooldownEnemy == 0 && keyStates[Qt::Key_M])
     {
         Bullet::Ptr bullet = make_shared<Bullet>(Bullet(enemy->getPosition() - enemy->getZAxis() * 42,
                                                         enemy->getXAxis(), enemy->getId()));
         physicsEngine->addBullet(bullet);
-        m_cooldown_enemy = 10;
+        m_cooldownEnemy = 10;
     }
-    if (m_cooldown_enemy > 0)
+    if (m_cooldownEnemy > 0)
     {
-        m_cooldown_enemy--;
+        m_cooldownEnemy--;
     }
 
     player->move(Transformable::FORWARD, 5);
@@ -71,16 +78,16 @@ void Controller::keyControl(std::map<Qt::Key, bool> &keyStates, Hittable::Ptr& p
     {
         player->rotate(Transformable::YAW_CLOCKWISE, 0.05);
     }
-    if (m_cooldown_player == 0 && keyStates[Qt::Key_Space])
+    if (m_cooldownPlayer == 0 && keyStates[Qt::Key_Space])
     {
         Bullet::Ptr bullet = make_shared<Bullet>(Bullet(player->getPosition() - player->getZAxis() * 42,
                                                         player->getXAxis(), player->getId()));
         physicsEngine->addBullet(bullet);
-        m_cooldown_player = 10;
+        m_cooldownPlayer = 10;
     }
-    if (m_cooldown_player > 0)
+    if (m_cooldownPlayer > 0)
     {
-        m_cooldown_player--;
+        m_cooldownPlayer--;
     }
 
     if (keyStates[Qt::Key_T])
