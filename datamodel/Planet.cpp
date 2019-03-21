@@ -47,12 +47,12 @@ bool Planet::delShips(int ships)
 	} 
 }
 
-void Planet::addNeighbour(Planet* neighbour) 
+void Planet::addNeighbour(Planet* neighbour)
 {
-	m_neighbours.push_back(neighbour);
+	m_neighbours.push_back(Planet::Ptr(neighbour));
 }
 
-void Planet::setOwner(Player* owner) 
+void Planet::setOwner(Player::Ptr owner) 
 {
 	m_owner = owner;
 }
@@ -72,7 +72,7 @@ void Planet::addMines(int mines)
 	m_mines += mines;
 }
 
-std::list<Planet*> Planet::getNeighbours() 
+std::list<Planet::Ptr> Planet::getNeighbours()
 {
 	return m_neighbours;
 }

@@ -113,6 +113,7 @@ MainWindow2D::MainWindow2D(DataModel *model, QWidget* parent) :
     // FighterWindow = new asteroids::MainWindow("...")
     FighterWindow = NULL;
 }
+
 void MainWindow2D::resizeEvent(QResizeEvent* event){
     ui->Map->fitInView(0, 500, 500, 1, Qt::KeepAspectRatio);
 }

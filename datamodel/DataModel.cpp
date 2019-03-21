@@ -8,11 +8,11 @@ namespace asteroids{
 DataModel::DataModel(std::string filename) : m_planets(), m_edges()
 {
     // player which runs this programm
-    m_self = new Player();
+    m_self = Player::Ptr(new Player());
 
     // enemy/ies that run the programm on other devices
     // information from network is needed
-    m_enemy = new Player();
+    m_enemy = Player::Ptr(new Player());
     getUniverse(filename);
 }
 
@@ -75,11 +75,65 @@ bool DataModel::endOfRound()
     // return if network response was succesful
     return true;
 }
+/*Code von Kay Bauer*/
+bool DataModel::buyShip(Planet::Ptr selectedPlanet, Player::Ptr Player1)
+{
+    /*test druck*/
+    std::cout << "Test für buyShip" << std::endl;
+    std::cout << Player1->getRubin() << std::endl;
+    /*test druck ende*/
+
+    int Player_Rubin_Number = Player1->getRubin();
+    if(Player_Rubin_Number >= Shipcost)
+    {
+        Player1->delRubin(Shipcost);
+        /*test druck*/
+        std::cout << Player1->getRubin() << std::endl;
+        /*test druck ende*/
+
+        return true;
+    }
+    
+    return false;
+
+}
+
+bool DataModel::buyMine(Planet::Ptr selectedPlanet, Player::Ptr Player1)
+{
+    /*test druck*/
+    std::cout << "Test für buyMine" << std::endl;
+    std::cout << selectedPlanet->getMines() << std::endl;
+    /*test druck ende*/
+    if(selectedPlanet->getMines() == 0)
+    {
+        int Player_Rubin_Number = Player1->getRubin();
+        if(Player_Rubin_Number >= Minecost)
+        {
+            Player1->delRubin(Minecost);
+             /*test druck*/
+            std::cout << Player1->getRubin() << std::endl;
+            /*test druck ende*/
+
+            return true;
+        }
+
+        return false;
+
+    }
+
+    return false;
+
+}
+
+Planet* DataModel::getPlanetFromId(int ID)
+{
+    return m_planets.at(ID);
+}
 
 DataModel::~DataModel()
 {
-    delete m_self;
-    delete m_enemy;
+    /*delete m_self;
+    delete m_enemy;*/
 }
 
 }

@@ -46,10 +46,21 @@ public:
      */
     bool endOfRound();
 
+    /*Code von Kay Bauer*/
+    bool buyShip(Planet::Ptr selectedPlanet, Player::Ptr Player1);
+
+    bool buyMine(Planet::Ptr selectedPlanet, Player::Ptr Player1);
+
+    Planet* getPlanetFromId(int ID);
+
     std::list<std::pair<int,int>> getEdges();
 
 private:
+    /*Variablen von Kay*/
 
+    int Shipcost = 500;
+
+    int Minecost = 1000;
     /**
      * @brief   Loads all the planets from the given file
      */
@@ -61,10 +72,10 @@ private:
     std::list<std::pair<int, int>> m_edges;
 
     // The host Player
-    Player*  m_self;
+    Player::Ptr  m_self;
 
     // The client Player
-    Player*  m_enemy;
+    Player::Ptr  m_enemy;
 
 };
 
