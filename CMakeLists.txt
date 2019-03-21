@@ -33,7 +33,8 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 # special optimization flags
 ###############################################################################
 
-set( CMAKE_CXX_FLAGS         "-O3 -Wall" )
+
+set( CMAKE_CXX_FLAGS         "-O3 -Wall -std=c++14" )
 set( CMAKE_CXX_FLAGS_RELEASE "-O3 -msse3 -Wno-deprecated-declarations -Wno-unused -Wcpp" )
 set( CMAKE_CXX_FLAGS_DEBUG   "-g -Wall" )
 
@@ -147,6 +148,13 @@ set(ASTEROID_SOURCES
     view/MainWindow.cpp 
     view/Camera.cpp  
     datamodel/DataModel.cpp
+    datamodel/Planet.cpp
+    datamodel/Player.cpp
+    datamodel/MineOrder.cpp
+    datamodel/ShipOrder.cpp
+
+    view2D/MainWindow2D.cpp
+    view2D/MyEllipse.cpp
 )
 set(ASTEROID_MOCS
     view/MainWindow.hpp
@@ -160,6 +168,19 @@ set(CMAKE_AUTOMOC ON)
 
 qt5_wrap_ui(ASTEROID_UI_HDRS ${ASTEROID_UIS})
 message(STATUS ${ASTEROID_UI_HDRS})
+
+
+set(STRATEGY_MOCS
+    view2D/MainWindow2D.hpp
+)
+
+set(STRATEGY_UIS
+    view2D/MainWindow2D.ui
+)
+
+qt5_wrap_ui(STRATEGY_UI_HDRS ${STRATEGY_UIS})
+message(STATUS ${STRATEGY_UI_HDRS})
+
 
 add_definitions(${QT_DEFINITIONS})
 
@@ -187,6 +208,8 @@ add_executable(asteroids
     ${C3DSREADER_SOURCES}
     ${ASTEROID_MOCS}
     ${ASTEROID_UI_HDRS}
+    ${STRATEGY_MOCS}
+    ${STRATEGY_UI_HDRS}
 )
 ###############################################################################
 # External library dependencys

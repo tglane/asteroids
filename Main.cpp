@@ -11,21 +11,29 @@
 
 #include "view/MainWindow.hpp"
 #include "datamodel/DataModel.hpp"
+#include "datamodel/Player.hpp"
+#include "view2D/MainWindow2D.hpp"
+
+
 
 int main(int argc, char** argv)
 {
-    if (argc < 2)
+    /*if (argc < 3)
     {
-        cerr << "Usage: asteroids <level-file>" << endl;
+        cerr << "Usage: asteroids <level-file> <map-file>" << endl;
         return 1;
-    }
+    }*/
 
-    DataModel model(argv[1]);
+    DataModel model("../models/Level-1.txt");
 
     QApplication a(argc, argv);
 
-    asteroids::MainWindow mainWindow(argv[1]);
-    mainWindow.show();
+    /*asteroids::MainWindow mainWindow(argv[1]);
+    mainWindow.show();*/
+
+    strategy::MainWindow2D mainWindow2D(&model);
+    mainWindow2D.show();
+    mainWindow2D.showFullScreen();
 
     return a.exec();
 }
