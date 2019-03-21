@@ -5,7 +5,7 @@
 #include <SDL2/SDL.h>
 #include <QtGui/QPainter>
 
-GLWidget::GLWidget(QWidget* parent) : QOpenGLWidget(parent) {}
+GLWidget::GLWidget(QWidget* parent) : QOpenGLWidget(parent), m_gameOver(false) {}
 
 void GLWidget::setLevelFile(const std::string& file)
 {
@@ -163,12 +163,43 @@ void GLWidget::step(map<Qt::Key, bool>& keyStates)
     int elapsed_time = m_timer.restart();
 
     // Get keyboard states and handle model movement
-    m_physicsEngine->process(elapsed_time);
+    m_gameOver = m_physicsEngine->process(elapsed_time);
 
-    Hittable::Ptr player_ptr = std::static_pointer_cast<Hittable>(m_camera);
-    Hittable::Ptr enemy_ptr = std::static_pointer_cast<Hittable>(m_enemy);
-    m_controller.keyControl(keyStates, player_ptr, enemy_ptr, m_physicsEngine, elapsed_time);
+    if (!m_gameOver) {
+        Hittable::Ptr player_ptr = std::static_pointer_cast<Hittable>(m_camera);
+        Hittable::Ptr enemy_ptr = std::static_pointer_cast<Hittable>(m_enemy);
+        m_controller.keyControl(keyStates, player_ptr, enemy_ptr, m_physicsEngine, elapsed_time);
 
+        Vector3f player_pos = m_camera->getPosition();
+        if (player_pos[0] > 4500 || player_pos[1] > 4500 || player_pos[2] > 4500) {
+            m_camera->outOfBound();
+            int time = m_camera->getTime();
+            if (time > 1000) {
+                m_camera->restartTimer(time - 1000);
+                m_camera->setHealth(m_camera->getHealth() - 1);
+                if (m_camera->getHealth() == 0) {
+                    m_gameOver = true;
+                }
+            }
+        } else {
+            m_camera->inBound();
+        }
+
+        Vector3f enemy_pos = m_enemy->getPosition();
+        if (enemy_pos[0] > 4500 || enemy_pos[1] > 4500 || enemy_pos[2] > 4500) {
+            m_enemy->outOfBound();
+            int time = m_enemy->getTime();
+            if (time > 1000) {
+                m_enemy->restartTimer(time - 1000);
+                m_enemy->setHealth(m_enemy->getHealth() - 1);
+                if (m_enemy->getHealth() == 0) {
+                    m_gameOver = true;
+                }
+            }
+        } else {
+            m_enemy->inBound();
+        }
+    }
     // Trigger update, i.e., redraw via paintGL()
     this->update();
 }

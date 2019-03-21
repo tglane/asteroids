@@ -1,6 +1,7 @@
 #ifndef CPP18_ASTEROIDS_HITTABLE_HPP
 #define CPP18_ASTEROIDS_HITTABLE_HPP
 
+#include <QtCore/QTime>
 #include "rendering/Bullet.hpp"
 #include "Transformable.hpp"
 
@@ -23,6 +24,14 @@ public:
 
     bool hit(Bullet b);
 
+    void outOfBound();
+
+    int getTime();
+
+    void inBound();
+
+    void restartTimer(int mSecs);
+
 private:
 
     static float signedDistanceToPlane(Vector3f x, Vector3f b, Vector3f e1, Vector3f e2);
@@ -33,6 +42,9 @@ private:
 
     int m_health;
 
+    QTime m_timer;
+
+    bool m_isOutOfBound;
 };
 
 }

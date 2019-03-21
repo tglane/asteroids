@@ -34,8 +34,13 @@ void PhysicsEngine::addBullet(Bullet::Ptr& bullet)
     m_bullets.push_back(bullet);
 }
 
-void PhysicsEngine::process(int elapsed_time)
+bool PhysicsEngine::process(int elapsed_time)
 {
+    bool gameOver = false;
+    if (m_hittables.size() == 1)
+    {
+        gameOver = true;
+    }
     //list<PhysicalObject::Ptr>::iterator p_it;
     list<PhysicalObject::Ptr>::iterator p_it;
     list<Bullet::Ptr>::iterator b_it;
@@ -105,6 +110,8 @@ void PhysicsEngine::process(int elapsed_time)
     }
 
     m_particles.update();
+
+    return gameOver;
 }
 
 void PhysicsEngine::render()
