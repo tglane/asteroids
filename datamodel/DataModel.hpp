@@ -8,6 +8,10 @@
 #include <map>
 #include <QMainWindow>
 
+#include "MoveOrder.hpp"
+#include "MineOrder.hpp"
+#include "ShipOrder.hpp"
+
 using std::map;
 
 
@@ -55,6 +59,12 @@ public:
     bool buyShip(Planet::Ptr selectedPlanet, Player::Ptr Player1);
 
     bool buyMine(Planet::Ptr selectedPlanet, Player::Ptr Player1);
+
+    void TransaktionShip(Player::Ptr Player1);
+
+    void TransaktionMine(Player::Ptr Player1);
+
+    void clearOrderList(Player::Ptr Player1);
 
     /*Kauf Methoden ende*/
     bool moveShips(Planet::Ptr from, Planet::Ptr to, int numShips);
