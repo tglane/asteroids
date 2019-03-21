@@ -51,7 +51,8 @@ MainWindow2D::MainWindow2D(DataModel *model, QWidget* parent) :
         view_planets[i] = new MyEllipse(p->getPosX()/position_scale, p->getPosY()/position_scale);
         scene->addItem(view_planets[i]);
         QVariant ellipse_ID(i);
-        //view_planets[i]->setData(1, ellipse_ID);
+        view_planets[i]->setData(1, ellipse_ID);
+        connect(view_planets[i], SIGNAL(show_planetInfo(int)), this, SLOT(choose_planet(int)));
     }
 
     std::list<std::pair<int,int>> edges = model->getEdges();
