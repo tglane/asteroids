@@ -131,6 +131,9 @@ void MainWindow2D::fight(bool click)
 void MainWindow2D::choose_planet(int id)
 {
     cout << "ID of clicked planet is " << id << endl;
+
+    // TODO: überall shared_Ptr
+    //Planet *p = model->getPlanetFromId(id);
     
     // TODO: Planeteninfo ausfüllen
     ui->PlanetName->setText("???");
