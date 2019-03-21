@@ -63,7 +63,11 @@ public:
 
     std::list<std::pair<int,int>> getEdges();
 
+    void startGame();
 
+    void addWindow(int Id, QMainWindow* Window);
+
+    void switchWindow(int Id);
 
 private:
     /*Variablen von Kay*/
