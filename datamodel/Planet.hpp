@@ -90,16 +90,33 @@ namespace asteroids
 		int getMines();
 
 		/**
-		 * @brief adds Mines to this Planet if the owner have enough rubin
+		 * @brief adds Mines to this Planet
+		 * @param number of mines to add
 		 */
 		void addMines(int mines); //erhöht rubin
 
+		/**
+		 * @brief returns a std::list which contains smartpointer to the neighbour planets
+		 * @return std::list<Planet::Ptr> contains smartpointer to the neighbour planets
+		 */
 		std::list<Planet::Ptr> getNeighbours();
 
+		/**
+		 * @brief returns position on x-axis
+		 * @return int position
+		 */
 		int getPosX();
 
+		/**
+		 * @brief returns position on y-axis
+		 * @return int position
+		 */
 		int getPosY();
 
+		/**
+		 * @brief returns the name of this planet
+		 * @return std::string name of this planet
+		 */
 		std::string getName();
 
 
