@@ -11,7 +11,6 @@ GLWidget::GLWidget(QWidget* parent)
     : QOpenGLWidget(parent),
       m_camera()
 {
-    m_camera.rotate(Transformable::YAW_CLOCKWISE, 3.141592);
 }
 
 void GLWidget::setLevelFile(const std::string& file)
@@ -112,12 +111,12 @@ void GLWidget::initializeGL()
     // Load level
     LevelParser lp(m_levelFile, m_actor, m_skybox, m_asteroidField);
     m_actor->fixArrow();
-    m_client.setOtherFighter(m_actor);
 
     // Setup physics
     m_physicsEngine = make_shared<PhysicsEngine>();
 
     // Add asteroids to physics engine
+    //TODO get asteroids from server via tcpclient
     std::list<Asteroid::Ptr> asteroids;
     m_asteroidField->getAsteroids(asteroids);
     for (auto it = asteroids.begin(); it != asteroids.end(); it++)
@@ -125,6 +124,10 @@ void GLWidget::initializeGL()
         PhysicalObject::Ptr p = std::static_pointer_cast<PhysicalObject>(*it);
         m_physicsEngine->addDestroyable(p);
     }
+
+    //TODO start udpclient
+    m_client.setOtherFighter(m_actor); //added
+    m_client.setPhysicsPtr(m_physicsEngine); //added
 }
 
 void GLWidget::paintGL()
@@ -236,7 +239,8 @@ void GLWidget::step(map<Qt::Key, bool>& keyStates)
     // Add a bullet to physics engine
     if(keyStates[Qt::Key_Space])
     {
-        Bullet::Ptr bullet = make_shared<Bullet>(Bullet(m_actor->getPosition(), m_actor->getDirection()));
+        Bullet::Ptr bullet = make_shared<Bullet>(Bullet(m_camera.getPosition(), m_camera.getDirection())); //changed
+        m_client.send_bullet(m_camera.getPosition(), m_camera.getDirection()); //added
         m_physicsEngine->addBullet(bullet);
     }
 

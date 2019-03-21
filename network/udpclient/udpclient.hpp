@@ -28,9 +28,9 @@ public:
     /**
      * @brief Sends position and flight direction of a new bullet to the server
      */
-    void send_bullet();
+    void send_bullet(asteroids::Vector3f position, asteroids::Vector3f velocity);
 
-    //void setPhysicsPtr(asteroids::PhysicsEngine::Ptr phyEng) { m_physicsEngine = std::move(phyEng); }
+    void setPhysicsPtr(asteroids::PhysicsEngine::Ptr phyEng) { m_physicsEngine = std::move(phyEng); }
 
     void setOtherFighter(asteroids::SpaceCraft::Ptr other_fighter) { m_otherFighter = std::move(other_fighter); }
 
@@ -45,7 +45,9 @@ public slots:
 
 private:
 
-    void setPosFromPackage(int id, char* data);
+    void setPosFromPackage(int recv_id, char* data);
+
+    void createNewBulletFromPackage(int recv_seq_nr, int recv_id, char* data);
 
     QUdpSocket *socket;
 
@@ -56,6 +58,9 @@ private:
     asteroids::PhysicsEngine::Ptr m_physicsEngine;
 
     asteroids::SpaceCraft::Ptr m_otherFighter;
+
+    /// map for not acknowledged packages
+    std::map<int, QByteArray> m_not_acknowledged;
 };
 
 #endif //CPP18_ASTEROIDS_UDPCLIENT_HPP

@@ -13,7 +13,7 @@
 #ifndef PHYSICSENGINE_HPP_
 #define PHYSICSENGINE_HPP_
 
-#include <list>
+#include <map>
 #include <memory>
 
 #include "PhysicalObject.hpp"
@@ -22,7 +22,7 @@
 #include "rendering/SpaceCraft.hpp"
 
 
-using std::list;
+using std::map;
 
 
 namespace asteroids
@@ -72,16 +72,23 @@ public:
      */
     void process();
 
+    /// Getter for current highest IDs
+    int get_curr_bull_id() { return curr_bull_id; }
+    int get_curr_dest_id() { return curr_dest_id; }
+
 private:
 
     /// List of destroyable objects
-    list<PhysicalObject::Ptr>    m_objects;
+    map<int, PhysicalObject::Ptr>    m_objects;
 
     /// List of active bullets
-    list<Bullet::Ptr>            m_bullets;
+    map<int, Bullet::Ptr>            m_bullets;
 
     ParticleEngine               m_particles;
 
+    /// Current highest id of asteroids and bullets
+    int curr_bull_id = 0;
+    int curr_dest_id = 0;
 
 };
 

@@ -110,8 +110,12 @@ void udpclient::readyRead()
             setPosFromPackage(recv_id, data);
             break;
         case 'B':
+            createNewBulletFromPackage(recv_seq_nr, recv_id, data);
             break;
         case 'C':
+            break;
+        case 'A':
+
             break;
         default:
             break;
@@ -140,7 +144,7 @@ void udpclient::setPosFromPackage(int recv_id, char *data)
         data += sizeof(float);
         memcpy(&z, data, sizeof(float));
         data += sizeof(float);
-        //m_otherFighter->setDirection(asteroids::Vector<float>(x, y, z));
+        m_otherFighter->setDirection(asteroids::Vector<float>(x, y, z));
 
         /* Set rotation of enemy fighter */
         memcpy(&x, data, sizeof(float));
@@ -167,5 +171,88 @@ void udpclient::setPosFromPackage(int recv_id, char *data)
         data += sizeof(float);
         m_otherFighter->setZAxis(asteroids::Vector<float>(x, y, z));
 
+    }
+}
+
+void udpclient::send_bullet(asteroids::Vector3f position, asteroids::Vector3f velocity)
+{
+    QByteArray data;
+    /* Append type of packet */
+    data.append('B');
+
+    /* Append sequence number of packet */
+    char seqn_char[sizeof(int)];
+    memcpy(seqn_char, &seq_number, sizeof(seqn_char));
+    data.append(seqn_char, sizeof(seqn_char));
+    seq_number++;
+
+    /* Append id of player to packet */
+    int id = m_id << 24;
+    id += m_physicsEngine->get_curr_bull_id();
+    char id_char[sizeof(int)];
+    memcpy(id_char, &id, sizeof(id_char));
+    data.append(id_char, sizeof(id_char));
+
+    /* Append position to packet */
+    char vec_char[sizeof(float)];
+    memcpy(vec_char, &position[0], sizeof(vec_char));
+    data.append(vec_char, sizeof(vec_char));
+    memcpy(vec_char, &position[1], sizeof(vec_char));
+    data.append(vec_char, sizeof(vec_char));
+    memcpy(vec_char, &position[2], sizeof(vec_char));
+    data.append(vec_char, sizeof(vec_char));
+
+    /* Append velocity to package */
+    memcpy(vec_char, &velocity[0], sizeof(vec_char));
+    data.append(vec_char, sizeof(vec_char));
+    memcpy(vec_char, &velocity[1], sizeof(vec_char));
+    data.append(vec_char, sizeof(vec_char));
+    memcpy(vec_char, &velocity[2], sizeof(vec_char));
+    data.append(vec_char, sizeof(vec_char));
+
+    /* Send own position data to server */
+    socket->writeDatagram(data, QHostAddress(QString("192.168.43.83")), 1235);
+}
+
+void udpclient::createNewBulletFromPackage(int recv_seq_nr, int recv_id, char* data) {
+    int id = recv_id >> 24;
+    if (id != m_id) {
+        float x, y, z;
+
+        /* Set position of enemy fighter */
+        memcpy(&x, data, sizeof(float));
+        data += sizeof(float);
+        memcpy(&y, data, sizeof(float));
+        data += sizeof(float);
+        memcpy(&z, data, sizeof(float));
+        data += sizeof(float);
+        asteroids::Vector3f bull_pos(x, y, z);
+
+        /* Set direction/velocity of enemy fighter */
+        memcpy(&x, data, sizeof(float));
+        data += sizeof(float);
+        memcpy(&y, data, sizeof(float));
+        data += sizeof(float);
+        memcpy(&z, data, sizeof(float));
+        data += sizeof(float);
+        asteroids::Vector3f bull_vel(x, y, z);
+
+        asteroids::Bullet::Ptr bull = std::make_shared<asteroids::Bullet>(asteroids::Bullet(bull_pos, bull_vel));
+        m_physicsEngine->addBullet(bull);
+
+        /* Send acknowledge to server */
+        QByteArray data;
+        data.append('A');
+
+        char seqn_char[sizeof(int)];
+        memcpy(seqn_char, &recv_seq_nr, sizeof(seqn_char));
+        data.append(seqn_char, sizeof(seqn_char));
+
+        int id = m_id << 24;
+        char id_char[sizeof(int)];
+        memcpy(id_char, &id, sizeof(id_char));
+        data.append(id_char, sizeof(id_char));
+
+        socket->writeDatagram(data, QHostAddress(QString("192.168.43.83")), 1235);
     }
 }
