@@ -85,7 +85,7 @@ public slots:
      * @brief   Is called when the Ship building Button is pressed
      *          A new ship is accessible on this Planet one round later
      */
-    void buildShip(bool click/*, Planet* p*/);
+    void buildShip(bool click);
 
     /**
      * @brief   Is calle when exit Button is pressed, 
