@@ -143,8 +143,6 @@ namespace asteroids
 		 * @return std::string name of this planet
 		 */
 		std::string getName();
-		
-		std::shared_ptr<Player> getOwner();
 
 
 	private:
