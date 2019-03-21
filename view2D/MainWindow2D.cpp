@@ -43,8 +43,6 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
 
     std::map<int, Planet::Ptr> planets = m_model->getPlanets();
 
-    // // Map für die Elipsen-Objekten im QGraphicsScene
-
     //Erstelle die Elipsen und füge sie in die Map und in die QGraphicsScene ein 
     for(int i = 0; i < (int)planets.size(); i++){
         Planet::Ptr p = planets.at(i);
@@ -243,6 +241,7 @@ void MainWindow2D::buildShip(bool click)
     // Ship should be accessible a round later
     Planet::Ptr p = m_model->getPlanetFromId(currentPlanet);
 
+    // TODO: Fehlerbehandlung
     if (p->getOwner() == NULL)
     {
         std::cout << "Planet wird nicht besessen!" << std::endl;
@@ -262,6 +261,12 @@ MyEllipse* MainWindow2D::getEllipseById(int id)
 {
     MyEllipse* ellipse = view_planets.at(id);
     return ellipse;
+}
+
+void MainWindow2D::updatePlayerInfo()
+{
+    ui->SpielerInfoTable->setCellWidget(0, 1, 
+        new QLabel(QString::fromStdString(m_model->getSelfPlayer()->getPlayerName())));
 }
 
 }

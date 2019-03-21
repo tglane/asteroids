@@ -44,12 +44,8 @@ public:
      */
     ~MainWindow2D();
 
+    void updatePlayerInfo();
 
-    /// Returns the width of the window
-    //int width();
-
-    /// Returns the height of the windows
-    //int height();
 public slots:
 
     /**
