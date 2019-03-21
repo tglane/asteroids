@@ -74,6 +74,11 @@ public:
     std::list<std::pair<int,int>> getEdges();
 
     void startGame();
+    /**
+     * @brief sets the choosen startplanet: 1 ship to the planet, m_self as new owner
+     * @param shared ptr to choosen planet
+     */
+    void setStartPlanet(std::shared_ptr<Planet> startplanet);
 
     void addWindow(int Id, QMainWindow* Window);
 
