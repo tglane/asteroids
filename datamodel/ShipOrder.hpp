@@ -16,28 +16,27 @@
 #include <memory>
 
 #include "Planet.hpp"
-#include "Order.hpp"
 
 namespace asteroids
 {
 
-	class ShipOrder : public Order
+	class ShipOrder
 	{
+        public:
         using Ptr = std::shared_ptr<ShipOrder>;
 
-        public:
         /**
          * @brief Constructor
          * @param P1 The planeet on which a Ship should be built
          */
-        ShipOrder(Planet::Ptr P1);
+        ShipOrder(std::shared_ptr<Planet> P1);
 
 
         /**
          * @brief returns Planet
          * @return The planet on which a ship should be built
          */
-        Planet::Ptr getPlanet()
+        std::shared_ptr<Planet> getPlanet()
         {
                 return m_P;
         }
@@ -46,7 +45,7 @@ namespace asteroids
         /**
          * @brief The planet on which a ship should be built
          */
-        Planet::Ptr m_P;
+        std::shared_ptr<Planet> m_P;
 
 	};
 }

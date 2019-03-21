@@ -11,15 +11,17 @@
 #include <memory>
 
 #include "Planet.hpp"
-#include "Order.hpp"
+#include "MoveOrder.hpp"
+#include "MineOrder.hpp"
+#include "ShipOrder.hpp"
 
 namespace asteroids
 {
 
 class Planet;
-
-
-	//using Planet::Ptr = std::shared_ptr<Planet>;
+class MineOrder;
+class ShipOrder;
+class MoveOrder;
 
 class Player
 {
@@ -50,7 +52,10 @@ private:
 	int m_ships;
 	std::list<std::shared_ptr<Planet>> m_planets;
 
-	std::list<Order::Ptr> m_orders;
+	std::list<std::shared_ptr<MoveOrder>> m_moveOrders;
+	std::list<std::shared_ptr<MineOrder>> m_mineOrders;
+	std::list<std::shared_ptr<ShipOrder>> m_shipOrders;
+
 };
 }
 
