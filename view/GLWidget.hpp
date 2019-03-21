@@ -17,6 +17,8 @@
 #include <GL/glew.h>
 #include <QOpenGLWidget>
 #include <QtGui/QPainter>
+#include <QtCore/QTimer>
+#include <QtCore/QTime>
 
 #include "view/Camera.hpp"
 #include "rendering/SpaceCraft.hpp"
@@ -86,6 +88,9 @@ private:
 
     /// Last set mouse position
     QPoint                      m_mousePos;
+
+    /// timer for correct speed with low fps
+    QTime                       m_timer;
 
     int m_cooldown_enemy;
 

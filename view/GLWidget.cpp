@@ -132,6 +132,7 @@ void GLWidget::initializeGL()
 
     m_cooldown_enemy = 0;
     m_cooldown_player = 0;
+    m_timer.start();
 }
 
 void GLWidget::paintGL()
@@ -150,17 +151,18 @@ void GLWidget::paintGL()
     m_enemy->render();
 
     // TODO: tut so noch nicht
-    //QPainter qPainter(this);
-    //QPixmap hud("../models/cockpit.png");
-    //qPainter.drawPixmap(0, 0, this->width(), this->height(), hud);
+    // QPainter qPainter(this);
+    // QPixmap hud("../models/cockpit.png");
+    // qPainter.drawPixmap(0, 0, this->width(), this->height(), hud);
 }
 
 void GLWidget::step(map<Qt::Key, bool>& keyStates)
 {
+    int elapsed_time = m_timer.restart();
     // Get keyboard states and handle model movement
     m_physicsEngine->process();
 
-    m_enemy->move(Transformable::FORWARD, 5);
+    m_enemy->move(Transformable::FORWARD, 300 * elapsed_time / 1000.0);
     if (keyStates[Qt::Key_L])
     {
         m_enemy->rotate(Transformable::ROLL_CLOCKWISE, 0.05);
@@ -198,7 +200,7 @@ void GLWidget::step(map<Qt::Key, bool>& keyStates)
         m_cooldown_enemy--;
     }
 
-    m_camera->move(Transformable::FORWARD, 5);
+    m_camera->move(Transformable::FORWARD, 300 * elapsed_time / 1000.0);
     if (keyStates[Qt::Key_D])
     {
         m_camera->rotate(Transformable::ROLL_CLOCKWISE, 0.05);
@@ -255,8 +257,7 @@ void GLWidget::step(map<Qt::Key, bool>& keyStates)
     {
         m_camera->move(Transformable::LIFT_UP, 5);
     }
-    if (keyStates[Qt::Key_Z])
-    {
+    if (keyStates[Qt::Key_Z]) {
         m_camera->move(Transformable::LIFT_DOWN, 5);
     }
 

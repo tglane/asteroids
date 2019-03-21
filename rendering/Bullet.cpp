@@ -35,7 +35,6 @@ Bullet::Bullet(const Vector3f &fighter_position, const Vector3f fighter_axis, in
 
 void Bullet::run() {
 	m_position = m_fighterAxis * m_speed + m_position;
-	//cout << m_position << endl;
 	m_iterations++;
 
 	if (m_iterations > m_lifetime) {
@@ -55,7 +54,6 @@ void Bullet::render() {
 	// internal transformation matrix
 	glPushMatrix();
 	glMultMatrixf(m_transformation.getData());
-	//cout << m_transformation << endl;
 	m_sphere.render();
 
 	// Pop transformation matrix of this object
