@@ -59,7 +59,7 @@ private:
 
     int m_id;
 
-    char* m_ip;
+    QString m_ip;
 
     unsigned int seq_number;
 
