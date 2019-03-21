@@ -39,15 +39,14 @@ MainWindow2D::MainWindow2D(DataModel *model, QWidget* parent) :
     QPen outlinePenHighlight(Qt::white);
     outlinePenHighlight.setWidth(1);;
 
-    // Map mit den Planeten-Objekten aus dem DataModel
-    std::map<int, Planet*> planets = model->getPlanets();
+    std::map<int, Planet::Ptr> planets = model->getPlanets();
 
     // Map für die Elipsen-Objekten im QGraphicsScene
     std::map<int, MyEllipse*> view_planets;
 
     //Erstelle die Elipsen und füge sie in die Map und in die QGraphicsScene ein 
     for(int i = 0; i < (int)planets.size(); i++){
-        Planet *p = planets.at(i);
+        Planet::Ptr p = planets.at(i);
         view_planets[i] = new MyEllipse(p->getPosX()/position_scale, p->getPosY()/position_scale);
         scene->addItem(view_planets[i]);
         QVariant ellipse_ID(i);
@@ -62,8 +61,8 @@ MainWindow2D::MainWindow2D(DataModel *model, QWidget* parent) :
         std::pair<int,int> coordinates = *it;
         int pos_1 = coordinates.first;
         int pos_2 = coordinates.second;
-        Planet *p1 = planets.at(pos_1);
-        Planet *p2 = planets.at(pos_2);
+        Planet::Ptr p1 = planets.at(pos_1);
+        Planet::Ptr p2 = planets.at(pos_2);
         scene->addLine(p1->getPosX()/position_scale+planet_size/2,p1->getPosY()/position_scale+planet_size/2, p2->getPosX()/position_scale+planet_size/2, p2->getPosY()/position_scale+planet_size/2, outlinePenHighlight);
     }
 
@@ -133,7 +132,7 @@ void MainWindow2D::choose_planet(int id)
     cout << "ID of clicked planet is " << id << endl;
 
     // TODO: überall shared_Ptr
-    //Planet *p = model->getPlanetFromId(id);
+    //Planet::Ptr p = model->getPlanetFromId(id);
     
     // TODO: Planeteninfo ausfüllen
     ui->PlanetName->setText("???");

@@ -33,7 +33,7 @@ void DataModel::getUniverse(std::string filename)
         for(int i = 0; i < numvertex; i++)
         {
             f >> name >> posx >> posy >> mines;
-            Planet* p = new Planet(name, posx, posy);
+            Planet::Ptr p = Planet::Ptr(new Planet(name, posx, posy));
 
             m_planets[i] = p;
         }
@@ -54,7 +54,7 @@ void DataModel::getUniverse(std::string filename)
     }
 }
 
-std::map<int, Planet*> DataModel::getPlanets()
+std::map<int, Planet::Ptr> DataModel::getPlanets()
 {
     return m_planets;
 }
@@ -125,7 +125,7 @@ bool DataModel::buyMine(Planet::Ptr selectedPlanet, Player::Ptr Player1)
 
 }
 
-Planet* DataModel::getPlanetFromId(int ID)
+Planet::Ptr DataModel::getPlanetFromId(int ID)
 {
     return m_planets.at(ID);
 }
