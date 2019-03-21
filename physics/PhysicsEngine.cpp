@@ -79,7 +79,7 @@ void PhysicsEngine::process()
         {
             if (b->get_shooter_id() != (*h_it)->getId() && (*h_it)->hit(*b))
             {
-                std::cout << "Treffer an Spieler " << (*h_it)->getId() << std::endl;
+                b->destroy();
             }
             h_it++;
         }

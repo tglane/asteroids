@@ -85,7 +85,6 @@ void GLWidget::initializeGL()
     glDepthFunc(GL_LESS);
     glShadeModel (GL_SMOOTH);
 
-
     // Set our OpenGL version.
     // SDL_GL_CONTEXT_CORE gives us only the newer version, deprecated functions are disabled
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
@@ -106,20 +105,22 @@ void GLWidget::initializeGL()
     LevelParser lp(m_levelFile, m_enemy, m_skybox, m_asteroidField);
     m_enemy->fixArrow();
     m_enemy->setId(1);
+    m_enemy->setHealth(10);
 
     // Setup physics
     m_physicsEngine = make_shared<PhysicsEngine>();
 
     m_camera = make_shared<Camera>();
     m_camera->setId(0);
+    m_camera->setHealth(10);
     m_camera->setPosition(Vector3f(2500, 0, 0));
     m_camera->setXAxis(Vector3f(-1, 0, 0));
     m_camera->setYAxis(Vector3f(0, -1, 0));
 
-    Hittable::Ptr enemy_ptr = std::static_pointer_cast<Hittable>(m_enemy);
-    m_physicsEngine->addHittable(enemy_ptr);
     Hittable::Ptr player_ptr = std::static_pointer_cast<Hittable>(m_camera);
     m_physicsEngine->addHittable(player_ptr);
+    Hittable::Ptr enemy_ptr = std::static_pointer_cast<Hittable>(m_enemy);
+    m_physicsEngine->addHittable(enemy_ptr);
 
     // Add asteroids to physics engine
     std::list<Asteroid::Ptr> asteroids;
@@ -130,8 +131,7 @@ void GLWidget::initializeGL()
         m_physicsEngine->addDestroyable(p);
     }
 
-    m_cooldown_enemy = 0;
-    m_cooldown_player = 0;
+    m_controller = Controller();
 }
 
 void GLWidget::paintGL()
@@ -160,105 +160,9 @@ void GLWidget::step(map<Qt::Key, bool>& keyStates)
     // Get keyboard states and handle model movement
     m_physicsEngine->process();
 
-    m_enemy->move(Transformable::FORWARD, 5);
-    if (keyStates[Qt::Key_L])
-    {
-        m_enemy->rotate(Transformable::ROLL_CLOCKWISE, 0.05);
-    }
-    if (keyStates[Qt::Key_J])
-    {
-        m_enemy->rotate(Transformable::ROLL_COUNTERCLOCKWISE, 0.05);
-    }
-    if (keyStates[Qt::Key_I])
-    {
-        m_enemy->rotate(Transformable::PITCH_DOWN, 0.05);
-    }
-    if (keyStates[Qt::Key_K])
-    {
-        m_enemy->rotate(Transformable::PITCH_UP, 0.05);
-    }
-    if (keyStates[Qt::Key_U])
-    {
-        m_enemy->rotate(Transformable::YAW_COUNTERCLOCKWISE, 0.05);
-    }
-    if (keyStates[Qt::Key_O])
-    {
-        m_enemy->rotate(Transformable::YAW_CLOCKWISE, 0.05);
-    }
-    // Add a bullet to physics engine
-    if (m_cooldown_enemy == 0 && keyStates[Qt::Key_M])
-    {
-        Bullet::Ptr bullet = make_shared<Bullet>(Bullet(m_enemy->getPosition() - m_enemy->getZAxis() * 42,
-                                                        m_enemy->getXAxis(), m_enemy->getId()));
-        m_physicsEngine->addBullet(bullet);
-        m_cooldown_enemy = 10;
-    }
-    if (m_cooldown_enemy > 0)
-    {
-        m_cooldown_enemy--;
-    }
-
-    m_camera->move(Transformable::FORWARD, 5);
-    if (keyStates[Qt::Key_D])
-    {
-        m_camera->rotate(Transformable::ROLL_CLOCKWISE, 0.05);
-    }
-    if (keyStates[Qt::Key_A])
-    {
-        m_camera->rotate(Transformable::ROLL_COUNTERCLOCKWISE, 0.05);
-    }
-    if (keyStates[Qt::Key_W])
-    {
-        m_camera->rotate(Transformable::PITCH_DOWN, 0.05);
-    }
-    if (keyStates[Qt::Key_S])
-    {
-        m_camera->rotate(Transformable::PITCH_UP, 0.05);
-    }
-    if (keyStates[Qt::Key_Q])
-    {
-        m_camera->rotate(Transformable::YAW_COUNTERCLOCKWISE, 0.05);
-    }
-    if (keyStates[Qt::Key_E])
-    {
-        m_camera->rotate(Transformable::YAW_CLOCKWISE, 0.05);
-    }
-    if (m_cooldown_player == 0 && keyStates[Qt::Key_Space])
-    {
-        Bullet::Ptr bullet = make_shared<Bullet>(Bullet(m_camera->getPosition() - m_camera->getZAxis() * 42,
-                                                        m_camera->getXAxis(), m_camera->getId()));
-        m_physicsEngine->addBullet(bullet);
-        m_cooldown_player = 10;
-    }
-    if (m_cooldown_player > 0)
-    {
-        m_cooldown_player--;
-    }
-
-    if (keyStates[Qt::Key_T])
-    {
-        m_camera->move(Transformable::FORWARD, 5);
-    }
-    if (keyStates[Qt::Key_G])
-    {
-        m_camera->move(Transformable::BACKWARD, 5);
-    }
-    if (keyStates[Qt::Key_F])
-    {
-        m_camera->move(Transformable::STRAFE_LEFT, 5);
-    }
-    if (keyStates[Qt::Key_H])
-    {
-        m_camera->move(Transformable::STRAFE_RIGHT, 5);
-    }
-    if (keyStates[Qt::Key_R])
-    {
-        m_camera->move(Transformable::LIFT_UP, 5);
-    }
-    if (keyStates[Qt::Key_Z])
-    {
-        m_camera->move(Transformable::LIFT_DOWN, 5);
-    }
+    Hittable::Ptr player_ptr = std::static_pointer_cast<Hittable>(m_camera);
+    Hittable::Ptr enemy_ptr = std::static_pointer_cast<Hittable>(m_enemy);
+    m_controller.keyControl(keyStates, player_ptr, enemy_ptr, m_physicsEngine);
 
     // Trigger update, i.e., redraw via paintGL()
     this->update();
