@@ -40,7 +40,7 @@ MainWindow2D::MainWindow2D(DataModel *model, QWidget* parent) :
     outlinePenHighlight.setWidth(1);;
 
     // Map mit den Planeten-Objekten aus dem DataModel
-    planets = model->getPlanets();
+    std::map<int, Planet*> planets = model->getPlanets();
 
     // Map für die Elipsen-Objekten im QGraphicsScene
     std::map<int, MyEllipse*> view_planets;
@@ -51,8 +51,7 @@ MainWindow2D::MainWindow2D(DataModel *model, QWidget* parent) :
         view_planets[i] = new MyEllipse(p->getPosX()/position_scale, p->getPosY()/position_scale);
         scene->addItem(view_planets[i]);
         QVariant ellipse_ID(i);
-        view_planets[i]->setData(1, ellipse_ID);
-        connect(view_planets[i], SIGNAL(show_planetInfo(int)), this, SLOT(choose_planet(int)));
+        //view_planets[i]->setData(1, ellipse_ID);
     }
 
     std::list<std::pair<int,int>> edges = model->getEdges();
@@ -110,6 +109,7 @@ MainWindow2D::MainWindow2D(DataModel *model, QWidget* parent) :
 void MainWindow2D::resizeEvent(QResizeEvent* event){
     ui->Map->fitInView(0, 500, 500, 1, Qt::KeepAspectRatio);
 }
+
 MainWindow2D::~MainWindow2D() 
 {
     if(ui)
@@ -128,7 +128,16 @@ void MainWindow2D::fight(bool click)
 
 void MainWindow2D::choose_planet(int id)
 {
-    std::cout << "ID of clicked planet is: " + id << std::endl;
+    cout << "ID of clicked planet is " << id << endl;
+    
+    // TODO: Planeteninfo ausfüllen
+    ui->PlanetName->setText("???");
+
+    ui->Info->setText("???");
+
+    ui->MineNumber->setText("???");
+
+    ui->ShipNumber->setText("???");
 
 }
 

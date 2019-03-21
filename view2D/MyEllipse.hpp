@@ -1,4 +1,9 @@
-
+/**
+ * MyEllipse.hpp
+ * 
+ * @brief   Custom Class that is derived from QGraphicsItem for representation of planets
+ * 
+ */
 
 #ifndef __MYELLIPSE_HPP__
 #define __MYELLIPSE_HPP__
@@ -11,7 +16,7 @@
 
 namespace strategy
 {
-class MyEllipse : public QObject, public QGraphicsItem
+class MyEllipse : public QGraphicsObject
 {
     Q_OBJECT
 public:
@@ -25,6 +30,7 @@ public:
                QWidget * widget);
 
 signals:
+    // signal that is emited when a planet is clicked
     void show_planetInfo(int id);
     
 protected:

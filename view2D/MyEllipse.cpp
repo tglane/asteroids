@@ -1,4 +1,4 @@
-/*
+/**
  * MyEllipse.cpp
  */
 #include "view2D/MyEllipse.hpp"

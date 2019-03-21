@@ -87,6 +87,9 @@ public slots:
      */
     void buildShip(bool click/*, Planet* p*/);
 
+    /**
+     * @brief   Is calle when exit Button is pressed, 
+     */
     void exitGame(bool click);
 
 private:
@@ -100,7 +103,6 @@ private:
 
     DataModel* model;
 
-    std::map<int, Planet*> planets;
 
 };
 
