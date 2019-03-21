@@ -28,7 +28,6 @@ PhysicalObject::PhysicalObject(Vector<float> direction, Vector<float> position, 
         float momentum, float speed, float accel, float radius)
 {
     this->m_accel = accel;
-    this->m_direction = direction;
     this->m_position = position;
     this->m_speed = speed;
     this->m_mass = mass;

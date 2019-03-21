@@ -39,7 +39,7 @@ public:
      * @param   fighter_position   Position of the fighter that shoots this bullet
      * @param   fighter_axis   Axis the bullet will move on
      */
-    PhysicsBullet(const Vector3f& fighter_position, const Vector3f fighter_axis);
+    PhysicsBullet(const Vector3f& fighter_position, const Vector3f fighter_axis, int shooter_id);
 
     ~PhysicsBullet() = default;
 
@@ -54,6 +54,9 @@ public:
     static int lifetime() { return m_lifetime;}
 
     Vector3f direction() {return m_fighterAxis;}
+
+	int get_shooter_id() const;
+
 private:
 
     // Lifetime, i.e., how many timesteps the bullet visible
@@ -67,8 +70,9 @@ private:
 	// Flight direction of the bullet
     Vector3f m_fighterAxis;
 
-
     size_t m_iterations;
+
+    int m_shooter_id;
 };
 
 } // namespace asteroids

@@ -20,15 +20,12 @@
 #endif
 
 
-namespace asteroids
-{
+namespace asteroids {
 
-
-void Bullet::render()
-{
-    // Compute transformation matrix
+void Bullet::render() {
+	// Compute transformation matrix
 	computeMatrix();
-    // Push old transformation of the OpenGL matrix stack and
+	// Push old transformation of the OpenGL matrix stack and
 	// start rendering the bullet in according to the
 	// internal transformation matrix
 	glPushMatrix();
@@ -42,5 +39,4 @@ void Bullet::render()
 	glPopMatrix();
 }
 
-} // namespace asreroids
-
+}

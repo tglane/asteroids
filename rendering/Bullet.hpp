@@ -41,10 +41,11 @@ public:
      * @param   fighter_position   Position of the fighter that shoots this bullet
      * @param   fighter_axis   Axis the bullet will move on
      */
-    Bullet(const Vector3f& fighter_position, const Vector3f fighter_axis)
-        : PhysicsBullet(fighter_position, fighter_axis) {}
+    Bullet(const Vector3f& fighter_position, const Vector3f fighter_axis, int shooter_id)
+        : PhysicsBullet(fighter_position, fighter_axis, shooter_id) {}
 
     ~Bullet() = default;
+
 
     /**
      * @brief Renders the bullet via glutSolidSphere.
