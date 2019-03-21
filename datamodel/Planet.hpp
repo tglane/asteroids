@@ -12,6 +12,7 @@
 #include <string>
 #include <list>
 #include <memory>
+#include <iostream>
 
 #include "Player.hpp"
 
@@ -29,13 +30,15 @@ namespace asteroids
 		//liste leer initialisieren, player auch)
 		Planet(std::string name, int posx, int posy, int rubin = 0, int mines = 0);
 
+		std::string getName();
+
 		int getShips();
 
 		void addShips(int ships);
 
 		bool delShips(int ships);
 
-		void addNeighbour(Planet* neighbour);
+		void addNeighbour(Planet::Ptr neighbour);
 
 		void setOwner(std::shared_ptr<Player> owner);
 

@@ -24,6 +24,11 @@ Planet::Planet(std::string name, int posx, int posy, int rubin, int mines) : m_n
 
 }
 
+std::string Planet::getName()
+{
+	return m_name;
+}
+
 int Planet::getShips() 
 {
 	return m_ships;
@@ -47,7 +52,7 @@ bool Planet::delShips(int ships)
 	} 
 }
 
-void Planet::addNeighbour(Planet* neighbour)
+void Planet::addNeighbour(Planet::Ptr neighbour)
 {
 	m_neighbours.push_back(Planet::Ptr(neighbour));
 }
