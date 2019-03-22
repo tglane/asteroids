@@ -28,9 +28,17 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
     scene = new QGraphicsScene(this);
     ui->Map->setScene(scene);
 
-    
-    ui->ContextMenue->setStyleSheet("background-color:#331155; border-radius:10px; color:#FFFFFF;");
+    //StyleStuff
+    ui->ContextMenue->setStyleSheet("background-color:#331155; border-radius:10px; color:#FFFFFF");
     ui->Fight->setStyleSheet("background-color:#331155; color:#FFFFFF; border-radius:10px;");
+    ui->ExitGame->setStyleSheet("background-color:#220044");
+    ui->NextRound->setStyleSheet("background-color:#220044");
+    ui->BuildMine->setStyleSheet("background-color:#220044");
+    ui->BuildShip->setStyleSheet("background-color:#220044");
+    ui->SendShip->setStyleSheet("background-color:#220044");
+    ui->Colonize->setStyleSheet("background-color:#220044");
+    ui->SendShipNumber->setStyleSheet("background-color:#220044");
+    ui->DestionationPlanet->setStyleSheet("background-color:#220044");
 
     QGraphicsOpacityEffect * effect = new QGraphicsOpacityEffect(ui->ContextMenue);
     effect->setOpacity(0.7);
