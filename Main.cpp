@@ -34,13 +34,16 @@ int main(int argc, char** argv)
     std::cout << Test->getName() << std::endl;
     std::cout << Test->getShips() << std::endl;
     std::cout << Test->getMines() << std::endl;
-    bool buytest;
+    //bool buytest;
 
-    bool buytest2;
-    buytest = model->buyShip(Test, Testplayer);
-    buytest2 = model->buyMine(Test, Testplayer);
+    //bool buytest2;
+    //buytest = model->buyShip(Test, Testplayer);
+    model->buyShip(Test, Testplayer);
+    //buytest2 = model->buyMine(Test, Testplayer);
+    model->buyMine(Test, Testplayer);
 
-    buytest = model->buyShip(Test, Testplayer);
+    //buytest = model->buyShip(Test, Testplayer);
+    model->buyShip(Test, Testplayer);
     model->TransaktionShip(Testplayer);
     model->TransaktionMine(Testplayer);
     std::cout << Test->getName() << std::endl;
