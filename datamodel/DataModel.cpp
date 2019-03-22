@@ -228,6 +228,27 @@ Player::Ptr DataModel::getEnemyPlayer()
     return m_enemy;
 }
 
+void DataModel::performMovements()
+{
+    std::list<std::shared_ptr<MoveOrder>> myMoveOrder = m_self->getListMoveOrder();
+    for (std::list<std::shared_ptr<MoveOrder>>::iterator it = myMoveOrder.begin(); it != myMoveOrder.end(); ++it){
+        std::shared_ptr<MoveOrder> moveOrder = *it;
+        std::shared_ptr<Planet> origin = moveOrder->getOrigin();
+        std::shared_ptr<Planet> destination = moveOrder->getDestination();
+        int ships = moveOrder->getNumberShips();
+        origin->delShips(ships);
+        if(destination->getOwner() == m_self){
+            destination->addShips(ships);
+        }else if(destination->getShips()==0){
+            destination->addShips(ships);
+            destination->setOwner(m_self);
+        }else{
+            destination->setInvader(m_self);
+            destination->addInvaderShips(ships);
+        }
+    }
+}
+
 DataModel::~DataModel()
 {
 

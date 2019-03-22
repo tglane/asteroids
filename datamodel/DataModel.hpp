@@ -95,6 +95,8 @@ public:
 
     //void findBattles();
 
+    void performMovements();
+
 private:
     /*Variablen von Kay*/
 
