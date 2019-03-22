@@ -8,6 +8,10 @@
 #include <map>
 #include <QMainWindow>
 
+#include "MoveOrder.hpp"
+#include "MineOrder.hpp"
+#include "ShipOrder.hpp"
+
 using std::map;
 
 
@@ -60,6 +64,12 @@ public:
 
     bool buyMine(Planet::Ptr selectedPlanet, Player::Ptr Player1);
 
+    void TransaktionShip(Player::Ptr Player1);
+
+    void TransaktionMine(Player::Ptr Player1);
+
+    void clearOrderList(Player::Ptr Player1);
+
     /*Kauf Methoden ende*/
     bool moveShips(Planet::Ptr from, Planet::Ptr to, int numShips);
 
@@ -68,6 +78,11 @@ public:
     std::list<std::pair<int,int>> getEdges();
     
     void startGame();
+    /**
+     * @brief sets the choosen startplanet: 1 ship to the planet, m_self as new owner
+     * @param shared ptr to choosen planet
+     */
+    void setStartPlanet(std::shared_ptr<Planet> startplanet);
 
     void addWindow(int Id, QMainWindow* Window);
 

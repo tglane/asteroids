@@ -59,8 +59,29 @@ void Planet::setOwner(std::shared_ptr<Player> owner)
 	m_owner = owner;
 }
 
-std::shared_ptr<Player> Planet::getOwner(){
+void Planet::setInvader(std::shared_ptr<Player> invader)
+{
+	m_invader = invader;
+}
+
+void Planet::setInvaderShips(int invaderShips)
+{
+	 m_invaderShips = invaderShips;
+}
+
+int Planet::getInvaderShips()
+{
+	return m_invaderShips;
+}
+
+std::shared_ptr<Player> Planet::getOwner()
+{
 	return m_owner;
+}
+
+std::shared_ptr<Player> Planet::getInvader()
+{
+	return m_invader;
 }
 
 int Planet::getRubin() 
