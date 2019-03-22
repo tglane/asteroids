@@ -213,6 +213,9 @@ void GLWidget::step(map<Qt::Key, bool>& keyStates)
             m_enemy->inBound();
         }
     }
+
+    m_client.send_position(m_camera->getPosition(), Vector3f(), m_camera->getXAxis(), m_camera->getYAxis(), m_camera->getZAxis());
+
     // Trigger update, i.e., redraw via paintGL()
     this->update();
 }
