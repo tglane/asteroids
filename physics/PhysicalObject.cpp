@@ -51,6 +51,19 @@ PhysicalObject::PhysicalObject() :
 
 }
 
+PhysicalObject::PhysicalObject(int id) :
+    m_euler(0, 0, 0),
+    m_momentum(0),
+    m_mass(0),
+    m_accel(0),
+    m_radius(0),
+    m_angle(0),
+    m_alive(true),
+    m_id(id)
+{
+
+}
+
 void PhysicalObject::destroy()
 {
     m_alive = false;

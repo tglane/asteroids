@@ -5,7 +5,8 @@
 #include <SDL2/SDL.h>
 #include <QtGui/QPainter>
 
-GLWidget::GLWidget(QWidget* parent) : QOpenGLWidget(parent) {}
+GLWidget::GLWidget(QWidget* parent) : QOpenGLWidget(parent), hudWidget(this) {
+}
 
 void GLWidget::setLevelFile(const std::string& file)
 {
@@ -142,9 +143,9 @@ void GLWidget::initializeGL()
 
 void GLWidget::paintGL()
 {
-    // Clear bg color and enable depth test (z-Buffer)
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glEnable(GL_DEPTH_TEST);
 
+    
     m_camera->apply();
 
     // Render stuff
@@ -156,9 +157,12 @@ void GLWidget::paintGL()
     m_enemy->render();
 
     // TODO: tut so noch nicht
-    //QPainter qPainter(this);
-    //QPixmap hud("../models/cockpit.png");
-    //qPainter.drawPixmap(0, 0, this->width(), this->height(), hud);
+    hudWidget.resize(this->width(), this->height());
+
+
+    QPainter qPainter(this);
+    QPixmap hud("../models/cockpit.png");
+    qPainter.drawPixmap(0, 0, this->width(), this->height(), hud);
 }
 
 void GLWidget::step(map<Qt::Key, bool>& keyStates)

@@ -1,7 +1,6 @@
 #ifndef SERVER_H
 #define SERVER_H
 
-#include <QApplication>
 #include <QUdpSocket>
 #include <QNetworkDatagram>
 #include <QTimer>
@@ -14,7 +13,10 @@
 #include <light_object.hpp>
 #include <light_ship.hpp>
 
+#include "ServerPhysicsEngine.hpp"
+
 using namespace asteroids;
+
 class UdpClient
 {
 public:
@@ -22,11 +24,11 @@ public:
     QHostAddress address;
     quint16 port;
     uint32_t seq_nr = 0;
-    PhysicalSpaceCraft ship;
+    PhysicalSpaceCraft::Ptr ship;
     std::map<uint32_t, QByteArray> ack_pending;
 
-    UdpClient(): ship(Vector3f(), 1, 1), id(0) {}
-    UdpClient(uint32_t id): ship(Vector3f(), 1, 1), id(id) {}
+    UdpClient(): ship(new PhysicalSpaceCraft(Vector3f(), 1, 1, 0)), id(0) {}
+    UdpClient(uint32_t id): ship(new PhysicalSpaceCraft(Vector3f(), 1, 1, id)), id(id) {}
     uint32_t next_seq_nr() { return seq_nr++; }
 };
 
@@ -39,7 +41,8 @@ private slots:
     void tick();
 
 private:
-    std::map<uint32_t, PhysicalBullet::Ptr> bullets;
+    ServerPhysicsEngine physics_engine;
+
     std::unique_ptr<QUdpSocket> socket;
     std::unique_ptr<QTimer> timer;
     std::map<uint32_t, UdpClient> clients;
@@ -52,7 +55,8 @@ private:
     void send_ack(QNetworkDatagram &datagram);
     void handle_ack(QNetworkDatagram &datagram);
     void send_collision(UdpClient &client, uint32_t id1, uint32_t id2);
-    void send_position_or_bullet(char type, UdpClient &client, Transformable &obj, uint32_t obj_id);
+    void send_position(UdpClient &client, Transformable &obj, uint32_t obj_id);
+    void send_bullet(UdpClient &client, PhysicalBullet &obj, uint32_t obj_id);
     bool check_client_id(QNetworkDatagram &datagram);
 
 public:

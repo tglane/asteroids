@@ -9,12 +9,14 @@ set(CMAKE_AUTOMOC ON)
 
 set(SERVER_SRC
     UdpServer.cpp
+    ServerPhysicsEngine.cpp
     ../../math/Quaternion.cpp
     ../../math/Matrix.cpp
     ../../physics/Transformable.cpp
     ../../physics/PhysicalObject.cpp
     ../../physics/PhysicalBullet.cpp
-    ../../physics/PhysicalSpaceCraft.cpp)
+    ../../physics/PhysicalSpaceCraft.cpp
+    ../../physics/Hittable.cpp)
 
 set(SERVER_HDR
     UdpServer.hpp)

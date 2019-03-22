@@ -21,8 +21,9 @@
 namespace asteroids
 {
 
-PhysicalSpaceCraft::PhysicalSpaceCraft(const Vector3f& position, float movespeed, float rotatespeed)
+    PhysicalSpaceCraft::PhysicalSpaceCraft(const Vector3f& position, float movespeed, float rotatespeed, int id = 0)
 {
+    setId(id);
     m_speed = movespeed;
     m_rotationSpeed = rotatespeed;
 }

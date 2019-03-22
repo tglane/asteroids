@@ -31,6 +31,8 @@ void PhysicsEngine::addHittable(Hittable::Ptr& h)
 
 void PhysicsEngine::addBullet(Bullet::Ptr& bullet)
 {
+
+    cout << "creating bullet " << bullet->get_id() << endl;
     //m_particles.addEffect(ParticleEffect::createBulletTail(bullet->getPosition(), bullet->direction(), bullet->lifetime()));
     m_bullets.insert(std::pair<int, Bullet::Ptr >(bullet->get_id(), bullet));
 }

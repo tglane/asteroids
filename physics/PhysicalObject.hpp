@@ -49,7 +49,7 @@ public:
         float mass, float momentum, float speed, 
         float accel, float radius, int id);
 
-    PhysicalObject(int id): m_id(id) {}
+    PhysicalObject(int id);
     PhysicalObject();
 
     /**
@@ -61,6 +61,8 @@ public:
      * @brief destroy this object
      */
     virtual void destroy();
+
+    virtual void render() {};
 
     /**
      * @brief multiply the speed by factor

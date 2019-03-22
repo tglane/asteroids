@@ -17,15 +17,22 @@ UdpServer::UdpServer()
 
     timer = std::unique_ptr<QTimer>(new QTimer(nullptr));
     connect(timer.get(), &QTimer::timeout, this, &UdpServer::tick);
-    timer->start(1000/10);
+    timer->start(1000/30);
+
 
     clients[42] = UdpClient(42);
     clients[42].address = QHostAddress::LocalHost;
     clients[42].port = 1234;
 
     clients[43] = UdpClient(43);
-    clients[43].address = QHostAddress(QString("192.168.43.103"));
+    clients[43].address = QHostAddress(QString("192.168.0.43"));
     clients[43].port = 1234;
+
+    physics_engine.addHittable(clients[42].ship);
+    physics_engine.addHittable(clients[43].ship);
+
+    PhysicalObject::Ptr a(new PhysicalObject(Vector3f(), Vector3f(2500, 0, 0), 0, 0, 0, 0, 100, 1));
+    physics_engine.addDestroyable(a);
 }
 
 
@@ -42,7 +49,7 @@ asteroids::Vector3f UdpServer::bytes_to_vector(char *bytes)
 
 void UdpServer::set_position_from_packet(QNetworkDatagram &datagram, Transformable &obj)
 {
-    std::cout << "received position data:" << std::endl;
+    //std::cout << "received position data:" << std::endl;
     QByteArray data = datagram.data();
     if (data.length() < 9 + 15 * 4) {
         std::cout << "packet to short" << std::endl;
@@ -59,11 +66,11 @@ void UdpServer::set_position_from_packet(QNetworkDatagram &datagram, Transformab
     obj.setXAxis(x_axis);
     obj.setYAxis(y_axis);
     obj.setZAxis(z_axis);
-    std::cout << " p: " << position[0] << ", " <<  position[1] << ", " <<  position[2] << std::endl
-              << " v: " << velocity[0] << ", " <<  velocity[1] << ", " <<  velocity[2] << std::endl
-              << " x: " << x_axis[0] << ", " <<  x_axis[1] << ", " <<  x_axis[2] << std::endl
-              << " y: " << y_axis[0] << ", " <<  y_axis[1] << ", " <<  y_axis[2] << std::endl
-              << " z: " << z_axis[0] << ", " <<  z_axis[1] << ", " <<  z_axis[2] << std::endl;
+    // std::cout << " p: " << position[0] << ", " <<  position[1] << ", " <<  position[2] << std::endl
+    //           << " v: " << velocity[0] << ", " <<  velocity[1] << ", " <<  velocity[2] << std::endl
+    //           << " x: " << x_axis[0] << ", " <<  x_axis[1] << ", " <<  x_axis[2] << std::endl
+    //           << " y: " << y_axis[0] << ", " <<  y_axis[1] << ", " <<  y_axis[2] << std::endl
+    //           << " z: " << z_axis[0] << ", " <<  z_axis[1] << ", " <<  z_axis[2] << std::endl;
 
 }
 
@@ -81,26 +88,35 @@ void UdpServer::handle_position_packet(QNetworkDatagram &datagram)
         return;
     }
 
-    set_position_from_packet(datagram, clients[client_id].ship);
+    set_position_from_packet(datagram, *clients[client_id].ship);
 }
 
 void UdpServer::handle_bullet_packet(QNetworkDatagram &datagram)
 {
     QByteArray data = datagram.data();
-    if (data.length() < 9 + 9 * 4) {
+    if (data.length() < 9 + 6 * 4) {
         std::cout << "packet to short" << std::endl;
         return;
     }
     uint32_t obj_id = *((int32_t*)(data.data() + 5));
     uint32_t client_id = obj_id >> 24;
     // TODO use positons
-    bullets[obj_id] = PhysicalBullet::Ptr(new PhysicalBullet(asteroids::Vector3f(), asteroids::Vector3f(), client_id, obj_id));
-    std::cout << "created bullet: " << obj_id << std::endl;
-    set_position_from_packet(datagram, *bullets[obj_id]);
+
+    asteroids::Vector3f position = bytes_to_vector(data.data() + 9);
+    asteroids::Vector3f velocity = bytes_to_vector(data.data() + 9 + 3 * 4);
+
+    PhysicalBullet::Ptr bullet(new PhysicalBullet(position, velocity, client_id, obj_id));
+
+    physics_engine.addBullet(bullet);
+    //std::cout << "created bullet: " << obj_id << std::endl;
+
+
+    //std::cout << " p: " << position[0] << ", " <<  position[1] << ", " <<  position[2] << std::endl
+    //          << " v: " << velocity[0] << ", " <<  velocity[1] << ", " <<  velocity[2] << std::endl;
 
     for (auto& i: clients) {
         UdpClient& dest = i.second;
-        send_position_or_bullet('B', dest, *bullets[obj_id], obj_id);
+        send_bullet(dest, *bullet, obj_id);
     }
 }
 
@@ -113,7 +129,7 @@ void UdpServer::send_ack(QNetworkDatagram &datagram)
     }
     char* data = datagram.data().data();
     uint32_t seq_nr = *(data + 1);
-    std::cout << "sending ACK seq_nr: " << seq_nr << std::endl;
+    //std::cout << "sending ACK seq_nr: " << seq_nr << std::endl;
     QByteArray reply_data;
     reply_data.append('A');
     reply_data.append((char *)(&seq_nr), 4);
@@ -134,19 +150,21 @@ void UdpServer::send_collision(UdpClient &client, uint32_t obj_id1, uint32_t obj
     socket->writeDatagram(data, client.address, client.port);
 }
 
-void UdpServer::send_position_or_bullet(char type, UdpClient &client, Transformable& obj, uint32_t obj_id)
+void UdpServer::send_position(UdpClient &client, Transformable& obj, uint32_t obj_id)
 {
     uint32_t seq_nr = client.next_seq_nr();
-    std::cout << "sending  " << type << " to " << client.id << " seq_nr " << seq_nr << std::endl;
+    //std::cout << "sending  " << 'P' << " to " << client.id << " seq_nr " << seq_nr << std::endl;
     QByteArray data;
 
-    data.append(type);
+    data.append('P');
     data.append((char *)(&seq_nr), 4);
     data.append((char *)(&obj_id), 4);
 
     asteroids::Vector3f position = obj.getPosition();
     asteroids::Vector3f velocity(); //obj.getVelocity();
     asteroids::Vector3f x_axis = obj.getXAxis();
+
+
     asteroids::Vector3f y_axis = obj.getYAxis();
     asteroids::Vector3f z_axis = obj.getZAxis();
 
@@ -172,16 +190,43 @@ void UdpServer::send_position_or_bullet(char type, UdpClient &client, Transforma
     data.append((char *)(&z_axis[2]), 4);
 
 
-    std::cout << " senging position: " << std::endl
-              << " p: " << position[0] << ", " <<  position[1] << ", " <<  position[2] << std::endl
-              << " x: " << x_axis[0] << ", " <<  x_axis[1] << ", " <<  x_axis[2] << std::endl
-              << " y: " << y_axis[0] << ", " <<  y_axis[1] << ", " <<  y_axis[2] << std::endl
-              << " z: " << z_axis[0] << ", " <<  z_axis[1] << ", " <<  z_axis[2] << std::endl;
+    // std::cout << " senging position: " << std::endl
+    //           << " p: " << position[0] << ", " <<  position[1] << ", " <<  position[2] << std::endl
+    //           << " x: " << x_axis[0] << ", " <<  x_axis[1] << ", " <<  x_axis[2] << std::endl
+    //           << " y: " << y_axis[0] << ", " <<  y_axis[1] << ", " <<  y_axis[2] << std::endl
+    //           << " z: " << z_axis[0] << ", " <<  z_axis[1] << ", " <<  z_axis[2] << std::endl;
+
+    socket->writeDatagram(data, client.address, client.port);}
+
+void UdpServer::send_bullet(UdpClient &client, PhysicalBullet& obj, uint32_t obj_id)
+{
+    uint32_t seq_nr = client.next_seq_nr();
+    //std::cout << "sending  " << 'B' << " to " << client.id << " seq_nr " << seq_nr << std::endl;
+    QByteArray data;
+
+    data.append('B');
+    data.append((char *)(&seq_nr), 4);
+    data.append((char *)(&obj_id), 4);
+
+    asteroids::Vector3f position = obj.getPosition();
+    asteroids::Vector3f velocity = obj.direction();
+
+
+    data.append((char *)(&position[0]), 4);
+    data.append((char *)(&position[1]), 4);
+    data.append((char *)(&position[2]), 4);
+
+    data.append((char *)(&velocity[0]), 4);
+    data.append((char *)(&velocity[1]), 4);
+    data.append((char *)(&velocity[2]), 4);
+
+
+    // std::cout << " senging position: " << std::endl
+    //           << " p: " << position[0] << ", " <<  position[1] << ", " <<  position[2] << std::endl
+    //           << " x: " << velocity[0] << ", " <<  velocity[1] << ", " <<  velocity[2] << std::endl;
 
     socket->writeDatagram(data, client.address, client.port);
-    if (type == 'B') {
-        client.ack_pending[seq_nr] = data;
-    }
+    client.ack_pending[seq_nr] = data;
 }
 
 void UdpServer::handle_ack(QNetworkDatagram &datagram)
@@ -222,7 +267,7 @@ void UdpServer::handle_udp()
 {
     while(socket->hasPendingDatagrams())
     {
-        std::cout << "============ handle_udp =============" << std::endl;
+        //std::cout << "============ handle_udp =============" << std::endl;
         QNetworkDatagram datagram = socket->receiveDatagram();
         QByteArray data = datagram.data();
 
@@ -232,11 +277,11 @@ void UdpServer::handle_udp()
 
         switch (data[0]) {
         case 'A':
-            std::cout << "received A" << std::endl;
+            //std::cout << "received A" << std::endl;
             handle_ack(datagram);
             break;
         case 'P':
-            std::cout << "received P" << std::endl;
+            //std::cout << "received P" << std::endl;
             handle_position_packet(datagram);
             break;
         case 'B':
@@ -252,23 +297,35 @@ void UdpServer::handle_udp()
 
 void UdpServer::tick()
 {
-    std::cout << "============ tick =============" << std::endl;
+    //std::cout << "============ tick =============" << std::endl;
+    auto collisions = physics_engine.process();
+    auto collisions2 = physics_engine.process();
     //send_collision(clients[42], 12, 21);
     for (auto& i: clients) {
+
         uint32_t client_id = i.first;
         UdpClient& client = i.second;
+
+        for (auto i: collisions) {
+            std::cout << "COL: " << i.first << " " << i.second << endl;
+            send_collision(client, i.first, i.second);
+        }
+        for (auto i: collisions2) {
+            std::cout << "COL2: " << i.first << " " << i.second << endl;
+            send_collision(client, i.first, i.second);
+        }
 
         // resend unacknowledged messages
         for (auto j: client.ack_pending) {
             QByteArray &data = j.second;
-            socket->writeDatagram(data, client.address, client.port);
+            //socket->writeDatagram(data, client.address, client.port);
         }
 
         // send ship positions
         for (auto& k: clients) {
             UdpClient& dest = k.second;
             if (client.id != dest.id) {
-                send_position_or_bullet('P', dest, client.ship, client.id << 24);
+                send_position(dest, *client.ship, client.id << 24);
             }
         }
     }

@@ -24,11 +24,13 @@ namespace asteroids
 {
 
     PhysicalBullet::PhysicalBullet(const Vector3f &fighter_position, const Vector3f fighter_axis, int shooter_id, int id)
-		: PhysicalObject(id), m_alive(true), m_shooter_id(shooter_id) {
+		: PhysicalObject(id) {
 	// the bullet will move on this axis, it has to be reversed for the direction to be right
 	this->m_fighterAxis = fighter_axis;
 	this->m_iterations = 0;
 	this->m_speed = 50;
+    this->m_radius = 10;
+    this->m_shooter_id = shooter_id;
 
 	// same position as the fighter
 	m_position = fighter_position;
