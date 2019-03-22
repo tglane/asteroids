@@ -29,7 +29,7 @@ int main(int argc, char** argv)
     //asteroids::MainWindow mainWindow("../models/level.xml");
     //mainWindow.show();
 
-    Planet::Ptr Test = model->getPlanetFromId(5);
+    /*Planet::Ptr Test = model->getPlanetFromId(5);
     Player::Ptr Testplayer = Player::Ptr(new Player(1,2000,0));
     std::cout << Test->getName() << std::endl;
     std::cout << Test->getShips() << std::endl;
@@ -53,7 +53,7 @@ int main(int argc, char** argv)
     std::cout << Test->getShips() << std::endl;
     std::cout << Test->getMines() << std::endl;
 
-    
+    */
 
 
 

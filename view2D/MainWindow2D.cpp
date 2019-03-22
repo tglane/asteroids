@@ -86,7 +86,7 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
     // Start colonizing the selected Planet, how we get selected Planet?
     // Button should only be selectable if a neighbour of the selected Planet is owned
     QPushButton* m_colonize = ui->Colonize;
-    m_colonize->setEnabled(false);
+    //m_colonize->setEnabled(false);
     connect(m_colonize, SIGNAL(clicked(bool)), this, SLOT(colonize(bool)));
 
     // Build a ship on selected Planet
@@ -94,8 +94,13 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
     QPushButton* m_buildShip = ui->BuildShip;
     connect(m_buildShip, SIGNAL(clicked(bool)), this, SLOT(buildShip(bool)));
 
+    // Build a mine on selected Planet
+    // Button should only be selectable if this Planet is owned
     QPushButton* m_buildMine = ui->BuildMine;
     connect(m_buildMine, SIGNAL(clicked(bool)), this, SLOT(buildMine(bool)));
+
+    QPushButton* m_sendShips = ui->SendShip;
+    connect(m_sendShips, SIGNAL(clicked(bool)), this, SLOT(sendShips(bool)));
 
     // at the beginning no planet is selected so this widget is not visible
     // ui->PlanetInfo->setVisible(false);
@@ -236,6 +241,8 @@ void MainWindow2D::endOfRound(bool click)
     // fuck this "unused" warnings! :D
     if(succes);
 
+    updatePlayerInfo();
+
     // TODO wait for response of server, block the window until all players are ready
 }
 
@@ -243,6 +250,10 @@ void MainWindow2D::colonize(bool click /*, Planet* p*/)
 {
     // TODO start colonization of Planet p
     //m_model->colonize(p);
+    Planet::Ptr p = m_model->getPlanetFromId(currentPlanet);
+
+    m_model->setStartPlanet(p);
+    ui->Colonize->setVisible(false);
     std::cout << "Colonize!" << std::endl;
 }
 
@@ -282,6 +293,17 @@ void MainWindow2D::buildMine(bool click)
     std::cout << "Build Mine!" << std::endl;
 }
 
+void MainWindow2D::sendShips(bool click)
+{
+    std::cout << "Send Ship from " << m_model->getPlanetFromId(currentPlanet)->getName() << 
+        " to " << ui->DestionationPlanet->currentText().toStdString() << std::endl;
+    
+    Planet::Ptr to = m_model->getPlanetFromName(ui->DestionationPlanet->currentText().toStdString());
+    Planet::Ptr from = m_model->getPlanetFromId(currentPlanet);
+
+    m_model->moveShips(from, to, ui->SendShipNumber->currentText().toInt());
+}
+
 void MainWindow2D::exitGame(bool click)
 {
     QCoreApplication::quit();
@@ -295,6 +317,8 @@ MyEllipse* MainWindow2D::getEllipseById(int id)
 
 void MainWindow2D::updatePlayerInfo()
 {
+    ui->SpielerInfoTable->setCellWidget(0, 1, 
+        new QLabel(QString::fromStdString(m_model->getSelfPlayer()->getPlayerName())));
     ui->SpielerInfoTable->setCellWidget(1, 1, 
         new QLabel(QString::number(m_model->getSelfPlayer()->getRubin())));
     ui->SpielerInfoTable->setCellWidget(2, 1, 

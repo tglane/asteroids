@@ -75,6 +75,8 @@ public:
 
     Planet::Ptr getPlanetFromId(int ID);
 
+    Planet::Ptr getPlanetFromName(std::string name){}
+
     std::list<std::pair<int,int>> getEdges();
     
     void startGame();
