@@ -108,6 +108,8 @@ public:
 
 	void ClearOrderListInPlayer();
 
+	std::list<std::shared_ptr<Planet>> getListOfPLanets();
+
 private:
 
 	std::string m_name;

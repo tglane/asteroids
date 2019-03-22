@@ -115,4 +115,10 @@ void Player::ClearOrderListInPlayer()
 
 }
 
+std::list<std::shared_ptr<Planet>> Player::getListOfPLanets()
+{
+	return m_planets;
+
+}
+
 }
