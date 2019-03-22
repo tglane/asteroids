@@ -5,6 +5,7 @@
 #include "MainWindow2D.hpp"
 #include "datamodel/Planet.hpp"
 #include "datamodel/DataModel.hpp"
+#include <QDesktopWidget>
 #include <QGraphicsOpacityEffect>
 #include <QGraphicsView>
 #include <iostream>
@@ -20,17 +21,25 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
     m_model = model;
     m_model->addWindow(DataModel::MAIN2D, this);
 
-    int planet_size = 20;
-    float position_scale = 1;
     // Setup user interface
     ui->setupUi(this);
     
+    resize(QDesktopWidget().availableGeometry(this).size());
+
     scene = new QGraphicsScene(this);
     ui->Map->setScene(scene);
 
-    
-    ui->ContextMenue->setStyleSheet("background-color:#331155; border-radius:10px; color:#FFFFFF;");
+    //StyleStuff
+    ui->ContextMenue->setStyleSheet("background-color:#331155; border-radius:10px; color:#FFFFFF");
     ui->Fight->setStyleSheet("background-color:#331155; color:#FFFFFF; border-radius:10px;");
+    ui->ExitGame->setStyleSheet("background-color:#220044");
+    ui->NextRound->setStyleSheet("background-color:#220044");
+    ui->BuildMine->setStyleSheet("background-color:#220044");
+    ui->BuildShip->setStyleSheet("background-color:#220044");
+    ui->SendShip->setStyleSheet("background-color:#220044");
+    ui->Colonize->setStyleSheet("background-color:#220044");
+    ui->SendShipNumber->setStyleSheet("background-color:#220044");
+    ui->DestionationPlanet->setStyleSheet("background-color:#220044");
 
     QGraphicsOpacityEffect * effect = new QGraphicsOpacityEffect(ui->ContextMenue);
     effect->setOpacity(0.7);
@@ -43,10 +52,14 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
 
     std::map<int, Planet::Ptr> planets = m_model->getPlanets();
 
+    resizeEvent(NULL);
+
+    int planet_size = 20;
+
     //Erstelle die Elipsen und füge sie in die Map und in die QGraphicsScene ein 
     for(int i = 0; i < (int)planets.size(); i++){
         Planet::Ptr p = planets.at(i);
-        view_planets[i] = new MyEllipse(p->getPosX()/position_scale, p->getPosY()/position_scale);
+        view_planets[i] = new MyEllipse(p->getPosX(), p->getPosY());
         view_planets[i]->setZValue(1);
         scene->addItem(view_planets[i]);
         QVariant ellipse_ID(i);
@@ -54,7 +67,7 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
         connect(view_planets[i], SIGNAL(show_planetInfo(int)), this, SLOT(choose_planet(int)));
 
         QGraphicsTextItem * io = new QGraphicsTextItem;
-        io->setPos(p->getPosX()/position_scale + planet_size/2,p->getPosY()/position_scale - planet_size/2);
+        io->setPos(p->getPosX() + planet_size/2,p->getPosY() - planet_size/2);
         io->setPlainText(QString::fromStdString(p->getName()));
         io->setDefaultTextColor(Qt::white);
         io->setFont(QFont("Helvetica",5));
@@ -71,7 +84,11 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
         int pos_2 = coordinates.second;
         Planet::Ptr p1 = planets.at(pos_1);
         Planet::Ptr p2 = planets.at(pos_2);
-        scene->addLine(p1->getPosX()/position_scale+planet_size/2,p1->getPosY()/position_scale+planet_size/2, p2->getPosX()/position_scale+planet_size/2, p2->getPosY()/position_scale+planet_size/2, outlinePenHighlight);
+        scene->addLine(p1->getPosX()+planet_size/2, 
+                    p1->getPosY()+planet_size/2, 
+                    p2->getPosX()+planet_size/2, 
+                    p2->getPosY()+planet_size/2, 
+                    outlinePenHighlight);
     }
 
     //Öffne das Fighter-Minigame testweise in neuem Fenster
@@ -126,7 +143,6 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
     ui->PlanetInfo->setVisible(false);
 
     updatePlayerInfo();
-
 }
 
 void MainWindow2D::resizeEvent(QResizeEvent* event){

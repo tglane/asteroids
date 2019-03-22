@@ -109,8 +109,6 @@ int main(int argc, char** argv)
     strategy::StartingDialog startWindow(model);
     startWindow.show();
 
-    //mainWindow2D.showFullScreen();
-
     return a.exec();
 }
 
