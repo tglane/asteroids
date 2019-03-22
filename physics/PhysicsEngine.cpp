@@ -20,12 +20,12 @@ namespace asteroids
 
 void PhysicsEngine::addDestroyable(PhysicalObject::Ptr& obj)
 {
-    m_objects.insert(std::pair<int, PhysicalObject::Ptr>(curr_dest_id++, obj));
+    m_objects.insert(std::pair<int, PhysicalObject::Ptr>(obj->get_id(), obj));
 }
 
 void PhysicsEngine::addHittable(Hittable::Ptr& h)
 {
-    m_hittables.insert(std::pair<int, Hittable::Ptr>(curr_player_id++, h));
+    m_hittables.insert(std::pair<int, Hittable::Ptr>(h->getId(), h));
 }
 
 void PhysicsEngine::addBullet(Bullet::Ptr& bullet)
@@ -173,6 +173,15 @@ void PhysicsEngine::check_id_type(int id_to_check)
         }else
         {
             //TODO change health of spaceship if collision with spaceship
+            if(m_hittables.count(id_to_check) == 1) {
+                int health = m_hittables[id_to_check]->getHealth()
+                m_hittables[id_to_check]->setHealth(health - 1);
+                if (health <= 0)
+                {
+                    m_particles.addEffect(ParticleEffect::createExplosionSphere(m_hittables[id_to_check]->getPosition()));
+                    m_hittables.erase(id_to_check);
+                }
+            }
         }
     }
 }

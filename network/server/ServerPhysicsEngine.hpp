@@ -15,6 +15,7 @@
 
 #include <list>
 #include <memory>
+#include <map>
 
 #include <physics/PhysicalObject.hpp>
 #include <physics/PhysicalBullet.hpp>
@@ -62,20 +63,21 @@ public:
      */
     void addBullet(PhysicalBullet::Ptr& bullet);
 
+    bool gameOver();
     /**
      * @brief   The engine's main loop
      */
-    std::list<std::pair<int, int>> process();
+    std::list<std::pair<int, int>> process(int time_elapsed);
 
 private:
 
     /// List of destroyable objects
-    list<PhysicalObject::Ptr>    m_objects;
+    map<int, PhysicalObject::Ptr>    m_objects;
 
     /// List of active bullets
-    list<PhysicalBullet::Ptr>     m_bullets;
+    map<int, PhysicalBullet::Ptr>     m_bullets;
 
-    list<Hittable::Ptr>          m_hittables;
+    map<int, Hittable::Ptr>          m_hittables;
 
 };
 

@@ -298,19 +298,13 @@ void UdpServer::handle_udp()
 void UdpServer::tick()
 {
     //std::cout << "============ tick =============" << std::endl;
-    auto collisions = physics_engine.process();
-    auto collisions2 = physics_engine.process();
-    //send_collision(clients[42], 12, 21);
+    auto collisions = physics_engine.process(10);
     for (auto& i: clients) {
 
         uint32_t client_id = i.first;
         UdpClient& client = i.second;
 
         for (auto i: collisions) {
-            std::cout << "COL: " << i.first << " " << i.second << endl;
-            send_collision(client, i.first, i.second);
-        }
-        for (auto i: collisions2) {
             std::cout << "COL2: " << i.first << " " << i.second << endl;
             send_collision(client, i.first, i.second);
         }
