@@ -65,8 +65,6 @@ public:
      */
     bool endOfRound();
 
-    /*Code von Kay Bauer*/
-
     /*Kauf Methoden start*/
     bool buyShip(Planet::Ptr selectedPlanet, Player::Ptr Player1);
 
@@ -84,6 +82,8 @@ public:
     Planet::Ptr getPlanetFromId(int ID);
 
     std::list<std::pair<int,int>> getEdges();
+
+    void calculateFinance(Player::Ptr Player);
     
     void startGame();
     /**
@@ -102,7 +102,14 @@ public:
 
     void updateAll(QJsonDocument update);
 
-    //void findBattles();
+
+
+    /**
+     * @brief   Finds occuring battles at the end of each round,
+     *          fills list of battles
+     */
+    void findBattles();
+
 
 private:
     /*Variablen von Kay*/
@@ -110,6 +117,8 @@ private:
     int Shipcost = 500;
 
     int Minecost = 1000;
+
+    int Minegain = 750;
     /**
      * @brief   Loads all the planets from the given file
      */
@@ -129,7 +138,8 @@ private:
     // Map of Windows
     std::map<int, QMainWindow*> m_Window;
 
-    std::list<Battle> m_battles;
+    // List of upcoming battles
+    std::list<std::shared_ptr<Battle>> m_battles;
 };
 
 }
