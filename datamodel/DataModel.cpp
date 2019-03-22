@@ -299,6 +299,10 @@ QJsonDocument DataModel::createJson(Player::Ptr player)
     //insert id of the player
     main.insert("ID", player->getIdentity());
 
+    //QJsonDocument theDocument(main);
+
+    //std::cout << theDocument.toJson().toStdString << std::endl;
+
     return QJsonDocument();
 }
 
