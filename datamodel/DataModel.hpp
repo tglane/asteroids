@@ -15,6 +15,7 @@
 #include <QJsonDocument>
 #include <QString>
 
+
 #include "MoveOrder.hpp"
 #include "MineOrder.hpp"
 #include "ShipOrder.hpp"
@@ -100,7 +101,7 @@ public:
 
     Player::Ptr getEnemyPlayer();
 
-    void updateAll(QJsonDocument update);
+    bool updateAll(QJsonDocument &update); // @suppress("Type cannot be resolved")
 
 
 
