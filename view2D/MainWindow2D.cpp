@@ -94,6 +94,9 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
     QPushButton* m_buildShip = ui->BuildShip;
     connect(m_buildShip, SIGNAL(clicked(bool)), this, SLOT(buildShip(bool)));
 
+    QPushButton* m_buildMine = ui->BuildMine;
+    connect(m_buildMine, SIGNAL(clicked(bool)), this, SLOT(buildMine(bool)));
+
     // at the beginning no planet is selected so this widget is not visible
     // ui->PlanetInfo->setVisible(false);
 
@@ -108,6 +111,8 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
     currentPlanet = -1;
 
     ui->PlanetInfo->setVisible(false);
+
+    updatePlayerInfo();
 
 }
 
@@ -257,6 +262,26 @@ void MainWindow2D::buildShip(bool click)
     std::cout << "Build Ship!" << std::endl;
 }
 
+void MainWindow2D::buildMine(bool click)
+{
+    Planet::Ptr p = m_model->getPlanetFromId(currentPlanet);
+
+    // TODO: Fehlerbehandlung
+    if (p->getOwner() == NULL)
+    {
+        std::cout << "Planet wird nicht besessen!" << std::endl;
+        return;
+    }
+    if (p->getMines() > 0)
+    {
+        std::cout << "Planet besitzt bereits eine Mine" << std::endl;
+        return;
+    }
+
+    m_model->buyMine(p, p->getOwner());
+    std::cout << "Build Mine!" << std::endl;
+}
+
 void MainWindow2D::exitGame(bool click)
 {
     QCoreApplication::quit();
@@ -269,6 +294,18 @@ MyEllipse* MainWindow2D::getEllipseById(int id)
 }
 
 void MainWindow2D::updatePlayerInfo()
+{
+    ui->SpielerInfoTable->setCellWidget(1, 1, 
+        new QLabel(QString::number(m_model->getSelfPlayer()->getRubin())));
+    ui->SpielerInfoTable->setCellWidget(2, 1, 
+        new QLabel(QString::number(m_model->getSelfPlayer()->getPlanets().size())));
+    ui->SpielerInfoTable->setCellWidget(3, 1, 
+        new QLabel(QString::fromStdString("???")));
+    ui->SpielerInfoTable->setCellWidget(4, 1, 
+        new QLabel(QString::number(m_model->getSelfPlayer()->getShips())));
+}
+
+void MainWindow2D::showPlayerName()
 {
     ui->SpielerInfoTable->setCellWidget(0, 1, 
         new QLabel(QString::fromStdString(m_model->getSelfPlayer()->getPlayerName())));

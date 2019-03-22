@@ -202,7 +202,7 @@
          <x>10</x>
          <y>300</y>
          <width>291</width>
-         <height>301</height>
+         <height>241</height>
         </rect>
        </property>
        <widget class="QLabel" name="PlanetenInfoLabel">
@@ -224,9 +224,9 @@
        <widget class="QComboBox" name="DestionationPlanet">
         <property name="geometry">
          <rect>
-          <x>140</x>
+          <x>160</x>
           <y>150</y>
-          <width>101</width>
+          <width>121</width>
           <height>31</height>
          </rect>
         </property>
@@ -247,8 +247,8 @@
        <widget class="QPushButton" name="BuildShip">
         <property name="geometry">
          <rect>
-          <x>110</x>
-          <y>200</y>
+          <x>180</x>
+          <y>120</y>
           <width>99</width>
           <height>27</height>
          </rect>
@@ -275,7 +275,7 @@
          <rect>
           <x>10</x>
           <y>20</y>
-          <width>101</width>
+          <width>261</width>
           <height>21</height>
          </rect>
         </property>
@@ -289,9 +289,9 @@
        <widget class="QLabel" name="Info">
         <property name="geometry">
          <rect>
-          <x>0</x>
+          <x>10</x>
           <y>40</y>
-          <width>171</width>
+          <width>261</width>
           <height>41</height>
          </rect>
         </property>
@@ -304,7 +304,7 @@
          <rect>
           <x>10</x>
           <y>90</y>
-          <width>121</width>
+          <width>151</width>
           <height>21</height>
          </rect>
         </property>
@@ -315,9 +315,9 @@
        <widget class="QPushButton" name="BuildMine">
         <property name="geometry">
          <rect>
-          <x>140</x>
+          <x>180</x>
           <y>90</y>
-          <width>91</width>
+          <width>101</width>
           <height>27</height>
          </rect>
         </property>
@@ -330,7 +330,7 @@
          <rect>
           <x>10</x>
           <y>120</y>
-          <width>121</width>
+          <width>151</width>
           <height>21</height>
          </rect>
         </property>
@@ -341,24 +341,11 @@
        <widget class="QComboBox" name="SendShipNumber">
         <property name="geometry">
          <rect>
-          <x>80</x>
+          <x>90</x>
           <y>150</y>
-          <width>51</width>
+          <width>61</width>
           <height>31</height>
          </rect>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="ExitGame">
-        <property name="geometry">
-         <rect>
-          <x>160</x>
-          <y>270</y>
-          <width>89</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Exit Game</string>
         </property>
        </widget>
       </widget>
@@ -386,6 +373,19 @@
        </property>
        <property name="text">
         <string>&lt;Date&gt;</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="ExitGame">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>570</y>
+         <width>291</width>
+         <height>27</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Exit Game</string>
        </property>
       </widget>
      </widget>

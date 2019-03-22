@@ -84,11 +84,18 @@ public slots:
     void buildShip(bool click);
 
     /**
+     * @brief   Builds a mine on a planet if it doesn't already have one
+     */
+    void buildMine(bool click);
+
+    /**
      * @brief   Is calle when exit Button is pressed, 
      */
     void exitGame(bool click);
 
     MyEllipse* getEllipseById(int id);
+
+    void showPlayerName();
 
 private:
 
