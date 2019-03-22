@@ -263,6 +263,11 @@ void MainWindow2D::colonize(bool click /*, Planet* p*/)
     m_model->setStartPlanet(p);
     ui->Colonize->setVisible(false);
     std::cout << "Colonize!" << std::endl;
+    std::cout<<currentPlanet<<std::endl;
+    MyEllipse* otherEllipse = getEllipseById(currentPlanet);
+    QPixmap otherpix("../models/surface/my2.jpg");
+    otherEllipse->myBrush = QBrush(otherpix);
+    otherEllipse->update();
 }
 
 void MainWindow2D::buildShip(bool click)
