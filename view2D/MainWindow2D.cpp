@@ -59,7 +59,7 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
         connect(view_planets[i], SIGNAL(show_planetInfo(int)), this, SLOT(choose_planet(int)));
 
         QGraphicsTextItem * io = new QGraphicsTextItem;
-        io->setPos(p->getPosX()/position_scale + planet_size/2,p->getPosY()/position_scale - planet_size/2);
+        io->setPos(p->getPosX() + planet_size/2,p->getPosY() - planet_size/2);
         io->setPlainText(QString::fromStdString(p->getName()));
         io->setDefaultTextColor(Qt::white);
         io->setFont(QFont("Helvetica",5));
