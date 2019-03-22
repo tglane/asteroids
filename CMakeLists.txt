@@ -152,7 +152,8 @@ set(ASTEROID_SOURCES
     view/GLWidget.cpp
     view/MainWindow.cpp 
     view/Camera.cpp
-    network/udpclient/udpclient.cpp
+    network/client/udpclient.cpp
+    #network/client/tcpclient.cpp
     view/Controller.cpp
     Gamepad.cpp
 )

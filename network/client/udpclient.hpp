@@ -57,7 +57,7 @@ private:
 
     void createNewBulletFromPackage(int recv_seq_nr, int recv_id, char* data);
 
-    QUdpSocket *socket;
+    std::shared_ptr<QUdpSocket> socket;
 
     int m_id;
 
