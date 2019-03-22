@@ -132,6 +132,8 @@ void GLWidget::initializeGL()
         m_physicsEngine->addDestroyable(p);
     }
 
+    m_useGamepad = m_controller.gamepadAvailable();
+
     m_timer.start();
 }
 
@@ -208,7 +210,7 @@ void GLWidget::step(map<Qt::Key, bool>& keyStates)
     if (!m_gameOver) {
         Hittable::Ptr player_ptr = std::static_pointer_cast<Hittable>(m_camera);
 
-        if (m_controller.gamepadAvailable())
+        if (m_useGamepad)
         {
             m_controller.gamepadControl(player_ptr, m_physicsEngine, elapsed_time);
         }

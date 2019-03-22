@@ -87,6 +87,8 @@ private:
     Controller                  m_controller;
 
     bool                        m_gameOver;
+
+    bool                        m_useGamepad;
 };
 
 #endif
