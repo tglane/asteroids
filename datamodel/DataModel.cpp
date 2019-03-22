@@ -296,19 +296,28 @@ QJsonDocument DataModel::createJson(Player::Ptr player)
 
 void DataModel::performMovements()
 {
+    //get own list of moveorders
     std::list<std::shared_ptr<MoveOrder>> myMoveOrder = m_self->getListMoveOrder();
+    //perform all moveorders
     for (std::list<std::shared_ptr<MoveOrder>>::iterator it = myMoveOrder.begin(); it != myMoveOrder.end(); ++it){
+        //get moveorder
         std::shared_ptr<MoveOrder> moveOrder = *it;
         std::shared_ptr<Planet> origin = moveOrder->getOrigin();
         std::shared_ptr<Planet> destination = moveOrder->getDestination();
         int ships = moveOrder->getNumberShips();
+        //take ships from origin planet
         origin->delShips(ships);
         if(destination->getOwner() == m_self){
+            //the destination planet is of the same owner
             destination->addShips(ships);
         }else if(destination->getShips()==0){
+            //the destination planet is of another player but he cannot defend, planet acquired
             destination->addShips(ships);
             destination->setOwner(m_self);
+            destination->setInvader(NULL);
+            destination->setInvaderShips(0);
         }else{
+            //the destination planet is of another player but he might defend
             destination->setInvader(m_self);
             destination->addInvaderShips(ships);
         }
