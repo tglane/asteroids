@@ -308,7 +308,6 @@ void MainWindow2D::sendShips(bool click)
     
     Planet::Ptr to = m_model->getPlanetFromName(ui->DestionationPlanet->currentText().toStdString());
     Planet::Ptr from = m_model->getPlanetFromId(currentPlanet);
-
     m_model->moveShips(from, to, ui->SendShipNumber->currentText().toInt());
 }
 
