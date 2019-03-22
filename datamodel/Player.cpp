@@ -88,18 +88,16 @@ std::list<std::shared_ptr<ShipOrder>> Player::getListShipOrder()
 void Player::putListShipOrder(std::shared_ptr<ShipOrder> NewShipOrder)
 {
 	m_shipOrders.push_back(NewShipOrder);
-
 }
+
 std::list<std::shared_ptr<MineOrder>> Player::getListMineOrder()
 {
 	return m_mineOrders;
-
 }
 
 void Player::putListMineOrder(std::shared_ptr<MineOrder> NewMineOrder)
 {
 	m_mineOrders.push_back(NewMineOrder);
-
 }
 
 void Player::putListMoveOrder(std::shared_ptr<MoveOrder> newMoveOrder)
@@ -112,7 +110,6 @@ void Player::ClearOrderListInPlayer()
 	m_shipOrders.clear();
 	m_mineOrders.clear();
 	m_moveOrders.clear();
-
 }
 
 }
