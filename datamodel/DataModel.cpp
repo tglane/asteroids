@@ -33,7 +33,7 @@ void DataModel::getUniverse(std::string filename)
         for(int i = 0; i < numvertex; i++)
         {
             f >> name >> posx >> posy >> mines;
-            Planet::Ptr p = Planet::Ptr(new Planet(name, posx, posy));
+            Planet::Ptr p = Planet::Ptr(new Planet(name, posx, posy, mines));
 
             m_planets[i] = p;
         }
@@ -128,14 +128,17 @@ bool DataModel::buyMine(Planet::Ptr selectedPlanet, Player::Ptr Player1)
 {
     /*test druck*/
     std::cout << "Test für buyMine" << std::endl;
+    std::cout << selectedPlanet->getMinesBuild() << std::endl;
     std::cout << selectedPlanet->getMines() << std::endl;
+
     /*test druck ende*/
-    if(selectedPlanet->getMines() == 0)
+    if(selectedPlanet->getMinesHidden() < selectedPlanet->getMines())
     {
         int Player_Rubin_Number = Player1->getRubin();
         if(Player_Rubin_Number >= Minecost)
         {
             Player1->delRubin(Minecost);
+            selectedPlanet->setMinesHidden();
              /*test druck*/
             std::cout << Player1->getRubin() << std::endl;
             /*test druck ende*/
@@ -162,7 +165,10 @@ void DataModel::TransaktionMine(Player::Ptr Player1)
 
         Planet::Ptr NewShipToPlanet = NewOrder->getPlanet();
 
-        NewShipToPlanet->addMines(1);
+        NewShipToPlanet->setMinesBuild();
+
+
+
     }
 
 }
@@ -193,6 +199,26 @@ Planet::Ptr DataModel::getPlanetFromId(int ID)
     return m_planets.at(ID);
 }
 
+void DataModel::calculateFinance(Player::Ptr Player)
+{
+    std::list<std::shared_ptr<Planet>> m_planetsForGain = Player->getListOfPLanets();
+    int MineNumbers = 0;
+    int MineGainWithNumbers = 0;
+    for(std::list<std::shared_ptr<Planet>>::iterator it = m_planetsForGain.begin(); it != m_planetsForGain.end(); ++it)
+    {
+        Planet::Ptr PlanetFromPlayer = *it;
+
+        MineNumbers += PlanetFromPlayer->getMinesBuild();
+        std::cout <<"Test MineNumbers"<< std::endl;
+        std::cout << MineNumbers << std::endl;
+    }
+    MineGainWithNumbers = MineNumbers * Minegain;
+    Player->addRubin(MineGainWithNumbers);
+    TransaktionMine(Player);
+    TransaktionShip(Player);
+    clearOrderList(Player);
+
+}
   
 void DataModel::startGame()
 {

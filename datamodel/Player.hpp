@@ -66,6 +66,12 @@ public:
 	int getIdentity();
 
 	/**
+	 * @brief set the identty of the player
+	 * @param ind id to set
+	 */
+	 void setIdentity(int id);
+
+	/**
 	 * @brief returns the number of rubin this player owns
 	 * @return int number of return
 	 */
@@ -96,17 +102,48 @@ public:
 	 */
 	std::string getPlayerName();
 
+	/**
+	 * @brief returns the ship order list
+	 * @return std::list<std::shared_ptr<ShipOrder>> ship order list
+	 */
 	std::list<std::shared_ptr<ShipOrder>> getListShipOrder();
 
+	/**
+	 * @brief add a ship order to the list
+	 * @param std::shared_ptr<ShipOrder> new ship order
+	 */
 	void putListShipOrder(std::shared_ptr<ShipOrder> NewShipOrder);
 
+	/**
+	 * @brief returns mine order list
+	 * @return std::list<std::shared_ptr<MineOrder>> mine order list
+	 */
 	std::list<std::shared_ptr<MineOrder>> getListMineOrder();
 
+	/**
+	 * @brief add a mine order to the list
+	 * @param std::shared_ptr<MineOrder> new mine order
+	 */
 	void putListMineOrder(std::shared_ptr<MineOrder> NewMineOrder);
 
+	/**
+	 * @brief returns the move order list
+	 * @return std::list<std::shared_ptr<MoveOrder>> move order list
+	 */
+	std::list<std::shared_ptr<MoveOrder>> getListMoveOrder();
+
+	/**
+	 * @brief add a move order to the list
+	 * @param std::shared_ptr<MoveOrder> new move order
+	 */
 	void putListMoveOrder(std::shared_ptr<MoveOrder> newMoveOrder);
 
+	/**
+	 * @brief clears the ship, mine and move order list
+	 */
 	void ClearOrderListInPlayer();
+
+	std::list<std::shared_ptr<Planet>> getListOfPLanets();
 
 private:
 
