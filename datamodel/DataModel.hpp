@@ -93,7 +93,11 @@ public:
 
     Player::Ptr getEnemyPlayer();
 
-    //void findBattles();
+    /**
+     * @brief   Finds occuring battles at the end of each round,
+     *          fills list of battles
+     */
+    void findBattles();
 
 private:
     /*Variablen von Kay*/
@@ -120,7 +124,8 @@ private:
     // Map of Windows
     std::map<int, QMainWindow*> m_Window;
 
-    std::list<Battle> m_battles;
+    // List of upcoming battles
+    std::list<std::shared_ptr<Battle>> m_battles;
 };
 
 }

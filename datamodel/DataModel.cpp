@@ -228,6 +228,20 @@ Player::Ptr DataModel::getEnemyPlayer()
     return m_enemy;
 }
 
+void DataModel::findBattles()
+{
+    std::map<int, Planet::Ptr>::iterator it;
+    for(it = m_planets.begin(); it != m_planets.end(); it++)
+    {
+        if(it->second->getInvader() != NULL)
+        {
+            m_battles.push_back(std::shared_ptr<Battle>(new Battle(it->second, it->second->getOwner(), 
+                            it->second->getInvader(), it->second->getShips(),
+                            it->second->getInvaderShips())));
+        }
+    }
+}
+
 DataModel::~DataModel()
 {
 
