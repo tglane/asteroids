@@ -1,6 +1,7 @@
 #ifndef CPP18_ASTEROIDS_HITTABLE_HPP
 #define CPP18_ASTEROIDS_HITTABLE_HPP
 
+#include <QtCore/QTime>
 #include "rendering/Bullet.hpp"
 #include "Transformable.hpp"
 
@@ -17,7 +18,19 @@ public:
 
     int getId() const;
 
+    void setHealth(int health);
+
+    int getHealth();
+
     bool hit(PhysicalBullet& b);
+
+    void outOfBound();
+
+    int getTime();
+
+    void inBound();
+
+    void restartTimer(int mSecs);
 
 private:
 
@@ -27,6 +40,11 @@ private:
 
     int m_id;
 
+    int m_health;
+
+    QTime m_timer;
+
+    bool m_isOutOfBound;
 };
 
 }

@@ -15,6 +15,17 @@ int Hittable::getId() const
     return m_id;
 }
 
+
+void Hittable::setHealth(int health)
+{
+    m_health = health;
+}
+
+int Hittable::getHealth()
+{
+    return m_health;
+}
+
 bool Hittable::hit(PhysicalBullet& b)
 {
 
@@ -69,6 +80,31 @@ float Hittable::signedDistanceToPlane(Vector3f x, Vector3f b, Vector3f e1, Vecto
 float Hittable::magnitude(Vector3f v)
 {
     return sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
+}
+
+void Hittable::outOfBound()
+{
+    if (!m_isOutOfBound)
+    {
+        m_isOutOfBound = true;
+        m_timer.start();
+    }
+}
+
+int Hittable::getTime()
+{
+    return m_timer.elapsed();
+}
+
+void Hittable::inBound()
+{
+    m_isOutOfBound = false;
+}
+
+void Hittable::restartTimer(int mSecs)
+{
+    m_timer.start();
+    m_timer = m_timer.addMSecs(-mSecs);
 }
 
 }

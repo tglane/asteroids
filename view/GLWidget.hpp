@@ -18,6 +18,8 @@
 #include <QOpenGLWidget>
 #include <QWidget>
 #include <QtGui/QPainter>
+#include <QtCore/QTimer>
+#include <QtCore/QTime>
 
 #include "view/Camera.hpp"
 #include "rendering/SpaceCraft.hpp"
@@ -25,6 +27,7 @@
 #include "util/AsteroidField.hpp"
 #include "physics/PhysicsEngine.hpp"
 #include "network/udpclient/udpclient.hpp"
+#include "view/Controller.hpp"
 
 using namespace asteroids;
 using std::shared_ptr;
@@ -80,23 +83,15 @@ private:
     /// Physics 
     PhysicsEngine::Ptr          m_physicsEngine;
 
-    /// Rotation speed of the actor
-    float                       m_rotationSpeed;
+    /// timer for correct speed with low fps
+    QTime                       m_timer;
 
-    /// Translation speed of the actor
-    float                       m_moveSpeed;
-
-    /// Last set mouse position
-    QPoint                      m_mousePos;
-
-    int m_cooldown_enemy;
-
-    int m_cooldown_player;
+    Controller                  m_controller;
 
     /// Udpclient to send pos/mov/rot to the server
     udpclient                   m_client;
 
-    QWidget hudWidget;
+    bool                        m_gameOver;
 };
 
 #endif

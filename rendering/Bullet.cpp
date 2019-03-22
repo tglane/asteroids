@@ -30,7 +30,6 @@ void Bullet::render() {
 	// internal transformation matrix
 	glPushMatrix();
 	glMultMatrixf(m_transformation.getData());
-	//cout << m_transformation << endl;
 	m_sphere.render();
 
 	// Pop transformation matrix of this object
