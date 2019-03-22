@@ -152,44 +152,7 @@ void MainWindow2D::fight(bool click)
 void MainWindow2D::choose_planet(int id)
 {
     
-    Planet::Ptr p = m_model->getPlanetFromId(id);
-
-    if(p->getOwner() != m_model->getSelfPlayer())
-    {
-        // Disable entsprechende Felder, wenn Planet nicht besessen wird
-        ui->SendShip->setEnabled(false);
-        ui->BuildMine->setEnabled(false);
-        ui->BuildShip->setEnabled(false);
-        ui->SendShipNumber->setEnabled(false);
-        ui->DestionationPlanet->setEnabled(false);
-    } else {
-        // Enable entsprechende Felder, wenn Planet besessen wird
-        ui->SendShip->setEnabled(true);
-        ui->BuildMine->setEnabled(true);
-        ui->BuildShip->setEnabled(true);
-        ui->SendShipNumber->setEnabled(true);
-        ui->DestionationPlanet->setEnabled(true);
-
-        std::list<Planet::Ptr> neighbour_list = p->getNeighbours();
-
-        // Lösche die Anzahl der Schiffe des zuletzt ausgewählten Planeten aus der QComboBox
-        ui->SendShipNumber->clear();
-        // Fülle die QComboBox mit der aktuellen Anzahl an Schiffen
-        for(int i = 0; i < p->getShips(); i++)
-        {
-            ui->SendShipNumber->addItem(QString::number(i + 1));
-        }    
-
-        // Lösche die Nachbarplaneten des zuletzt ausgewählten Planeten aus der QComboBox
-        ui->DestionationPlanet->clear();
-        // Fülle die QComboBox mit den aktuellen Nachbarn
-        int j = neighbour_list.size();
-        for(int i = 1; i <= j; i++)
-        {
-            ui->DestionationPlanet->addItem(QString::fromStdString(neighbour_list.front()->getName()));
-            neighbour_list.pop_front();
-        }
-    }
+    updatePlanetInfo(id);
 
     std::map<int, Planet::Ptr> planets = m_model->getPlanets();
 
@@ -243,19 +206,6 @@ void MainWindow2D::choose_planet(int id)
         ellipse->myPen = QPen(Qt::white,1);
     }
 
-    // Planeteninfo ausfüllen
-    ui->PlanetName->setText(QString::fromStdString(p->getName()));
-    ui->MineNumber->setText(QString::number(p->getMinesBuild()));
-    ui->ShipNumber->setText(QString::number(p->getShips()));
-    if (p->getOwner() == NULL)
-    {
-        ui->Info->setText("Niemand besitzt diesen Planeten!");
-    }
-    else
-    {
-        ui->Info->setText(QString::fromStdString(p->getOwner()->getPlayerName()));
-    }
-
 }
 
 void MainWindow2D::endOfRound(bool click)
@@ -264,6 +214,8 @@ void MainWindow2D::endOfRound(bool click)
 
     // fuck this "unused" warnings! :D
     if(succes);
+
+    m_model->calculateFinance(m_model->getSelfPlayer());
 
     updatePlayerInfo();
 
@@ -287,8 +239,8 @@ void MainWindow2D::colonize(bool click /*, Planet* p*/)
     // Aktualisiere Informationen
     ui->Info->setText(QString::fromStdString(p->getOwner()->getPlayerName()));
     ui->ShipNumber->setText(QString::number(p->getShips()));
+    updatePlanetInfo(currentPlanet);
     updatePlayerInfo();
-    choose_planet(currentPlanet);
 }
 
 void MainWindow2D::buildShip(bool click)
@@ -303,8 +255,13 @@ void MainWindow2D::buildShip(bool click)
         return;
     }
 
-    m_model->buyShip(p, p->getOwner());
-    std::cout << "Build Ship!" << std::endl;
+    if (m_model->buyShip(p, p->getOwner()))
+    {
+        std::cout << "Build Ship!" << std::endl;
+        updatePlanetInfo(currentPlanet);
+        updatePlayerInfo();
+    }
+    
 }
 
 void MainWindow2D::buildMine(bool click)
@@ -324,6 +281,8 @@ void MainWindow2D::buildMine(bool click)
     }
 
     m_model->buyMine(p, p->getOwner());
+    updatePlanetInfo(currentPlanet);
+    updatePlayerInfo();
     std::cout << "Build Mine!" << std::endl;
 }
 
@@ -360,6 +319,61 @@ void MainWindow2D::updatePlayerInfo()
         new QLabel(QString::fromStdString("???")));
     ui->SpielerInfoTable->setCellWidget(4, 1, 
         new QLabel(QString::number(m_model->getSelfPlayer()->getShips())));
+}
+
+void MainWindow2D::updatePlanetInfo(int id)
+{
+    Planet::Ptr p = m_model->getPlanetFromId(id);
+
+    if(p->getOwner() != m_model->getSelfPlayer())
+    {
+        // Disable entsprechende Felder, wenn Planet nicht besessen wird
+        ui->SendShip->setVisible(false);
+        ui->BuildMine->setVisible(false);
+        ui->BuildShip->setVisible(false);
+        ui->SendShipNumber->setVisible(false);
+        ui->DestionationPlanet->setVisible(false);
+    } else {
+        // Enable entsprechende Felder, wenn Planet besessen wird
+        ui->SendShip->setVisible(true);
+        ui->BuildMine->setVisible(true);
+        ui->BuildShip->setVisible(true);
+        ui->SendShipNumber->setVisible(true);
+        ui->DestionationPlanet->setVisible(true);
+
+        std::list<Planet::Ptr> neighbour_list = p->getNeighbours();
+
+        // Lösche die Anzahl der Schiffe des zuletzt ausgewählten Planeten aus der QComboBox
+        ui->SendShipNumber->clear();
+        // Fülle die QComboBox mit der aktuellen Anzahl an Schiffen
+        for(int i = 0; i < p->getShips(); i++)
+        {
+            ui->SendShipNumber->addItem(QString::number(i + 1));
+        }    
+
+        // Lösche die Nachbarplaneten des zuletzt ausgewählten Planeten aus der QComboBox
+        ui->DestionationPlanet->clear();
+        // Fülle die QComboBox mit den aktuellen Nachbarn
+        int j = neighbour_list.size();
+        for(int i = 1; i <= j; i++)
+        {
+            ui->DestionationPlanet->addItem(QString::fromStdString(neighbour_list.front()->getName()));
+            neighbour_list.pop_front();
+        }
+    }
+
+    // Planeteninfo ausfüllen
+    ui->PlanetName->setText(QString::fromStdString(p->getName()));
+    ui->MineNumber->setText(QString::number(p->getMinesBuild()));
+    ui->ShipNumber->setText(QString::number(p->getShips()));
+    if (p->getOwner() == NULL)
+    {
+        ui->Info->setText("Niemand besitzt diesen Planeten!");
+    }
+    else
+    {
+        ui->Info->setText(QString::fromStdString(p->getOwner()->getPlayerName()));
+    }
 }
 
 void MainWindow2D::showPlayerName()

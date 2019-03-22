@@ -33,7 +33,7 @@ void DataModel::getUniverse(std::string filename)
         for(int i = 0; i < numvertex; i++)
         {
             f >> name >> posx >> posy >> mines;
-            Planet::Ptr p = Planet::Ptr(new Planet(name, posx, posy));
+            Planet::Ptr p = Planet::Ptr(new Planet(name, posx, posy, mines));
 
             m_planets[i] = p;
             m_nameToPlanets[name] = p;
@@ -76,6 +76,8 @@ bool DataModel::endOfRound()
     // return if network response was succesful
     return true;
 }
+
+
 /*Code von Kay Bauer*/
 bool DataModel::buyShip(Planet::Ptr selectedPlanet, Player::Ptr Player1)
 {
@@ -127,15 +129,16 @@ bool DataModel::buyMine(Planet::Ptr selectedPlanet, Player::Ptr Player1)
 {
     /*test druck*/
     std::cout << "Test für buyMine" << std::endl;
+    std::cout << selectedPlanet->getMinesBuild() << std::endl;
     std::cout << selectedPlanet->getMines() << std::endl;
-    std::cout << Player1->getRubin() << std::endl;
     /*test druck ende*/
-    if(selectedPlanet->getMines() == 0)
+    if(selectedPlanet->getMinesHidden() < selectedPlanet->getMines())
     {
         int Player_Rubin_Number = Player1->getRubin();
         if(Player_Rubin_Number >= Minecost)
         {
             Player1->delRubin(Minecost);
+            selectedPlanet->setMinesHidden();
              /*test druck*/
             std::cout << Player1->getRubin() << std::endl;
             /*test druck ende*/
@@ -162,7 +165,7 @@ void DataModel::TransaktionMine(Player::Ptr Player1)
 
         Planet::Ptr NewShipToPlanet = NewOrder->getPlanet();
 
-        NewShipToPlanet->addMines(1);
+        NewShipToPlanet->setMinesBuild();
 
 
 
@@ -181,9 +184,6 @@ void DataModel::TransaktionShip(Player::Ptr Player1)
         Planet::Ptr NewShipToPlanet = NewOrder->getPlanet();
 
         NewShipToPlanet->addShips(1);
-
-
-
     }
 
 
@@ -192,7 +192,6 @@ void DataModel::TransaktionShip(Player::Ptr Player1)
 void DataModel::clearOrderList(Player::Ptr Player1)
 {
     Player1->ClearOrderListInPlayer();
-
 }
 
 Planet::Ptr DataModel::getPlanetFromId(int ID)
@@ -205,10 +204,29 @@ Planet::Ptr DataModel::getPlanetFromName(std::string name)
     return m_nameToPlanets[name];
 }
 
+void DataModel::calculateFinance(Player::Ptr Player)
+{
+    std::list<std::shared_ptr<Planet>> m_planetsForGain = Player->getListOfPLanets();
+    int MineNumbers = 0;
+    int MineGainWithNumbers = 0;
+    for(std::list<std::shared_ptr<Planet>>::iterator it = m_planetsForGain.begin(); it != m_planetsForGain.end(); ++it)
+    {
+        Planet::Ptr PlanetFromPlayer = *it;
+
+        MineNumbers += PlanetFromPlayer->getMinesBuild();
+        std::cout <<"Test MineNumbers"<< std::endl;
+        std::cout << MineNumbers << std::endl;
+    }
+    MineGainWithNumbers = MineNumbers * Minegain;
+    Player->addRubin(MineGainWithNumbers);
+    TransaktionMine(Player);
+    TransaktionShip(Player);
+    clearOrderList(Player);
+
+}
   
 void DataModel::startGame()
 {
-
 
 }
 
@@ -223,14 +241,12 @@ void DataModel::setStartPlanet(std::shared_ptr<Planet> startplanet)
 void DataModel::addWindow(int Id, QMainWindow* Window)
 {
     m_Window[Id] = Window;
-
 }
 
 void DataModel::switchWindow(int Id)
 {
     QMainWindow* Active = m_Window[Id];
-    Active->showFullScreen();
-    
+    Active->showFullScreen();  
 }
 
 Player::Ptr DataModel::getSelfPlayer()
@@ -245,8 +261,7 @@ Player::Ptr DataModel::getEnemyPlayer()
 
 DataModel::~DataModel()
 {
-    /*delete m_self;
-    delete m_enemy;*/
+
 }
 
 }

@@ -11,6 +11,7 @@
 #include "MoveOrder.hpp"
 #include "MineOrder.hpp"
 #include "ShipOrder.hpp"
+#include "Battle.hpp"
 
 using std::map;
 
@@ -57,8 +58,6 @@ public:
      */
     bool endOfRound();
 
-    /*Code von Kay Bauer*/
-
     /*Kauf Methoden start*/
     bool buyShip(Planet::Ptr selectedPlanet, Player::Ptr Player1);
 
@@ -78,6 +77,8 @@ public:
     Planet::Ptr getPlanetFromName(std::string name);
 
     std::list<std::pair<int,int>> getEdges();
+
+    void calculateFinance(Player::Ptr Player);
     
     void startGame();
     /**
@@ -94,12 +95,16 @@ public:
 
     Player::Ptr getEnemyPlayer();
 
+    //void findBattles();
+
 private:
     /*Variablen von Kay*/
 
     int Shipcost = 500;
 
     int Minecost = 1000;
+
+    int Minegain = 750;
     /**
      * @brief   Loads all the planets from the given file
      */
@@ -121,6 +126,7 @@ private:
     // Map of Windows
     std::map<int, QMainWindow*> m_Window;
 
+    std::list<Battle> m_battles;
 };
 
 }
