@@ -259,17 +259,36 @@ void DataModel::findBattles()
     std::map<int, Planet::Ptr>::iterator it;
     for(it = m_planets.begin(); it != m_planets.end(); it++)
     {
-        if(it->second->getInvader() != NULL)
+        Planet::Ptr p = it->second;
+        if(p->getInvader() != NULL)
         {
-            m_battles.push_back(std::shared_ptr<Battle>(new Battle(it->second, it->second->getOwner(), 
-                            it->second->getInvader(), it->second->getShips(),
-                            it->second->getInvaderShips())));
+            // In case the defender ships are not present anymore
+            if(p->getShips() == 0)
+            {
+                p->setOwner(p->getInvader());
+                p->addShips(p->getInvaderShips());
+
+            }
+            else
+            {
+                //everything for battle is ready
+                m_battles.push_back(std::shared_ptr<Battle>(new Battle(p, p->getOwner(), 
+                                p->getInvader(), p->getShips(),
+                                p->getInvaderShips())));
+            }
+            p->setInvader(NULL);
         }
     }
 }
 
-QJsonDocument DataModel::createJson()
+QJsonDocument DataModel::createJson(Player::Ptr player)
 {
+    // main QJson object in the document
+    QJsonObject main;
+
+    //insert id of the player
+    main.insert("ID", player->getIdentity());
+
     return QJsonDocument();
 }
 

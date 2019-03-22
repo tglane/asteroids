@@ -112,9 +112,10 @@ public:
 
     /**
      * @brief Creates Json File, which includes information about a certain player and his planets
+     * @param player The player for which the information should be sent
      * @return the created Json File
      */
-    QJsonDocument createJson();
+    QJsonDocument createJson(Player::Ptr player);
 
 
     void performMovements();
