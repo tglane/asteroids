@@ -133,6 +133,7 @@ void GLWidget::initializeGL()
     }
 
     m_useGamepad = m_controller.gamepadAvailable();
+    m_outOfBound = false;
 
     m_timer.start();
 }
@@ -163,6 +164,19 @@ void GLWidget::paintGL()
     painter.drawPixmap(0, 0, this->width(), this->height(), hud);
 
     drawHealth(painter, m_camera->getHealth(), m_enemy->getHealth());
+
+    if (m_gameOver)
+    {
+        QPixmap won("../models/won.png");
+        QPixmap lost("../models/lost.png");
+        painter.drawPixmap(0, 0, this->width(), this->height(), (m_camera->getHealth() > 0) ? won : lost);
+    }
+
+    if (m_outOfBound && !m_gameOver)
+    {
+        QPixmap turnWarning("../models/turn_warning.png");
+        painter.drawPixmap(0, 0, this->width(), this->height(), turnWarning);
+    }
 
     // paint with OpenGL
 //    glMatrixMode(GL_PROJECTION);
@@ -222,32 +236,44 @@ void GLWidget::step(map<Qt::Key, bool>& keyStates)
         }
 
         Vector3f player_pos = m_camera->getPosition();
-        if (player_pos[0] > 4500 || player_pos[1] > 4500 || player_pos[2] > 4500) {
+        if (std::abs(player_pos[0]) > 4500 || std::abs(player_pos[1]) > 4500 || std::abs(player_pos[2]) > 4500)
+        {
             m_camera->outOfBound();
             int time = m_camera->getTime();
-            if (time > 1000) {
+            if (time > 1000)
+            {
                 m_camera->restartTimer(time - 1000);
                 m_camera->setHealth(m_camera->getHealth() - 1);
-                if (m_camera->getHealth() == 0) {
+                if (m_camera->getHealth() == 0)
+                {
                     m_gameOver = true;
                 }
             }
-        } else {
+            m_outOfBound = true;
+        }
+        else
+        {
             m_camera->inBound();
+            m_outOfBound = false;
         }
 
         Vector3f enemy_pos = m_enemy->getPosition();
-        if (enemy_pos[0] > 4500 || enemy_pos[1] > 4500 || enemy_pos[2] > 4500) {
+        if (std::abs(enemy_pos[0]) > 4500 || std::abs(enemy_pos[1]) > 4500 || std::abs(enemy_pos[2]) > 4500)
+        {
             m_enemy->outOfBound();
             int time = m_enemy->getTime();
-            if (time > 1000) {
+            if (time > 1000)
+            {
                 m_enemy->restartTimer(time - 1000);
                 m_enemy->setHealth(m_enemy->getHealth() - 1);
-                if (m_enemy->getHealth() == 0) {
+                if (m_enemy->getHealth() == 0)
+                {
                     m_gameOver = true;
                 }
             }
-        } else {
+        }
+        else
+        {
             m_enemy->inBound();
         }
     }
@@ -262,13 +288,14 @@ void GLWidget::drawHealth(QPainter& painter, int healthPlayer, int healthEnemy)
     int height = (int) (size - 2 * size * gap);
     int width = (int) (height * 1.1);
 
-    QPixmap heart("../models/heart.png");
+    QPixmap playerHeart("../models/player_heart.png");
+    QPixmap enemyHeart("../models/enemy_heart.png");
     QPixmap emptyHeart("../models/empty_heart.png");
 
     for (int i = 0; i < 10; i++)
     {
-        painter.drawPixmap((int) (size * i + size * gap), (int) (size * gap), width, height, (i < healthPlayer) ? heart : emptyHeart);
-        painter.drawPixmap((int) (this->width() - size - (size * i + size * gap)), (int) (size * gap), width, height, (i < healthEnemy) ? heart : emptyHeart);
+        painter.drawPixmap((int) (size * i + size * gap), (int) (size * gap), width, height, (i < healthPlayer) ? playerHeart : emptyHeart);
+        painter.drawPixmap((int) (this->width() - size - (size * i + size * gap)), (int) (size * gap), width, height, (i < healthEnemy) ? enemyHeart : emptyHeart);
     }
 }
 

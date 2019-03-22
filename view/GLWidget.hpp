@@ -87,6 +87,8 @@ private:
 
     bool                        m_gameOver;
 
+    bool                        m_outOfBound;
+
     bool                        m_useGamepad;
 };
 
