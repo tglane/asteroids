@@ -6,7 +6,14 @@
 #include "MoveOrder.hpp"
 
 #include <map>
+
 #include <QMainWindow>
+
+#include <QCoreApplication>
+#include <QJsonObject>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QString>
 
 #include "MoveOrder.hpp"
 #include "MineOrder.hpp"
@@ -93,11 +100,16 @@ public:
 
     Player::Ptr getEnemyPlayer(int id);
 
+    void updateAll(QJsonDocument update);
+
+
+
     /**
      * @brief   Finds occuring battles at the end of each round,
      *          fills list of battles
      */
     void findBattles();
+
 
 private:
 
