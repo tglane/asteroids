@@ -251,8 +251,9 @@ void DataModel::switchWindow(int Id)
     Active->showFullScreen();
     
 }
-
+//TODO ordentliche Fehlerbehandlung + Doku + manche (unnötige) Felder in Player koennen mit Infos aus File nicht aktualisiert werden
 bool DataModel::updateAll(QJsonDocument &update) {
+
 	if (update.isObject() && !update.isEmpty())
 	{
 
@@ -294,23 +295,24 @@ bool DataModel::updateAll(QJsonDocument &update) {
 					for (it1 = array.constBegin(); it1 != array.constEnd(); it1++)
 					{
 						planet = getPlanetFromId(it1->toObject(QJsonObject()).value("ID").toInt());
-						mines = it1->toObject(QJsonObject()).value("Mines");
-						ships = it1->toObject(QJsonObject()).value("Ships");
+						mines = it1->toObject(QJsonObject()).value("Mines").toInt();
+						ships = it1->toObject(QJsonObject()).value("Ships").toInt();
 
 						planet->setMines(mines);
 						planet->setShips(ships);
 
-					}
+						planets.push_back(planet);
+
+					}//End Iterator Array
 				}
-				else return false;
 			}
-		}
 
+		}//End Iterator File
 
-
-		return true;
+		player->setPlanetsList(planets);
 	}
-	else return false;
+	return true;
+
 }
 
 Player::Ptr DataModel::getSelfPlayer()

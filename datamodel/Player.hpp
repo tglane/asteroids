@@ -49,6 +49,15 @@ public:
 
 	int getMines();
 
+	void setShips(int ships);
+
+	void setMines(int mines);
+
+	/**
+	 * @brief sets/replaces the list containing my planets
+	 */
+	void setPlanetsList(std::list<std::shared_ptr<Planet>> planets);
+
 	/**
 	 * @brief adds planet to the planetslist of the player
 	 * @param shared ptr planet to add
