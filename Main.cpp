@@ -20,7 +20,7 @@
 int main(int argc, char** argv)
 {
 
-    DataModel::Ptr model = DataModel::Ptr(new DataModel("../models/Level-1.txt"));
+    DataModel::Ptr model = DataModel::Ptr(new DataModel("../models/Level-1.map"));
 
     QApplication a(argc, argv);
 
@@ -31,8 +31,6 @@ int main(int argc, char** argv)
 
     strategy::StartingDialog startWindow(model);
     startWindow.show();
-
-    //mainWindow2D.showFullScreen();
 
     return a.exec();
 }

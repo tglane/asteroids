@@ -39,13 +39,15 @@ public:
 	 * @param int rubin = 0
 	 * @paran int ships = 0
 	 */
-	Player(int identity, int rubin = 0, int ships = 0);
+	Player(int identity, int rubin = 3000, int ships = 0);
 
 	/**
 	 * @brief returns the number of ships
 	 * @return int number of ships
 	 */
 	int getShips();
+
+	int getMines();
 
 	/**
 	 * @brief adds planet to the planetslist of the player
@@ -83,6 +85,16 @@ public:
 	 *
 	 */
 	void addRubin(int rubin);
+
+	/**
+	 * @brief increase ship-counter
+	 */
+	void incShips();
+
+	/**
+	 * @brief increase mines-counter
+	 */
+	void incMines();
 
 	/**
 	 * @brief decrease the rubin this player owns
@@ -152,6 +164,7 @@ private:
 	int m_rubin;
 	//freie Raumschiffe?
 	int m_ships;
+	int m_mines;
 	std::list<std::shared_ptr<Planet>> m_planets;
 
 	std::list<std::shared_ptr<MoveOrder>> m_moveOrders;

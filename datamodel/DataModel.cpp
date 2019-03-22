@@ -7,9 +7,11 @@ namespace asteroids{
 
 DataModel::DataModel(std::string filename) : m_players(), m_planets(), m_edges()
 {
-    // no data when initialized, name and id are set later
-    // when id is given this player will be added to the map with its id
-    m_self = Player::Ptr(new Player());
+    // player which runs this programm
+    m_self = Player::Ptr(new Player(1,3000,0));
+
+    // enemy/ies that run the programm on other devices
+    // information from network is needed
     m_enemy = Player::Ptr(new Player());
 
     // when networking issues are solved the map is loaded later
@@ -36,6 +38,7 @@ void DataModel::getUniverse(std::string filename)
             Planet::Ptr p = Planet::Ptr(new Planet(name, posx, posy, mines));
 
             m_planets[i] = p;
+            m_nameToPlanets[name] = p;
         }
 
         // add the edges to the map
@@ -67,6 +70,8 @@ std::list<std::pair<int,int>> DataModel::getEdges()
 bool DataModel::endOfRound()
 {
     std::cout << "End of Round!" << std::endl;
+
+    calculateFinance(getSelfPlayer());
     // TODO Update players ressources, money, ships, planets, mines
 
     // TODO make a json-data-package from the data and send it to the server
@@ -130,7 +135,6 @@ bool DataModel::buyMine(Planet::Ptr selectedPlanet)
     std::cout << "Test für buyMine" << std::endl;
     std::cout << selectedPlanet->getMinesBuild() << std::endl;
     std::cout << selectedPlanet->getMines() << std::endl;
-
     /*test druck ende*/
     if(selectedPlanet->getMinesHidden() < selectedPlanet->getMines())
     {
@@ -196,7 +200,12 @@ Planet::Ptr DataModel::getPlanetFromId(int ID)
     return m_planets.at(ID);
 }
 
-void DataModel::calculateFinance()
+Planet::Ptr DataModel::getPlanetFromName(std::string name)
+{
+    return m_nameToPlanets[name];
+}
+
+void DataModel::calculateFinance(Player::Ptr Player)
 {
     std::list<std::shared_ptr<Planet>> m_planetsForGain = m_self->getListOfPLanets();
     int MineNumbers = 0;
@@ -227,7 +236,6 @@ void DataModel::setStartPlanet(std::shared_ptr<Planet> startplanet)
 	startplanet->setOwner(m_self);
 	startplanet->addShips(1);
 	m_self->addPlanet(startplanet);
-	startplanet->addShips(1);
 }
 
 void DataModel::addWindow(int Id, QMainWindow* Window)
@@ -238,7 +246,8 @@ void DataModel::addWindow(int Id, QMainWindow* Window)
 void DataModel::switchWindow(int Id)
 {
     QMainWindow* Active = m_Window[Id];
-    Active->showFullScreen();  
+    Active->showFullScreen();
+    
 }
 
 void DataModel::updateAll(QJsonDocument update) {

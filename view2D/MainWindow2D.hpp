@@ -46,6 +46,8 @@ public:
 
     void updatePlayerInfo();
 
+    void updatePlanetInfo(int id);
+
 public slots:
 
     /**
@@ -72,7 +74,7 @@ public slots:
 
     /**
      * @brief   Is called when the colonization button is pressed
-     *          Starts an attemp to colonize the new Planet between the rounds
+     *          Starts an attemp to colonize the start planet
      *          
      */
     void colonize(bool click/*, Planet* p*/);
@@ -84,11 +86,23 @@ public slots:
     void buildShip(bool click);
 
     /**
+     * @brief   Builds a mine on a planet if it doesn't already have one
+     */
+    void buildMine(bool click);
+
+    /**
+     * @brief   Send Ships to choosen planet
+     */
+    void sendShips(bool click);
+
+    /**
      * @brief   Is calle when exit Button is pressed, 
      */
     void exitGame(bool click);
 
     MyEllipse* getEllipseById(int id);
+
+    void showPlayerName();
 
 private:
 

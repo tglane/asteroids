@@ -58,6 +58,21 @@ void Player::addRubin(int add)
 	m_rubin += add;
 }
 
+void Player::incShips()
+{
+	m_ships++;
+}
+
+void Player::incMines()
+{
+	m_mines++;
+}
+
+int Player::getMines()
+{
+	return m_mines;
+}
+
 bool Player::delRubin(int del) 
 {
 	if (del > m_rubin) {
