@@ -47,6 +47,8 @@ public:
 	 */
 	int getShips();
 
+	int getMines();
+
 	/**
 	 * @brief adds planet to the planetslist of the player
 	 * @param shared ptr planet to add
@@ -83,6 +85,16 @@ public:
 	 *
 	 */
 	void addRubin(int rubin);
+
+	/**
+	 * @brief increase ship-counter
+	 */
+	void incShips();
+
+	/**
+	 * @brief increase mines-counter
+	 */
+	void incMines();
 
 	/**
 	 * @brief decrease the rubin this player owns
@@ -152,6 +164,7 @@ private:
 	int m_rubin;
 	//freie Raumschiffe?
 	int m_ships;
+	int m_mines;
 	std::list<std::shared_ptr<Planet>> m_planets;
 
 	std::list<std::shared_ptr<MoveOrder>> m_moveOrders;

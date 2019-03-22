@@ -36,6 +36,7 @@ int Planet::getShips()
 void Planet::addShips(int ships) 
 {
 	m_ships += ships;
+	m_owner->incShips();
 }
 
 bool Planet::delShips(int ships) 
@@ -142,7 +143,7 @@ int Planet::getMinesBuild()
 void Planet::setMinesBuild()
 {
 	m_minesbuild += 1;
-
+	m_owner->incMines();
 }
 
 }

@@ -68,6 +68,8 @@ std::list<std::pair<int,int>> DataModel::getEdges()
 bool DataModel::endOfRound()
 {
     std::cout << "End of Round!" << std::endl;
+
+    calculateFinance(getSelfPlayer());
     // TODO Update players ressources, money, ships, planets, mines
 
     // TODO make a json-data-package from the data and send it to the server
@@ -235,7 +237,6 @@ void DataModel::setStartPlanet(std::shared_ptr<Planet> startplanet)
 	startplanet->setOwner(m_self);
 	startplanet->addShips(1);
 	m_self->addPlanet(startplanet);
-	startplanet->addShips(1);
 }
 
 void DataModel::addWindow(int Id, QMainWindow* Window)

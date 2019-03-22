@@ -167,7 +167,6 @@ void MainWindow2D::fight(bool click)
 
 void MainWindow2D::choose_planet(int id)
 {
-    
     updatePlanetInfo(id);
 
     std::map<int, Planet::Ptr> planets = m_model->getPlanets();
@@ -221,7 +220,6 @@ void MainWindow2D::choose_planet(int id)
         currentPlanet = id;
         ellipse->myPen = QPen(Qt::white,1);
     }
-
 }
 
 void MainWindow2D::endOfRound(bool click)
@@ -231,14 +229,14 @@ void MainWindow2D::endOfRound(bool click)
     // fuck this "unused" warnings! :D
     if(succes);
 
-    m_model->calculateFinance(m_model->getSelfPlayer());
 
     updatePlayerInfo();
+    updatePlanetInfo(currentPlanet);
 
     // TODO wait for response of server, block the window until all players are ready
 }
 
-void MainWindow2D::colonize(bool click /*, Planet* p*/)
+void MainWindow2D::colonize(bool click)
 {
     Planet::Ptr p = m_model->getPlanetFromId(currentPlanet);
 
@@ -276,8 +274,9 @@ void MainWindow2D::buildShip(bool click)
         std::cout << "Build Ship!" << std::endl;
         updatePlanetInfo(currentPlanet);
         updatePlayerInfo();
+    } else {
+        std::cout << "Fehler MainWindow2D: Build Ship!" << std::endl;
     }
-    
 }
 
 void MainWindow2D::buildMine(bool click)
@@ -296,10 +295,15 @@ void MainWindow2D::buildMine(bool click)
         return;
     }
 
-    m_model->buyMine(p, p->getOwner());
-    updatePlanetInfo(currentPlanet);
-    updatePlayerInfo();
-    std::cout << "Build Mine!" << std::endl;
+    if (m_model->buyMine(p, p->getOwner()))
+    {
+        updatePlanetInfo(currentPlanet);
+        updatePlayerInfo();
+        std::cout << "Build Mine!" << std::endl;
+    } else {
+        std::cout << "Fehler MainWindow2D: Build Mine!" << std::endl;
+    }
+    
 }
 
 void MainWindow2D::sendShips(bool click)
@@ -332,7 +336,7 @@ void MainWindow2D::updatePlayerInfo()
     ui->SpielerInfoTable->setCellWidget(2, 1, 
         new QLabel(QString::number(m_model->getSelfPlayer()->getPlanets().size())));
     ui->SpielerInfoTable->setCellWidget(3, 1, 
-        new QLabel(QString::fromStdString("???")));
+        new QLabel(QString::number(m_model->getSelfPlayer()->getMines())));
     ui->SpielerInfoTable->setCellWidget(4, 1, 
         new QLabel(QString::number(m_model->getSelfPlayer()->getShips())));
 }
