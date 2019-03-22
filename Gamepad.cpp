@@ -2,6 +2,8 @@
 
 namespace asteroids {
 
+Gamepad::Gamepad(QObject *parent) : QObject(parent), m_aPressed(false), m_r2(0), m_leftX(0), m_leftY(0) {}
+
 bool Gamepad::init()
 {
     auto gamepads = QGamepadManager::instance()->connectedGamepads();
@@ -26,6 +28,14 @@ bool Gamepad::init()
     {
         m_leftY = value;
     });
+    connect(m_gamepad, &QGamepad::buttonR1Changed, this, [this](bool pressed)
+    {
+        m_r1Pressed = pressed;
+    });
+    connect(m_gamepad, &QGamepad::buttonL1Changed, this, [this](bool pressed)
+    {
+        m_l1Pressed = pressed;
+    });
     return true;
 }
 
@@ -47,6 +57,16 @@ double Gamepad::getLeftX() const
 double Gamepad::getLeftY() const
 {
     return m_leftY;
+}
+
+bool Gamepad::isR1Pressed() const
+{
+    return m_r1Pressed;
+}
+
+bool Gamepad::isL1Pressed() const
+{
+    return m_l1Pressed;
 }
 
 }
