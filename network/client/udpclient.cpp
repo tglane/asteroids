@@ -11,7 +11,7 @@ udpclient::udpclient(QObject *parent)
 
     m_ip = "192.168.0.42";
 
-    socket = std::make_shared<QUdpSocket>(QUdpSocket(this));
+    socket = std::make_shared<QUdpSocket>(this);
     seq_number = 1;
 
     socket->bind(QHostAddress(QString("0.0.0.0")), 1234);

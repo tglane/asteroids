@@ -9,6 +9,9 @@
 
 #include <QtCore/QObject>
 #include <QTcpSocket>
+#include <QJsonObject>
+#include <QJsonArray>
+#include <QJsonDocument>
 #include <memory>
 
 #include "physics/PhysicsEngine.hpp"
@@ -20,18 +23,33 @@ class tcpclient : public QObject {
 
     Q_OBJECT
 
+    enum client_state { CONNECTING, READY, ROUND, END_ROUND, FIGHT };
+
 public:
 
-    tcpclient(QString server_ip, QObject* parent = 0);
+    tcpclient(QString player_name, QString server_ip, QObject* parent = 0);
 
     void connect_to_server(string player_name);
 
 private slots:
     void send_init();
 
+    void recv_json();
+
 private:
 
-    enum client_state { init, init_res, ready, strat_init, state };
+    /// receive id (and map/level name)
+    void process_init_res(QJsonObject recv_obj);
+
+    /// receive player list
+    void process_strat_init(QJsonObject recv_obj);
+
+    /// receive new data state after a strat round
+    void process_state(QJsonObject recv_obj);
+
+    client_state m_state; /// Represents tcp client state
+
+    QString m_player_name;
 
     QString m_server_ip;
 
