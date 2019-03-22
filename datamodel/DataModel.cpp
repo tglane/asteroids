@@ -75,6 +75,8 @@ bool DataModel::endOfRound()
     // return if network response was succesful
     return true;
 }
+
+
 /*Code von Kay Bauer*/
 bool DataModel::buyShip(Planet::Ptr selectedPlanet, Player::Ptr Player1)
 {
@@ -182,9 +184,6 @@ void DataModel::TransaktionShip(Player::Ptr Player1)
         Planet::Ptr NewShipToPlanet = NewOrder->getPlanet();
 
         NewShipToPlanet->addShips(1);
-
-
-
     }
 
 
@@ -193,7 +192,6 @@ void DataModel::TransaktionShip(Player::Ptr Player1)
 void DataModel::clearOrderList(Player::Ptr Player1)
 {
     Player1->ClearOrderListInPlayer();
-
 }
 
 Planet::Ptr DataModel::getPlanetFromId(int ID)
@@ -225,7 +223,6 @@ void DataModel::calculateFinance(Player::Ptr Player)
 void DataModel::startGame()
 {
 
-
 }
 
 void DataModel::setStartPlanet(std::shared_ptr<Planet> startplanet)
@@ -239,14 +236,12 @@ void DataModel::setStartPlanet(std::shared_ptr<Planet> startplanet)
 void DataModel::addWindow(int Id, QMainWindow* Window)
 {
     m_Window[Id] = Window;
-
 }
 
 void DataModel::switchWindow(int Id)
 {
     QMainWindow* Active = m_Window[Id];
-    Active->showFullScreen();
-    
+    Active->showFullScreen();  
 }
 
 Player::Ptr DataModel::getSelfPlayer()
@@ -261,8 +256,7 @@ Player::Ptr DataModel::getEnemyPlayer()
 
 DataModel::~DataModel()
 {
-    /*delete m_self;
-    delete m_enemy;*/
+
 }
 
 }
