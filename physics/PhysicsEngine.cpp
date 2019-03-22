@@ -10,7 +10,6 @@
  *  No unauthorized distribution.
  */
 
-
 #include "PhysicsEngine.hpp"
 
 #include <iostream>
@@ -37,11 +36,17 @@ void PhysicsEngine::addBullet(Bullet::Ptr& bullet)
     m_bullets.insert(std::pair<int, Bullet::Ptr >(bullet->get_id(), bullet));
 }
 
-void PhysicsEngine::process()
+bool PhysicsEngine::process(int elapsed_time)
 {
     map<int, Hittable::Ptr>::iterator h_it;
     map<int, PhysicalObject::Ptr>::iterator p_it;
     map<int, Bullet::Ptr>::iterator b_it;
+
+    bool gameOver = false;
+    if (m_hittables.size() == 1)
+    {
+        gameOver = true;
+    }
 
     // Move all objects
     for (p_it = m_objects.begin(); p_it != m_objects.end(); p_it++)
@@ -56,7 +61,7 @@ void PhysicsEngine::process()
     while (b_it != m_bullets.end())
     {
         Bullet::Ptr b = (*b_it).second;
-        b->run();
+        b->run(elapsed_time);
 
         // Check for collisions with present objects
         /**p_it = m_objects.begin();
@@ -85,6 +90,16 @@ void PhysicsEngine::process()
             if (b->get_shooter_id() != (*h_it).second->getId() && (*h_it).second->hit(*b))
             {
                 std::cout << "Treffer an Spieler " << (*h_it).second->getId() << std::endl;
+                b->destroy();
+                if (m_hittables.size() > 1)
+                {
+                    (*h_it)->setHealth((*h_it)->getHealth() - 1);
+                    if ((*h_it)->getHealth() == 0)
+                    {
+                        m_particles.addEffect(ParticleEffect::createExplosionSphere((*h_it)->getPosition()));
+                        h_it = m_hittables.erase(h_it);
+                    }
+                }
             }
             h_it++;
         }*/
@@ -103,6 +118,8 @@ void PhysicsEngine::process()
     }
 
     m_particles.update();
+
+    return gameOver;
 }
 
 void PhysicsEngine::render()

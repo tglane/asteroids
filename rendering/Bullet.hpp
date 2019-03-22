@@ -46,7 +46,6 @@ public:
 
     virtual ~Bullet() = default;
 
-
     /**
      * @brief Renders the bullet via glutSolidSphere.
      */

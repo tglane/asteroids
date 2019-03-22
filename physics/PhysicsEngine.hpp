@@ -71,7 +71,7 @@ public:
     /**
      * @brief   The engine's main loop
      */
-    void process();
+    bool process(int elapsed_time);
 
     void process_collisions(int id_one, int id_two);
     void check_id_type(int id_to_check);
