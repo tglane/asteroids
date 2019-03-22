@@ -174,7 +174,7 @@ void PhysicsEngine::check_id_type(int id_to_check)
         {
             //TODO change health of spaceship if collision with spaceship
             if(m_hittables.count(id_to_check) == 1) {
-                int health = m_hittables[id_to_check]->getHealth()
+                int health = m_hittables[id_to_check]->getHealth();
                 m_hittables[id_to_check]->setHealth(health - 1);
                 if (health <= 0)
                 {
