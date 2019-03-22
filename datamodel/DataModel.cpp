@@ -218,6 +218,10 @@ void DataModel::switchWindow(int Id)
     Active->showFullScreen();  
 }
 
+void DataModel::updateAll(QJsonDocument update) {
+
+}
+
 Player::Ptr DataModel::getSelfPlayer()
 {
     return m_self;

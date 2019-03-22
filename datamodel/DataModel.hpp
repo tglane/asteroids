@@ -6,7 +6,14 @@
 #include "MoveOrder.hpp"
 
 #include <map>
+
 #include <QMainWindow>
+
+#include <QCoreApplication>
+#include <QJsonObject>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QString>
 
 #include "MoveOrder.hpp"
 #include "MineOrder.hpp"
@@ -92,6 +99,8 @@ public:
     Player::Ptr getSelfPlayer();
 
     Player::Ptr getEnemyPlayer();
+
+    void updateAll(QJsonDocument update);
 
     //void findBattles();
 
