@@ -4,7 +4,7 @@
 #include <QMouseEvent>
 #include <SDL2/SDL.h>
 #include <QtGui/QPainter>
-#include <SOIL.h>
+//#include <SOIL.h>
 
 GLWidget::GLWidget(QWidget* parent) : QOpenGLWidget(parent), m_gameOver(false) {}
 
