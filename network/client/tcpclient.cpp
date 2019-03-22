@@ -5,7 +5,7 @@
 #include <QDebug>
 #include "tcpclient.hpp"
 
-tcpclient::tcpclient(QString player_name, QString server_ip, QObject* parent = 0)
+tcpclient::tcpclient(QString player_name, QString server_ip, QObject* parent)
     : m_server_ip(std::move(server_ip)), m_player_name(std::move(player_name))
 {
     m_socket = std::make_shared<QTcpSocket>(this);
