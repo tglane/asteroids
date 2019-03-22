@@ -11,6 +11,7 @@
 #include "MoveOrder.hpp"
 #include "MineOrder.hpp"
 #include "ShipOrder.hpp"
+#include "Battle.hpp"
 
 using std::map;
 
@@ -92,6 +93,8 @@ public:
 
     Player::Ptr getEnemyPlayer();
 
+    //void findBattles();
+
 private:
     /*Variablen von Kay*/
 
@@ -117,6 +120,7 @@ private:
     // Map of Windows
     std::map<int, QMainWindow*> m_Window;
 
+    std::list<Battle> m_battles;
 };
 
 }
