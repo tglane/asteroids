@@ -5,14 +5,13 @@
 
 namespace asteroids{
 
-DataModel::DataModel(std::string filename) : m_planets(), m_edges()
+DataModel::DataModel(std::string filename) : m_players(), m_planets(), m_edges()
 {
-    // player which runs this programm
+    // no data when initialized, name and id are set later
+    // when id is given this player will be added to the map with its id
     m_self = Player::Ptr(new Player());
 
-    // enemy/ies that run the programm on other devices
-    // information from network is needed
-    m_enemy = Player::Ptr(new Player());
+    // when networking issues are solved the map is loaded later
     getUniverse(filename);
 }
 
@@ -33,7 +32,7 @@ void DataModel::getUniverse(std::string filename)
         for(int i = 0; i < numvertex; i++)
         {
             f >> name >> posx >> posy >> mines;
-            Planet::Ptr p = Planet::Ptr(new Planet(name, posx, posy));
+            Planet::Ptr p = Planet::Ptr(new Planet(name, posx, posy, mines));
 
             m_planets[i] = p;
         }
@@ -78,22 +77,22 @@ bool DataModel::endOfRound()
 
 
 /*Code von Kay Bauer*/
-bool DataModel::buyShip(Planet::Ptr selectedPlanet, Player::Ptr Player1)
+bool DataModel::buyShip(Planet::Ptr selectedPlanet)
 {
     /*test druck*/
     std::cout << "Test für buyShip" << std::endl;
-    std::cout << Player1->getRubin() << std::endl;
+    std::cout << m_self->getRubin() << std::endl;
     /*test druck ende*/
 
-    int Player_Rubin_Number = Player1->getRubin();
+    int Player_Rubin_Number = m_self->getRubin();
     if(Player_Rubin_Number >= Shipcost)
     {
-        Player1->delRubin(Shipcost);
+        m_self->delRubin(Shipcost);
         /*test druck*/
-        std::cout << Player1->getRubin() << std::endl;
+        std::cout << m_self->getRubin() << std::endl;
         /*test druck ende*/
         std::shared_ptr<ShipOrder> NewShip = std::shared_ptr<ShipOrder>(new ShipOrder(selectedPlanet));
-        Player1->putListShipOrder(NewShip);
+        m_self->putListShipOrder(NewShip);
 
 
         return true;
@@ -124,23 +123,26 @@ bool DataModel::moveShips(Planet::Ptr from, Planet::Ptr to, int numShips) {
 
 
 }
-bool DataModel::buyMine(Planet::Ptr selectedPlanet, Player::Ptr Player1)
+bool DataModel::buyMine(Planet::Ptr selectedPlanet)
 {
     /*test druck*/
     std::cout << "Test für buyMine" << std::endl;
+    std::cout << selectedPlanet->getMinesBuild() << std::endl;
     std::cout << selectedPlanet->getMines() << std::endl;
+
     /*test druck ende*/
-    if(selectedPlanet->getMines() == 0)
+    if(selectedPlanet->getMinesHidden() < selectedPlanet->getMines())
     {
-        int Player_Rubin_Number = Player1->getRubin();
+        int Player_Rubin_Number = m_self->getRubin();
         if(Player_Rubin_Number >= Minecost)
         {
-            Player1->delRubin(Minecost);
+            m_self->delRubin(Minecost);
+            selectedPlanet->setMinesHidden();
              /*test druck*/
-            std::cout << Player1->getRubin() << std::endl;
+            std::cout << m_self->getRubin() << std::endl;
             /*test druck ende*/
             std::shared_ptr<MineOrder> NewMine = std::shared_ptr<MineOrder>(new MineOrder(selectedPlanet));
-            Player1->putListMineOrder(NewMine); 
+            m_self->putListMineOrder(NewMine); 
             return true;
         }
 
@@ -152,9 +154,9 @@ bool DataModel::buyMine(Planet::Ptr selectedPlanet, Player::Ptr Player1)
 
 }
 
-void DataModel::TransaktionMine(Player::Ptr Player1)
+void DataModel::TransaktionMine()
 {
-    std::list<std::shared_ptr<MineOrder>> m_TransaktionMine = Player1->getListMineOrder();
+    std::list<std::shared_ptr<MineOrder>> m_TransaktionMine = m_self->getListMineOrder();
 
     for(std::list<std::shared_ptr<MineOrder>>::iterator it = m_TransaktionMine.begin(); it != m_TransaktionMine.end(); ++it)
     {
@@ -162,14 +164,14 @@ void DataModel::TransaktionMine(Player::Ptr Player1)
 
         Planet::Ptr NewShipToPlanet = NewOrder->getPlanet();
 
-        NewShipToPlanet->addMines(1);
+        NewShipToPlanet->setMinesBuild();
     }
 
 }
 
-void DataModel::TransaktionShip(Player::Ptr Player1)
+void DataModel::TransaktionShip()
 {
-    std::list<std::shared_ptr<ShipOrder>> m_TransaktionShip = Player1->getListShipOrder();
+    std::list<std::shared_ptr<ShipOrder>> m_TransaktionShip = m_self->getListShipOrder();
 
     for(std::list<std::shared_ptr<ShipOrder>>::iterator it = m_TransaktionShip.begin(); it != m_TransaktionShip.end(); ++it)
     {
@@ -183,9 +185,9 @@ void DataModel::TransaktionShip(Player::Ptr Player1)
 
 }
 
-void DataModel::clearOrderList(Player::Ptr Player1)
+void DataModel::clearOrderList()
 {
-    Player1->ClearOrderListInPlayer();
+    m_self->ClearOrderListInPlayer();
 }
 
 Planet::Ptr DataModel::getPlanetFromId(int ID)
@@ -193,6 +195,26 @@ Planet::Ptr DataModel::getPlanetFromId(int ID)
     return m_planets.at(ID);
 }
 
+void DataModel::calculateFinance()
+{
+    std::list<std::shared_ptr<Planet>> m_planetsForGain = m_self->getListOfPLanets();
+    int MineNumbers = 0;
+    int MineGainWithNumbers = 0;
+    for(std::list<std::shared_ptr<Planet>>::iterator it = m_planetsForGain.begin(); it != m_planetsForGain.end(); ++it)
+    {
+        Planet::Ptr PlanetFromPlayer = *it;
+
+        MineNumbers += PlanetFromPlayer->getMinesBuild();
+        std::cout <<"Test MineNumbers"<< std::endl;
+        std::cout << MineNumbers << std::endl;
+    }
+    MineGainWithNumbers = MineNumbers * Minegain;
+    m_self->addRubin(MineGainWithNumbers);
+    TransaktionMine();
+    TransaktionShip();
+    clearOrderList();
+
+}
   
 void DataModel::startGame()
 {
@@ -218,14 +240,32 @@ void DataModel::switchWindow(int Id)
     Active->showFullScreen();  
 }
 
+void DataModel::updateAll(QJsonDocument update) {
+
+}
+
 Player::Ptr DataModel::getSelfPlayer()
 {
     return m_self;
 }
 
-Player::Ptr DataModel::getEnemyPlayer()
+Player::Ptr DataModel::getEnemyPlayer(int id)
 {
-    return m_enemy;
+    return m_players.at(id);
+}
+
+void DataModel::findBattles()
+{
+    std::map<int, Planet::Ptr>::iterator it;
+    for(it = m_planets.begin(); it != m_planets.end(); it++)
+    {
+        if(it->second->getInvader() != NULL)
+        {
+            m_battles.push_back(std::shared_ptr<Battle>(new Battle(it->second, it->second->getOwner(), 
+                            it->second->getInvader(), it->second->getShips(),
+                            it->second->getInvaderShips())));
+        }
+    }
 }
 
 void DataModel::performMovements()

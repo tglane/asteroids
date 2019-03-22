@@ -14,13 +14,15 @@
 namespace asteroids
 {
 
-Planet::Planet(std::string name, int posx, int posy, int rubin, int mines) : m_neighbours() 
+Planet::Planet(std::string name, int posx, int posy, int mines, int rubin) : m_neighbours() 
 {
 	m_posx = posx;
 	m_posy = posy;
 	m_name = name;
 	m_rubin = rubin;
 	m_mines = mines;
+	m_minesbuild = 0;
+	m_minesHidden = 0;
 	m_ships = 0;
 	m_owner = NULL;
 	m_invaderShips = 0;
@@ -123,6 +125,30 @@ int Planet::getPosY()
 std::string Planet::getName()
 {
     return m_name;
+}
+
+int Planet::getMinesHidden()
+{
+	return m_minesHidden;
+
+}
+
+void Planet::setMinesHidden()
+{
+	m_minesHidden += 1;
+
+}
+
+int Planet::getMinesBuild()
+{
+	return m_minesbuild;
+
+}
+
+void Planet::setMinesBuild()
+{
+	m_minesbuild += 1;
+
 }
 
 }

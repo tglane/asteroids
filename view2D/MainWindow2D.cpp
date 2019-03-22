@@ -146,7 +146,11 @@ void MainWindow2D::choose_planet(int id)
         if(planets.at(id)->getOwner()==m_model->getSelfPlayer()){
             QPixmap pix("../models/surface/my1.jpg");
             ellipse->myBrush = QBrush(pix);
-        } else if (planets.at(id)->getOwner()==m_model->getEnemyPlayer()){
+        } 
+        
+        // TODO Players are now saved in a map with their id
+        //      iterate over all players if getOwner() != NULL
+        else if (planets.at(id)->getOwner()==m_model->getEnemyPlayer(1)){
             QPixmap pix("../models/surface/other1.jpg");
             ellipse->myBrush = QBrush(pix);
         } else{
@@ -163,7 +167,9 @@ void MainWindow2D::choose_planet(int id)
             if(planets.at(currentPlanet)->getOwner()==m_model->getSelfPlayer()){
                 QPixmap otherpix("../models/surface/my1.jpg");
                 ellipse->myBrush = QBrush(otherpix);
-            } else if (planets.at(currentPlanet)->getOwner()==m_model->getEnemyPlayer()){
+            // TODO Players are now saved in a map with their id
+            //      iterate over all players if getOwner() != NULL
+            } else if (planets.at(currentPlanet)->getOwner()==m_model->getEnemyPlayer(1)){
                 QPixmap otherpix("../models/surface/other1.jpg");
                 ellipse->myBrush = QBrush(otherpix);
             } else{
@@ -177,7 +183,9 @@ void MainWindow2D::choose_planet(int id)
         if(planets.at(id)->getOwner()==m_model->getSelfPlayer()){
             QPixmap pix("../models/surface/my2.jpg");
             ellipse->myBrush = QBrush(pix);
-        } else if (planets.at(id)->getOwner()==m_model->getEnemyPlayer()){
+        // TODO Players are now saved in a map with their id
+        //      iterate over all players if getOwner() != NULL
+        } else if (planets.at(id)->getOwner()==m_model->getEnemyPlayer(1)){
             QPixmap pix("../models/surface/other2.jpg");
             ellipse->myBrush = QBrush(pix);
         } else{
@@ -253,7 +261,7 @@ void MainWindow2D::buildShip(bool click)
         return;
     }
 
-    m_model->buyShip(p, p->getOwner());
+    m_model->buyShip(p);
     std::cout << "Build Ship!" << std::endl;
 }
 

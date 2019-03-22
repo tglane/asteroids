@@ -6,7 +6,14 @@
 #include "MoveOrder.hpp"
 
 #include <map>
+
 #include <QMainWindow>
+
+#include <QCoreApplication>
+#include <QJsonObject>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QString>
 
 #include "MoveOrder.hpp"
 #include "MineOrder.hpp"
@@ -58,18 +65,16 @@ public:
      */
     bool endOfRound();
 
-    /*Code von Kay Bauer*/
-
     /*Kauf Methoden start*/
-    bool buyShip(Planet::Ptr selectedPlanet, Player::Ptr Player1);
+    bool buyShip(Planet::Ptr selectedPlanet);
 
-    bool buyMine(Planet::Ptr selectedPlanet, Player::Ptr Player1);
+    bool buyMine(Planet::Ptr selectedPlanet);
 
-    void TransaktionShip(Player::Ptr Player1);
+    void TransaktionShip();
 
-    void TransaktionMine(Player::Ptr Player1);
+    void TransaktionMine();
 
-    void clearOrderList(Player::Ptr Player1);
+    void clearOrderList();
 
     /*Kauf Methoden ende*/
     bool moveShips(Planet::Ptr from, Planet::Ptr to, int numShips);
@@ -77,6 +82,8 @@ public:
     Planet::Ptr getPlanetFromId(int ID);
 
     std::list<std::pair<int,int>> getEdges();
+
+    void calculateFinance();
     
     void startGame();
     /**
@@ -91,22 +98,38 @@ public:
 
     Player::Ptr getSelfPlayer();
 
-    Player::Ptr getEnemyPlayer();
+    Player::Ptr getEnemyPlayer(int id);
 
-    //void findBattles();
+    void updateAll(QJsonDocument update);
+
+
+
+    /**
+     * @brief   Finds occuring battles at the end of each round,
+     *          fills list of battles
+     */
+    void findBattles();
+
 
     void performMovements();
 
 private:
+
+    int m_playerid;
+
     /*Variablen von Kay*/
 
     int Shipcost = 500;
 
     int Minecost = 1000;
+
+    int Minegain = 750;
     /**
      * @brief   Loads all the planets from the given file
      */
     void getUniverse(std::string filename);
+
+    std::map<int, Player::Ptr> m_players;
 
     // Map to hold all planets, filled by getUniverse()
     std::map<int, Planet::Ptr>  m_planets;
@@ -122,7 +145,8 @@ private:
     // Map of Windows
     std::map<int, QMainWindow*> m_Window;
 
-    std::list<Battle> m_battles;
+    // List of upcoming battles
+    std::list<std::shared_ptr<Battle>> m_battles;
 };
 
 }

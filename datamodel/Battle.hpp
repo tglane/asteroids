@@ -66,6 +66,8 @@ namespace asteroids
          */
         int m_numberShips2;
 
+        //bool invaderWon;
+
 
 	};
 }

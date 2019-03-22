@@ -150,6 +150,14 @@ namespace asteroids
 		 */
 		std::string getName();
 
+		int getMinesHidden();
+
+		void setMinesHidden();
+
+		int getMinesBuild();
+
+		void setMinesBuild();
+
 
 	private:
 		std::string m_name;
@@ -157,6 +165,8 @@ namespace asteroids
 		std::list<Planet::Ptr> m_neighbours;
 
 		int m_mines;
+		int m_minesbuild;
+		int m_minesHidden;
 		int m_rubin;
 		int m_ships;
 		int m_invaderShips;
