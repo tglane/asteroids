@@ -106,9 +106,9 @@ void GLWidget::initializeGL()
     LevelParser lp(m_levelFile, m_enemy, m_skybox, m_asteroidField);
     m_enemy->fixArrow();
     if (m_client.get_id() == 42) {
-        m_enemy->setId(43);
+        m_enemy->setId(43 << 24);
     } else {
-        m_enemy->setId(42);
+        m_enemy->setId(42 << 24);
     }
     m_enemy->setHealth(10);
 
@@ -117,7 +117,7 @@ void GLWidget::initializeGL()
     m_physicsEngine = make_shared<PhysicsEngine>();
 
     m_camera = make_shared<Camera>();
-    m_camera->setId(m_client.get_id());
+    m_camera->setId(m_client.get_id() << 24);
     m_camera->setHealth(10);
     m_camera->setPosition(Vector3f(2500, 0, 0));
     m_camera->setXAxis(Vector3f(-1, 0, 0));

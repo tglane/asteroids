@@ -9,7 +9,7 @@ udpclient::udpclient(QObject *parent)
     std::cout << "Enter player_id (int):" << std::endl;
     std::cin >> m_id;
 
-    m_ip = "127.0.0.1";
+    m_ip = "192.168.0.42";
 
     socket = new QUdpSocket(this);
     seq_number = 1;

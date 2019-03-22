@@ -31,7 +31,7 @@ void PhysicsEngine::addHittable(Hittable::Ptr& h)
 void PhysicsEngine::addBullet(Bullet::Ptr& bullet)
 {
 
-    cout << "creating bullet " << bullet->get_id() << endl;
+    //cout << "creating bullet " << bullet->get_id() << endl;
     //m_particles.addEffect(ParticleEffect::createBulletTail(bullet->getPosition(), bullet->direction(), bullet->lifetime()));
     m_bullets.insert(std::pair<int, Bullet::Ptr >(bullet->get_id(), bullet));
 }
@@ -172,11 +172,13 @@ void PhysicsEngine::check_id_type(int id_to_check)
             }
         }else
         {
+            std::cout << id_to_check << std::endl;
             //TODO change health of spaceship if collision with spaceship
             if(m_hittables.count(id_to_check) == 1) {
                 int health = m_hittables[id_to_check]->getHealth();
                 m_hittables[id_to_check]->setHealth(health - 1);
-                if (health <= 0)
+                std::cout << health << std::endl;
+                if (health <= 1)
                 {
                     m_particles.addEffect(ParticleEffect::createExplosionSphere(m_hittables[id_to_check]->getPosition()));
                     m_hittables.erase(id_to_check);
