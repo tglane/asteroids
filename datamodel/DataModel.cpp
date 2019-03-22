@@ -228,7 +228,7 @@ void DataModel::addWindow(int Id, QMainWindow* Window)
 void DataModel::switchWindow(int Id)
 {
     QMainWindow* Active = m_Window[Id];
-    Active->showFullScreen();
+    Active->show();
     
 }
 
