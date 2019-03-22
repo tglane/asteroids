@@ -71,6 +71,14 @@ std::list<std::pair<int, int>> ServerPhysicsEngine::process(int time_elapsed)
         {
             if (p_it->second->collision(b->getPosition(), b->radius()))
             {
+                std::cout << "b: " << b->getPosition()[0]
+                          << " " << b->getPosition()[1]
+                          << " " << b->getPosition()[2] << std::endl;
+
+                std::cout << "b: " << p_it->second->getPosition()[0]
+                          << " " << p_it->second->getPosition()[1]
+                          << " " << p_it->second->getPosition()[2] << std::endl;
+
                 collisions.push_back(std::pair<int, int>(b->get_id(), p_it->second->get_id()));
                 // Mark bulled as killed
                 b->destroy();
@@ -79,7 +87,10 @@ std::list<std::pair<int, int>> ServerPhysicsEngine::process(int time_elapsed)
                 p_it = m_objects.erase(p_it);
 
             }
-            p_it++;
+            else
+            {
+                p_it++;
+            }
         }
 
         h_it = m_hittables.begin();
@@ -95,9 +106,11 @@ std::list<std::pair<int, int>> ServerPhysicsEngine::process(int time_elapsed)
                 b->destroy();
                 if (m_hittables.size() > 1)
                 {
+                    collisions.push_back(std::pair<int, int>(b->get_id(), h_it->second->getId()));
                     h_it->second->setHealth(h_it->second->getHealth() - 1);
                     if (h_it->second->getHealth() == 0)
                     {
+                        std::cout << "Player destroyed: " << h_it->second->getId() << std::endl;
                         //m_particles.addEffect(ParticleEffect::createExplosionSphere((*h_it)->getPosition()));
                         h_it = m_hittables.erase(h_it);
                     }
@@ -112,7 +125,6 @@ std::list<std::pair<int, int>> ServerPhysicsEngine::process(int time_elapsed)
         // bullet list. Otherwise continue with next bullet.
         if (!b->alive())
         {
-            std::cout << "ADFSAD" << std::endl;
             b_it = m_bullets.erase(b_it);
         }
         else

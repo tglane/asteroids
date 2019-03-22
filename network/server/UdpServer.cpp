@@ -12,7 +12,10 @@ using namespace asteroids;
 UdpServer::UdpServer()
 {
     socket = std::unique_ptr<QUdpSocket>(new QUdpSocket(nullptr));
-    socket->bind(QHostAddress(QString("0.0.0.0")), 1235);
+
+    if (!socket->bind(QHostAddress(QString("0.0.0.0")), 1235)) {
+        std::cout << "Failed to bind socket" << std::endl;
+    }
     connect(socket.get(), &QUdpSocket::readyRead, this, &UdpServer::handle_udp);
 
     timer = std::unique_ptr<QTimer>(new QTimer(nullptr));
@@ -23,16 +26,26 @@ UdpServer::UdpServer()
     clients[42] = UdpClient(42);
     clients[42].address = QHostAddress::LocalHost;
     clients[42].port = 1234;
+    clients[42].ship->setHealth(10);
 
     clients[43] = UdpClient(43);
     clients[43].address = QHostAddress(QString("192.168.0.43"));
     clients[43].port = 1234;
+    clients[43].ship->setHealth(10);
 
     physics_engine.addHittable(clients[42].ship);
     physics_engine.addHittable(clients[43].ship);
 
-    PhysicalObject::Ptr a(new PhysicalObject(Vector3f(), Vector3f(2500, 0, 0), 0, 0, 0, 0, 100, 1));
+    PhysicalObject::Ptr a(new PhysicalObject(Vector3f(), Vector3f(1000, 0, 0), 0, 0, 0, 0, 100, 1));
+    PhysicalObject::Ptr b(new PhysicalObject(Vector3f(), Vector3f(-1000, 0, 0), 0, 0, 0, 0, 100, 2));
+    PhysicalObject::Ptr c(new PhysicalObject(Vector3f(), Vector3f(0, 1000, 0), 0, 0, 0, 0, 100, 3));
+    PhysicalObject::Ptr d(new PhysicalObject(Vector3f(), Vector3f(0, -1000, 0), 0, 0, 0, 0, 100, 4));
     physics_engine.addDestroyable(a);
+    physics_engine.addDestroyable(b);
+    physics_engine.addDestroyable(c);
+    physics_engine.addDestroyable(d);
+
+    time.start();
 }
 
 
@@ -105,7 +118,7 @@ void UdpServer::handle_bullet_packet(QNetworkDatagram &datagram)
     asteroids::Vector3f position = bytes_to_vector(data.data() + 9);
     asteroids::Vector3f velocity = bytes_to_vector(data.data() + 9 + 3 * 4);
 
-    PhysicalBullet::Ptr bullet(new PhysicalBullet(position, velocity, client_id, obj_id));
+    PhysicalBullet::Ptr bullet(new PhysicalBullet(position, velocity, client_id << 24, obj_id));
 
     physics_engine.addBullet(bullet);
     //std::cout << "created bullet: " << obj_id << std::endl;
@@ -139,6 +152,7 @@ void UdpServer::send_ack(QNetworkDatagram &datagram)
 
 void UdpServer::send_collision(UdpClient &client, uint32_t obj_id1, uint32_t obj_id2)
 {
+    std::cout << "sending col" << std::endl;
     uint32_t seq_nr = client.next_seq_nr();
     QByteArray &data = client.ack_pending[seq_nr];
     uint32_t client_id = 0;
@@ -285,7 +299,7 @@ void UdpServer::handle_udp()
             handle_position_packet(datagram);
             break;
         case 'B':
-            std::cout << "received B" << std::endl;
+            //std::cout << "received B" << std::endl;
             send_ack(datagram);
             handle_bullet_packet(datagram);
             break;
@@ -298,7 +312,8 @@ void UdpServer::handle_udp()
 void UdpServer::tick()
 {
     //std::cout << "============ tick =============" << std::endl;
-    auto collisions = physics_engine.process(10);
+    int time_elapsed = time.restart();
+    auto collisions = physics_engine.process(time_elapsed);
     for (auto& i: clients) {
 
         uint32_t client_id = i.first;
@@ -322,6 +337,10 @@ void UdpServer::tick()
                 send_position(dest, *client.ship, client.id << 24);
             }
         }
+    }
+    if (physics_engine.gameOver()) {
+        std::cout << "GAME OVER!!!!!!!!!!!!!!!" << std::endl;
+        timer->stop();
     }
 }
 

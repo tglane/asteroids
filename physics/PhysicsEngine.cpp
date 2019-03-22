@@ -167,6 +167,8 @@ void PhysicsEngine::check_id_type(int id_to_check)
         {
 
             if(m_bullets.count(id_to_check) == 1) {
+
+                m_particles.addEffect(ParticleEffect::createExplosionSphere(m_bullets[id_to_check]->getPosition()));
                 m_bullets[id_to_check]->destroy();
                 m_bullets.erase(id_to_check);
             }

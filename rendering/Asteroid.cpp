@@ -23,8 +23,9 @@ Asteroid::Asteroid(
     float rotation,
     float speed,
     float accell,
-    float radius)
-    : PhysicalObject(startDirection, startPosition, mass, rotation, speed, accell, radius, 0), m_renderable(mesh)
+    float radius,
+    int id)
+    : PhysicalObject(startDirection, startPosition, mass, rotation, speed, accell, radius, id), m_renderable(mesh)
 {
     // cout << startDirection << endl;
     // cout << startPosition << endl;
@@ -66,6 +67,7 @@ void Asteroid::copy(const Asteroid& other)
     m_zAxis = other.m_zAxis;
     m_scale = other.m_scale;
     m_speed = other.m_speed;
+    m_id = other.m_id;
 }
 
 void Asteroid::render()
