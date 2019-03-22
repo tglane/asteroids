@@ -38,7 +38,7 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
     effect = new QGraphicsOpacityEffect(ui->Fight);
     effect->setOpacity(0.7);
     ui->Fight->setGraphicsEffect(effect);
-    QPen outlinePenHighlight(Qt::white);
+    QPen outlinePenHighlight(Qt::gray);
     outlinePenHighlight.setWidth(1);
 
     std::map<int, Planet::Ptr> planets = m_model->getPlanets();
@@ -52,6 +52,14 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
         QVariant ellipse_ID(i);
         view_planets[i]->setData(1, ellipse_ID);
         connect(view_planets[i], SIGNAL(show_planetInfo(int)), this, SLOT(choose_planet(int)));
+
+        QGraphicsTextItem * io = new QGraphicsTextItem;
+        io->setPos(p->getPosX()/position_scale + planet_size/2,p->getPosY()/position_scale - planet_size/2);
+        io->setPlainText(QString::fromStdString(p->getName()));
+        io->setDefaultTextColor(Qt::white);
+        io->setFont(QFont("Helvetica",5));
+        io->setZValue(1);
+        scene->addItem(io);
     }
 
     std::list<std::pair<int,int>> edges = m_model->getEdges();
@@ -167,13 +175,13 @@ void MainWindow2D::choose_planet(int id)
             MyEllipse* otherEllipse = getEllipseById(currentPlanet);
             if(planets.at(currentPlanet)->getOwner()==m_model->getSelfPlayer()){
                 QPixmap otherpix("../models/surface/my1.jpg");
-                ellipse->myBrush = QBrush(otherpix);
+                otherEllipse->myBrush = QBrush(otherpix);
             } else if (planets.at(currentPlanet)->getOwner()==m_model->getEnemyPlayer()){
                 QPixmap otherpix("../models/surface/other1.jpg");
-                ellipse->myBrush = QBrush(otherpix);
+                otherEllipse->myBrush = QBrush(otherpix);
             } else{
                 QPixmap otherpix("../models/surface/neutral1.jpg");
-                ellipse->myBrush = QBrush(otherpix);  
+                otherEllipse->myBrush = QBrush(otherpix);  
             }
             otherEllipse->myPen = QPen(Qt::black,1);
             otherEllipse->update();
@@ -226,7 +234,7 @@ void MainWindow2D::choose_planet(int id)
         ui->DestionationPlanet->addItem(QString::fromStdString(neighbour_list.front()->getName()));
         neighbour_list.pop_front();
     }
-
+    QString blub = ui->DestionationPlanet->currentText();
 }
 
 void MainWindow2D::endOfRound(bool click)
