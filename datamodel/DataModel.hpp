@@ -59,15 +59,15 @@ public:
     bool endOfRound();
 
     /*Kauf Methoden start*/
-    bool buyShip(Planet::Ptr selectedPlanet, Player::Ptr Player1);
+    bool buyShip(Planet::Ptr selectedPlanet);
 
-    bool buyMine(Planet::Ptr selectedPlanet, Player::Ptr Player1);
+    bool buyMine(Planet::Ptr selectedPlanet);
 
-    void TransaktionShip(Player::Ptr Player1);
+    void TransaktionShip();
 
-    void TransaktionMine(Player::Ptr Player1);
+    void TransaktionMine();
 
-    void clearOrderList(Player::Ptr Player1);
+    void clearOrderList();
 
     /*Kauf Methoden ende*/
     bool moveShips(Planet::Ptr from, Planet::Ptr to, int numShips);
@@ -76,7 +76,7 @@ public:
 
     std::list<std::pair<int,int>> getEdges();
 
-    void calculateFinance(Player::Ptr Player);
+    void calculateFinance();
     
     void startGame();
     /**
@@ -91,7 +91,7 @@ public:
 
     Player::Ptr getSelfPlayer();
 
-    Player::Ptr getEnemyPlayer();
+    Player::Ptr getEnemyPlayer(int id);
 
     /**
      * @brief   Finds occuring battles at the end of each round,
@@ -100,6 +100,9 @@ public:
     void findBattles();
 
 private:
+
+    int m_playerid;
+
     /*Variablen von Kay*/
 
     int Shipcost = 500;
@@ -111,6 +114,8 @@ private:
      * @brief   Loads all the planets from the given file
      */
     void getUniverse(std::string filename);
+
+    std::map<int, Player::Ptr> m_players;
 
     // Map to hold all planets, filled by getUniverse()
     std::map<int, Planet::Ptr>  m_planets;
