@@ -129,7 +129,9 @@ void UdpServer::handle_bullet_packet(QNetworkDatagram &datagram)
 
     for (auto& i: clients) {
         UdpClient& dest = i.second;
-        send_bullet(dest, *bullet, obj_id);
+        if (dest.id != client_id) {
+            send_bullet(dest, *bullet, obj_id);
+        }
     }
 }
 
@@ -245,6 +247,7 @@ void UdpServer::send_bullet(UdpClient &client, PhysicalBullet& obj, uint32_t obj
 
 void UdpServer::handle_ack(QNetworkDatagram &datagram)
 {
+    std::cout << "handle_ack" << std::endl;
     QByteArray data = datagram.data();
     uint32_t client_id = *((uint32_t*)(data.data() + 5)) >> 24;
     UdpClient &client = clients[client_id];
@@ -319,12 +322,22 @@ void UdpServer::tick()
         uint32_t client_id = i.first;
         UdpClient& client = i.second;
 
+
+
+        // resend unacknowledged messageserasing client
+        if (client.ack_pending.size() > 0) {
+            std::cout << "resending " << client.ack_pending.size() << " packets to " << client.id << std::endl;
+        }
+        if (client.ack_pending.size() > 100) {
+            std::cout  << client.ack_pending.size() << " unacknowledged packets. giving up on " << client.id << std::endl;
+            break;
+        }
+
         for (auto i: collisions) {
             std::cout << "COL2: " << i.first << " " << i.second << endl;
             send_collision(client, i.first, i.second);
         }
 
-        // resend unacknowledged messages
         for (auto j: client.ack_pending) {
             QByteArray &data = j.second;
             //socket->writeDatagram(data, client.address, client.port);
