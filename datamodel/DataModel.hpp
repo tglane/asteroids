@@ -122,6 +122,8 @@ public:
 
     void performMovements();
 
+    int getIDFromPlanet(Planet::Ptr planet);
+
 private:
 
     int m_playerid;

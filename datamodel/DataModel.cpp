@@ -298,6 +298,43 @@ QJsonDocument DataModel::createJson(Player::Ptr player)
 
     //insert id of the player
     main.insert("ID", player->getIdentity());
+    main.insert("Name",  QString::fromStdString(player->getPlayerName()));
+    main.insert("Rubin", player->getIdentity());
+
+    QJsonArray planeets;
+
+    //planeets.push_back();
+    std::string planetString("Planet");
+    /**
+    for(uint i = 0; i < player->getPlanets().size(); i++)
+    {
+        std::string planetNumber = planetString + std::to_string(i);
+        QString qPlanetNumber = QString::fromStdString(planetNumber);
+
+        
+    }
+    */
+   int i = 1;
+   std::list<std::shared_ptr<Planet>> planetos = player->getPlanets();
+    for(std::list<std::shared_ptr<Planet>>::iterator it = planetos.begin(); it != planetos.end(); ++it)
+    {
+        Planet::Ptr planet = *it;
+        QJsonObject qPlanet;
+
+        std::string planetNumber = planetString + std::to_string(i);
+        QString qPlanetNumber = QString::fromStdString(planetNumber);
+
+        qPlanet.insert("ID", getIDFromPlanet(planet));
+        qPlanet.insert("Mines", planet->getMines());
+        qPlanet.insert("Ships", planet->getShips());
+
+        planeets.push_back(qPlanet);
+
+        i++;
+
+    }
+
+    main.insert("PlanetArray", planeets);
 
     QJsonDocument theDocument(main);
 
@@ -333,6 +370,18 @@ void DataModel::performMovements()
             //the destination planet is of another player but he might defend
             destination->setInvader(m_self);
             destination->addInvaderShips(ships);
+        }
+    }
+}
+
+int DataModel::getIDFromPlanet(Planet::Ptr planet)
+{
+    for(int i = 0; i < m_planets.size(); i++)
+    {
+        Planet::Ptr mapPlanet = m_planets.find(i)->second;
+        if(mapPlanet->getName() == planet->getName())
+        {
+            return i;
         }
     }
 }

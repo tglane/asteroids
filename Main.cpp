@@ -30,7 +30,12 @@ int main(int argc, char** argv)
     //mainWindow.show();
 
     // Test
-    //model->createJson(model->getSelfPlayer());
+    /*
+    model->getSelfPlayer()->addPlanet(model->getPlanets().find(1)->second);
+    model->getSelfPlayer()->addPlanet(model->getPlanets().find(2)->second);
+    model->getSelfPlayer()->addPlanet(model->getPlanets().find(3)->second);
+    model->createJson(model->getSelfPlayer());
+    */
     //end test
 
     strategy::StartingDialog startWindow(model);
