@@ -100,6 +100,11 @@ void Player::putListMineOrder(std::shared_ptr<MineOrder> NewMineOrder)
 	m_mineOrders.push_back(NewMineOrder);
 }
 
+std::list<std::shared_ptr<MoveOrder>> Player::getListMoveOrder()
+{
+	return m_moveOrders;
+}
+
 void Player::putListMoveOrder(std::shared_ptr<MoveOrder> newMoveOrder)
 {
 	m_moveOrders.push_back(newMoveOrder);
