@@ -66,9 +66,9 @@ public:
     bool endOfRound();
 
     /*Kauf Methoden start*/
-    bool buyShip(Planet::Ptr selectedPlanet);
+    bool buyShip(Planet::Ptr selectedPlanet, Player::Ptr m_self);
 
-    bool buyMine(Planet::Ptr selectedPlanet);
+    bool buyMine(Planet::Ptr selectedPlanet, Player::Ptr m_self);
 
     void TransaktionShip();
 
@@ -85,7 +85,7 @@ public:
 
     std::list<std::pair<int,int>> getEdges();
 
-    void calculateFinance();
+    void calculateFinance(Player::Ptr Player);
     
     void startGame();
     /**
