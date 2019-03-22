@@ -1,5 +1,5 @@
 /*
- *  PhysicsEngine.cpp
+ *  ServerPhysicsEngine.cpp
  *
  *  @date 19.01.2019
  *  @author Thomas Wiemann
@@ -32,21 +32,21 @@ namespace asteroids
  *          and implements collision detection. Handles particle
  *          effects like explosions.
  */
-class PhysicsEngine : public Renderable
+class ServerPhysicsEngine
 {
 public:
 
-    using Ptr = std::shared_ptr<PhysicsEngine>;
+    using Ptr = std::shared_ptr<ServerPhysicsEngine>;
 
     /**
      * @brief   Ctor.
      */
-    PhysicsEngine() = default;
+    ServerPhysicsEngine() = default;
 
     /**
      * @brief   Dtor.
      */
-    virtual ~PhysicsEngine() = default;
+    virtual ~ServerPhysicsEngine() = default;
 
     /**
      * @brief   Adds a destroyable objects, i.e. a static objects
@@ -60,17 +60,12 @@ public:
     /**
      * @brief   Adds a bullet to the scene. Takes ownership of the given pointer
      */
-    void addBullet(Bullet::Ptr& bullet);
-
-    /**
-     * @brief   Renders all objects and particle effects
-     */
-    void render();
+    void addBullet(PhysicalBullet::Ptr& bullet);
 
     /**
      * @brief   The engine's main loop
      */
-    void process();
+    std::list<std::pair<int, int>> process();
 
 private:
 
@@ -78,13 +73,11 @@ private:
     list<PhysicalObject::Ptr>    m_objects;
 
     /// List of active bullets
-    list<Bullet::Ptr>            m_bullets;
-
-    ParticleEngine               m_particles;
+    list<PhysicalBullet::Ptr>     m_bullets;
 
     list<Hittable::Ptr>          m_hittables;
 
 };
 
-} /* namespace asteroids */
+}/* namespace asteroids */
 #endif /* PHYSICSENGINE_HPP_ */

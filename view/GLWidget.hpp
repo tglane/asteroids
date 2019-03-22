@@ -16,6 +16,7 @@
 
 #include <GL/glew.h>
 #include <QOpenGLWidget>
+#include <QWidget>
 #include <QtGui/QPainter>
 
 #include "view/Camera.hpp"
@@ -94,6 +95,8 @@ private:
 
     /// Udpclient to send pos/mov/rot to the server
     udpclient                   m_client;
+
+    QWidget hudWidget;
 };
 
 #endif

@@ -63,10 +63,6 @@ private:
     // Lifetime, i.e., how many timesteps the bullet visible
 	static const int m_lifetime = 80;
 
-	// True, if the bullet's lifetime isn't over yet
-	bool m_alive;
-
-    float m_radius;
 
 	// Flight direction of the bullet
     Vector3f m_fighterAxis;

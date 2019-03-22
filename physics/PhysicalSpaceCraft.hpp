@@ -34,7 +34,7 @@ public:
      * @param movespeed movespeed for the key handling
      * @param rotatespeed rotatespeed for the key handling
      */
-    PhysicalSpaceCraft(const Vector3f& position, float movespeed, float rotatespeed);
+    PhysicalSpaceCraft(const Vector3f& position, float movespeed, float rotatespeed, int id);
 
     /// dtor
     virtual ~PhysicalSpaceCraft();

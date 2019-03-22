@@ -17,7 +17,7 @@ public:
 
     int getId() const;
 
-    bool hit(Bullet b);
+    bool hit(PhysicalBullet& b);
 
 private:
 

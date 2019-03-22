@@ -9,7 +9,7 @@ udpclient::udpclient(QObject *parent)
     std::cout << "Enter player_id (int):" << std::endl;
     std::cin >> m_id;
 
-    m_ip = "192.168.0.42";
+    m_ip = "127.0.0.1";
 
     socket = new QUdpSocket(this);
     seq_number = 1;
@@ -197,7 +197,7 @@ void udpclient::send_bullet(asteroids::Vector3f position, asteroids::Vector3f xA
     data.append(id_char, sizeof(id_char));
 
     asteroids::Bullet::Ptr bullet = make_shared<asteroids::Bullet>(asteroids::Bullet(position - zAxis * 42,
-                                                    xAxis, id));
+                                                                                     xAxis, 0, id));
     m_physicsEngine->addBullet(bullet);
 
     /* Append position to packet */
