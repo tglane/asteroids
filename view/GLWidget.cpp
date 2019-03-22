@@ -4,6 +4,7 @@
 #include <QMouseEvent>
 #include <SDL2/SDL.h>
 #include <QtGui/QPainter>
+#include <SOIL.h>
 
 GLWidget::GLWidget(QWidget* parent) : QOpenGLWidget(parent), m_gameOver(false) {}
 
@@ -139,6 +140,7 @@ void GLWidget::paintGL()
 {
     // Clear bg color and enable depth test (z-Buffer)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glEnable(GL_DEPTH_TEST);
 
     m_camera->apply();
 
@@ -153,10 +155,48 @@ void GLWidget::paintGL()
         m_enemy->render();
     }
 
-    // TODO: tut so noch nicht
-//     QPainter qPainter(this);
-//     QPixmap hud("../models/cockpit.png");
-//     qPainter.drawPixmap(0, 0, this->width(), this->height(), hud);
+    glDisable(GL_DEPTH_TEST);
+
+    QPainter painter(this);
+    QPixmap hud("../models/cockpit.png");
+    painter.drawPixmap(0, 0, this->width(), this->height(), hud);
+
+    // paint with OpenGL
+//    glMatrixMode(GL_PROJECTION);
+//    glPushMatrix();
+//    glLoadIdentity();
+//    glOrtho(0.0, this->width(), this->height(), 0.0, -1.0, 10.0);
+//    glMatrixMode(GL_MODELVIEW);
+//    glPushMatrix();
+//    glLoadIdentity();
+//    glDisable(GL_CULL_FACE);
+//    glDisable(GL_DEPTH_TEST);
+//    glDepthMask(GL_FALSE);
+//    glClear(GL_DEPTH_BUFFER_BIT);
+//
+//    int width = this->width();
+//    int height = this->height();
+//    unsigned char* image = SOIL_load_image("../models/cockpit.png", &width, &height, 0, SOIL_LOAD_RGB);
+//    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+//    glColor3f(1.0, 1.0, 1.0);
+//    glBegin(GL_QUADS);
+//    glTexCoord2f(0.0, 1.0);
+//    glVertex2f(0.0, this->height() * 0.7);
+//    glTexCoord2f(1.0, 1.0);
+//    glVertex2f(this->width(), this->height() * 0.7);
+//    glTexCoord2f(1.0, 1.0);
+//    glVertex2f(this->width(), this->height());
+//    glTexCoord2f(0.0, 0.0);
+//    glVertex2f(0.0, this->height());
+//    glEnd();
+//
+////     Making sure we can render 3d again
+//    glMatrixMode(GL_PROJECTION);
+//    glPopMatrix();
+//    glMatrixMode(GL_MODELVIEW);
+//    glPopMatrix();
+//    glEnable(GL_DEPTH_TEST);
+//    glDepthMask(GL_TRUE);
 }
 
 void GLWidget::step(map<Qt::Key, bool>& keyStates)
@@ -164,7 +204,7 @@ void GLWidget::step(map<Qt::Key, bool>& keyStates)
     int elapsed_time = m_timer.restart();
 
     // Get keyboard states and handle model movement
-    m_gameOver = m_physicsEngine->process(elapsed_time);
+    m_gameOver = m_physicsEngine->process(elapsed_time) | m_gameOver;
 
     if (!m_gameOver) {
         Hittable::Ptr player_ptr = std::static_pointer_cast<Hittable>(m_camera);

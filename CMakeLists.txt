@@ -193,4 +193,5 @@ add_executable(asteroids
 # External library dependencys
 ###############################################################################
 
+#target_link_libraries(asteroids SOIL)
 target_link_libraries(asteroids ${ASTEROID_DEPENDS})
