@@ -39,7 +39,7 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
     effect = new QGraphicsOpacityEffect(ui->Fight);
     effect->setOpacity(0.7);
     ui->Fight->setGraphicsEffect(effect);
-    QPen outlinePenHighlight(Qt::white);
+    QPen outlinePenHighlight(Qt::gray);
     outlinePenHighlight.setWidth(1);
 
     std::map<int, Planet::Ptr> planets = m_model->getPlanets();
@@ -57,6 +57,14 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
         QVariant ellipse_ID(i);
         view_planets[i]->setData(1, ellipse_ID);
         connect(view_planets[i], SIGNAL(show_planetInfo(int)), this, SLOT(choose_planet(int)));
+
+        QGraphicsTextItem * io = new QGraphicsTextItem;
+        io->setPos(p->getPosX()/position_scale + planet_size/2,p->getPosY()/position_scale - planet_size/2);
+        io->setPlainText(QString::fromStdString(p->getName()));
+        io->setDefaultTextColor(Qt::white);
+        io->setFont(QFont("Helvetica",5));
+        io->setZValue(1);
+        scene->addItem(io);
     }
 
     std::list<std::pair<int,int>> edges = m_model->getEdges();
@@ -95,13 +103,21 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
     // Start colonizing the selected Planet, how we get selected Planet?
     // Button should only be selectable if a neighbour of the selected Planet is owned
     QPushButton* m_colonize = ui->Colonize;
-    m_colonize->setEnabled(false);
+    //m_colonize->setEnabled(false);
     connect(m_colonize, SIGNAL(clicked(bool)), this, SLOT(colonize(bool)));
 
     // Build a ship on selected Planet
     // Button should only be selectable if this Planet is owned
     QPushButton* m_buildShip = ui->BuildShip;
     connect(m_buildShip, SIGNAL(clicked(bool)), this, SLOT(buildShip(bool)));
+
+    // Build a mine on selected Planet
+    // Button should only be selectable if this Planet is owned
+    QPushButton* m_buildMine = ui->BuildMine;
+    connect(m_buildMine, SIGNAL(clicked(bool)), this, SLOT(buildMine(bool)));
+
+    QPushButton* m_sendShips = ui->SendShip;
+    connect(m_sendShips, SIGNAL(clicked(bool)), this, SLOT(sendShips(bool)));
 
     // at the beginning no planet is selected so this widget is not visible
     // ui->PlanetInfo->setVisible(false);
@@ -117,6 +133,8 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
     currentPlanet = -1;
 
     ui->PlanetInfo->setVisible(false);
+
+    updatePlayerInfo();
 }
 
 void MainWindow2D::resizeEvent(QResizeEvent* event){
@@ -170,13 +188,13 @@ void MainWindow2D::choose_planet(int id)
             MyEllipse* otherEllipse = getEllipseById(currentPlanet);
             if(planets.at(currentPlanet)->getOwner()==m_model->getSelfPlayer()){
                 QPixmap otherpix("../models/surface/my1.jpg");
-                ellipse->myBrush = QBrush(otherpix);
+                otherEllipse->myBrush = QBrush(otherpix);
             } else if (planets.at(currentPlanet)->getOwner()==m_model->getEnemyPlayer()){
                 QPixmap otherpix("../models/surface/other1.jpg");
-                ellipse->myBrush = QBrush(otherpix);
+                otherEllipse->myBrush = QBrush(otherpix);
             } else{
                 QPixmap otherpix("../models/surface/neutral1.jpg");
-                ellipse->myBrush = QBrush(otherpix);  
+                otherEllipse->myBrush = QBrush(otherpix);  
             }
             otherEllipse->myPen = QPen(Qt::black,1);
             otherEllipse->update();
@@ -229,7 +247,7 @@ void MainWindow2D::choose_planet(int id)
         ui->DestionationPlanet->addItem(QString::fromStdString(neighbour_list.front()->getName()));
         neighbour_list.pop_front();
     }
-
+    QString blub = ui->DestionationPlanet->currentText();
 }
 
 void MainWindow2D::endOfRound(bool click)
@@ -239,6 +257,8 @@ void MainWindow2D::endOfRound(bool click)
     // fuck this "unused" warnings! :D
     if(succes);
 
+    updatePlayerInfo();
+
     // TODO wait for response of server, block the window until all players are ready
 }
 
@@ -246,7 +266,16 @@ void MainWindow2D::colonize(bool click /*, Planet* p*/)
 {
     // TODO start colonization of Planet p
     //m_model->colonize(p);
+    Planet::Ptr p = m_model->getPlanetFromId(currentPlanet);
+
+    m_model->setStartPlanet(p);
+    ui->Colonize->setVisible(false);
     std::cout << "Colonize!" << std::endl;
+    std::cout<<currentPlanet<<std::endl;
+    MyEllipse* otherEllipse = getEllipseById(currentPlanet);
+    QPixmap otherpix("../models/surface/my2.jpg");
+    otherEllipse->myBrush = QBrush(otherpix);
+    otherEllipse->update();
 }
 
 void MainWindow2D::buildShip(bool click)
@@ -265,6 +294,36 @@ void MainWindow2D::buildShip(bool click)
     std::cout << "Build Ship!" << std::endl;
 }
 
+void MainWindow2D::buildMine(bool click)
+{
+    Planet::Ptr p = m_model->getPlanetFromId(currentPlanet);
+
+    // TODO: Fehlerbehandlung
+    if (p->getOwner() == NULL)
+    {
+        std::cout << "Planet wird nicht besessen!" << std::endl;
+        return;
+    }
+    if (p->getMines() > 0)
+    {
+        std::cout << "Planet besitzt bereits eine Mine" << std::endl;
+        return;
+    }
+
+    m_model->buyMine(p, p->getOwner());
+    std::cout << "Build Mine!" << std::endl;
+}
+
+void MainWindow2D::sendShips(bool click)
+{
+    std::cout << "Send Ship from " << m_model->getPlanetFromId(currentPlanet)->getName() << 
+        " to " << ui->DestionationPlanet->currentText().toStdString() << std::endl;
+    
+    Planet::Ptr to = m_model->getPlanetFromName(ui->DestionationPlanet->currentText().toStdString());
+    Planet::Ptr from = m_model->getPlanetFromId(currentPlanet);
+    m_model->moveShips(from, to, ui->SendShipNumber->currentText().toInt());
+}
+
 void MainWindow2D::exitGame(bool click)
 {
     QCoreApplication::quit();
@@ -277,6 +336,20 @@ MyEllipse* MainWindow2D::getEllipseById(int id)
 }
 
 void MainWindow2D::updatePlayerInfo()
+{
+    ui->SpielerInfoTable->setCellWidget(0, 1, 
+        new QLabel(QString::fromStdString(m_model->getSelfPlayer()->getPlayerName())));
+    ui->SpielerInfoTable->setCellWidget(1, 1, 
+        new QLabel(QString::number(m_model->getSelfPlayer()->getRubin())));
+    ui->SpielerInfoTable->setCellWidget(2, 1, 
+        new QLabel(QString::number(m_model->getSelfPlayer()->getPlanets().size())));
+    ui->SpielerInfoTable->setCellWidget(3, 1, 
+        new QLabel(QString::fromStdString("???")));
+    ui->SpielerInfoTable->setCellWidget(4, 1, 
+        new QLabel(QString::number(m_model->getSelfPlayer()->getShips())));
+}
+
+void MainWindow2D::showPlayerName()
 {
     ui->SpielerInfoTable->setCellWidget(0, 1, 
         new QLabel(QString::fromStdString(m_model->getSelfPlayer()->getPlayerName())));

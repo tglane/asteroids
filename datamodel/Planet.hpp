@@ -54,37 +54,109 @@ namespace asteroids
 		/**
 		 * @brief deletes ships on the planet
 		 * @param ships number of ships
-		 *
+		 * @return boolean if deleting given number of ships was successful or not
 		 */
 		bool delShips(int ships);
 
+		/**
+		 * @brief adds given Planet as Neighbour
+		 * @param neighbour: in Planet defined sharedPointer pointing our Neighbour
+		 * @return void
+		 */
 		void addNeighbour(Planet::Ptr neighbour);
 
+		/**
+		 * @brief sets a Player as the Owner of this planet
+		 * @param owner shared Pointer to our new owner
+		 * @return void
+		 */
 		void setOwner(std::shared_ptr<Player> owner);
 
-		int getRubin();
+		/**
+		 *@brief sets a Player who wants to colonialize this planet
+		 *@param shared ptr to the invader
+		 */
+		void setInvader(std::shared_ptr<Player> invader);
 
-		int getMines();
-
-		void addMines(int mines); //erhöht rubin
-
-		std::list<Planet::Ptr> getNeighbours();
-
-		int getPosX();
-
-		int getPosY();
-
+		/**
+		 * @brief returns the owner of this planet
+		 * @return shared_ptr to the owner
+		 */
 		std::shared_ptr<Player> getOwner();
 
+		/**
+		 * @brief returns the player who wants to colonialise this planet
+		 * @return shared_ptr to the invader
+		 */
+		std::shared_ptr<Player> getInvader();
+
+		/**
+		 * @brief sets the number of the invaderships
+		 * @param int number of invaderships
+		 */
+		void setInvaderShips(int invaderShips);
+
+		/**
+		 * @brief returns the number of the invaderships
+		 * @return int
+		 */
+		int getInvaderShips();
+
+		/**
+		 * @brief returns the number of rubin the owner earn from this planet
+		 * @return int number of rubin
+		 */
+		int getRubin();
+
+		/**
+		 * @brief return the number of mines on this planet
+		 * @return int number of mines
+		 */
+		int getMines();
+
+		/**
+		 * @brief adds Mines to this Planet
+		 * @param number of mines to add
+		 */
+		void addMines(int mines); //erhöht rubin
+
+		/**
+		 * @brief returns a std::list which contains smartpointer to the neighbour planets
+		 * @return std::list<Planet::Ptr> contains smartpointer to the neighbour planets
+		 */
+		std::list<Planet::Ptr> getNeighbours();
+
+		/**
+		 * @brief returns position on x-axis
+		 * @return int position
+		 */
+		int getPosX();
+
+		/**
+		 * @brief returns position on y-axis
+		 * @return int position
+		 */
+		int getPosY();
+
+		/**
+		 * @brief returns the name of this planet
+		 * @return std::string name of this planet
+		 */
 		std::string getName();
+
 
 	private:
 		std::string m_name;
+
 		std::list<Planet::Ptr> m_neighbours;
+
 		int m_mines;
 		int m_rubin;
 		int m_ships;
+		int m_invaderShips;
+
 		std::shared_ptr<Player> m_owner;
+		std::shared_ptr<Player> m_invader;
 
 		int m_posx;
 		int m_posy;	

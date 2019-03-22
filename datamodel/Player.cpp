@@ -25,6 +25,11 @@ Player::Player(int identity, int rubin, int ships) : m_planets()
 
 }
 
+void Player::addPlanet(std::shared_ptr<Planet> planet)
+{
+	m_planets.push_back(planet);
+}
+
 int Player::getShips() 
 {
 	return m_ships;
@@ -71,6 +76,42 @@ void Player::setPlayerName(std::string name)
 std::string Player::getPlayerName()
 {
 	return m_name;
+
+}
+
+std::list<std::shared_ptr<ShipOrder>> Player::getListShipOrder()
+{
+	return m_shipOrders;
+
+}
+
+void Player::putListShipOrder(std::shared_ptr<ShipOrder> NewShipOrder)
+{
+	m_shipOrders.push_back(NewShipOrder);
+
+}
+std::list<std::shared_ptr<MineOrder>> Player::getListMineOrder()
+{
+	return m_mineOrders;
+
+}
+
+void Player::putListMineOrder(std::shared_ptr<MineOrder> NewMineOrder)
+{
+	m_mineOrders.push_back(NewMineOrder);
+
+}
+
+void Player::putListMoveOrder(std::shared_ptr<MoveOrder> newMoveOrder)
+{
+	m_moveOrders.push_back(newMoveOrder);
+}
+
+void Player::ClearOrderListInPlayer()
+{
+	m_shipOrders.clear();
+	m_mineOrders.clear();
+	m_moveOrders.clear();
 
 }
 
