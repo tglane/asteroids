@@ -20,18 +20,18 @@ namespace asteroids
 
 void PhysicsEngine::addDestroyable(PhysicalObject::Ptr& obj)
 {
-    m_objects.insert(std::pair<int, PhysicalObject::Ptr>(curr_dest_id++, obj));
+    m_objects.insert(std::pair<int, PhysicalObject::Ptr>(obj->get_id(), obj));
 }
 
 void PhysicsEngine::addHittable(Hittable::Ptr& h)
 {
-    m_hittables.insert(std::pair<int, Hittable::Ptr>(curr_player_id++, h));
+    m_hittables.insert(std::pair<int, Hittable::Ptr>(h->getId(), h));
 }
 
 void PhysicsEngine::addBullet(Bullet::Ptr& bullet)
 {
 
-    cout << "creating bullet " << bullet->get_id() << endl;
+    //cout << "creating bullet " << bullet->get_id() << endl;
     //m_particles.addEffect(ParticleEffect::createBulletTail(bullet->getPosition(), bullet->direction(), bullet->lifetime()));
     m_bullets.insert(std::pair<int, Bullet::Ptr >(bullet->get_id(), bullet));
 }
@@ -166,13 +166,25 @@ void PhysicsEngine::check_id_type(int id_to_check)
         {
 
             if(m_bullets.count(id_to_check) == 1) {
+
                 m_particles.addEffect(ParticleEffect::createExplosionSphere(m_bullets[id_to_check]->getPosition()));
                 m_bullets[id_to_check]->destroy();
                 m_bullets.erase(id_to_check);
             }
         }else
         {
+            std::cout << id_to_check << std::endl;
             //TODO change health of spaceship if collision with spaceship
+            if(m_hittables.count(id_to_check) == 1) {
+                int health = m_hittables[id_to_check]->getHealth();
+                m_hittables[id_to_check]->setHealth(health - 1);
+                std::cout << health << std::endl;
+                if (health <= 1)
+                {
+                    m_particles.addEffect(ParticleEffect::createExplosionSphere(m_hittables[id_to_check]->getPosition()));
+                    m_hittables.erase(id_to_check);
+                }
+            }
         }
     }
 }

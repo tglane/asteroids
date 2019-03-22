@@ -43,7 +43,8 @@ public:
              float rotation,
              float speed,
              float accell,
-             float radius);
+             float radius,
+             int id);
 
     Asteroid(const Asteroid& other);
 

@@ -30,9 +30,9 @@ bool Hittable::hit(PhysicalBullet& b)
 {
 
 
-    std::cout << "bullet    " << b.getPosition()[0] << " " << b.getPosition()[1]<< " "<< b.getPosition()[2] << std::endl;
-    std::cout << "hittable  " << getPosition()[0] << " " << getPosition()[1]<< " "<< getPosition()[2] << std::endl;
-    std::cout << "rad " << b.radius() << std::endl;
+    // std::cout << "bullet    " << b.getPosition()[0] << " " << b.getPosition()[1]<< " "<< b.getPosition()[2] << std::endl;
+    // std::cout << "hittable  " << getPosition()[0] << " " << getPosition()[1]<< " "<< getPosition()[2] << std::endl;
+    // std::cout << "rad " << b.radius() << std::endl;
 
 
     float length = 200;

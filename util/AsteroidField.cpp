@@ -20,20 +20,23 @@ AsteroidField::AsteroidField(int quantity, const std::string& filename, float ra
 {
 	TexturedMesh::Ptr mesh = std::static_pointer_cast<TexturedMesh>(TriangleMeshFactory::instance().getMesh(filename));
  	// Generate asteroids
- 	addAsteroid(std::make_shared<Asteroid>(Asteroid(mesh, Vector3f(), Vector3f(2500, 0, 0), 0, 0, 0, 0, 100)));
-	for(int i = 0; i < quantity; i++)
-	{
-	  Asteroid::Ptr p = make_shared<Asteroid>(Asteroid(
-		  mesh,  Randomizer::instance()->getRandomVertex(1.0),           // Orientation
-                Randomizer::instance()->getRandomVertex(1000),          // Position
-                Randomizer::instance()->getRandomNumber(0, 100),        // Mass
-                Randomizer::instance()->getRandomNumber(0, 1.57079633), // Rotation
-                Randomizer::instance()->getRandomNumber(0, 0.05),          // Speed
-                Randomizer::instance()->getRandomNumber(0, 0),          // Acceleration
-                Randomizer::instance()->getRandomNumber(20, 100)         // Radius)
-	  ));
-	  m_asteroids.push_back(p);
-	}
+    addAsteroid(Asteroid::Ptr(new Asteroid(mesh, Vector3f(), Vector3f(1000, 0, 0), 0, 0, 0, 0, 100, 1)));
+    addAsteroid(Asteroid::Ptr(new Asteroid(mesh, Vector3f(), Vector3f(-1000, 0, 0), 0, 0, 0, 0, 100, 2)));
+    addAsteroid(Asteroid::Ptr(new Asteroid(mesh, Vector3f(), Vector3f(0, 1000, 0), 0, 0, 0, 0, 100, 3)));
+    addAsteroid(Asteroid::Ptr(new Asteroid(mesh, Vector3f(), Vector3f(0, -1000, 0), 0, 0, 0, 0, 100, 4)));
+	// for(int i = 0; i < quantity; i++)
+	// {
+	//   Asteroid::Ptr p = make_shared<Asteroid>(Asteroid(
+	// 	  mesh,  Randomizer::instance()->getRandomVertex(1.0),           // Orientation
+    //             Randomizer::instance()->getRandomVertex(1000),          // Position
+    //             Randomizer::instance()->getRandomNumber(0, 100),        // Mass
+    //             Randomizer::instance()->getRandomNumber(0, 1.57079633), // Rotation
+    //             Randomizer::instance()->getRandomNumber(0, 0.05),          // Speed
+    //             Randomizer::instance()->getRandomNumber(0, 0),          // Acceleration
+    //             Randomizer::instance()->getRandomNumber(20, 100)         // Radius)
+	//   ));
+	//   m_asteroids.push_back(p);
+	// }
 }
 
 void AsteroidField::getAsteroids(std::list<Asteroid::Ptr>& out)
