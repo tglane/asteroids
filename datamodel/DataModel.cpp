@@ -83,7 +83,7 @@ bool DataModel::endOfRound()
 
 
 /*Code von Kay Bauer*/
-bool DataModel::buyShip(Planet::Ptr selectedPlanet)
+bool DataModel::buyShip(Planet::Ptr selectedPlanet, Player::Ptr m_self)
 {
     /*test druck*/
     std::cout << "Test für buyShip" << std::endl;
@@ -117,7 +117,7 @@ bool DataModel::moveShips(Planet::Ptr from, Planet::Ptr to, int numShips) {
 		MoveOrder::Ptr move = MoveOrder::Ptr(new MoveOrder(from, to, numShips));
 		m_self->putListMoveOrder(move);
 		std::cout << "MoveOrder successful"<< std::endl;
-
+        from->delShips(numShips);
 		return true;
 	}
 
@@ -129,7 +129,7 @@ bool DataModel::moveShips(Planet::Ptr from, Planet::Ptr to, int numShips) {
 
 
 }
-bool DataModel::buyMine(Planet::Ptr selectedPlanet)
+bool DataModel::buyMine(Planet::Ptr selectedPlanet, Player::Ptr m_self)
 {
     /*test druck*/
     std::cout << "Test für buyMine" << std::endl;
@@ -315,7 +315,7 @@ void DataModel::performMovements()
         std::shared_ptr<Planet> destination = moveOrder->getDestination();
         int ships = moveOrder->getNumberShips();
         //take ships from origin planet
-        origin->delShips(ships);
+
         if(destination->getOwner() == m_self){
             //the destination planet is of the same owner
             destination->addShips(ships);
