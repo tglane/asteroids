@@ -29,6 +29,10 @@ int main(int argc, char** argv)
     //asteroids::MainWindow mainWindow("../models/level.xml");
     //mainWindow.show();
 
+    // Test
+    //model->createJson(model->getSelfPlayer());
+    //end test
+
     strategy::StartingDialog startWindow(model);
     startWindow.show();
 
