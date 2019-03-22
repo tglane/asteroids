@@ -46,7 +46,7 @@ public:
     /**
      * @brief Moves the bullet until it's lifetime is over.
      */
-	void run();
+	void run(int elapsed_time);
     
     /// Returns the radius of the bullet
     int radius() { return m_radius; } const
