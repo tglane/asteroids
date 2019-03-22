@@ -67,20 +67,22 @@ public:
     bool endOfRound();
 
     /*Kauf Methoden start*/
-    bool buyShip(Planet::Ptr selectedPlanet, Player::Ptr Player1);
+    bool buyShip(Planet::Ptr selectedPlanet, Player::Ptr m_self);
 
-    bool buyMine(Planet::Ptr selectedPlanet, Player::Ptr Player1);
+    bool buyMine(Planet::Ptr selectedPlanet, Player::Ptr m_self);
 
-    void TransaktionShip(Player::Ptr Player1);
+    void TransaktionShip();
 
-    void TransaktionMine(Player::Ptr Player1);
+    void TransaktionMine();
 
-    void clearOrderList(Player::Ptr Player1);
+    void clearOrderList();
 
     /*Kauf Methoden ende*/
     bool moveShips(Planet::Ptr from, Planet::Ptr to, int numShips);
 
     Planet::Ptr getPlanetFromId(int ID);
+
+    Planet::Ptr getPlanetFromName(std::string name);
 
     std::list<std::pair<int,int>> getEdges();
 
@@ -99,7 +101,7 @@ public:
 
     Player::Ptr getSelfPlayer();
 
-    Player::Ptr getEnemyPlayer();
+    Player::Ptr getEnemyPlayer(int id);
 
     bool updateAll(QJsonDocument &update); // @suppress("Type cannot be resolved")
 
@@ -111,8 +113,20 @@ public:
      */
     void findBattles();
 
+    /**
+     * @brief Creates Json File, which includes information about a certain player and his planets
+     * @param player The player for which the information should be sent
+     * @return the created Json File
+     */
+    QJsonDocument createJson(Player::Ptr player);
+
+
+    void performMovements();
 
 private:
+
+    int m_playerid;
+
     /*Variablen von Kay*/
 
     int Shipcost = 500;
@@ -125,8 +139,12 @@ private:
      */
     void getUniverse(std::string filename);
 
+    std::map<int, Player::Ptr> m_players;
+
     // Map to hold all planets, filled by getUniverse()
     std::map<int, Planet::Ptr>  m_planets;
+
+    std::map<std::string, Planet::Ptr> m_nameToPlanets;
 
     std::list<std::pair<int, int>> m_edges;
 

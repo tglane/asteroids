@@ -25,6 +25,7 @@ Planet::Planet(std::string name, int posx, int posy, int mines, int rubin) : m_n
 	m_minesHidden = 0;
 	m_ships = 0;
 	m_owner = NULL;
+	m_invaderShips = 0;
 }
 
 
@@ -36,6 +37,7 @@ int Planet::getShips()
 void Planet::addShips(int ships) 
 {
 	m_ships += ships;
+	m_owner->incShips();
 }
 
 bool Planet::delShips(int ships) 
@@ -69,6 +71,11 @@ void Planet::setInvader(std::shared_ptr<Player> invader)
 void Planet::setInvaderShips(int invaderShips)
 {
 	 m_invaderShips = invaderShips;
+}
+
+void Planet::addInvaderShips(int invaderShips)
+{
+	m_invaderShips = m_invaderShips+invaderShips;
 }
 
 int Planet::getInvaderShips()
@@ -142,7 +149,7 @@ int Planet::getMinesBuild()
 void Planet::setMinesBuild()
 {
 	m_minesbuild += 1;
-
+	m_owner->incMines();
 }
 
 }

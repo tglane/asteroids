@@ -97,6 +97,12 @@ namespace asteroids
 		void setInvaderShips(int invaderShips);
 
 		/**
+		 * @brief add Ships to the amount of InvaderShips
+		 * @param int invaderShips ships to add
+		 */	
+		void addInvaderShips(int invaderShips);
+
+		/**
 		 * @brief returns the number of the invaderships
 		 * @return int
 		 */
