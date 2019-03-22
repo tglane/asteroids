@@ -1,0 +1,4 @@
+/Users/Tristan/CLionProjects/praktikum4/network/testclient/build/CMakeFiles/rebuild_cache.dir
+/Users/Tristan/CLionProjects/praktikum4/network/testclient/build/CMakeFiles/edit_cache.dir
+/Users/Tristan/CLionProjects/praktikum4/network/testclient/build/CMakeFiles/client.dir
+/Users/Tristan/CLionProjects/praktikum4/network/testclient/build/CMakeFiles/client_autogen.dir

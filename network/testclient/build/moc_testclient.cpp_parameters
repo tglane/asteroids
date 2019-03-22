@@ -1,0 +1,9 @@
+-I/Users/Tristan/CLionProjects/praktikum4/network/testclient/../light_classes
+-F/usr/local/opt/qt/lib
+-I/usr/local/opt/qt/lib/QtNetwork.framework/Headers
+-F/usr/local/opt/qt/lib
+-I/usr/local/opt/qt/lib/QtCore.framework/Headers
+-I/usr/local/opt/qt/./mkspecs/macx-clang
+-o
+/Users/Tristan/CLionProjects/praktikum4/network/testclient/build/moc_testclient.cpp
+/Users/Tristan/CLionProjects/praktikum4/network/testclient/testclient.h

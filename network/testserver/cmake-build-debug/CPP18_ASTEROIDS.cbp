@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="CPP18_ASTEROIDS"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;CMake Files\..\;CMake Files\..\..\;CMake Files\..\..\..\;CMake Files\..\..\..\..\;CMake Files\..\..\..\..\..\;CMake Files\..\..\..\..\..\..\;CMake Files\..\..\..\..\..\..\usr\;CMake Files\..\..\..\..\..\..\usr\local\;CMake Files\..\..\..\..\..\..\usr\local\opt\;CMake Files\..\..\..\..\..\..\usr\local\opt\qt\;CMake Files\..\..\..\..\..\..\usr\local\opt\qt\lib\;CMake Files\..\..\..\..\..\..\usr\local\opt\qt\lib\cmake\;CMake Files\..\..\..\..\..\..\usr\local\opt\qt\lib\cmake\Qt5Network\;CMake Files\..\..\..\..\..\..\usr\local\opt\qt\lib\cmake\Qt5Core\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/Users/Tristan/CLionProjects/praktikum4/network/testserver/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/Users/Tristan/CLionProjects/praktikum4/network/testserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/Users/Tristan/CLionProjects/praktikum4/network/testserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/Users/Tristan/CLionProjects/praktikum4/network/testserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/Users/Tristan/CLionProjects/praktikum4/network/testserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/Users/Tristan/CLionProjects/praktikum4/network/testserver/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/Users/Tristan/CLionProjects/praktikum4/network/testserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/Users/Tristan/CLionProjects/praktikum4/network/testserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/Users/Tristan/CLionProjects/praktikum4/network/testserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/Users/Tristan/CLionProjects/praktikum4/network/testserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/Users/Tristan/CLionProjects/praktikum4/network/testserver/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/Users/Tristan/CLionProjects/praktikum4/network/testserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/Users/Tristan/CLionProjects/praktikum4/network/testserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/Users/Tristan/CLionProjects/praktikum4/network/testserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/Users/Tristan/CLionProjects/praktikum4/network/testserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="server">
+				<Option output="/Users/Tristan/CLionProjects/praktikum4/network/testserver/cmake-build-debug/server" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/Tristan/CLionProjects/praktikum4/network/testserver/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DQT_NETWORK_LIB"/>
+					<Add option="-DQT_CORE_LIB"/>
+					<Add directory="/Users/Tristan/CLionProjects/praktikum4/network/testserver/cmake-build-debug"/>
+					<Add directory="/Users/Tristan/CLionProjects/praktikum4/network/testserver"/>
+					<Add directory="/Users/Tristan/CLionProjects/praktikum4/network/testserver/cmake-build-debug/server_autogen/include"/>
+					<Add directory="/usr/local/opt/qt/lib/QtNetwork.framework"/>
+					<Add directory="/usr/local/opt/qt/lib/QtNetwork.framework/Headers"/>
+					<Add directory="/usr/local/opt/qt/lib/QtCore.framework"/>
+					<Add directory="/usr/local/opt/qt/lib/QtCore.framework/Headers"/>
+					<Add directory="/usr/local/opt/qt/./mkspecs/macx-clang"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/10.0.0/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/Users/Tristan/CLionProjects/praktikum4/network/testserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 server"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/Users/Tristan/CLionProjects/praktikum4/network/testserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/Users/Tristan/CLionProjects/praktikum4/network/testserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/Users/Tristan/CLionProjects/praktikum4/network/testserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="server/fast">
+				<Option output="/Users/Tristan/CLionProjects/praktikum4/network/testserver/cmake-build-debug/server" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/Tristan/CLionProjects/praktikum4/network/testserver/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DQT_NETWORK_LIB"/>
+					<Add option="-DQT_CORE_LIB"/>
+					<Add directory="/Users/Tristan/CLionProjects/praktikum4/network/testserver/cmake-build-debug"/>
+					<Add directory="/Users/Tristan/CLionProjects/praktikum4/network/testserver"/>
+					<Add directory="/Users/Tristan/CLionProjects/praktikum4/network/testserver/cmake-build-debug/server_autogen/include"/>
+					<Add directory="/usr/local/opt/qt/lib/QtNetwork.framework"/>
+					<Add directory="/usr/local/opt/qt/lib/QtNetwork.framework/Headers"/>
+					<Add directory="/usr/local/opt/qt/lib/QtCore.framework"/>
+					<Add directory="/usr/local/opt/qt/lib/QtCore.framework/Headers"/>
+					<Add directory="/usr/local/opt/qt/./mkspecs/macx-clang"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/10.0.0/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/Users/Tristan/CLionProjects/praktikum4/network/testserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 server/fast"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/Users/Tristan/CLionProjects/praktikum4/network/testserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/Users/Tristan/CLionProjects/praktikum4/network/testserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/Users/Tristan/CLionProjects/praktikum4/network/testserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="server_autogen">
+				<Option working_dir="/Users/Tristan/CLionProjects/praktikum4/network/testserver/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/Users/Tristan/CLionProjects/praktikum4/network/testserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 server_autogen"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/Users/Tristan/CLionProjects/praktikum4/network/testserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/Users/Tristan/CLionProjects/praktikum4/network/testserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/Users/Tristan/CLionProjects/praktikum4/network/testserver/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/Users/Tristan/CLionProjects/praktikum4/network/testserver/cmake-build-debug/moc_testserver_tcp.cpp">
+			<Option target="server"/>
+		</Unit>
+		<Unit filename="/Users/Tristan/CLionProjects/praktikum4/network/testserver/cmake-build-debug/moc_testserver_tcp.cpp.rule">
+			<Option target="server"/>
+		</Unit>
+		<Unit filename="/Users/Tristan/CLionProjects/praktikum4/network/testserver/cmake-build-debug/server_autogen/mocs_compilation.cpp">
+			<Option target="server"/>
+		</Unit>
+		<Unit filename="/Users/Tristan/CLionProjects/praktikum4/network/testserver/testserver_tcp.cpp">
+			<Option target="server"/>
+		</Unit>
+		<Unit filename="/Users/Tristan/CLionProjects/praktikum4/network/testserver/testserver_tcp.hpp">
+			<Option target="server"/>
+		</Unit>
+		<Unit filename="/Users/Tristan/CLionProjects/praktikum4/network/testserver/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="/Users/Tristan/CLionProjects/praktikum4/network/testserver/../../../../../../usr/local/opt/qt/lib/cmake/Qt5Network/Qt5NetworkConfig.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\usr\local\opt\qt\lib\cmake\Qt5Network\"/>
+		</Unit>
+		<Unit filename="/Users/Tristan/CLionProjects/praktikum4/network/testserver/../../../../../../usr/local/opt/qt/lib/cmake/Qt5Network/Qt5NetworkConfigVersion.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\usr\local\opt\qt\lib\cmake\Qt5Network\"/>
+		</Unit>
+		<Unit filename="/Users/Tristan/CLionProjects/praktikum4/network/testserver/../../../../../../usr/local/opt/qt/lib/cmake/Qt5Network/Qt5Network_QGenericEnginePlugin.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\usr\local\opt\qt\lib\cmake\Qt5Network\"/>
+		</Unit>
+		<Unit filename="/Users/Tristan/CLionProjects/praktikum4/network/testserver/../../../../../../usr/local/opt/qt/lib/cmake/Qt5Core/Qt5CoreConfig.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\usr\local\opt\qt\lib\cmake\Qt5Core\"/>
+		</Unit>
+		<Unit filename="/Users/Tristan/CLionProjects/praktikum4/network/testserver/../../../../../../usr/local/opt/qt/lib/cmake/Qt5Core/Qt5CoreConfigExtras.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\usr\local\opt\qt\lib\cmake\Qt5Core\"/>
+		</Unit>
+		<Unit filename="/Users/Tristan/CLionProjects/praktikum4/network/testserver/../../../../../../usr/local/opt/qt/lib/cmake/Qt5Core/Qt5CoreConfigExtrasMkspecDir.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\usr\local\opt\qt\lib\cmake\Qt5Core\"/>
+		</Unit>
+		<Unit filename="/Users/Tristan/CLionProjects/praktikum4/network/testserver/../../../../../../usr/local/opt/qt/lib/cmake/Qt5Core/Qt5CoreConfigVersion.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\usr\local\opt\qt\lib\cmake\Qt5Core\"/>
+		</Unit>
+		<Unit filename="/Users/Tristan/CLionProjects/praktikum4/network/testserver/../../../../../../usr/local/opt/qt/lib/cmake/Qt5Core/Qt5CoreMacros.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\usr\local\opt\qt\lib\cmake\Qt5Core\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

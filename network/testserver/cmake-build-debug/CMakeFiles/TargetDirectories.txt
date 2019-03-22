@@ -1,0 +1,4 @@
+/Users/Tristan/CLionProjects/praktikum4/network/testserver/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/Users/Tristan/CLionProjects/praktikum4/network/testserver/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/Tristan/CLionProjects/praktikum4/network/testserver/cmake-build-debug/CMakeFiles/server.dir
+/Users/Tristan/CLionProjects/praktikum4/network/testserver/cmake-build-debug/CMakeFiles/server_autogen.dir

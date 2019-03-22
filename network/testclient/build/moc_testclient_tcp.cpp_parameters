@@ -1,0 +1,5 @@
+-I/Users/Tristan/CLionProjects/praktikum4/network/testclient
+-I/Users/Tristan/CLionProjects/praktikum4/network/testclient/build
+-o
+/Users/Tristan/CLionProjects/praktikum4/network/testclient/build/moc_testclient_tcp.cpp
+/Users/Tristan/CLionProjects/praktikum4/network/testclient/testclient_tcp.hpp

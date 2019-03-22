@@ -1,0 +1,1 @@
+/usr/bin/g++  -g -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/server.dir/server_autogen/mocs_compilation.cpp.o CMakeFiles/server.dir/moc_testserver_tcp.cpp.o CMakeFiles/server.dir/testserver_tcp.cpp.o  -o server /usr/local/opt/qt/lib/QtNetwork.framework/QtNetwork /usr/local/opt/qt/lib/QtCore.framework/QtCore 
