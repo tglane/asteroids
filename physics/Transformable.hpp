@@ -27,7 +27,7 @@ class Transformable
 {
 public:
     enum MoveTransform {FORWARD, BACKWARD, STRAFE_LEFT, STRAFE_RIGHT, LIFT_UP, LIFT_DOWN};
-    enum RotationTransfrom{YAW_COUNTERCLOCKWISE, YAW_CLOCKWISE, PITCH_DOWN, PITCH_UP, ROLL_CLOCKWISE, ROLL_COUNTERCLOCKWISE};
+    enum RotationTransform{YAW_COUNTERCLOCKWISE, YAW_CLOCKWISE, PITCH_DOWN, PITCH_UP, ROLL_CLOCKWISE, ROLL_COUNTERCLOCKWISE};
 
     Transformable();
     virtual ~Transformable() = default;
@@ -37,9 +37,9 @@ public:
      * @param axis axis to rotate
      * @param speed speed of rotation
      */
-    void rotate(RotationTransfrom axis, float speed);
+    void rotate(RotationTransform axis, float speed);
 
-    void rotate(RotationTransfrom axis);
+    void rotate(RotationTransform axis);
 
     /**
      * @brief   Moves a triangle mesh at the given axis with the given speed

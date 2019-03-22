@@ -47,12 +47,12 @@ void Transformable::move(MoveTransform axis)
 }
 
 
-void Transformable::rotate(RotationTransfrom axis)
+void Transformable::rotate(RotationTransform axis)
 {
     rotate(axis, m_rotationSpeed);
 }
 
-void Transformable::rotate(RotationTransfrom axis, float s)
+void Transformable::rotate(RotationTransform axis, float s)
 {
 
     Quaternion nq;
