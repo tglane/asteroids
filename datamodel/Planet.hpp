@@ -79,6 +79,16 @@ namespace asteroids
 		void setInvader(std::shared_ptr<Player> invader);
 
 		/**
+		 * @brief sets number of ships from the owner on this planet
+		 */
+		void setShips(int ships);
+
+		/**
+		 * @brief sets number of mines from the owner on this planet
+		 */
+		void setMines(int mines);
+
+		/**
 		 * @brief returns the owner of this planet
 		 * @return shared_ptr to the owner
 		 */
