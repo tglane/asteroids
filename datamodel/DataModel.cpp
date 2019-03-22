@@ -36,6 +36,7 @@ void DataModel::getUniverse(std::string filename)
             Planet::Ptr p = Planet::Ptr(new Planet(name, posx, posy));
 
             m_planets[i] = p;
+            m_nameToPlanets[name] = p;
         }
 
         // add the edges to the map
@@ -196,6 +197,11 @@ void DataModel::clearOrderList(Player::Ptr Player1)
 Planet::Ptr DataModel::getPlanetFromId(int ID)
 {
     return m_planets.at(ID);
+}
+
+Planet::Ptr DataModel::getPlanetFromName(std::string name)
+{
+    return m_nameToPlanets[name];
 }
 
   
