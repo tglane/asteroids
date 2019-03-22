@@ -10,6 +10,7 @@ DataModel::DataModel(std::string filename) : m_players(), m_planets(), m_edges()
     // no data when initialized, name and id are set later
     // when id is given this player will be added to the map with its id
     m_self = Player::Ptr(new Player());
+    m_enemy = Player::Ptr(new Player());
 
     // when networking issues are solved the map is loaded later
     getUniverse(filename);
@@ -251,7 +252,7 @@ Player::Ptr DataModel::getSelfPlayer()
 
 Player::Ptr DataModel::getEnemyPlayer(int id)
 {
-    return m_players.at(id);
+    return m_enemy;
 }
 
 void DataModel::findBattles()
