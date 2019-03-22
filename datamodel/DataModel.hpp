@@ -110,6 +110,12 @@ public:
      */
     void findBattles();
 
+    /**
+     * @brief Creates Json File, which includes information about a certain player and his planets
+     * @return the created Json File
+     */
+    QJsonDocument createJson();
+
 
 private:
     /*Variablen von Kay*/

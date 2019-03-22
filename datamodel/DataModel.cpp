@@ -272,6 +272,12 @@ void DataModel::findBattles()
     }
 }
 
+QJsonDocument DataModel::createJson()
+{
+    return QJsonDocument();
+}
+
+
 DataModel::~DataModel()
 {
 
