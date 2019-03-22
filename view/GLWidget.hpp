@@ -47,6 +47,8 @@ public:
     /// Handles keyboard input and updates the physics engine
     void step(map<Qt::Key, bool>& keyStates);
 
+    void drawHealth(QPainter& painter, int healthPlayer, int healthEnemy);
+
 protected:
 
     /// Init OpenGL
@@ -57,9 +59,6 @@ protected:
 
     /// Handle new window dimenions
     virtual void resizeGL(int w, int h) override;
-
-    /// Handle mouse movement
-    virtual void mouseMoveEvent(QMouseEvent* event) override;
 
 private:
 

@@ -162,6 +162,8 @@ void GLWidget::paintGL()
     QPixmap hud("../models/cockpit.png");
     painter.drawPixmap(0, 0, this->width(), this->height(), hud);
 
+    drawHealth(painter, m_camera->getHealth(), m_enemy->getHealth());
+
     // paint with OpenGL
 //    glMatrixMode(GL_PROJECTION);
 //    glPushMatrix();
@@ -253,9 +255,21 @@ void GLWidget::step(map<Qt::Key, bool>& keyStates)
     this->update();
 }
 
-void GLWidget::mouseMoveEvent(QMouseEvent* event)
+void GLWidget::drawHealth(QPainter& painter, int healthPlayer, int healthEnemy)
 {
-    // Bei Maus Events passiert nichts
+    float size = this->width() / 30.0f;
+    float gap = 0.1;
+    int height = (int) (size - 2 * size * gap);
+    int width = (int) (height * 1.1);
+
+    QPixmap heart("../models/heart.png");
+    QPixmap emptyHeart("../models/empty_heart.png");
+
+    for (int i = 0; i < 10; i++)
+    {
+        painter.drawPixmap((int) (size * i + size * gap), (int) (size * gap), width, height, (i < healthPlayer) ? heart : emptyHeart);
+        painter.drawPixmap((int) (this->width() - size - (size * i + size * gap)), (int) (size * gap), width, height, (i < healthEnemy) ? heart : emptyHeart);
+    }
 }
 
 void GLWidget::resizeGL(int w, int h)
