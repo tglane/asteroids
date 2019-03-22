@@ -269,6 +269,12 @@ void DataModel::findBattles()
     }
 }
 
+QJsonDocument DataModel::createJson()
+{
+    return QJsonDocument();
+}
+
+
 void DataModel::performMovements()
 {
     std::list<std::shared_ptr<MoveOrder>> myMoveOrder = m_self->getListMoveOrder();
