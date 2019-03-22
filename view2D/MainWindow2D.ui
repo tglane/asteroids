@@ -112,7 +112,7 @@
          <rect>
           <x>10</x>
           <y>20</y>
-          <width>191</width>
+          <width>201</width>
           <height>221</height>
          </rect>
         </property>
@@ -224,9 +224,9 @@
        <widget class="QComboBox" name="DestionationPlanet">
         <property name="geometry">
          <rect>
-          <x>160</x>
+          <x>150</x>
           <y>150</y>
-          <width>121</width>
+          <width>131</width>
           <height>31</height>
          </rect>
         </property>
@@ -289,14 +289,14 @@
        <widget class="QLabel" name="MineNumber">
         <property name="geometry">
          <rect>
-          <x>10</x>
+          <x>80</x>
           <y>90</y>
-          <width>151</width>
+          <width>71</width>
           <height>21</height>
          </rect>
         </property>
         <property name="text">
-         <string>&lt;Num of Mines&gt;</string>
+         <string/>
         </property>
        </widget>
        <widget class="QPushButton" name="BuildMine">
@@ -315,14 +315,14 @@
        <widget class="QLabel" name="ShipNumber">
         <property name="geometry">
          <rect>
-          <x>10</x>
+          <x>80</x>
           <y>120</y>
-          <width>151</width>
+          <width>71</width>
           <height>21</height>
          </rect>
         </property>
         <property name="text">
-         <string>&lt;Num of Ships&gt;</string>
+         <string/>
         </property>
        </widget>
        <widget class="QComboBox" name="SendShipNumber">
@@ -330,7 +330,7 @@
          <rect>
           <x>90</x>
           <y>150</y>
-          <width>61</width>
+          <width>51</width>
           <height>31</height>
          </rect>
         </property>
@@ -338,7 +338,7 @@
        <widget class="QPushButton" name="SendShip">
         <property name="geometry">
          <rect>
-          <x>10</x>
+          <x>0</x>
           <y>150</y>
           <width>81</width>
           <height>31</height>
@@ -346,6 +346,32 @@
         </property>
         <property name="text">
          <string>Send Ship</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="MineLabel">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>90</y>
+          <width>71</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Mines: </string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="ShipLabel">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>120</y>
+          <width>67</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Ships: </string>
         </property>
        </widget>
       </widget>

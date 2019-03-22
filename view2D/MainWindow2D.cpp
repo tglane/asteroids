@@ -151,8 +151,45 @@ void MainWindow2D::fight(bool click)
 
 void MainWindow2D::choose_planet(int id)
 {
-
+    
     Planet::Ptr p = m_model->getPlanetFromId(id);
+
+    if(p->getOwner() != m_model->getSelfPlayer())
+    {
+        // Disable entsprechende Felder, wenn Planet nicht besessen wird
+        ui->SendShip->setEnabled(false);
+        ui->BuildMine->setEnabled(false);
+        ui->BuildShip->setEnabled(false);
+        ui->SendShipNumber->setEnabled(false);
+        ui->DestionationPlanet->setEnabled(false);
+    } else {
+        // Enable entsprechende Felder, wenn Planet besessen wird
+        ui->SendShip->setEnabled(true);
+        ui->BuildMine->setEnabled(true);
+        ui->BuildShip->setEnabled(true);
+        ui->SendShipNumber->setEnabled(true);
+        ui->DestionationPlanet->setEnabled(true);
+
+        std::list<Planet::Ptr> neighbour_list = p->getNeighbours();
+
+        // Lösche die Anzahl der Schiffe des zuletzt ausgewählten Planeten aus der QComboBox
+        ui->SendShipNumber->clear();
+        // Fülle die QComboBox mit der aktuellen Anzahl an Schiffen
+        for(int i = 0; i < p->getShips(); i++)
+        {
+            ui->SendShipNumber->addItem(QString::number(i + 1));
+        }    
+
+        // Lösche die Nachbarplaneten des zuletzt ausgewählten Planeten aus der QComboBox
+        ui->DestionationPlanet->clear();
+        // Fülle die QComboBox mit den aktuellen Nachbarn
+        int j = neighbour_list.size();
+        for(int i = 1; i <= j; i++)
+        {
+            ui->DestionationPlanet->addItem(QString::fromStdString(neighbour_list.front()->getName()));
+            neighbour_list.pop_front();
+        }
+    }
 
     std::map<int, Planet::Ptr> planets = m_model->getPlanets();
 
@@ -208,8 +245,7 @@ void MainWindow2D::choose_planet(int id)
 
     // Planeteninfo ausfüllen
     ui->PlanetName->setText(QString::fromStdString(p->getName()));
-    ui->Info->setText("???");
-    ui->MineNumber->setText(QString::number(p->getMines()));
+    ui->MineNumber->setText(QString::number(p->getMinesBuild()));
     ui->ShipNumber->setText(QString::number(p->getShips()));
     if (p->getOwner() == NULL)
     {
@@ -220,26 +256,6 @@ void MainWindow2D::choose_planet(int id)
         ui->Info->setText(QString::fromStdString(p->getOwner()->getPlayerName()));
     }
 
-    std::list<Planet::Ptr> neighbour_list = p->getNeighbours();
-
-    // Lösche die Anzahl der Schiffe des zuletzt ausgewählten Planeten aus der QComboBox
-    ui->SendShipNumber->clear();
-    // Fülle die QComboBox mit der aktuellen Anzahl an Schiffen
-    for(int i = 0; i < p->getShips(); i++)
-    {
-        ui->SendShipNumber->addItem(QString::number(i + 1));
-    }    
-
-    // Lösche die Nachbarplaneten des zuletzt ausgewählten Planeten aus der QComboBox
-    ui->DestionationPlanet->clear();
-    // Fülle die QComboBox mit den aktuellen Nachbarn
-    int j = neighbour_list.size();
-    for(int i = 1; i <= j; i++)
-    {
-        ui->DestionationPlanet->addItem(QString::fromStdString(neighbour_list.front()->getName()));
-        neighbour_list.pop_front();
-    }
-    QString blub = ui->DestionationPlanet->currentText();
 }
 
 void MainWindow2D::endOfRound(bool click)
@@ -256,11 +272,10 @@ void MainWindow2D::endOfRound(bool click)
 
 void MainWindow2D::colonize(bool click /*, Planet* p*/)
 {
-    // TODO start colonization of Planet p
-    //m_model->colonize(p);
     Planet::Ptr p = m_model->getPlanetFromId(currentPlanet);
 
     m_model->setStartPlanet(p);
+
     ui->Colonize->setVisible(false);
     std::cout << "Colonize!" << std::endl;
     std::cout<<currentPlanet<<std::endl;
@@ -268,6 +283,12 @@ void MainWindow2D::colonize(bool click /*, Planet* p*/)
     QPixmap otherpix("../models/surface/my2.jpg");
     otherEllipse->myBrush = QBrush(otherpix);
     otherEllipse->update();
+
+    // Aktualisiere Informationen
+    ui->Info->setText(QString::fromStdString(p->getOwner()->getPlayerName()));
+    ui->ShipNumber->setText(QString::number(p->getShips()));
+    updatePlayerInfo();
+    choose_planet(currentPlanet);
 }
 
 void MainWindow2D::buildShip(bool click)
@@ -296,7 +317,7 @@ void MainWindow2D::buildMine(bool click)
         std::cout << "Planet wird nicht besessen!" << std::endl;
         return;
     }
-    if (p->getMines() > 0)
+    if (p->getMinesBuild() > 0)
     {
         std::cout << "Planet besitzt bereits eine Mine" << std::endl;
         return;

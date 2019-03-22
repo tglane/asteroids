@@ -8,7 +8,7 @@ namespace asteroids{
 DataModel::DataModel(std::string filename) : m_planets(), m_edges()
 {
     // player which runs this programm
-    m_self = Player::Ptr(new Player());
+    m_self = Player::Ptr(new Player(1,3000,0));
 
     // enemy/ies that run the programm on other devices
     // information from network is needed
@@ -128,6 +128,7 @@ bool DataModel::buyMine(Planet::Ptr selectedPlanet, Player::Ptr Player1)
     /*test druck*/
     std::cout << "Test für buyMine" << std::endl;
     std::cout << selectedPlanet->getMines() << std::endl;
+    std::cout << Player1->getRubin() << std::endl;
     /*test druck ende*/
     if(selectedPlanet->getMines() == 0)
     {

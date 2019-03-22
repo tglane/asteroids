@@ -39,7 +39,7 @@ public:
 	 * @param int rubin = 0
 	 * @paran int ships = 0
 	 */
-	Player(int identity, int rubin = 0, int ships = 0);
+	Player(int identity, int rubin = 3000, int ships = 0);
 
 	/**
 	 * @brief returns the number of ships
