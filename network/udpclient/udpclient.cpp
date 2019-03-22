@@ -251,7 +251,7 @@ void udpclient::recv_collision(int recv_seq_nr, char* data)
     memcpy(id_char, &id, sizeof(id_char));
     ack.append(id_char, sizeof(id_char));
 
-    socket->writeDatagram(data, QHostAddress(m_ip), 1235);
+    socket->writeDatagram(ack, QHostAddress(m_ip), 1235);
 }
 
 void udpclient::createNewBulletFromPackage(int recv_seq_nr, int recv_id, char* data) {
@@ -281,19 +281,19 @@ void udpclient::createNewBulletFromPackage(int recv_seq_nr, int recv_id, char* d
         m_physicsEngine->addBullet(bull);
 
         /* Send acknowledge to server */
-        QByteArray data;
-        data.append('A');
+        QByteArray ack;
+        ack.append('A');
 
         char seqn_char[sizeof(int)];
         memcpy(seqn_char, &recv_seq_nr, sizeof(seqn_char));
-        data.append(seqn_char, sizeof(seqn_char));
+        ack.append(seqn_char, sizeof(seqn_char));
 
         int id = m_id << 24;
         char id_char[sizeof(int)];
         memcpy(id_char, &id, sizeof(id_char));
-        data.append(id_char, sizeof(id_char));
+        ack.append(id_char, sizeof(id_char));
 
-        socket->writeDatagram(data, QHostAddress(m_ip), 1235);
+        socket->writeDatagram(ack, QHostAddress(m_ip), 1235);
     }
 }
 
