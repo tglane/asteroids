@@ -8,8 +8,8 @@
 #include <math/Vector.hpp>
 #include <math/Quaternion.hpp>
 #include <physics/PhysicalBullet.hpp>
-#include <physics/PhysicalSpaceCraft.hpp>
 #include <physics/Transformable.hpp>
+#include <physics/Hittable.hpp>
 #include <memory>
 #include <light_object.hpp>
 #include <light_ship.hpp>
@@ -25,11 +25,11 @@ public:
     QHostAddress address;
     quint16 port;
     uint32_t seq_nr = 0;
-    PhysicalSpaceCraft::Ptr ship;
+    Hittable::Ptr ship;
     std::map<uint32_t, QByteArray> ack_pending;
 
-    UdpClient(): ship(new PhysicalSpaceCraft(Vector3f(), 1, 1, 0)), id(0) {}
-    UdpClient(uint32_t id): ship(new PhysicalSpaceCraft(Vector3f(), 1, 1, id << 24)), id(id) {}
+    UdpClient(): ship(new Hittable(0)), id(0) {}
+    UdpClient(uint32_t id): ship(new Hittable(id << 24)), id(id) {}
     uint32_t next_seq_nr() { return seq_nr++; }
 };
 
@@ -63,7 +63,8 @@ private:
     QTime time;
 public:
     UdpServer();
-    void add_client(uint32_t id, Vector3f position);
+    void add_client(int id, QHostAddress addr);
+    void start();
 };
 
 #endif

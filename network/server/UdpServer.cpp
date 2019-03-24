@@ -20,9 +20,10 @@ UdpServer::UdpServer()
 
     timer = std::unique_ptr<QTimer>(new QTimer(nullptr));
     connect(timer.get(), &QTimer::timeout, this, &UdpServer::tick);
-    timer->start(1000/30);
+    //timer->start(1000/30);
 
 
+    /*
     clients[42] = UdpClient(42);
     clients[42].address = QHostAddress::LocalHost;
     clients[42].port = 1234;
@@ -32,9 +33,10 @@ UdpServer::UdpServer()
     clients[43].address = QHostAddress(QString("192.168.0.43"));
     clients[43].port = 1234;
     clients[43].ship->setHealth(10);
-
+    
     physics_engine.addHittable(clients[42].ship);
     physics_engine.addHittable(clients[43].ship);
+    */
 
     PhysicalObject::Ptr a(new PhysicalObject(Vector3f(), Vector3f(1000, 0, 0), 0, 0, 0, 0, 100, 1));
     PhysicalObject::Ptr b(new PhysicalObject(Vector3f(), Vector3f(-1000, 0, 0), 0, 0, 0, 0, 100, 2));
@@ -272,10 +274,11 @@ bool UdpServer::check_client_id(QNetworkDatagram &datagram)
         return false;
     }
     UdpClient &client = clients[client_id];
-    if (client.address != datagram.senderAddress() || client.port != datagram.senderPort()) {
-        std::cout << "wrong client_id" << std::endl;
-        return false;
-    }
+    // if (client.address != datagram.senderAddress() || client.port != datagram.senderPort()) {
+    //     qDebug() << datagram.senderAddress();
+    //     std::cout << "wrong client_id" << std::endl;
+    //     return false;
+    // }
     return true;
 }
 
@@ -357,9 +360,19 @@ void UdpServer::tick()
     }
 }
 
-int main(int argc, char** argv)
+
+void UdpServer::start()
 {
-    QApplication app(argc, argv);
-    UdpServer server;
-    return app.exec();
+    timer->start(1000/30);
+}
+
+void UdpServer::add_client(int id, QHostAddress addr)
+{
+
+    clients[id] = UdpClient(id);
+    clients[id].address = addr;
+    clients[id].port = 1234;
+    clients[id].ship->setHealth(10);
+
+    physics_engine.addHittable(clients[id].ship);
 }

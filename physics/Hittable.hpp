@@ -11,6 +11,8 @@ class Hittable : public Transformable
 {
 
 public:
+    Hittable() = default;
+    Hittable(int id): m_id(id) { }
 
     using Ptr = std::shared_ptr<Hittable>;
 

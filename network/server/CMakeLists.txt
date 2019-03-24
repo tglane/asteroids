@@ -8,6 +8,7 @@ set(CMAKE_AUTOMOC ON)
 
 
 set(SERVER_SRC
+    TcpServer.cpp
     UdpServer.cpp
     ServerPhysicsEngine.cpp
     ../../math/Quaternion.cpp
@@ -15,11 +16,11 @@ set(SERVER_SRC
     ../../physics/Transformable.cpp
     ../../physics/PhysicalObject.cpp
     ../../physics/PhysicalBullet.cpp
-    ../../physics/PhysicalSpaceCraft.cpp
     ../../physics/Hittable.cpp)
 
 set(SERVER_HDR
-    UdpServer.hpp)
+    UdpServer.hpp
+    TcpServer.hpp)
 
 include_directories(../light_classes/)
 include_directories(../../)

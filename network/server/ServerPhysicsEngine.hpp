@@ -19,7 +19,7 @@
 
 #include <physics/PhysicalObject.hpp>
 #include <physics/PhysicalBullet.hpp>
-#include <physics/PhysicalSpaceCraft.hpp>
+#include <physics/Hittable.hpp>
 
 
 using std::list;
