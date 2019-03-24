@@ -22,8 +22,8 @@ namespace asteroids
 {
 
 SpaceCraft::SpaceCraft(const std::string &filename, const Vector3f& position, float movespeed, float rotatespeed)
-    : PhysicalSpaceCraft(position, movespeed, rotatespeed, 0)
 {
+    m_position = position;
     m_mesh = TriangleMeshFactory::instance().getMesh(filename);
     m_speed = movespeed;
     if(m_mesh)

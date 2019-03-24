@@ -319,7 +319,8 @@ void UdpServer::tick()
 {
     //std::cout << "============ tick =============" << std::endl;
     int time_elapsed = time.restart();
-    auto collisions = physics_engine.process(time_elapsed);
+    bool game_over = physics_engine.process(time_elapsed);
+    auto collisions = physics_engine.detect_collisions();
     for (auto& i: clients) {
 
         uint32_t client_id = i.first;
@@ -354,7 +355,7 @@ void UdpServer::tick()
             }
         }
     }
-    if (physics_engine.gameOver()) {
+    if (game_over) {
         std::cout << "GAME OVER!!!!!!!!!!!!!!!" << std::endl;
         timer->stop();
     }

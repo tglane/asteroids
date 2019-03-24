@@ -19,6 +19,7 @@
 
 #include <physics/PhysicalObject.hpp>
 #include <physics/PhysicalBullet.hpp>
+#include <physics/BasePhysicsEngine.hpp>
 #include <physics/Hittable.hpp>
 
 
@@ -33,7 +34,7 @@ namespace asteroids
  *          and implements collision detection. Handles particle
  *          effects like explosions.
  */
-class ServerPhysicsEngine
+class ServerPhysicsEngine: public BasePhysicsEngine
 {
 public:
 
@@ -49,35 +50,9 @@ public:
      */
     virtual ~ServerPhysicsEngine() = default;
 
-    /**
-     * @brief   Adds a destroyable objects, i.e. a static objects
-     *          that can be hit by a bullet (asteroids etc.). Takes ownership of 
-     *          the given pointer
-     */
-    void addDestroyable(PhysicalObject::Ptr& d);
-
-    void addHittable(Hittable::Ptr& h);
-
-    /**
-     * @brief   Adds a bullet to the scene. Takes ownership of the given pointer
-     */
-    void addBullet(PhysicalBullet::Ptr& bullet);
-
-    bool gameOver();
-    /**
-     * @brief   The engine's main loop
-     */
-    std::list<std::pair<int, int>> process(int time_elapsed);
+    std::list<std::pair<int, int>> detect_collisions();
 
 private:
-
-    /// List of destroyable objects
-    map<int, PhysicalObject::Ptr>    m_objects;
-
-    /// List of active bullets
-    map<int, PhysicalBullet::Ptr>     m_bullets;
-
-    map<int, Hittable::Ptr>          m_hittables;
 
 };
 

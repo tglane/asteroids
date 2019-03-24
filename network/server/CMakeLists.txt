@@ -16,6 +16,7 @@ set(SERVER_SRC
     ../../physics/Transformable.cpp
     ../../physics/PhysicalObject.cpp
     ../../physics/PhysicalBullet.cpp
+    ../../physics/BasePhysicsEngine.cpp
     ../../physics/Hittable.cpp)
 
 set(SERVER_HDR

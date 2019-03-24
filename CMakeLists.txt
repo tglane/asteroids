@@ -132,8 +132,8 @@ set(ASTEROID_SOURCES
     physics/Transformable.cpp
     physics/PhysicalObject.cpp
     physics/PhysicalBullet.cpp
-    physics/PhysicalSpaceCraft.cpp
     physics/PhysicsEngine.cpp
+    physics/BasePhysicsEngine.cpp
     physics/ParticleEngine.cpp
     physics/Hittable.cpp
     physics/PhysicalBullet.cpp

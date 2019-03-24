@@ -10,19 +10,18 @@
  */
 
 
-#ifndef PHYSICSENGINE_HPP_
-#define PHYSICSENGINE_HPP_
+#ifndef BASEPHYSICSENGINE_HPP_
+#define BASEPHYSICSENGINE_HPP_
 
-#include <list>
+#include <map>
 #include <memory>
 
 #include "PhysicalObject.hpp"
-#include "ParticleEngine.hpp"
-#include "rendering/Bullet.hpp"
-#include "rendering/SpaceCraft.hpp"
+#include "PhysicalBullet.hpp"
+#include "Hittable.hpp"
 
 
-using std::list;
+using std::map;
 
 
 namespace asteroids
@@ -37,49 +36,47 @@ class BasePhysicsEngine
 {
 public:
 
-    using Ptr = std::shared_ptr<PhysicsEngine>;
+    using Ptr = std::shared_ptr<BasePhysicsEngine>;
 
     /**
      * @brief   Ctor.
      */
-    PhysicsEngine() = default;
+    BasePhysicsEngine() = default;
 
     /**
      * @brief   Dtor.
      */
-    virtual ~PhysicsEngine() = default;
+    virtual ~BasePhysicsEngine() = default;
 
     /**
      * @brief   Adds a destroyable objects, i.e. a static objects
      *          that can be hit by a bullet (asteroids etc.). Takes ownership of 
      *          the given pointer
      */
-    void addDestroyable(PhysicalObject::Ptr& d);
+    void addDestroyable(PhysicalObject::Ptr d);
 
+    void addHittable(Hittable::Ptr h);
 
     /**
      * @brief   Adds a bullet to the scene. Takes ownership of the given pointer
      */
-    void addBullet(Bullet::Ptr& bullet);
+    void addBullet(PhysicalBullet::Ptr bullet);
 
     /**
      * @brief   The engine's main loop
      */
-    void process();
+    bool process(int elapsed_time);
 
-    void handle_collision(PhysicalObject::Ptr& obj1, PhysicalObject::Ptr& obj2) = 0;
-private:
+protected:
 
     /// List of destroyable objects
-    list<PhysicalObject::Ptr>    m_objects;
+    map<int, PhysicalObject::Ptr>    m_objects;
 
     /// List of active bullets
-    list<Bullet::Ptr>            m_bullets;
+    map<int, PhysicalBullet::Ptr>            m_bullets;
 
-    ParticleEngine               m_particles;
-
-
+    map<int, Hittable::Ptr>          m_hittables;
 };
 
 } /* namespace asteroids */
-#endif /* PHYSICSENGINE_HPP_ */
+#endif /* BASEPHYSICSENGINE_HPP_ */

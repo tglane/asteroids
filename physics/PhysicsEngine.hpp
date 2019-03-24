@@ -20,6 +20,7 @@
 #include "ParticleEngine.hpp"
 #include "rendering/Bullet.hpp"
 #include "rendering/SpaceCraft.hpp"
+#include "BasePhysicsEngine.hpp"
 
 
 using std::map;
@@ -33,7 +34,7 @@ namespace asteroids
  *          and implements collision detection. Handles particle
  *          effects like explosions.
  */
-class PhysicsEngine : public Renderable
+class PhysicsEngine : public BasePhysicsEngine, public Renderable
 {
 public:
 
@@ -48,20 +49,6 @@ public:
      * @brief   Dtor.
      */
     virtual ~PhysicsEngine() = default;
-
-    /**
-     * @brief   Adds a destroyable objects, i.e. a static objects
-     *          that can be hit by a bullet (asteroids etc.). Takes ownership of 
-     *          the given pointer
-     */
-    void addDestroyable(PhysicalObject::Ptr& d);
-
-    void addHittable(Hittable::Ptr& h);
-
-    /**
-     * @brief   Adds a bullet to the scene. Takes ownership of the given pointer
-     */
-    void addBullet(Bullet::Ptr& bullet);
 
     /**
      * @brief   Renders all objects and particle effects
@@ -82,15 +69,7 @@ public:
 
 private:
 
-    /// List of destroyable objects
-    map<int, PhysicalObject::Ptr>    m_objects;
-
-    /// List of active bullets
-    map<int, Bullet::Ptr>            m_bullets;
-
     ParticleEngine               m_particles;
-
-    map<int, Hittable::Ptr>          m_hittables;
 
     /// Current highest id of asteroids and bullets
     int curr_bull_id = 1;
