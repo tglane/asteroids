@@ -111,7 +111,7 @@ void TcpServer::handle_init(TcpClient& client, QJsonDocument& doc)
         state = WAIT_READY;
     }
     qDebug() << client.socket->peerAddress();
-    udpServer.add_client(client.id, client.socket->peerAddress());
+    udpServer.add_client(client.id, client.socket->peerAddress(), client.socket->peerPort());
 }
 
 
@@ -137,6 +137,6 @@ void TcpServer::readyRead()
 int main(int argc, char** argv)
 {
     QApplication app(argc, argv);
-    TcpServer server;
+    UdpServer server;
     return app.exec();
 }

@@ -11,6 +11,7 @@ set(SERVER_SRC
     TcpServer.cpp
     UdpServer.cpp
     ServerPhysicsEngine.cpp
+    ../UdpPeer.cpp
     ../../math/Quaternion.cpp
     ../../math/Matrix.cpp
     ../../physics/Transformable.cpp
@@ -21,7 +22,8 @@ set(SERVER_SRC
 
 set(SERVER_HDR
     UdpServer.hpp
-    TcpServer.hpp)
+    TcpServer.hpp
+    ../UdpPeer.hpp)
 
 include_directories(../light_classes/)
 include_directories(../../)

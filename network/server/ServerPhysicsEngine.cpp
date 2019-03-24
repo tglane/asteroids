@@ -75,6 +75,7 @@ std::list<std::pair<int, int>> ServerPhysicsEngine::detect_collisions()
                 h_it++;
             }
         }
+        b_it++;
     }
 
     return collisions;

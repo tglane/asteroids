@@ -15,6 +15,7 @@
 #include <light_ship.hpp>
 
 #include "ServerPhysicsEngine.hpp"
+#include "../UdpPeer.hpp"
 
 using namespace asteroids;
 
@@ -38,32 +39,26 @@ class UdpServer: public QObject
     Q_OBJECT
 
 private slots:
-    void handle_udp();
+    void handle_bullet(int id, Vector3f& position, Vector3f& velocity);
+    void handle_position(int id, Vector3f& position, Vector3f& x_axis, Vector3f& y_axis, Vector3f& z_axis);
+    //void handle_collision(int id, int obj_id1, int obj_id2);
+    void handle_ack(int id, int seq_nr);
     void tick();
 
 private:
+    UdpPeer peer;
+
     ServerPhysicsEngine physics_engine;
 
-    std::unique_ptr<QUdpSocket> socket;
-    std::unique_ptr<QTimer> timer;
     std::map<uint32_t, UdpClient> clients;
 
-    Vector3f bytes_to_vector(char *bytes);
-    Quaternion bytes_to_quaternion(char *bytes);
-    void handle_position_packet(QNetworkDatagram &datagram);
-    void handle_bullet_packet(QNetworkDatagram &datagram);
-    void set_position_from_packet(QNetworkDatagram &datagram, Transformable &obj);
-    void send_ack(QNetworkDatagram &datagram);
-    void handle_ack(QNetworkDatagram &datagram);
-    void send_collision(UdpClient &client, uint32_t id1, uint32_t id2);
-    void send_position(UdpClient &client, Transformable &obj, uint32_t obj_id);
-    void send_bullet(UdpClient &client, PhysicalBullet &obj, uint32_t obj_id);
-    bool check_client_id(QNetworkDatagram &datagram);
+    bool check_client_id(int id); //QNetworkDatagram &datagram);
 
+    QTimer timer;
     QTime time;
 public:
     UdpServer();
-    void add_client(int id, QHostAddress addr);
+    void add_client(int id, QHostAddress addr, int port);
     void start();
 };
 
