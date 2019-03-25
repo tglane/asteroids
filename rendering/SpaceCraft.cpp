@@ -49,6 +49,11 @@ bool SpaceCraft::hasMesh() const
     return m_mesh != nullptr;
 }
 
+void SpaceCraft::fixArrow()
+{
+    m_mesh->fixArrow();
+}
+
 SpaceCraft::~SpaceCraft()
 {
  

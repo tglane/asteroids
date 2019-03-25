@@ -2,3 +2,5 @@
 /.vscode
 /.metadata/
 /cmake
+cmake-build-debug/
+.idea/

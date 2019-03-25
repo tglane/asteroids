@@ -347,7 +347,7 @@ float* Matrix::getData(){ return m;};
  */
 float Matrix::operator[](const int& index) const
 {
-    /// TODO: Boundary check
+    /// notTODO: Boundary check
     return m[index];
 }
 
