@@ -33,9 +33,13 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 # special optimization flags
 ###############################################################################
 
+
+
 set( CMAKE_CXX_FLAGS         "-O3 -Wall -std=c++14" )
 set( CMAKE_CXX_FLAGS_RELEASE "-O3 -msse3 -Wno-deprecated-declarations -Wno-unused -Wcpp" )
 set( CMAKE_CXX_FLAGS_DEBUG   "-g -Wall" )
+
+#set( CMAKE_EXE_LINKER_FLAGS  "-L/usr/local/lib -lSDL -lSDLmain -lSDL")
 
 ###############################################################################
 # Find required libraries.Right now we need glut and OpenGL. The required 
@@ -151,24 +155,39 @@ set(ASTEROID_SOURCES
     util/Util.cpp
     view/GLWidget.cpp
     view/MainWindow.cpp 
-    view/Camera.cpp
     network/udpclient/udpclient.cpp
     view/Controller.cpp
     Gamepad.cpp
+    view/Camera.cpp  
+    datamodel/DataModel.cpp
+    datamodel/Planet.cpp
+    datamodel/Player.cpp
+    datamodel/MineOrder.cpp
+    datamodel/ShipOrder.cpp
+    datamodel/MoveOrder.cpp
+    datamodel/Battle.cpp
+    view2D/StartingDialog.cpp
+    view2D/MainWindow2D.cpp
+    view2D/MyEllipse.cpp
 )
 
 set(ASTEROID_MOCS
     view/MainWindow.hpp
+    view2D/MainWindow2D.hpp
+    view2D/StartingDialog.hpp
 )
 
 set(ASTEROID_UIS
     view/MainWindow.ui
+    view2D/MainWindow2D.ui
+    view2D/StartingDialog.ui
 )
 
 set(CMAKE_AUTOMOC ON)
 
 qt5_wrap_ui(ASTEROID_UI_HDRS ${ASTEROID_UIS})
 message(STATUS ${ASTEROID_UI_HDRS})
+
 
 add_definitions(${QT_DEFINITIONS})
 
@@ -197,6 +216,10 @@ add_executable(asteroids
     ${C3DSREADER_SOURCES}
     ${ASTEROID_MOCS}
     ${ASTEROID_UI_HDRS}
+    ${STRATEGY_MOCS}
+    ${STRATEGY_UI_HDRS}
+    ${START_MOCS}
+    ${START_UI_HDRS}
 )
 ###############################################################################
 # External library dependencys
