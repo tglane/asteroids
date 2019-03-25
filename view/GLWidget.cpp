@@ -4,7 +4,7 @@
 #include <QMouseEvent>
 #include <SDL2/SDL.h>
 #include <QtGui/QPainter>
-//#include <SOIL.h>
+#include <math.h>
 
 GLWidget::GLWidget(QWidget* parent) :
     QOpenGLWidget(parent),
@@ -14,8 +14,7 @@ GLWidget::GLWidget(QWidget* parent) :
     m_cockpit("../models/cockpit.png"),
     m_playerHeart("../models/player_heart.png"),
     m_enemyHeart("../models/enemy_heart.png"),
-    m_emptyHeart("../models/empty_heart.png")
-    {}
+    m_emptyHeart("../models/empty_heart.png") {}
 
 void GLWidget::setLevelFile(const std::string& file)
 {
@@ -174,6 +173,8 @@ void GLWidget::paintGL()
 
     drawHealth(painter, m_camera->getHealth(), m_enemy->getHealth());
 
+    drawMinimap(painter, m_camera, m_enemy);
+
     // Draw start timer
     int time = m_startTimer.elapsed();
     if (time >= 1000 && time < 2000)
@@ -288,6 +289,10 @@ void GLWidget::step(map<Qt::Key, bool>& keyStates)
 
 void GLWidget::drawHealth(QPainter& painter, int healthPlayer, int healthEnemy)
 {
+    QPixmap playerHeart("../models/player_heart.png");
+    QPixmap enemyHeart("../models/enemy_heart.png");
+    QPixmap emptyHeart("../models/empty_heart.png");
+
     float size = this->width() / 30.0f;
     float gap = 0.1;
     int height = (int) (size - 2 * size * gap);
@@ -298,6 +303,35 @@ void GLWidget::drawHealth(QPainter& painter, int healthPlayer, int healthEnemy)
         painter.drawPixmap((int) (size * i + size * gap), (int) (size * gap), width, height, (i < healthPlayer) ? m_playerHeart : m_emptyHeart);
         painter.drawPixmap((int) (this->width() - size - (size * i + size * gap)), (int) (size * gap), width, height, (i < healthEnemy) ? m_enemyHeart : m_emptyHeart);
     }
+}
+
+void GLWidget::drawMinimap(QPainter& painter, Hittable::Ptr player, Hittable::Ptr enemy)
+{
+    QPixmap minimap("../models/minimap");
+    QPixmap playerMinimap("../models/player_minimap");
+    QPixmap enemyMinimap("../models/enemy_minimap");
+
+    float size = this->width() * 0.2F;
+    float originX = this->height() - size * 1.1F + size / 2;
+    float originY = this->width() - size * 1.1F + size / 2;
+    painter.translate(originY, originX);
+    painter.save();
+    painter.drawPixmap((int) (-size / 2), (int) (-size / 2), (int) size, (int) size, minimap);
+
+    int fighterHeight = (int) (this->width() * 0.025);
+    int fighterWidth = fighterHeight / 2;
+
+    painter.translate(size / 10000 * player->getPosition()[0], -size / 10000 * player->getPosition()[1]);
+    painter.rotate(std::atan2(player->getXAxis()[0], player->getXAxis()[1]) * 180 / M_PI);
+    painter.drawPixmap(0 - fighterWidth / 2, 0 - fighterHeight / 2, fighterWidth, fighterHeight, playerMinimap);
+
+    painter.restore();
+
+    painter.translate(size / 10000 * enemy->getPosition()[0], -size / 10000 * enemy->getPosition()[1]);
+    painter.rotate(std::atan2(enemy->getXAxis()[0], enemy->getXAxis()[1]) * 180 / M_PI);
+    painter.drawPixmap(0 - fighterWidth / 2, 0 - fighterHeight / 2, fighterWidth, fighterHeight, enemyMinimap);
+
+    painter.resetTransform();
 }
 
 void GLWidget::resizeGL(int w, int h)

@@ -49,6 +49,8 @@ public:
 
     void drawHealth(QPainter& painter, int healthPlayer, int healthEnemy);
 
+    void drawMinimap(QPainter& painter, Hittable::Ptr player, Hittable::Ptr enemy);
+
 protected:
 
     /// Init OpenGL

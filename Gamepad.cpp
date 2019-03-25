@@ -3,7 +3,7 @@
 namespace asteroids {
 
 Gamepad::Gamepad(QObject *parent) : QObject(parent),
-                                    m_aPressed(false), m_r2(0), m_leftX(0), m_leftY(0), m_r1Pressed(false), m_l1Pressed(false) {}
+                                    m_aPressed(false), m_r2(0), m_leftX(0), m_leftY(0), m_l1Pressed(false), m_r1Pressed(false) {}
 
 bool Gamepad::init()
 {
