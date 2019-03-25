@@ -26,18 +26,18 @@ DataModel::DataModel(std::string filename) : m_players(), m_planets(), m_edges()
     // when networking issues are solved the map is loaded later
     getUniverse(filename);
 
-    Planet::Ptr Test = getPlanetFromId(5);
- 	Planet::Ptr Test2 = getPlanetFromId(6);
-	Planet::Ptr Test3 = getPlanetFromId(7);
-	m_enemy = Player::Ptr(new Player(1,3000,0));
-	
-    Test->setOwner(m_enemy);
-    Test2->setOwner(m_enemy);
-    Test3->setOwner(m_enemy);
-    Test3->addShips(3);
-	m_enemy->addPlanet(Test);
-	m_enemy->addPlanet(Test2);
-	m_enemy->addPlanet(Test3);
+    //Planet::Ptr Test = getPlanetFromId(5);
+ 	//Planet::Ptr Test2 = getPlanetFromId(6);
+	//Planet::Ptr Test3 = getPlanetFromId(7);
+	//m_enemy = Player::Ptr(new Player(1,3000,0));
+	//
+    //Test->setOwner(m_enemy);
+    //Test2->setOwner(m_enemy);
+    //Test3->setOwner(m_enemy);
+    //Test3->addShips(3);
+	//m_enemy->addPlanet(Test);
+	//m_enemy->addPlanet(Test2);
+	//m_enemy->addPlanet(Test3);
 }
 
 void DataModel::getUniverse(std::string filename)
@@ -426,8 +426,9 @@ Player::Ptr DataModel::getPlayer(int id) {
     return m_players[id];
 }
 
-std::list<std::shared_ptr<Battle>> DataModel::findBattles()
+std::vector<std::shared_ptr<Battle>> DataModel::findBattles()
 {
+    m_battles = std::vector<Battle::Ptr>();
     std::map<int, Planet::Ptr>::iterator it;
     for(it = m_planets.begin(); it != m_planets.end(); it++)
     {
@@ -615,8 +616,8 @@ void DataModel::performMovements(Player::Ptr player)
 
 void DataModel::BattleReport()
 {
-    std::list<std::shared_ptr<Battle>> BattleResult = m_battles;
-    for (std::list<std::shared_ptr<Battle>>::iterator it = BattleResult.begin(); it != BattleResult.end(); ++it)
+    std::vector<std::shared_ptr<Battle>> BattleResult = m_battles;
+    for (std::vector<std::shared_ptr<Battle>>::iterator it = BattleResult.begin(); it != BattleResult.end(); ++it)
     {
         std::shared_ptr<Battle> BattleDetailResult = *it;
         if(BattleDetailResult->FightResultInvader == false)
@@ -692,8 +693,8 @@ void DataModel::WinCondition()
 
 void DataModel::BattlePhase()
 {
-    std::list<std::shared_ptr<Battle>> BattlePhase = m_battles;
-    for (std::list<std::shared_ptr<Battle>>::iterator it = BattlePhase.begin(); it != BattlePhase.end(); ++it)  
+    std::vector<std::shared_ptr<Battle>> BattlePhase = m_battles;
+    for (std::vector<std::shared_ptr<Battle>>::iterator it = BattlePhase.begin(); it != BattlePhase.end(); ++it)
     {
         std::shared_ptr<Battle> BattleDetail = *it;
         std::cout << "Kampfphase" << std::endl;

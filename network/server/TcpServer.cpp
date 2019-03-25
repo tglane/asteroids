@@ -10,6 +10,7 @@ TcpServer::TcpServer()
 {
     state = WAITING;
     connect(&server, SIGNAL(newConnection()), this, SLOT(onConnect()));
+    //connect(&server, SIGNAL(disconnected()), this, SLOT(onDisconnect()));
 
     m_datamodel = DataModel::Ptr(new DataModel("../models/Level-1.map"));
 
@@ -24,6 +25,11 @@ TcpServer::TcpServer()
     }
 }
 
+void TcpServer::onDisconnect()
+{
+    qDebug() << "Client disconnected";
+}
+
 void TcpServer::onConnect()
 {
     qDebug() << "Client connected";
@@ -36,6 +42,7 @@ void TcpServer::onConnect()
     client.socket->setSocketOption(QAbstractSocket::KeepAliveOption, 1);
     clients.push_back(client);
 
+    connect(client.socket.get(), SIGNAL(disconnect()), this, SLOT(onDisconnect()));
     connect(client.socket.get(), SIGNAL(readyRead()), this, SLOT(readyRead()));
 
 }
@@ -112,13 +119,13 @@ void TcpServer::handle_ready(TcpClient& client, QJsonDocument& doc)
 void TcpServer::handle_state(TcpClient& client, QJsonDocument& doc) {
     QJsonArray array_state = doc.array();
     QJsonObject obj_state = array_state[1].toObject();
-    //m_datamodel->updateAll(obj_state);
+    m_datamodel->updateAll(obj_state);
 }
 
 void TcpServer::fight_init()
 {
     udpServer = std::shared_ptr<UdpServer>(new UdpServer());
-    connect(udpServer.get(),SIGNAL(fightEnd(int)), this, SLOT(fightEnd(int)));
+    connect(udpServer.get(),SIGNAL(fightEnd(int,int)), this, SLOT(fightEnd(int,int)));
     for (auto j: clients)
     {
         udpServer->add_client(j.id, j.socket->peerAddress(), j.socket->peerPort(), 10);
@@ -130,9 +137,27 @@ void TcpServer::fight_init()
     array.push_back("fight_init");
 }
 
-void TcpServer::fightEnd(int id) {
+void TcpServer::fightEnd(int id, int health_left) {
     // ToDo Datamodel
-    //udpServer.stop();
+    Battle::Ptr current_battle = m_battle_list[battle_count];
+    if (current_battle->m_player1->getIdentity() == id) {
+        current_battle->m_player1->delShips(current_battle->m_numberShips1 - health_left);
+    } else {
+        current_battle->m_player1->delShips(current_battle->m_numberShips1);
+    }
+    if (current_battle->m_player2->getIdentity() == id) {
+        current_battle->m_player2->delShips(current_battle->m_numberShips2 - health_left);
+    } else {
+        current_battle->m_player2->delShips(current_battle->m_numberShips2);
+    }
+
+    m_datamodel->getPlayer(clients[id].id)->addPlanet(m_battle_list[battle_count]->m_location);
+
+    current_battle->m_location->setOwner(m_datamodel->getPlayer(clients[id].id));
+    current_battle->m_location->setInvader(nullptr);
+    current_battle->m_location->setInvaderShips(0);
+    current_battle->m_location->setShips(health_left);
+
     udpServer.reset();
     send_battle();
 }

@@ -35,7 +35,8 @@ class TcpServer: public QObject
 private slots:
     void onConnect();
     void readyRead();
-    void fightEnd(int id);
+    void onDisconnect();
+    void fightEnd(int id,int  health_left);
 
 private:
     char last_id = 1;
@@ -63,7 +64,7 @@ private:
 
     DataModel::Ptr m_datamodel;
 
-    std::list<std::shared_ptr<Battle>> m_battle_list;
+    std::vector<std::shared_ptr<Battle>> m_battle_list;
 
 public:
     TcpServer();

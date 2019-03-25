@@ -123,7 +123,7 @@ public:
      *          fills list of battles, and gives planets to invaders
      *          on planets that dont have defenders,
      */
-    std::list<std::shared_ptr<Battle>> findBattles();
+    std::vector<std::shared_ptr<Battle>> findBattles();
 
     /**
      * @brief Creates Json File, which includes information about a certain player and his planets, 
@@ -196,7 +196,7 @@ private:
     std::map<int, QMainWindow*> m_Window;
 
     // List of upcoming battles
-    std::list<std::shared_ptr<Battle>> m_battles;
+    std::vector<std::shared_ptr<Battle>> m_battles;
 };
 
 }
