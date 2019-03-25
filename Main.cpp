@@ -26,8 +26,6 @@ int main(int argc, char** argv)
 
     strategy::MainWindow2D mainWindow2D(model);
 
-    //strategy::StartingDialog startWindow(model);
-
     mainWindow2D.show();
 
     return a.exec();

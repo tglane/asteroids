@@ -26,6 +26,7 @@ Planet::Planet(std::string name, int posx, int posy, int mines, int rubin) : m_n
 	m_ships = 0;
 	m_owner = NULL;
 	m_invaderShips = 0;
+	m_ships_ordered = 0;
 }
 
 
@@ -37,7 +38,7 @@ int Planet::getShips()
 void Planet::addShips(int ships) 
 {
 	m_ships += ships;
-	m_owner->incShips();
+	m_owner->incShips(ships);
 }
 
 bool Planet::delShips(int ships) 
@@ -46,11 +47,17 @@ bool Planet::delShips(int ships)
 	{
 		return false;
 	}
-	else
+	else if(m_ships > 0)
 	{
 		m_ships -= ships; 
 		return true;
 	} 
+
+	else
+	{
+		return false;
+
+	}
 }
 
 void Planet::addNeighbour(Planet::Ptr neighbour)
@@ -161,6 +168,21 @@ void Planet::setMinesBuild()
 {
 	m_minesbuild += 1;
 	m_owner->incMines();
+}
+
+int Planet::getShipsOrdered()
+{
+	return m_ships_ordered;
+}
+
+void Planet::incShipsOrdered()
+{
+	m_ships_ordered++;
+}
+
+void Planet::resetShipsOrdered()
+{
+	m_ships_ordered = 0;
 }
 
 }

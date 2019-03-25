@@ -285,6 +285,7 @@ void MainWindow2D::buildShip(bool click)
     if (m_model->buyShip(p, p->getOwner()))
     {
         std::cout << "Build Ship!" << std::endl;
+        p->incShipsOrdered();
         updatePlanetInfo(currentPlanet);
         updatePlayerInfo();
     } else {
@@ -327,6 +328,8 @@ void MainWindow2D::sendShips(bool click)
     Planet::Ptr to = m_model->getPlanetFromName(ui->DestionationPlanet->currentText().toStdString());
     Planet::Ptr from = m_model->getPlanetFromId(currentPlanet);
     m_model->moveShips(from, to, ui->SendShipNumber->currentText().toInt());
+    updatePlanetInfo(currentPlanet);
+    updatePlayerInfo();
 }
 
 void MainWindow2D::exitGame(bool click)
@@ -366,6 +369,10 @@ void MainWindow2D::updatePlanetInfo(int id)
         ui->BuildShip->setVisible(false);
         ui->SendShipNumber->setVisible(false);
         ui->DestionationPlanet->setVisible(false);
+        ui->MineOrdersLabel->setVisible(false);
+        ui->MineOrdersValue->setVisible(false);
+        ui->ShipOrdersLabel->setVisible(false);
+        ui->ShipOrdersValue->setVisible(false);
     } else {
         // Enable entsprechende Felder, wenn Planet besessen wird
         ui->SendShip->setVisible(true);
@@ -373,6 +380,25 @@ void MainWindow2D::updatePlanetInfo(int id)
         ui->BuildShip->setVisible(true);
         ui->SendShipNumber->setVisible(true);
         ui->DestionationPlanet->setVisible(true);
+        ui->MineOrdersLabel->setVisible(true);
+        ui->MineOrdersValue->setVisible(true);
+        ui->ShipOrdersLabel->setVisible(true);
+        ui->ShipOrdersValue->setVisible(true);
+
+        /* Schiffe und Minen können nur mit genügend Rubinen gekauft werden */
+        if (m_model->getSelfPlayer()->getRubin() < m_model->getShipCost())
+        {
+            ui->BuildShip->setVisible(false);
+        } else {
+            ui->BuildShip->setVisible(true);
+        }
+        if (m_model->getSelfPlayer()->getRubin() < m_model->getMineCost())
+        {
+            ui->BuildMine->setVisible(false);
+        } else {
+            ui->BuildMine->setVisible(true);
+        }
+
 
         std::list<Planet::Ptr> neighbour_list = p->getNeighbours();
 
@@ -397,7 +423,15 @@ void MainWindow2D::updatePlanetInfo(int id)
 
     // Planeteninfo ausfüllen
     ui->PlanetName->setText(QString::fromStdString(p->getName()));
-    ui->MineNumber->setText(QString::number(p->getMinesBuild()));
+
+    QString mineText = QString::number(p->getMinesBuild()) + " / " + QString::number(p->getMines());
+    ui->MineNumber->setText(mineText);
+    // Verstecke den Button, wenn die max. Minenanzahl erreicht ist
+    if (p->getMinesBuild() + p->getMinesHidden() == p->getMines())
+    {
+        ui->BuildMine->setVisible(false);
+    }
+
     ui->ShipNumber->setText(QString::number(p->getShips()));
     if (p->getOwner() == NULL)
     {
@@ -407,6 +441,9 @@ void MainWindow2D::updatePlanetInfo(int id)
     {
         ui->Info->setText(QString::fromStdString(p->getOwner()->getPlayerName()));
     }
+
+    ui->MineOrdersValue->setText(QString::number(p->getMinesHidden()));
+    ui->ShipOrdersValue->setText(QString::number(p->getShipsOrdered()));
 }
 
 void MainWindow2D::showPlayerName()
