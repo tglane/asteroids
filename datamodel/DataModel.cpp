@@ -443,6 +443,29 @@ QJsonDocument DataModel::createJsonPlayerStatus(Player::Ptr player)
     //Add the array to the json file
     main.insert("PlanetArray", planeets);
 
+    //Json array for invasion
+    QJsonArray qInvasions;
+
+    //Go over all planets and if there is a fight, add it to json file 
+    for(std::map<int, Planet::Ptr>::iterator it = m_planets.begin(); it != m_planets.end(); it++)
+    {
+        //A planet in the list
+        Planet::Ptr planet = it->second;
+        // In this case an invasion is happening on this planet
+        if(planet->getInvader() != NULL)
+        {
+            //planet representation
+            QJsonObject qInvasion;
+
+            qInvasion.insert("ID", getIDFromPlanet(planet));
+            qInvasion.insert("InvaderShips", planet->getInvaderShips());
+
+            qInvasions.push_back(qInvasion);
+        }
+    }
+
+    main.insert("InvadePlanets", qInvasions);
+
     // Make qjsondocument out of it
     QJsonDocument theDocument(main);
 
