@@ -292,7 +292,7 @@ bool DataModel::updateAll(QJsonDocument &update) {
 		int id = 0;
 
 		int rubin = 0;
-		int id;
+		
 		std::string name;
 		std::list<Planet::Ptr> planets;
 		Player::Ptr player;
@@ -662,7 +662,7 @@ void DataModel::WinCondition()
 
     }
 
-    return -1;
+    
 }
 
 void DataModel::BattlePhase()
