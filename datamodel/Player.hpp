@@ -47,6 +47,8 @@ public:
 	 */
 	int getShips();
 
+	void delShips(int ShipNumber);
+
 	int getMines();
 
 	void setShips(int ships);
@@ -98,7 +100,7 @@ public:
 	/**
 	 * @brief increase ship-counter
 	 */
-	void incShips();
+	void incShips(int Ships);
 
 	/**
 	 * @brief increase mines-counter
