@@ -359,46 +359,40 @@ QJsonDocument DataModel::createJson(Player::Ptr player)
 
     //insert id of the player
     main.insert("ID", player->getIdentity());
+    // Playername
     main.insert("Name",  QString::fromStdString(player->getPlayerName()));
+    // amount of rubin
     main.insert("Rubin", player->getIdentity());
 
+    //Json array
     QJsonArray planeets;
+    
+    //Planets of the player
+    std::list<std::shared_ptr<Planet>> planetos = player->getPlanets();
 
-    //planeets.push_back();
-    std::string planetString("Planet");
-    /**
-    for(uint i = 0; i < player->getPlanets().size(); i++)
-    {
-        std::string planetNumber = planetString + std::to_string(i);
-        QString qPlanetNumber = QString::fromStdString(planetNumber);
-
-        
-    }
-    */
-   int i = 1;
-   std::list<std::shared_ptr<Planet>> planetos = player->getPlanets();
+    //Iterate over all and add the to the json file
     for(std::list<std::shared_ptr<Planet>>::iterator it = planetos.begin(); it != planetos.end(); ++it)
     {
+        //The Planet and the qjson representations
         Planet::Ptr planet = *it;
         QJsonObject qPlanet;
 
-        std::string planetNumber = planetString + std::to_string(i);
-        QString qPlanetNumber = QString::fromStdString(planetNumber);
-
+        // Add necessary information to representation
         qPlanet.insert("ID", getIDFromPlanet(planet));
         qPlanet.insert("Mines", planet->getMines());
         qPlanet.insert("Ships", planet->getShips());
 
+        //Add to the json array
         planeets.push_back(qPlanet);
-
-        i++;
-
     }
 
+    //Add the array to the json file
     main.insert("PlanetArray", planeets);
 
+    // Make qjsondocument out of it
     QJsonDocument theDocument(main);
 
+    // In case the json document should be printed
     //std::cout << theDocument.toJson().toStdString() << std::endl;
 
     return theDocument;
