@@ -317,6 +317,7 @@ bool DataModel::updateAll(QJsonDocument &update) {
 
 						planet->setMines(mines);
 						planet->setShips(ships);
+						planet->setOwner(player);
 
 						planets.push_back(planet);
 
