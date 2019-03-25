@@ -143,7 +143,6 @@ void TcpServer::handle_init(TcpClient& client, QJsonDocument& doc)
     qDebug() << "init received";
     qDebug() << doc;
 
-
     // Ziehe Daten aus Document
     QJsonArray array = doc.array();
     QJsonObject temp_name = array[1].toObject();
