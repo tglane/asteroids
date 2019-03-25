@@ -10,13 +10,14 @@ EndWindow::EndWindow(bool victory, QWidget* parent) :
     ui->setupUi(this);
 
     ui->ResultLabel->setStyleSheet("QLabel { color: white }");
+    QPixmap bkgnd;
     if (victory)
     {
         ui->ResultLabel->setText("Victory!");
-        QPixmap bkgnd("../models/victory.jpg");
+        bkgnd = QPixmap("../models/victory.jpg");
     } else {
         ui->ResultLabel->setText("Defeat!");
-        QPixmap bkgnd("../models/defeat.jpg");
+        bkgnd = QPixmap("../models/defeat.jpg");
 
     }
 
