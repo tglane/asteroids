@@ -45,6 +45,6 @@ sudo apt remove qt*dev
 - `Space`: Schießen
 
 ### Gamepad:
-- `L3`, `L1` und `R1`: Lenken
+- `L`, `L1` und `R1`: Lenken
 - `R2`: Schnell fliegen
-- `X` (PlayStation) / `A`(Xbox): Schießen
+- `X`: Schießen
