@@ -118,6 +118,8 @@ private:
     std::map<int, MyEllipse*> view_planets;
 
     int currentPlanet;
+
+    int currentYear;
 };
 
 
