@@ -213,7 +213,7 @@ void TcpServer::handle_init(TcpClient& client, QJsonDocument& doc)
     }
     qDebug() << client.socket->peerAddress();
 
-    udpServer->add_client(client.id, client.socket->peerAddress(), client.socket->peerPort(), 100);
+    //udpServer->add_client(client.id, client.socket->peerAddress(), client.socket->peerPort(), 100);
 }
 
 

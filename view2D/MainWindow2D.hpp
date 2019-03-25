@@ -104,11 +104,6 @@ public slots:
 
     void showPlayerName();
 
-    /**
-     *  @brief  When new round are all the planets color updated
-     */
-    void updatePlanetColor();
-
 private:
 
     /// QT UI of the window
@@ -121,10 +116,6 @@ private:
     DataModel::Ptr m_model;
 
     std::map<int, MyEllipse*> view_planets;
-
-    //std::map<int, QGraphicsTextItem*> m_fighterAmount;
-
-    std::map<std::pair<int,int>, QGraphicsTextItem*> m_fighterAmount;
 
     int currentPlanet;
 };

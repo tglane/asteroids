@@ -5,9 +5,6 @@
 #include <QDebug>
 #include "tcpclient.hpp"
 
-
-#include "view2D/MainWindow2D.hpp"
-
 tcpclient::tcpclient(asteroids::DataModel::Ptr datamodel, QObject* parent)
     : m_datamodel(std::move(datamodel))
 {
@@ -20,8 +17,8 @@ tcpclient::tcpclient(asteroids::DataModel::Ptr datamodel, QObject* parent)
 
 void tcpclient::connect_to_server(string name, string server_ip)
 {
-    m_player_name = QString::fromStdString(name);
-    m_server_ip = QString::fromStdString(server_ip);
+    m_player_name = QString::fromStdString("asdf");
+    m_server_ip = QString::fromStdString("127.0.0.1");
 
     m_socket->connectToHost(m_server_ip, 1235);
 }
@@ -100,7 +97,6 @@ void tcpclient::process_init_res(QJsonObject recv_obj)
     m_datamodel->setOwnID(recv_obj["id"].toInt());
     m_datamodel->getUniverse(recv_obj["map"].toString().toStdString());
 
-    //strategy::MainWindow2D mainWindow2D(m_datamodel);
     m_datamodel->switchWindow(asteroids::DataModel::MAIN2D);
 
     m_state = client_state::WAIT;

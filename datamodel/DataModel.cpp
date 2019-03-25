@@ -15,12 +15,13 @@ DataModel::DataModel() : m_players(), m_planets(), m_edges()
     // enemy/ies that run the programm on other devices
     // information from network is needed
 
-    m_enemy = m_players[1];
-    m_self = m_players[2];
 
     m_players[1] = Player::Ptr(new Player(1,3000,1));
     m_players[2] = Player::Ptr(new Player(2,4000,0));
 
+
+    m_enemy = m_players[1];
+    m_self = m_players[2];
     // m_enemy = Player::Ptr(new Player());
 
     // when networking issues are solved the map is loaded later
