@@ -8,6 +8,8 @@
 
 #include "UdpServer.hpp"
 
+#include "datamodel/DataModel.hpp"
+
 #include <vector>
 #include <memory>
 
@@ -35,7 +37,7 @@ private slots:
     void readyRead();
 
 private:
-    char last_id = 41;
+    char last_id = 1;
     ServerState state;
     QTcpServer server;
     std::vector<TcpClient> clients;
@@ -50,8 +52,12 @@ private:
 
     UdpServer udpServer;
 
+    DataModel::Ptr m_datamodel;
+
 public:
     TcpServer();
+
+
 };
 
 #endif
