@@ -70,7 +70,7 @@ bool PhysicsEngine::process(int elapsed_time)
                 b->destroy();
                 for (Hittable::Ptr& h : m_hittables)
                 {
-                    if (h->getId() == b->get_shooter_id() && h->getHealth() < 10)
+                    if (h->getId() == b->get_shooter_id() && h->getHealth() % 10 != 0)
                     {
                         h->setHealth(h->getHealth() + 1);
                     }
@@ -94,7 +94,7 @@ bool PhysicsEngine::process(int elapsed_time)
                 if (m_hittables.size() > 1)
                 {
                     (*h_it)->setHealth((*h_it)->getHealth() - 1);
-                    if ((*h_it)->getHealth() == 0)
+                    if ((*h_it)->getHealth() % 10 == 0)
                     {
                         m_particles.addEffect(ParticleEffect::createExplosionSphere((*h_it)->getPosition()));
                     }
@@ -138,7 +138,7 @@ bool PhysicsEngine::process(int elapsed_time)
                 p_it = m_objects.erase(p_it);
 
                 (*h_it)->setHealth((*h_it)->getHealth() - 1);
-                if ((*h_it)->getHealth() == 0)
+                if ((*h_it)->getHealth() % 10 == 0)
                 {
                     m_particles.addEffect(ParticleEffect::createExplosionSphere((*h_it)->getPosition()));
                     break;
@@ -187,7 +187,6 @@ void PhysicsEngine::render()
     }
 
     m_particles.render();
-    //cout << m_bullets.size() << endl;
 }
 
 } /* namespace asteroids */

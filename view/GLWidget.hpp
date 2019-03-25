@@ -47,7 +47,7 @@ public:
     /// Handles keyboard input and updates the physics engine
     void step(map<Qt::Key, bool>& keyStates);
 
-    void drawHealth(QPainter& painter, int healthPlayer, int healthEnemy);
+    void drawHealth(QPainter& painter, int totalHealthPlayer, int totalHealthEnemy);
 
     void drawMinimap(QPainter& painter, Hittable::Ptr player, Hittable::Ptr enemy);
 

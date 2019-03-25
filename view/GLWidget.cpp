@@ -114,14 +114,14 @@ void GLWidget::initializeGL()
     LevelParser lp(m_levelFile, m_enemy, m_skybox, m_asteroidField);
     m_enemy->fixArrow();
     m_enemy->setId(1);
-    m_enemy->setHealth(10);
+    m_enemy->setHealth(20);
 
     // Setup physics
     m_physicsEngine = make_shared<PhysicsEngine>();
 
     m_camera = make_shared<Camera>();
     m_camera->setId(0);
-    m_camera->setHealth(10);
+    m_camera->setHealth(20);
     m_camera->setPosition(Vector3f(2500, 0, 0));
     m_camera->setXAxis(Vector3f(-1, 0, 0));
     m_camera->setYAxis(Vector3f(0, -1, 0));
@@ -287,16 +287,31 @@ void GLWidget::step(map<Qt::Key, bool>& keyStates)
     this->update();
 }
 
-void GLWidget::drawHealth(QPainter& painter, int healthPlayer, int healthEnemy)
+void GLWidget::drawHealth(QPainter& painter, int totalHealthPlayer, int totalHealthEnemy)
 {
-    QPixmap playerHeart("../models/player_heart.png");
-    QPixmap enemyHeart("../models/enemy_heart.png");
-    QPixmap emptyHeart("../models/empty_heart.png");
-
+    // Draw amount of spaceships
     float size = this->width() / 30.0f;
     float gap = 0.1;
     int height = (int) (size - 2 * size * gap);
     int width = (int) (height * 1.1);
+
+    int spaceshipsPlayer = totalHealthPlayer / 10 + (totalHealthPlayer % 10 != 0 ? 1 : 0);
+    int spaceshipsEnemy = totalHealthEnemy / 10 + (totalHealthEnemy % 10 != 0 ? 1 : 0);
+
+    painter.setPen(Qt::green);
+    painter.drawRect(QRect((int) (size * 12 + size * gap), (int) (size * gap), width, height));
+    painter.drawText(QRect((int) (size * 12 + size * gap), (int) (size * gap), width, height), Qt::AlignCenter, QString::number(spaceshipsPlayer));
+    painter.setPen(Qt::red);
+    painter.drawRect(QRect((int) (this->width() - size - (size * 12 + size * gap)), (int) (size * gap), width, height));
+    painter.drawText(QRect((int) (this->width() - size - (size * 12 + size * gap)), (int) (size * gap), width, height), Qt::AlignCenter, QString::number(spaceshipsEnemy));
+
+    // Draw hearts
+    QPixmap playerHeart("../models/player_heart.png");
+    QPixmap enemyHeart("../models/enemy_heart.png");
+    QPixmap emptyHeart("../models/empty_heart.png");
+
+    int healthPlayer = totalHealthPlayer % 10 + (totalHealthPlayer % 10 == 0  && totalHealthPlayer != 0 ? 10 : 0);
+    int healthEnemy = totalHealthEnemy % 10 + (totalHealthEnemy % 10 == 0 && totalHealthEnemy != 0 ? 10 : 0);
 
     for (int i = 0; i < 10; i++)
     {
