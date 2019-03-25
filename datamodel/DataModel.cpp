@@ -277,6 +277,7 @@ bool DataModel::updateAll(QJsonDocument &update) {
 	{
 
 		int id;
+		int rubin;
 		std::string name;
 		std::list<Planet::Ptr> planets;
 		Player::Ptr player;
@@ -299,6 +300,11 @@ bool DataModel::updateAll(QJsonDocument &update) {
 			if(it.key() == "Name")
 			{
 				name = it.value().toString().toStdString();
+			}
+
+			if(it.key() == "Rubin")
+			{
+				rubin = it.value().toInt();
 			}
 
 			if(it.key() == "PlanetArray")
@@ -326,9 +332,26 @@ bool DataModel::updateAll(QJsonDocument &update) {
 				}
 			}
 
+
+
 		}//End Iterator File
 
+		std::cout <<  "ID of " << name << " is: " << id << std::endl;
+		std::cout << "Planets in his ownership: " << std::endl;
+		std::cout << "rubin in his ownership: " << rubin << std::endl;
+
+		std::list<std::shared_ptr<Planet>>::iterator i;
+		for(i = planets.begin(); i != planets.end(); i++)
+		{
+			Planet::Ptr planet = *i;
+
+			std::cout << "Name: " << planet->getName() << std::endl;
+			std::cout << "Minen: " << planet->getMines() << std::endl;
+			std::cout << "Ships: " << planet->getShips() << std::endl;
+		}
+
 		player->setPlanetsList(planets);
+		std::cout << "updateAll() finished" << std::endl;
 	}
 	return true;
 
@@ -412,8 +435,8 @@ QJsonDocument DataModel::createJson(Player::Ptr player)
     // Make qjsondocument out of it
     QJsonDocument theDocument(main);
 
-    // In case the json document should be printed
-    //std::cout << theDocument.toJson().toStdString() << std::endl;
+    //In case the json document should be printed
+    std::cout << theDocument.toJson().toStdString() << std::endl;
 
     return theDocument;
 }

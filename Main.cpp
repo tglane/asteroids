@@ -55,13 +55,14 @@ int main(int argc, char** argv)
 	
 	    // std::cout << Test->getShips() << std::endl;
     // Test
-    /*
+
     model->getSelfPlayer()->addPlanet(model->getPlanets().find(1)->second);
     model->getSelfPlayer()->addPlanet(model->getPlanets().find(2)->second);
     model->getSelfPlayer()->addPlanet(model->getPlanets().find(3)->second);
-    model->createJson(model->getSelfPlayer());
-    */
-    //end test
+    QJsonDocument doc = model->createJson(model->getSelfPlayer());
+    model->updateAll(doc);
+
+
 
     strategy::StartingDialog startWindow(model);
     startWindow.show();
