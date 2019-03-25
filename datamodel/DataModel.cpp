@@ -88,6 +88,7 @@ bool DataModel::endOfRound()
 
     performMovements(getSelfPlayer());
     findBattles();
+    BattlePhase();
     m_self->PrintPlanetsList();
     m_enemy->PrintPlanetsList();
     BattleReport();
@@ -429,6 +430,7 @@ void DataModel::findBattles()
                 Player::Ptr Tempplayer = Planets->getOwner();
                 Tempplayer->RemovePlaneteFromList(Planets);
                 Planets->setOwner(Planets->getInvader());
+                Planets->getOwner()->addPlanet(Planets);
                 Planets->addShips(Planets->getInvaderShips());
                 
 
@@ -483,6 +485,29 @@ QJsonDocument DataModel::createJsonPlayerStatus(Player::Ptr player)
     //Add the array to the json file
     main.insert("PlanetArray", planeets);
 
+    //Json array for invasion
+    QJsonArray qInvasions;
+
+    //Go over all planets and if there is a fight, add it to json file 
+    for(std::map<int, Planet::Ptr>::iterator it = m_planets.begin(); it != m_planets.end(); it++)
+    {
+        //A planet in the list
+        Planet::Ptr planet = it->second;
+        // In this case an invasion is happening on this planet
+        if(planet->getInvader() != NULL)
+        {
+            //planet representation
+            QJsonObject qInvasion;
+
+            qInvasion.insert("ID", getIDFromPlanet(planet));
+            qInvasion.insert("InvaderShips", planet->getInvaderShips());
+
+            qInvasions.push_back(qInvasion);
+        }
+    }
+
+    main.insert("InvadePlanets", qInvasions);
+
     // Make qjsondocument out of it
     QJsonDocument theDocument(main);
 
@@ -492,6 +517,7 @@ QJsonDocument DataModel::createJsonPlayerStatus(Player::Ptr player)
     return theDocument;
 }
 
+/*
 QJsonDocument createJsonOrders(Player::Ptr player)
 {
     // main QJson object in the document
@@ -521,7 +547,7 @@ QJsonDocument createJsonOrders(Player::Ptr player)
         //qMineOrder.insert("PlanetID", getIDFromPlanet(mineOrder->getPlanet()));
 
         qMineOrders.push_back(qMineOrder);
-        /*
+       
         //The Planet and the qjson representations
         Planet::Ptr planet = *it;
         QJsonObject qPlanet;
@@ -533,12 +559,12 @@ QJsonDocument createJsonOrders(Player::Ptr player)
 
         //Add to the json array
         planeets.push_back(qPlanet);
-        */
+        
     }
 
     return QJsonDocument();
 }
-
+*/
 
 void DataModel::performMovements(Player::Ptr player)
 {
@@ -642,6 +668,27 @@ void DataModel::WinCondition()
     if(NumberOfPlanets == CountOfPlanets)
     {
         std::cout << "Gewonnen" <<std::endl;
+
+
+    }
+
+}
+
+void DataModel::BattlePhase()
+{
+    std::list<std::shared_ptr<Battle>> BattlePhase = m_battles;
+    for (std::list<std::shared_ptr<Battle>>::iterator it = BattlePhase.begin(); it != BattlePhase.end(); ++it)  
+    {
+        std::shared_ptr<Battle> BattleDetail = *it;
+        std::cout << "Kampfphase" << std::endl;
+        std::cout << BattleDetail->m_location->getName() << std::endl;
+        std::cout << BattleDetail->m_player1->getPlayerName() << std::endl;
+        std::cout << BattleDetail->m_numberShips1 << std::endl;
+        std::cout << "" << std::endl;
+        std::cout << BattleDetail->m_player2->getPlayerName() << std::endl;
+        std::cout << BattleDetail->m_numberShips2 << std::endl;
+
+        
 
 
     }
