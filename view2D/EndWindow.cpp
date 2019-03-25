@@ -13,11 +13,13 @@ EndWindow::EndWindow(bool victory, QWidget* parent) :
     if (victory)
     {
         ui->ResultLabel->setText("Victory!");
+        QPixmap bkgnd("../models/victory.jpg");
     } else {
-        ui->ResultLabel->setText("Loose!");
+        ui->ResultLabel->setText("Defeat!");
+        QPixmap bkgnd("../models/defeat.jpg");
+
     }
 
-    QPixmap bkgnd("../models/box1.jpg");
     bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
     QPalette palette;
     palette.setBrush(QPalette::Background, bkgnd);
