@@ -12,8 +12,7 @@
 #include "view/MainWindow.hpp"
 #include "datamodel/DataModel.hpp"
 #include "datamodel/Player.hpp"
-#include "view2D/MainWindow2D.hpp"
-#include "view2D/StartingDialog.hpp"
+#include "view2D/GameWindow.hpp"
 
 
 
@@ -24,9 +23,9 @@ int main(int argc, char** argv)
 
     QApplication a(argc, argv);
 
-    strategy::MainWindow2D mainWindow2D(model);
+    strategy::GameWindow gamewindow(model);
 
-    mainWindow2D.show();
+    gamewindow.show();
 
     return a.exec();
 }

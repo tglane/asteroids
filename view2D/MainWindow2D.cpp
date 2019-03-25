@@ -25,10 +25,6 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
     // Setup user interface
     ui->setupUi(this);
 
-    // register the StackedWidget at datamodel for switching
-    m_model->addMainWindow(ui->centralwidget);
-    m_model->addWidget(DataModel::MAIN2D, ui->StrategyContent);
-
     scene = new QGraphicsScene(this);
     ui->Map->setScene(scene);
 
@@ -140,16 +136,6 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
 
     updatePlayerInfo();
 
-    // Insert 3D Window into Stacked Widget
-    MainWindow* fightwindow = new MainWindow("../models/level.xml", m_model);
-    ui->centralwidget->addWidget(fightwindow);
-    m_model->addWidget(DataModel::MAIN3D, fightwindow);
-
-    StartingDialog* startingDialog = new StartingDialog(m_model);
-    ui->centralwidget->addWidget(startingDialog);
-    m_model->addWidget(DataModel::START, startingDialog);
-
-    ui->centralwidget->setCurrentWidget(startingDialog);
 }
 
 void MainWindow2D::resizeEvent(QResizeEvent* event){
@@ -167,7 +153,7 @@ MainWindow2D::~MainWindow2D()
 
 void MainWindow2D::fight(bool click)
 {
-    ui->centralwidget->setCurrentIndex(1);
+    m_model->switchWindow(DataModel::MAIN3D);
 }
 
 void MainWindow2D::choose_planet(int id)
