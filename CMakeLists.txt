@@ -33,9 +33,12 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 # special optimization flags
 ###############################################################################
 
+
 set( CMAKE_CXX_FLAGS         "-O3 -Wall -std=c++14" )
 set( CMAKE_CXX_FLAGS_RELEASE "-O3 -msse3 -Wno-deprecated-declarations -Wno-unused -Wcpp" )
 set( CMAKE_CXX_FLAGS_DEBUG   "-g -Wall" )
+
+#set( CMAKE_EXE_LINKER_FLAGS  "-L/usr/local/lib -lSDL -lSDLmain -lSDL")
 
 ###############################################################################
 # Find required libraries.Right now we need glut and OpenGL. The required 
@@ -100,6 +103,7 @@ include_directories(${Qt5Core_INCLUDE_DIRS})
 include_directories(${Qt5OpenGL_INCLUDE_DIRS})
 include_directories(${Qt5Network_INCLUDE_DIRS})
 
+
 ###############################################################################
 # Compile external libraries
 ###############################################################################
@@ -131,12 +135,11 @@ set(ASTEROID_SOURCES
     math/Randomizer.cpp
     physics/Transformable.cpp
     physics/PhysicalObject.cpp
-    physics/PhysicalBullet.cpp
-    physics/PhysicalSpaceCraft.cpp
     physics/PhysicsEngine.cpp
     physics/ParticleEngine.cpp
-    physics/Hittable.cpp
     physics/PhysicalBullet.cpp
+    physics/PhysicalSpaceCraft.cpp
+    physics/Hittable.cpp
     rendering/Bullet.cpp
     rendering/ParticleEffect.cpp
     rendering/Sphere.cpp
@@ -156,20 +159,35 @@ set(ASTEROID_SOURCES
     network/client/tcpclient.cpp
     view/Controller.cpp
     Gamepad.cpp
+    datamodel/DataModel.cpp
+    datamodel/Planet.cpp
+    datamodel/Player.cpp
+    datamodel/MineOrder.cpp
+    datamodel/ShipOrder.cpp
+    datamodel/MoveOrder.cpp
+    datamodel/Battle.cpp
+    view2D/StartingDialog.cpp
+    view2D/MainWindow2D.cpp
+    view2D/MyEllipse.cpp
 )
-
 set(ASTEROID_MOCS
     view/MainWindow.hpp
+    view2D/MainWindow2D.hpp
+    view2D/StartingDialog.hpp
 )
 
 set(ASTEROID_UIS
     view/MainWindow.ui
+    view2D/MainWindow2D.ui
+    view2D/StartingDialog.ui
 )
 
 set(CMAKE_AUTOMOC ON)
+SET(CMAKE_AUTOUIC ON)
 
 qt5_wrap_ui(ASTEROID_UI_HDRS ${ASTEROID_UIS})
 message(STATUS ${ASTEROID_UI_HDRS})
+
 
 add_definitions(${QT_DEFINITIONS})
 
@@ -198,6 +216,10 @@ add_executable(asteroids
     ${C3DSREADER_SOURCES}
     ${ASTEROID_MOCS}
     ${ASTEROID_UI_HDRS}
+    ${STRATEGY_MOCS}
+    ${STRATEGY_UI_HDRS}
+    ${START_MOCS}
+    ${START_UI_HDRS}
 )
 ###############################################################################
 # External library dependencys

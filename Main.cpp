@@ -10,20 +10,36 @@
  */
 
 #include "view/MainWindow.hpp"
+#include "datamodel/DataModel.hpp"
+#include "datamodel/Player.hpp"
+#include "view2D/MainWindow2D.hpp"
+#include "view2D/StartingDialog.hpp"
+
+
 
 int main(int argc, char** argv)
 {
-    if (argc < 2)
-    {
-        cerr << "Usage: asteroids <level-file>" << endl;
-        return 1;
-    }
+
+    DataModel::Ptr model = DataModel::Ptr(new DataModel("../models/Level-1.map"));
 
     QApplication a(argc, argv);
 
-    asteroids::MainWindow mainWindow(argv[1]);
-    //mainWindow.showFullScreen();
-    mainWindow.show();
+    strategy::MainWindow2D mainWindow2D(model);
 
+    //asteroids::MainWindow mainWindow("../models/level.xml");
+    //mainWindow.show();
+
+    // Test
+    /*
+    model->getSelfPlayer()->addPlanet(model->getPlanets().find(1)->second);
+    model->getSelfPlayer()->addPlanet(model->getPlanets().find(2)->second);
+    model->getSelfPlayer()->addPlanet(model->getPlanets().find(3)->second);
+    model->createJson(model->getSelfPlayer());
+    */
+    //end test
+
+    strategy::StartingDialog startWindow(model);
+    startWindow.show();
     return a.exec();
 }
+

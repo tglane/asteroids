@@ -18,6 +18,8 @@ class udpclient: public QObject {
 
 public:
 
+    using Ptr = std::shared_ptr<udpclient>;
+
     explicit udpclient(QObject *parent = 0);
 
     /**
@@ -45,8 +47,6 @@ public:
 signals:
 
 public slots:
-
-    using Ptr = std::shared_ptr<udpclient>;
 
     /**
      * @brief
