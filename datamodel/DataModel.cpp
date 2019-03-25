@@ -475,6 +475,7 @@ QJsonDocument DataModel::createJsonPlayerStatus(Player::Ptr player)
     return theDocument;
 }
 
+/*
 QJsonDocument createJsonOrders(Player::Ptr player)
 {
     // main QJson object in the document
@@ -504,7 +505,7 @@ QJsonDocument createJsonOrders(Player::Ptr player)
         //qMineOrder.insert("PlanetID", getIDFromPlanet(mineOrder->getPlanet()));
 
         qMineOrders.push_back(qMineOrder);
-        /*
+       
         //The Planet and the qjson representations
         Planet::Ptr planet = *it;
         QJsonObject qPlanet;
@@ -516,12 +517,12 @@ QJsonDocument createJsonOrders(Player::Ptr player)
 
         //Add to the json array
         planeets.push_back(qPlanet);
-        */
+        
     }
 
     return QJsonDocument();
 }
-
+*/
 
 void DataModel::performMovements(Player::Ptr player)
 {

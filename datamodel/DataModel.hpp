@@ -127,11 +127,13 @@ public:
     QJsonDocument createJsonPlayerStatus(Player::Ptr player);
 
     /**
+     * OBSOLETE
      * @brief Creates Json File, which includes player identification, player rubin status, and orders
      * @param player The player for which the information should be sent
      * @return the created Json File
-     */
+     
     QJsonDocument createJsonOrders(Player::Ptr player);
+    */
 
     void performMovements(Player::Ptr player);
 
