@@ -85,6 +85,10 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
 
     currentPlanet = -1;
 
+    currentYear = 2019;
+    QString qyear = QString::fromUtf8("Year: ");
+    ui->Date->setText(qyear + QString::number(currentYear));
+
     ui->PlanetInfo->setVisible(false);
 
     connect(m_model.get(), SIGNAL(updateInfo()), this, SLOT(updatePlayerInfo()));
@@ -181,6 +185,9 @@ void MainWindow2D::endOfRound(bool click)
     // fuck this "unused" warnings! :D
     if(succes);
 
+    currentYear++;
+    QString qyear = QString::fromUtf8("Year: ");
+    ui->Date->setText(qyear + QString::number(currentYear));
 
     updatePlayerInfo();
     updatePlanetInfo(currentPlanet);
