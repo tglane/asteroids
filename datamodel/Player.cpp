@@ -165,4 +165,18 @@ std::list<std::shared_ptr<Planet>> Player::getListOfPLanets()
 
 }
 
+void Player::updateResources() {
+
+	std::list<std::shared_ptr<Planet>>::iterator i;
+	m_rubin = 0;
+	m_ships = 0;
+	for( i = m_planets.begin(); i != m_planets.end(); i++)
+	{
+		std::shared_ptr<Planet> planet = *i;
+		m_rubin += planet->getRubin();
+		m_ships += planet->getInvaderShips();
+
+	}
+}
+
 }

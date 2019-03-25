@@ -351,6 +351,7 @@ bool DataModel::updateAll(QJsonDocument &update) {
 		}
 
 		player->setPlanetsList(planets);
+		player->updateResources();
 		std::cout << "updateAll() finished" << std::endl;
 	}
 	return true;

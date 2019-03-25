@@ -168,6 +168,11 @@ public:
 
 	std::list<std::shared_ptr<Planet>> getListOfPLanets();
 
+	/**
+	 * @brief updates number of rubin and ships by the values of the planets in our ownership
+	 */
+	void updateResources();
+
 private:
 
 	std::string m_name;
