@@ -165,6 +165,48 @@ std::list<std::shared_ptr<Planet>> Player::getListOfPLanets()
 
 }
 
+void Player::RemovePlaneteFromList(Planet::Ptr Planet)
+{
+	std::list<Planet::Ptr>::iterator it;
+	int Postion = 0;
+	std::list<Planet::Ptr>::iterator PostionRemove = m_planets.begin();
+    for(it = m_planets.begin(); it != m_planets.end(); ) 
+	{
+		Planet::Ptr PlanetsFromList = *it;
+		std::cout << Postion <<std::endl;
+		if(Planet == PlanetsFromList)
+		{
+			std::advance(PostionRemove, Postion);
+			std::cout << "test In Remove List before" <<std::endl;
+			it = m_planets.erase(PostionRemove);
+			std::cout << "test In Remove List after" <<std::endl;
+		}
+		else
+		{
+		it++;	
+		Postion++;
+		}
+		
+
+		
+	
+	}
+
+}
+
+void Player::PrintPlanetsList()
+{
+	std::cout << m_name << std::endl;
+	std::list<Planet::Ptr>::iterator it;
+    for(it = m_planets.begin(); it != m_planets.end(); it++) 
+	{
+		Planet::Ptr PlanetsFromList = *it;
+		std::cout << PlanetsFromList->getName() <<std::endl;
+	}
+
+}
+
+
 void Player::updateResources() {
 
 	std::list<std::shared_ptr<Planet>>::iterator i;

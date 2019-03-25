@@ -56,11 +56,11 @@ int main(int argc, char** argv)
 	    // std::cout << Test->getShips() << std::endl;
     // Test
 
-    model->getSelfPlayer()->addPlanet(model->getPlanets().find(1)->second);
-    model->getSelfPlayer()->addPlanet(model->getPlanets().find(2)->second);
-    model->getSelfPlayer()->addPlanet(model->getPlanets().find(3)->second);
-    QJsonDocument doc = model->createJsonPlayerStatus(model->getSelfPlayer());
-    model->updateAll(doc);
+    // model->getSelfPlayer()->addPlanet(model->getPlanets().find(1)->second);
+    // model->getSelfPlayer()->addPlanet(model->getPlanets().find(2)->second);
+    // model->getSelfPlayer()->addPlanet(model->getPlanets().find(3)->second);
+    // QJsonDocument doc = model->createJson(model->getSelfPlayer());
+    // model->updateAll(doc);
 
 
 
