@@ -46,6 +46,8 @@ signals:
 
 public slots:
 
+    using Ptr = std::shared_ptr<udpclient>;
+
     /**
      * @brief
      */

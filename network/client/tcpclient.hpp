@@ -27,6 +27,8 @@ class tcpclient : public QObject {
 
 public:
 
+    using Ptr = std::shared_ptr<tcpclient>;
+
     tcpclient(QString player_name, QString server_ip, QObject* parent = 0);
 
     void connect_to_server(string player_name);

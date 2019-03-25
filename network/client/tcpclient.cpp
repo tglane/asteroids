@@ -6,7 +6,7 @@
 #include "tcpclient.hpp"
 
 tcpclient::tcpclient(QString player_name, QString server_ip, QObject* parent)
-    : m_server_ip(std::move(server_ip)), m_player_name(std::move(player_name))
+    : m_player_name(std::move(player_name)), m_server_ip(std::move(server_ip))
 {
     m_socket = std::make_shared<QTcpSocket>(this);
 
@@ -34,6 +34,9 @@ void tcpclient::send_init()
 
     QJsonDocument doc(init_array);
 
+    int size = doc.toJson().size();
+    m_socket->write((char*) &size, sizeof(size));
+
     m_socket->write(doc.toJson());
     m_socket->flush();
 
@@ -45,13 +48,27 @@ void tcpclient::recv_json()
     QByteArray recv_data(m_socket->readAll());
     QString recv_json(recv_data);
     QJsonDocument json_doc = QJsonDocument::fromJson(recv_json.toUtf8());
-    QJsonObject recv_obj = json_doc.object();
+    QJsonArray recv_array = json_doc.array();
 
-    //TODO switch recv_obj
+    if(recv_array[0] == "init_res")
+    {
+        process_init_res(recv_array[1].toObject());
+    } else if(recv_array[0] == "strat_init")
+    {
+        process_strat_init(recv_array[1].toObject());
+    } else if(recv_array[0] == "fight_init")
+    {
+        process_state(recv_array[1].toObject());
+    } else
+    {
+        std::cout << m_state << " | " << recv_array[1].toString().toUtf8().constData() << std::endl;
+    }
 }
 
 void tcpclient::process_init_res(QJsonObject recv_obj)
 {
+
+
     QJsonArray init_array;
     init_array.push_back("ready");
 
