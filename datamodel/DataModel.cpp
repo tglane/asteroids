@@ -276,8 +276,8 @@ bool DataModel::updateAll(QJsonDocument &update) {
 	if (update.isObject() && !update.isEmpty())
 	{
 
-		int id;
-		int rubin;
+		int id = 0;
+		int rubin = 0;
 		std::string name;
 		std::list<Planet::Ptr> planets;
 		Player::Ptr player;
@@ -396,7 +396,7 @@ void DataModel::findBattles()
     }
 }
 
-QJsonDocument DataModel::createJson(Player::Ptr player)
+QJsonDocument DataModel::createJsonPlayerStatus(Player::Ptr player)
 {
     // main QJson object in the document
     QJsonObject main;
@@ -440,6 +440,11 @@ QJsonDocument DataModel::createJson(Player::Ptr player)
     std::cout << theDocument.toJson().toStdString() << std::endl;
 
     return theDocument;
+}
+
+QJsonDocument createJsonOrders(Player::Ptr player)
+{
+    return QJsonDocument();
 }
 
 
@@ -517,7 +522,7 @@ void DataModel::BattleReport()
 int DataModel::getIDFromPlanet(Planet::Ptr planet)
 {
     // go over all planets in planets
-    for(int i = 0; i < m_planets.size(); i++)
+    for(int i = 0; i < (int)m_planets.size(); i++)
     {
         // Get planet with index i
         Planet::Ptr mapPlanet = m_planets.find(i)->second;
@@ -527,6 +532,11 @@ int DataModel::getIDFromPlanet(Planet::Ptr planet)
             return i;
         }
     }
+    
+    // If we get to this point, the planet was not found in the map of all planets
+    std::cerr << "Achtung, die ID des Planeten " << planet->getName() << "wurde nicht gefunden"; 
+    std::cerr << "Es wurde ID 0 ausgegeben" << std::endl; 
+    return 0;
 }
 
 void DataModel::WinCondition()
