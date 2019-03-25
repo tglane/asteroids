@@ -8,8 +8,8 @@
 
 GLWidget::GLWidget(QWidget* parent) :
     QOpenGLWidget(parent),
-    m_gameOver(false),
     m_started(false),
+    m_gameOver(false),
     m_outOfBound(false),
     m_cockpit("../models/cockpit.png"),
     m_playerHeart("../models/player_heart.png"),
