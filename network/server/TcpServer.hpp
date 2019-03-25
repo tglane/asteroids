@@ -38,9 +38,11 @@ private slots:
 
 private:
     char last_id = 1;
+
     ServerState state;
     QTcpServer server;
     std::vector<TcpClient> clients;
+
     void send_strat_init();
     void send_state();
 
