@@ -4,7 +4,7 @@
 namespace asteroids
 {
 
-const vector<Qt::Key> Controller::mapToQt = {Qt::Key_E, Qt::Key_Q, Qt::Key_W, Qt::Key_S, Qt::Key_A, Qt::Key_D};
+const vector<Qt::Key> Controller::mapToQt = {Qt::Key_E, Qt::Key_Q, Qt::Key_S, Qt::Key_W, Qt::Key_A, Qt::Key_D};
 const vector<Transformable::RotationTransform> Controller::mapToAngle = {Transformable::ROLL_CLOCKWISE,
                                                                          Transformable::ROLL_COUNTERCLOCKWISE,
                                                                          Transformable::PITCH_DOWN,
@@ -17,7 +17,7 @@ const float Controller::maxSpeed = 1000;
 const int Controller::framesToMaxRot = 30;
 const float Controller::maxRot = 0.05;
 
-Controller::Controller() : m_cooldownPlayer(0), m_cooldownEnemy(0), m_gamepadR1(0), m_gamepadL1(0)
+Controller::Controller() : m_cooldownPlayer(0), m_gamepadR1(0), m_gamepadL1(0)
 {
     m_keys = std::vector<int>(7);
     for (int i = 0; i < 7; i++)
@@ -89,7 +89,7 @@ void Controller::keyControl(std::map<Qt::Key, bool> &keyStates, Hittable::Ptr& p
             Bullet::Ptr bullet = make_shared<Bullet>(Bullet(player->getPosition() - player->getZAxis() * 42,
                                                             player->getXAxis(), player->getId()));
             physicsEngine->addBullet(bullet);
-            m_cooldownPlayer = 300;
+            m_cooldownPlayer = 200;
         }
     }
 }
@@ -108,7 +108,7 @@ void Controller::gamepadControl(Hittable::Ptr& player, PhysicsEngine::Ptr& physi
             float rot = maxRot * (float) m_gamepad.getLeftX();
             player->rotate(Transformable::YAW_CLOCKWISE, rot);
             rot = maxRot * (float) m_gamepad.getLeftY();
-            player->rotate(Transformable::PITCH_UP, rot);
+            player->rotate(Transformable::PITCH_DOWN, rot);
             if (m_gamepad.isR1Pressed())
             {
                 if (m_gamepadR1 < framesToMaxRot)
@@ -154,7 +154,7 @@ void Controller::gamepadControl(Hittable::Ptr& player, PhysicsEngine::Ptr& physi
                 Bullet::Ptr bullet = make_shared<Bullet>(Bullet(player->getPosition() - player->getZAxis() * 42,
                                                                 player->getXAxis(), player->getId()));
                 physicsEngine->addBullet(bullet);
-                m_cooldownPlayer = 300;
+                m_cooldownPlayer = 200;
             }
         }
     }
