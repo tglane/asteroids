@@ -73,6 +73,10 @@ bool DataModel::endOfRound()
 {
     std::cout << "End of Round!" << std::endl;
 
+    performMovements(getSelfPlayer());
+    findBattles();
+    BattleReport();
+
     calculateFinance(getSelfPlayer());
     // TODO Update players ressources, money, ships, planets, mines
 
@@ -120,6 +124,7 @@ bool DataModel::moveShips(Planet::Ptr from, Planet::Ptr to, int numShips) {
 		m_self->putListMoveOrder(move);
 		std::cout << "MoveOrder successful"<< std::endl;
         from->delShips(numShips);
+        m_self->delShips(numShips);
 		return true;
 	}
 
@@ -334,24 +339,25 @@ void DataModel::findBattles()
     std::map<int, Planet::Ptr>::iterator it;
     for(it = m_planets.begin(); it != m_planets.end(); it++)
     {
-        Planet::Ptr p = it->second;
-        if(p->getInvader() != NULL)
+        Planet::Ptr Planets = it->second;
+        if(Planets->getInvader() != NULL)
         {
             // In case the defender ships are not present anymore
-            if(p->getShips() == 0)
+            if(Planets->getShips() == 0)
             {
-                p->setOwner(p->getInvader());
-                p->addShips(p->getInvaderShips());
+                Planets->setOwner(Planets->getInvader());
+                Planets->addShips(Planets->getInvaderShips());
 
             }
             else
             {
                 //everything for battle is ready
-                m_battles.push_back(std::shared_ptr<Battle>(new Battle(p, p->getOwner(), 
-                                p->getInvader(), p->getShips(),
-                                p->getInvaderShips())));
+                m_battles.push_back(std::shared_ptr<Battle>(new Battle(Planets, Planets->getOwner(), 
+                                Planets->getInvader(), Planets->getShips(),
+                                Planets->getInvaderShips(), true)));
+                std::cout << "Kampf Karte erzeugt" << std::endl;
             }
-            p->setInvader(NULL);
+            Planets->setInvader(NULL);
         }
     }
 }
@@ -363,73 +369,83 @@ QJsonDocument DataModel::createJson(Player::Ptr player)
 
     //insert id of the player
     main.insert("ID", player->getIdentity());
+    // Playername
     main.insert("Name",  QString::fromStdString(player->getPlayerName()));
+    // amount of rubin
     main.insert("Rubin", player->getIdentity());
 
+    //Json array
     QJsonArray planeets;
+    
+    //Planets of the player
+    std::list<std::shared_ptr<Planet>> planetos = player->getPlanets();
 
-    //planeets.push_back();
-    std::string planetString("Planet");
-    /**
-    for(uint i = 0; i < player->getPlanets().size(); i++)
-    {
-        std::string planetNumber = planetString + std::to_string(i);
-        QString qPlanetNumber = QString::fromStdString(planetNumber);
-
-        
-    }
-    */
-   int i = 1;
-   std::list<std::shared_ptr<Planet>> planetos = player->getPlanets();
+    //Iterate over all and add the to the json file
     for(std::list<std::shared_ptr<Planet>>::iterator it = planetos.begin(); it != planetos.end(); ++it)
     {
+        //The Planet and the qjson representations
         Planet::Ptr planet = *it;
         QJsonObject qPlanet;
 
-        std::string planetNumber = planetString + std::to_string(i);
-        QString qPlanetNumber = QString::fromStdString(planetNumber);
-
+        // Add necessary information to representation
         qPlanet.insert("ID", getIDFromPlanet(planet));
         qPlanet.insert("Mines", planet->getMines());
         qPlanet.insert("Ships", planet->getShips());
 
+        //Add to the json array
         planeets.push_back(qPlanet);
-
-        i++;
-
     }
 
+    //Add the array to the json file
     main.insert("PlanetArray", planeets);
 
+    // Make qjsondocument out of it
     QJsonDocument theDocument(main);
 
-    std::cout << theDocument.toJson().toStdString() << std::endl;
+    // In case the json document should be printed
+    //std::cout << theDocument.toJson().toStdString() << std::endl;
 
-    return QJsonDocument();
+    return theDocument;
 }
 
 
-void DataModel::performMovements()
+void DataModel::performMovements(Player::Ptr player)
 {
     //get own list of moveorders
+
     std::list<std::shared_ptr<MoveOrder>> myMoveOrder = m_self->getListMoveOrder();
+     
     //perform all moveorders
     for (std::list<std::shared_ptr<MoveOrder>>::iterator it = myMoveOrder.begin(); it != myMoveOrder.end(); ++it){
         //get moveorder
+        
         std::shared_ptr<MoveOrder> moveOrder = *it;
         std::shared_ptr<Planet> origin = moveOrder->getOrigin();
         std::shared_ptr<Planet> destination = moveOrder->getDestination();
         int ships = moveOrder->getNumberShips();
         //take ships from origin planet
-
-        if(destination->getOwner() == m_self){
+        if(destination->getOwner()== 0)
+        {
+            Player::Ptr Empty = Player::Ptr(new Player());
+            destination->setOwner(Empty);
+        }
+        std::cout << destination->getOwner() << std::endl;
+        std::cout << destination->getShips() << std::endl;
+      
+        if(m_self == destination->getOwner()){
             //the destination planet is of the same owner
+            destination->setOwner(player);
             destination->addShips(ships);
+       
         }else if(destination->getShips()==0){
             //the destination planet is of another player but he cannot defend, planet acquired
-            destination->addShips(ships);
             destination->setOwner(m_self);
+            destination->addShips(ships);
+
+            m_self->addPlanet(destination);
+            std::cout <<"Speicherzugriffsfehler test before" << std::endl;
             destination->setInvader(NULL);
+            std::cout <<"Speicherzugriffsfehler test" << std::endl;
             destination->setInvaderShips(0);
         }else{
             //the destination planet is of another player but he might defend
@@ -439,11 +455,39 @@ void DataModel::performMovements()
     }
 }
 
+void DataModel::BattleReport()
+{
+    std::list<std::shared_ptr<Battle>> BattleResult = m_battles;
+    for (std::list<std::shared_ptr<Battle>>::iterator it = BattleResult.begin(); it != BattleResult.end(); ++it)
+    {
+        std::shared_ptr<Battle> BattleDetailResult = *it;
+        if(BattleDetailResult->FightResultInvader == false)
+        {
+            std::cout << "Kampf verloren" << std::endl;
+            BattleDetailResult->m_player2->delShips(BattleDetailResult->m_numberShips2);
+        }
+        if(BattleDetailResult->FightResultInvader == true)
+        {
+            std::cout << "Kampf gewonnen" << std::endl;
+            BattleDetailResult->m_location->setOwner(BattleDetailResult->m_player2);
+            BattleDetailResult->m_location->delShips(BattleDetailResult->m_numberShips1);
+            BattleDetailResult->m_location->addShips(BattleDetailResult->m_numberShips2);
+            BattleDetailResult->m_player2->addPlanet(BattleDetailResult->m_location);
+
+
+        }
+    }
+    m_battles.clear();
+}
+
 int DataModel::getIDFromPlanet(Planet::Ptr planet)
 {
+    // go over all planets in planets
     for(int i = 0; i < m_planets.size(); i++)
     {
+        // Get planet with index i
         Planet::Ptr mapPlanet = m_planets.find(i)->second;
+        // If they're the same planets correct planet has been found
         if(mapPlanet->getName() == planet->getName())
         {
             return i;

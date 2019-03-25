@@ -38,7 +38,7 @@ int Planet::getShips()
 void Planet::addShips(int ships) 
 {
 	m_ships += ships;
-	m_owner->incShips();
+	m_owner->incShips(ships);
 }
 
 bool Planet::delShips(int ships) 
@@ -47,11 +47,17 @@ bool Planet::delShips(int ships)
 	{
 		return false;
 	}
-	else
+	else if(m_ships > 0)
 	{
 		m_ships -= ships; 
 		return true;
 	} 
+
+	else
+	{
+		return false;
+
+	}
 }
 
 void Planet::addNeighbour(Planet::Ptr neighbour)
