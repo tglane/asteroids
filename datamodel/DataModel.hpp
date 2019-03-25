@@ -125,6 +125,11 @@ public:
 
     void BattleReport();
 
+    /**
+     * Returns the id of a given planet
+     * @param planet Planet for which the id should be returned
+     * @return the id of the given planet
+     */
     int getIDFromPlanet(Planet::Ptr planet);
 
     void WinCondition();
