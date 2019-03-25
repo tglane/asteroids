@@ -292,8 +292,9 @@ bool DataModel::updateAll(QJsonDocument &update) {
 			if(it.key() == "ID")
 			{
 				id = it.value().toInt();
-				//TODO Later getPlayerByID?
-				player = m_enemy;
+
+				player = this->getEnemyPlayer(it.value().toInt());
+
 
 			}
 
@@ -325,6 +326,7 @@ bool DataModel::updateAll(QJsonDocument &update) {
 
 						planet->setMines(mines);
 						planet->setShips(ships);
+						planet->setOwner(player);
 
 						planets.push_back(planet);
 
@@ -351,6 +353,7 @@ bool DataModel::updateAll(QJsonDocument &update) {
 		}
 
 		player->setPlanetsList(planets);
+		player->updateResources();
 		std::cout << "updateAll() finished" << std::endl;
 	}
 	return true;
