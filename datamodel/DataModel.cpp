@@ -413,7 +413,7 @@ QJsonDocument DataModel::createJsonPlayerStatus(Player::Ptr player)
     //Planets of the player
     std::list<std::shared_ptr<Planet>> planetos = player->getPlanets();
 
-    //Iterate over all and add the to the json file
+    //Iterate over all planets and add the to the json file
     for(std::list<std::shared_ptr<Planet>>::iterator it = planetos.begin(); it != planetos.end(); ++it)
     {
         //The Planet and the qjson representations
@@ -443,6 +443,48 @@ QJsonDocument DataModel::createJsonPlayerStatus(Player::Ptr player)
 
 QJsonDocument createJsonOrders(Player::Ptr player)
 {
+    // main QJson object in the document
+    QJsonObject main;
+
+    //insert id of the player
+    main.insert("ID", player->getIdentity());
+    // Playername
+    main.insert("Name",  QString::fromStdString(player->getPlayerName()));
+    // amount of rubin
+    main.insert("Rubin", player->getIdentity());
+
+    //Json array
+    QJsonArray qMineOrders;
+
+    //Mineorders of the player
+    std::list<MineOrder::Ptr> mineOrders = player->getListMineOrder();
+
+    //Iterate over all planets and add the to the json file
+    for(std::list<MineOrder::Ptr>::iterator it = mineOrders.begin(); it != mineOrders.end(); ++it)
+    {
+        // Get mineorder and representation
+        MineOrder::Ptr mineOrder = *it;
+        QJsonObject qMineOrder;
+
+        //Add Id
+        qMineOrder.insert("PlanetID", getIDFromPlanet(mineOrder->getPlanet()));
+
+        qMineOrders.push_back(qMineOrder);
+        /*
+        //The Planet and the qjson representations
+        Planet::Ptr planet = *it;
+        QJsonObject qPlanet;
+
+        // Add necessary information to representation
+        qPlanet.insert("ID", getIDFromPlanet(planet));
+        qPlanet.insert("Mines", planet->getMines());
+        qPlanet.insert("Ships", planet->getShips());
+
+        //Add to the json array
+        planeets.push_back(qPlanet);
+        */
+    }
+
     return QJsonDocument();
 }
 
