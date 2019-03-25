@@ -76,6 +76,7 @@ bool DataModel::endOfRound()
     performMovements(getSelfPlayer());
     findBattles();
     BattleReport();
+    WinCondition();
 
     calculateFinance(getSelfPlayer());
     // TODO Update players ressources, money, ships, planets, mines
@@ -460,7 +461,7 @@ void DataModel::BattleReport()
         if(BattleDetailResult->FightResultInvader == false)
         {
             std::cout << "Kampf verloren" << std::endl;
-            BattleDetailResult->m_player2->delShips(BattleDetailResult->m_numberShips2);
+            //BattleDetailResult->m_player2->delShips(BattleDetailResult->m_numberShips2);
         }
         if(BattleDetailResult->FightResultInvader == true)
         {
@@ -474,7 +475,7 @@ void DataModel::BattleReport()
         }
     }
     m_battles.clear();
-
+}
 int DataModel::getIDFromPlanet(Planet::Ptr planet)
 {
     for(int i = 0; i < m_planets.size(); i++)
@@ -485,6 +486,32 @@ int DataModel::getIDFromPlanet(Planet::Ptr planet)
             return i;
         }
     }
+}
+
+void DataModel::WinCondition()
+{
+    std::map<int, Planet::Ptr>::iterator it;
+    int NumberOfPlanets = m_planets.size();
+    int CountOfPlanets = 0;
+    std::cout << "Anzahl der Planeten" << std::endl;
+    std::cout << NumberOfPlanets << std::endl;
+    for(it = m_planets.begin(); it != m_planets.end(); it++)  
+    {
+        Planet::Ptr Planets = it->second;
+        if(Planets->getOwner() == m_self)
+        {
+            CountOfPlanets++;
+        }
+
+    }  
+    std::cout << CountOfPlanets << std::endl;
+    if(NumberOfPlanets == CountOfPlanets)
+    {
+        std::cout << "Gewonnen" <<std::endl;
+
+
+    }
+
 }
 
 DataModel::~DataModel()

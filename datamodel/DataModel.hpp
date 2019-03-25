@@ -127,6 +127,8 @@ public:
 
     int getIDFromPlanet(Planet::Ptr planet);
 
+    void WinCondition();
+
 private:
 
     int m_playerid;
