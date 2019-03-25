@@ -367,7 +367,8 @@ void MainWindow2D::sendShips(bool click)
     std::cout << "Send Ship from " << m_model->getPlanetFromId(currentPlanet)->getName() << 
         " to " << ui->DestionationPlanet->currentText().toStdString() << std::endl;
     
-    Planet::Ptr to = m_model->getPlanetFromName(ui->DestionationPlanet->currentText().toStdString());
+    std::string planetname = ui->DestionationPlanet->currentText().toStdString();
+    Planet::Ptr to = m_model->getPlanetFromName(planetname);
     Planet::Ptr from = m_model->getPlanetFromId(currentPlanet);
     int ships = ui->SendShipNumber->currentText().toInt();
     m_model->moveShips(from, to, ships);
@@ -375,7 +376,7 @@ void MainWindow2D::sendShips(bool click)
     updatePlayerInfo();
         //Flüge an Kanten hinzufügen
         int pos_1 = currentPlanet;
-        int pos_2 = m_model->getIDFromPlanetName(ui->DestionationPlanet->currentText().toStdString());
+        int pos_2 = m_model->getIDFromPlanetName(planetname);
         if(pos_1<=pos_2){
             QGraphicsTextItem *qgti = m_fighterAmount[std::make_pair(pos_1,pos_2)];
             QString qs = qgti->toPlainText();
