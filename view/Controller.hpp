@@ -37,8 +37,6 @@ private:
 
     int m_cooldownPlayer;
 
-    int m_cooldownEnemy;
-
     bool m_gamepadAvailable;
 
     Gamepad m_gamepad;

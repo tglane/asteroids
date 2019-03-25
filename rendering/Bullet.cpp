@@ -27,7 +27,7 @@ Bullet::Bullet(const Vector3f &fighter_position, const Vector3f fighter_axis, in
 	// the bullet will move on this axis, it has to be reversed for the direction to be right
 	this->m_fighterAxis = fighter_axis;
 	this->m_iterations = 0;
-	this->m_speed = 50;
+	this->m_speed = 100;
 
 	// same position as the fighter
 	m_position = fighter_position;
