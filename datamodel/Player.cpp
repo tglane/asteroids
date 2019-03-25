@@ -34,6 +34,17 @@ int Player::getShips()
 	return m_ships;
 }
 
+void Player::delShips(int ShipNumber)
+{
+	if(m_ships > 0)
+	{	
+		if(m_ships >= ShipNumber)
+		{
+			m_ships -= ShipNumber;
+		}
+	}
+}
+
 std::list<Planet::Ptr> Player::getPlanets()
 {
 	return m_planets;
@@ -58,9 +69,10 @@ void Player::addRubin(int add)
 	m_rubin += add;
 }
 
-void Player::incShips()
+void Player::incShips(int Ships)
 {
-	m_ships++;
+	std::cout << "Schiffe werden erhöht um 1" << std::endl;
+	m_ships += Ships;
 }
 
 void Player::incMines()

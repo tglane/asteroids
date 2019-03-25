@@ -120,7 +120,9 @@ public:
     QJsonDocument createJson(Player::Ptr player);
 
 
-    void performMovements();
+    void performMovements(Player::Ptr player);
+
+    void BattleReport();
 
 private:
 
