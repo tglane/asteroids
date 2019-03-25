@@ -2,6 +2,7 @@
 #define CPP18_ASTEROIDS_HITTABLE_HPP
 
 #include <QtCore/QTime>
+#include <rendering/Asteroid.hpp>
 #include "rendering/Bullet.hpp"
 #include "Transformable.hpp"
 
@@ -22,7 +23,9 @@ public:
 
     int getHealth();
 
-    bool hit(Bullet b);
+    bool hitBullet(Bullet b);
+
+    bool hitAsteroid(PhysicalObject p);
 
     void outOfBound();
 

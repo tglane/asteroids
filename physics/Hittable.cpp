@@ -1,6 +1,7 @@
 #include "Hittable.hpp"
 
 #include <algorithm>
+#include <rendering/Asteroid.hpp>
 
 namespace asteroids
 {
@@ -25,7 +26,7 @@ int Hittable::getHealth()
     return m_health;
 }
 
-bool Hittable::hit(Bullet b)
+bool Hittable::hitBullet(Bullet b)
 {
     float length = 200;
     float width = 100;
@@ -53,6 +54,36 @@ bool Hittable::hit(Bullet b)
     float y = std::max(boxMinY, std::min(by, boxMaxY));
     float z = std::max(boxMinZ, std::min(bz, boxMaxZ));
     return magnitude(Vector3f(x - bx, y - by, z - bz)) < b.radius();
+}
+
+bool Hittable::hitAsteroid(PhysicalObject p)
+{
+    float length = 200;
+    float width = 100;
+    float height = 50;
+
+    Vector3f xp = this->getPosition() + this->getXAxis() * length;
+    Vector3f xn = this->getPosition() - this->getXAxis() * length;
+    Vector3f yp = this->getPosition() + this->getYAxis() * width;
+    Vector3f yn = this->getPosition() - this->getYAxis() * width;
+    Vector3f zp = this->getPosition() + this->getZAxis() * height;
+    Vector3f zn = this->getPosition() - this->getZAxis() * height;
+
+    float boxMaxX = signedDistanceToPlane(xp, this->getXAxis(), this->getYAxis(), this->getZAxis());
+    float boxMinX = signedDistanceToPlane(xn, this->getXAxis(), this->getYAxis(), this->getZAxis());
+    float boxMaxY = signedDistanceToPlane(yp, this->getYAxis(), this->getXAxis(), this->getZAxis());
+    float boxMinY = signedDistanceToPlane(yn, this->getYAxis(), this->getXAxis(), this->getZAxis());
+    float boxMaxZ = signedDistanceToPlane(zp, this->getZAxis(), this->getXAxis(), this->getYAxis());
+    float boxMinZ = signedDistanceToPlane(zn, this->getZAxis(), this->getXAxis(), this->getYAxis());
+
+    float bx = signedDistanceToPlane(p.getPosition(), this->getXAxis(), this->getYAxis(), this->getZAxis());
+    float by = signedDistanceToPlane(p.getPosition(), this->getYAxis(), this->getXAxis(), this->getZAxis());
+    float bz = signedDistanceToPlane(p.getPosition(), this->getZAxis(), this->getXAxis(), this->getYAxis());
+
+    float x = std::max(boxMinX, std::min(bx, boxMaxX));
+    float y = std::max(boxMinY, std::min(by, boxMaxY));
+    float z = std::max(boxMinZ, std::min(bz, boxMaxZ));
+    return magnitude(Vector3f(x - bx, y - by, z - bz)) < p.radius();
 }
 
 float Hittable::signedDistanceToPlane(Vector3f x, Vector3f b, Vector3f e1, Vector3f e2)

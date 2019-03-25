@@ -58,7 +58,7 @@ public:
 	void render() override;
 
     /// Returns the radius of the bullet
-    int radius();
+    virtual int radius() override;
 
     static int lifetime() { return m_lifetime;}
 

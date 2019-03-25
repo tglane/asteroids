@@ -68,6 +68,13 @@ bool PhysicsEngine::process(int elapsed_time)
             {
                 // Mark bulled as killed
                 b->destroy();
+                for (Hittable::Ptr& h : m_hittables)
+                {
+                    if (h->getId() == b->get_shooter_id() && h->getHealth() < 10)
+                    {
+                        h->setHealth(h->getHealth() + 1);
+                    }
+                }
 
                 // Delete destroyed object
                 p_it = m_objects.erase(p_it);
@@ -81,7 +88,7 @@ bool PhysicsEngine::process(int elapsed_time)
         h_it = m_hittables.begin();
         while (h_it != m_hittables.end())
         {
-            if (b->get_shooter_id() != (*h_it)->getId() && (*h_it)->hit(*b))
+            if (b->get_shooter_id() != (*h_it)->getId() && (*h_it)->hitBullet(*b))
             {
                 b->destroy();
                 if (m_hittables.size() > 1)
@@ -90,11 +97,17 @@ bool PhysicsEngine::process(int elapsed_time)
                     if ((*h_it)->getHealth() == 0)
                     {
                         m_particles.addEffect(ParticleEffect::createExplosionSphere((*h_it)->getPosition()));
-                        h_it = m_hittables.erase(h_it);
                     }
                 }
             }
-            h_it++;
+            if ((*h_it)->getHealth() == 0 && m_hittables.size() > 1)
+            {
+                h_it = m_hittables.erase(h_it);
+            }
+            else
+            {
+                h_it++;
+            }
         }
 
         // Check if bullet is dead. If it is, remove from
@@ -106,6 +119,43 @@ bool PhysicsEngine::process(int elapsed_time)
         else
         {
             b_it++;
+        }
+    }
+
+    // Check for asteroid collision
+    h_it = m_hittables.begin();
+    while (h_it != m_hittables.end())
+    {
+        p_it = m_objects.begin();
+        while (p_it != m_objects.end())
+        {
+            if ((*h_it)->hitAsteroid(**p_it))
+            {
+                // Add explosion
+                m_particles.addEffect(ParticleEffect::createExplosionSphere((*p_it)->getPosition()));
+
+                // Delete destroyed object
+                p_it = m_objects.erase(p_it);
+
+                (*h_it)->setHealth((*h_it)->getHealth() - 1);
+                if ((*h_it)->getHealth() == 0)
+                {
+                    m_particles.addEffect(ParticleEffect::createExplosionSphere((*h_it)->getPosition()));
+                    break;
+                }
+            }
+            else
+            {
+                p_it++;
+            }
+        }
+        if ((*h_it)->getHealth() == 0)
+        {
+            h_it = m_hittables.erase(h_it);
+        }
+        else
+        {
+            h_it++;
         }
     }
 

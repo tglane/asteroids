@@ -83,15 +83,27 @@ private:
     PhysicsEngine::Ptr          m_physicsEngine;
 
     /// timer for correct speed with low fps
-    QTime                       m_timer;
+    QTime                       m_fpsTimer;
+
+    QTime                       m_startTimer;
 
     Controller                  m_controller;
+
+    bool                        m_started;
 
     bool                        m_gameOver;
 
     bool                        m_outOfBound;
 
     bool                        m_useGamepad;
+
+    QPixmap                     m_cockpit;
+
+    QPixmap                     m_playerHeart;
+
+    QPixmap                     m_enemyHeart;
+
+    QPixmap                     m_emptyHeart;
 };
 
 #endif
