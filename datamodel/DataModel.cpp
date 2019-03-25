@@ -288,8 +288,8 @@ bool DataModel::updateAll(QJsonDocument &update) {
 		Player::Ptr player;
 
 		QJsonObject all = update.object();
-		//all leeres Object, falls QJsonDokument Array und kein Object ist
-		if(all.empty()) return false;
+
+		if(all.empty()) return false; //QJsonDocument contains not an Object
 
 		QJsonObject::const_iterator it;
 
