@@ -5,6 +5,7 @@
 #include "MainWindow2D.hpp"
 #include "datamodel/Planet.hpp"
 #include "datamodel/DataModel.hpp"
+#include "view/MainWindow.hpp"
 #include <QDesktopWidget>
 #include <QGraphicsOpacityEffect>
 #include <QGraphicsView>
@@ -133,16 +134,18 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
     QPushButton* m_exit = ui->ExitGame;
     connect(m_exit, SIGNAL(clicked(bool)), this, SLOT(exitGame(bool)));
 
-
-    // Somehow there's a Segmentation fault if the Fighterwindow is initialized here like
-    // FighterWindow = new asteroids::MainWindow("...")
-    FighterWindow = NULL;
-
     currentPlanet = -1;
 
     ui->PlanetInfo->setVisible(false);
 
     updatePlayerInfo();
+
+    // Insert 3D Window into Stacked Widget
+    MainWindow* fightwindow = new MainWindow("../models/level.xml", m_model);
+    ui->centralwidget->addWidget(fightwindow);
+
+    std::cout << ui->centralwidget->indexOf(fightwindow) << std::endl;
+
 }
 
 void MainWindow2D::resizeEvent(QResizeEvent* event){
@@ -160,9 +163,7 @@ MainWindow2D::~MainWindow2D()
 
 void MainWindow2D::fight(bool click)
 {
-    std::cout << "Fight" << std::endl;
-    FighterWindow = new asteroids::MainWindow("../models/level.xml");
-    FighterWindow->show();
+    ui->centralwidget->setCurrentIndex(1);
 }
 
 void MainWindow2D::choose_planet(int id)

@@ -159,6 +159,7 @@ private:
     // Map of Windows
     std::map<int, QMainWindow*> m_Window;
 
+
     // List of upcoming battles
     std::list<std::shared_ptr<Battle>> m_battles;
 };

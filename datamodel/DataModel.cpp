@@ -247,8 +247,10 @@ void DataModel::addWindow(int Id, QMainWindow* Window)
 
 void DataModel::switchWindow(int Id)
 {
+    std::cout << "Hier" << std::endl;
     QMainWindow* Active = m_Window[Id];
     Active->showFullScreen();
+    std::cout << "Hier" << std::endl;
     
 }
 //TODO ordentliche Fehlerbehandlung + Doku + manche (unnötige) Felder in Player koennen mit Infos aus File nicht aktualisiert werden
@@ -274,7 +276,6 @@ bool DataModel::updateAll(QJsonDocument &update) {
 				id = it.value().toInt();
 				//TODO Later getPlayerByID?
 				player = m_enemy;
-
 			}
 
 			if(it.key() == "Name")
@@ -445,6 +446,7 @@ int DataModel::getIDFromPlanet(Planet::Ptr planet)
             return i;
         }
     }
+    return -1;
 }
 
 DataModel::~DataModel()

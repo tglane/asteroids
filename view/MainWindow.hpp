@@ -22,6 +22,7 @@
 #include "GLWidget.hpp"
 
 #include "../build/ui_MainWindow.h"
+#include "datamodel/DataModel.hpp"
 
 namespace asteroids
 {
@@ -42,7 +43,7 @@ public:
      *
      * @param plyname  A .ply file to render
      */
-    MainWindow(const std::string& plyname, QWidget* parent = NULL);
+    MainWindow(const std::string& plyname, DataModel::Ptr model, QWidget* parent = NULL);
 
     /**
      * @brief Destroys the Main Window object

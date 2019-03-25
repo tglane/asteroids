@@ -29,7 +29,7 @@ StartingDialog::StartingDialog(DataModel::Ptr model, QWidget* parent) :
 
     QPushButton* exitButton = ui->ExitGame;
     connect(exitButton, SIGNAL(clicked(bool)), this, SLOT(exitGame(bool)));
-    
+
 }
 
 StartingDialog::~StartingDialog()

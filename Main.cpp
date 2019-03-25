@@ -26,19 +26,8 @@ int main(int argc, char** argv)
 
     strategy::MainWindow2D mainWindow2D(model);
 
-    //asteroids::MainWindow mainWindow("../models/level.xml");
-    //mainWindow.show();
-
-    // Test
-    /*
-    model->getSelfPlayer()->addPlanet(model->getPlanets().find(1)->second);
-    model->getSelfPlayer()->addPlanet(model->getPlanets().find(2)->second);
-    model->getSelfPlayer()->addPlanet(model->getPlanets().find(3)->second);
-    model->createJson(model->getSelfPlayer());
-    */
-    //end test
-
     strategy::StartingDialog startWindow(model);
+
     startWindow.show();
 
     return a.exec();

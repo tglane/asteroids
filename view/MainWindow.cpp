@@ -12,6 +12,7 @@
 #include "MainWindow.hpp"
 #include "io/LevelParser.hpp"
 #include "io/TextureFactory.hpp"
+#include "datamodel/DataModel.hpp"
 
 #include <iostream>
 #include <QTimer>
@@ -20,7 +21,7 @@
 namespace asteroids
 {
 
-MainWindow::MainWindow(const std::string& file, QWidget* parent) :
+MainWindow::MainWindow(const std::string& file, DataModel::Ptr model, QWidget* parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow()),
     m_timer(new QTimer())
@@ -31,6 +32,8 @@ MainWindow::MainWindow(const std::string& file, QWidget* parent) :
 
     // Set level
     m_widget->setLevelFile(file);
+
+    model->addWindow(DataModel::MAIN3D, this);
 
     // Create a timer object to trigger the main loop
     connect(m_timer.get(), SIGNAL(timeout()), this, SLOT(handleInput()));
