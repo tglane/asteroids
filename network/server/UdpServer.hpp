@@ -58,7 +58,7 @@ private:
     QTime time;
 public:
     UdpServer();
-    void add_client(int id, QHostAddress addr, int port);
+    void add_client(int id, QHostAddress addr, int port, int health);
     void start();
 };
 

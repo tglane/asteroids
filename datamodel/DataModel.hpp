@@ -105,7 +105,7 @@ public:
 
     Player::Ptr getEnemyPlayer(int id);
 
-    bool updateAll(QJsonDocument &update); // @suppress("Type cannot be resolved")
+    bool updateAll(QJsonObject &update); // @suppress("Type cannot be resolved")
 
 
 
@@ -113,14 +113,14 @@ public:
      * @brief   Finds occuring battles at the end of each round,
      *          fills list of battles
      */
-    void findBattles();
+    std::list<std::shared_ptr<Battle>> findBattles();
 
     /**
      * @brief Creates Json File, which includes information about a certain player and his planets
      * @param player The player for which the information should be sent
      * @return the created Json File
      */
-    QJsonDocument createJson(Player::Ptr player);
+    QJsonObject createJson(Player::Ptr player);
 
 
     void performMovements(Player::Ptr player);

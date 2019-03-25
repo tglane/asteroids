@@ -260,9 +260,9 @@ void DataModel::switchWindow(int Id)
     
 }
 //TODO ordentliche Fehlerbehandlung + Doku + manche (unnötige) Felder in Player koennen mit Infos aus File nicht aktualisiert werden
-bool DataModel::updateAll(QJsonDocument &update) {
+bool DataModel::updateAll(QJsonObject &update) {
 
-	if (update.isObject() && !update.isEmpty())
+	if (!update.isEmpty())
 	{
 
 		int id;
@@ -270,7 +270,7 @@ bool DataModel::updateAll(QJsonDocument &update) {
 		std::list<Planet::Ptr> planets;
 		Player::Ptr player;
 
-		QJsonObject all = update.object();
+		QJsonObject all = update;
 		//all leeres Object, falls QJsonDokument Array und kein Object ist
 		if(all.empty()) return false;
 
@@ -337,7 +337,7 @@ Player::Ptr DataModel::getPlayer(int id) {
     return m_players[id];
 }
 
-void DataModel::findBattles()
+std::list<std::shared_ptr<Battle>> DataModel::findBattles()
 {
     std::map<int, Planet::Ptr>::iterator it;
     for(it = m_planets.begin(); it != m_planets.end(); it++)
@@ -363,9 +363,10 @@ void DataModel::findBattles()
             Planets->setInvader(NULL);
         }
     }
+    return m_battles;
 }
 
-QJsonDocument DataModel::createJson(Player::Ptr player)
+QJsonObject DataModel::createJson(Player::Ptr player)
 {
     // main QJson object in the document
     QJsonObject main;
@@ -403,12 +404,12 @@ QJsonDocument DataModel::createJson(Player::Ptr player)
     main.insert("PlanetArray", planeets);
 
     // Make qjsondocument out of it
-    QJsonDocument theDocument(main);
+    //QJsonDocument theDocument(main);
 
     // In case the json document should be printed
     //std::cout << theDocument.toJson().toStdString() << std::endl;
 
-    return theDocument;
+    return main;
 }
 
 

@@ -16,10 +16,10 @@ UdpServer::UdpServer() : peer(QHostAddress::Any, 1235)
     connect(&peer, &UdpPeer::received_position, this, &UdpServer::handle_position);
     //connect(&peer, &UdpPeer::received_collision, this, &UdpServer::handle_collision);
     connect(&peer, &UdpPeer::received_ack, this, &UdpServer::handle_ack);
-    timer.start(1000/30);
+    //timer.start(1000/30);
 
 
-    clients[42] = UdpClient(42);
+    /*clients[42] = UdpClient(42);
     clients[42].address = QHostAddress::LocalHost;
     clients[42].port = 1234;
     clients[42].ship->setHealth(10);
@@ -30,7 +30,7 @@ UdpServer::UdpServer() : peer(QHostAddress::Any, 1235)
     clients[43].ship->setHealth(10);
 
     physics_engine.addHittable(clients[42].ship);
-    physics_engine.addHittable(clients[43].ship);
+    physics_engine.addHittable(clients[43].ship);*/
 
 
     PhysicalObject::Ptr a(new PhysicalObject(Vector3f(), Vector3f(1000, 0, 0), 0, 0, 0, 0, 100, 1));
@@ -42,7 +42,7 @@ UdpServer::UdpServer() : peer(QHostAddress::Any, 1235)
     physics_engine.addDestroyable(c);
     physics_engine.addDestroyable(d);
 
-    time.start();
+    //time.start();
 }
 
 
@@ -175,15 +175,16 @@ void UdpServer::tick()
 void UdpServer::start()
 {
     timer.start(1000/30);
+    time.start();
 }
 
-void UdpServer::add_client(int id, QHostAddress addr, int port)
+void UdpServer::add_client(int id, QHostAddress addr, int port, int health)
 {
 
     clients[id] = UdpClient(id);
     clients[id].address = addr;
-    clients[id].port = 1234;
-    clients[id].ship->setHealth(10);
+    clients[id].port = port;
+    clients[id].ship->setHealth(health);
 
     physics_engine.addHittable(clients[id].ship);
 }

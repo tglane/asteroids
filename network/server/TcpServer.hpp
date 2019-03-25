@@ -46,13 +46,19 @@ private:
 
     void handle_init(TcpClient& client, QJsonDocument& doc);
     void handle_ready(TcpClient& client, QJsonDocument& doc);
+    void handle_state(TcpClient& client, QJsonDocument& doc);
+    void send_battle();
 
     int init_count = 0;
     int ready_count = 0;
+    int battle_count = 0;
+
 
     UdpServer udpServer;
 
     DataModel::Ptr m_datamodel;
+
+    std::list<std::shared_ptr<Battle>> m_battle_list;
 
 public:
     TcpServer();

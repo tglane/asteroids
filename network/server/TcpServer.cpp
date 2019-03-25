@@ -57,9 +57,12 @@ void TcpServer::send_state()
     for (auto client: clients)
     {
         QJsonArray array;
-        array.push_back("fight_init");
+        array.push_back("state");
+        for (auto j: clients) {
+            Player::Ptr temp_player = m_datamodel->getPlayer(j.id);
+            array.push_back(m_datamodel->createJson(temp_player));
+        }
         QJsonDocument doc(array);
-
         int size = doc.toJson().size();
         client.socket->write((char*)&size, 4);
         client.socket->write(doc.toJson());
@@ -68,19 +71,25 @@ void TcpServer::send_state()
 
 void TcpServer::handle_ready(TcpClient& client, QJsonDocument& doc)
 {
-
     qDebug() << "ready received";
     qDebug() << doc;
-    if (state == WAIT_READY) {
-        //QJsonObject init;
-        //init.insert("id", QJsonValue::fromVariant(client.id));
+    if (state == WAIT_READY)
+    {
 
         QJsonArray array;
         array.push_back("strat_init");
-        //array.push_back(init);
+
+        for (auto i: clients)
+        {
+            QJsonObject player_obj;
+            player_obj.insert("id", QJsonValue::fromVariant(client.id));
+            Player::Ptr player = m_datamodel->getPlayer(client.id);
+            player_obj.insert("player_name", QJsonValue::fromVariant(QString::fromStdString(player->getPlayerName())));
+
+            array.push_back(player_obj);
+        }
+
         QJsonDocument res(array);
-
-
         int size = res.toJson().size();
         client.socket->write((char*)&size, 4);
         client.socket->write(res.toJson());
@@ -90,29 +99,68 @@ void TcpServer::handle_ready(TcpClient& client, QJsonDocument& doc)
             send_strat_init();
             qDebug() << "state changed: ROUND";
             state = ROUND;
+            ready_count = 0;
         }
     } else if (state == ROUND) {
         //TODO berechnungen / kämpfe
-        send_state();
-        state = FIGHT;
-        udpServer.start();
-        qDebug() << "state changed: FIGHT";
+        ready_count++;
+        handle_state(client, doc);
+        if (clients.size() == ready_count) {
+            m_battle_list = m_datamodel->findBattles();
+
+            state = FIGHT;
+            battle_count = 0;
+            // Relevant,
+            //udpServer.start();
+            send_battle();
+
+            qDebug() << "state changed: FIGHT";
+        }
     }
 }
 
+void TcpServer::handle_state(TcpClient& client, QJsonDocument& doc) {
+    QJsonArray array_state = doc.array();
+    QJsonObject obj_state = array_state[1].toObject();
+    m_datamodel->updateAll(obj_state);
+}
+
+void TcpServer::send_battle() {
+    if (battle_count < m_battle_list.size()) {
+        // ToDo
+        // fight_init();
+        battle_count++;
+
+    } else {
+        state = ROUND;
+        qDebug() << "state changed: ROUND";
+        send_state();
+    }
+}
 
 void TcpServer::handle_init(TcpClient& client, QJsonDocument& doc)
 {
     qDebug() << "init received";
     qDebug() << doc;
 
-    QJsonObject init;
-    init.insert("id", QJsonValue::fromVariant(client.id));
 
-    QJsonArray array;
-    array.push_back("init_resp");
-    array.push_back(init);
-    QJsonDocument res(array);
+    // Ziehe Daten aus Document
+    QJsonArray array = doc.array();
+    QJsonObject temp_name = array[1].toObject();
+
+
+    QString name(temp_name["playername"].toString().toUtf8());
+
+    m_datamodel->getPlayer(client.id)->setPlayerName(name.toUtf8().constData());
+
+    QJsonObject init_res;
+    init_res.insert("id", QJsonValue::fromVariant(client.id));
+    init_res.insert("map", QJsonValue::fromVariant("../models/Level-1.map"));
+
+    QJsonArray array_response;
+    array_response.push_back("init_res");
+    array_response.push_back(init_res);
+    QJsonDocument res(array_response);
 
     int size = res.toJson().size();
     client.socket->write((char*)&size, 4);
@@ -126,7 +174,7 @@ void TcpServer::handle_init(TcpClient& client, QJsonDocument& doc)
     }
     qDebug() << client.socket->peerAddress();
 
-    udpServer.add_client(client.id, client.socket->peerAddress(), client.socket->peerPort());
+    udpServer.add_client(client.id, client.socket->peerAddress(), client.socket->peerPort(), 100);
 }
 
 
