@@ -21,6 +21,10 @@ tcpclient::tcpclient(asteroids::DataModel::Ptr datamodel, QString player_name, Q
 void tcpclient::connect_to_server()
 {
     m_socket->connectToHost(m_server_ip, 1235);
+    if(!m_socket->waitForDisconnected(1000))
+    {
+        qDebug() << "Error: " << m_socket->errorString();
+    }
 }
 
 void tcpclient::send_ready()
