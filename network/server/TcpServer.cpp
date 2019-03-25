@@ -43,6 +43,9 @@ void TcpServer::send_strat_init()
         QJsonArray array;
         array.push_back("strat_init");
         QJsonDocument doc(array);
+
+        int size = doc.toJson().size();
+        client.socket->write((char*)&size, 4);
         client.socket->write(doc.toJson());
     }
 }
@@ -54,9 +57,13 @@ void TcpServer::send_state()
         QJsonArray array;
         array.push_back("fight_init");
         QJsonDocument doc(array);
+
+        int size = doc.toJson().size();
+        client.socket->write((char*)&size, 4);
         client.socket->write(doc.toJson());
     }
 }
+
 void TcpServer::handle_ready(TcpClient& client, QJsonDocument& doc)
 {
 
@@ -71,13 +78,16 @@ void TcpServer::handle_ready(TcpClient& client, QJsonDocument& doc)
         //array.push_back(init);
         QJsonDocument res(array);
 
+
+        int size = res.toJson().size();
+        client.socket->write((char*)&size, 4);
         client.socket->write(res.toJson());
 
         ready_count++;
         if (clients.size() == ready_count) {
             send_strat_init();
-            qDebug() << "state changed: FIGHT";
-            state = FIGHT;
+            qDebug() << "state changed: ROUND";
+            state = ROUND;
         }
     } else if (state == ROUND) {
         //TODO berechnungen / kämpfe
@@ -102,6 +112,8 @@ void TcpServer::handle_init(TcpClient& client, QJsonDocument& doc)
     array.push_back(init);
     QJsonDocument res(array);
 
+    int size = res.toJson().size();
+    client.socket->write((char*)&size, 4);
     client.socket->write(res.toJson());
 
     init_count++;
@@ -111,6 +123,7 @@ void TcpServer::handle_init(TcpClient& client, QJsonDocument& doc)
         state = WAIT_READY;
     }
     qDebug() << client.socket->peerAddress();
+
     udpServer.add_client(client.id, client.socket->peerAddress(), client.socket->peerPort());
 }
 
@@ -121,7 +134,9 @@ void TcpServer::readyRead()
     {
         if (i.socket->bytesAvailable() > 0)
         {
-            QByteArray data = i.socket->readAll();
+            int size;
+            i.socket->readData((char*) &size, 4);
+            QByteArray data = i.socket->read(size);
             QJsonDocument doc = QJsonDocument::fromJson(QString(data).toUtf8());
             QJsonArray array = doc.array();
             QString ident(array[0].toString().toUtf8());
@@ -137,6 +152,6 @@ void TcpServer::readyRead()
 int main(int argc, char** argv)
 {
     QApplication app(argc, argv);
-    UdpServer server;
+    TcpServer server;
     return app.exec();
 }

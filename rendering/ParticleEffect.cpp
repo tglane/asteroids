@@ -178,6 +178,7 @@ void ParticleEffect::render()
   float z;
 
   glPushAttrib(GL_ENABLE_BIT);
+  glDisable(GL_TEXTURE_2D);
   glDisable(GL_TEXTURE);
   glDisable(GL_LIGHTING);
   // Draw particles as quads
@@ -217,6 +218,7 @@ void ParticleEffect::render()
   /// Zeichnen Ende
   glEnd();
   glEnable(GL_TEXTURE);
+  glEnable(GL_TEXTURE_2D);
   glEnable(GL_LIGHTING);
   glPopAttrib();
 }
