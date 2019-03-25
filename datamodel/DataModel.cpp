@@ -493,7 +493,7 @@ void DataModel::BattleReport()
 int DataModel::getIDFromPlanet(Planet::Ptr planet)
 {
     // go over all planets in planets
-    for(int i = 0; i < m_planets.size(); i++)
+    for(int i = 0; i < (int)m_planets.size(); i++)
     {
         // Get planet with index i
         Planet::Ptr mapPlanet = m_planets.find(i)->second;
@@ -503,6 +503,11 @@ int DataModel::getIDFromPlanet(Planet::Ptr planet)
             return i;
         }
     }
+    
+    // If we get to this point, the planet was not found in the map of all planets
+    std::cerr << "Achtung, die ID des Planeten " << planet->getName() << "wurde nicht gefunden"; 
+    std::cerr << "Es wurde ID 0 ausgegeben" << std::endl; 
+    return 0;
 }
 
 void DataModel::WinCondition()
