@@ -365,7 +365,7 @@ bool DataModel::updateAll(QJsonDocument &update) {
 						planet = getPlanetFromId(it1->toObject(QJsonObject()).value("ID").toInt());
 						ships = it1->toObject(QJsonObject()).value("Ships").toInt();
 
-						if(planet->getOwner() == nullptr)
+						if(planet->getOwner() == nullptr || planet->getOwner()->getIdentity() == id)
 						{
 							planet->setOwner(player);
 							planet->setShips(ships);
