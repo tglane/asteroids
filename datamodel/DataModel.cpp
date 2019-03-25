@@ -88,8 +88,13 @@ bool DataModel::endOfRound()
 
     performMovements(getSelfPlayer());
     findBattles();
+    m_self->PrintPlanetsList();
+    m_enemy->PrintPlanetsList();
     BattleReport();
     WinCondition();
+    m_self->PrintPlanetsList();
+    m_enemy->PrintPlanetsList();
+
 
     calculateFinance(getSelfPlayer());
     // TODO Update players ressources, money, ships, planets, mines
@@ -378,8 +383,11 @@ void DataModel::findBattles()
             // In case the defender ships are not present anymore
             if(Planets->getShips() == 0)
             {
+                Player::Ptr Tempplayer = Planets->getOwner();
+                Tempplayer->RemovePlaneteFromList(Planets);
                 Planets->setOwner(Planets->getInvader());
                 Planets->addShips(Planets->getInvaderShips());
+                
 
             }
             else
@@ -506,6 +514,7 @@ void DataModel::BattleReport()
             BattleDetailResult->m_location->delShips(BattleDetailResult->m_numberShips1);
             BattleDetailResult->m_location->addShips(BattleDetailResult->m_numberShips2);
             BattleDetailResult->m_player2->addPlanet(BattleDetailResult->m_location);
+            BattleDetailResult->m_player1->RemovePlaneteFromList(BattleDetailResult->m_location);
 
 
         }

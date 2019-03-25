@@ -9,6 +9,10 @@
 #include <list>
 #include <string>
 #include <memory>
+#include <iostream>
+#include <iterator>
+
+#include <map>
 
 #include "Planet.hpp"
 #include "MoveOrder.hpp"
@@ -167,6 +171,10 @@ public:
 	void ClearOrderListInPlayer();
 
 	std::list<std::shared_ptr<Planet>> getListOfPLanets();
+
+	void RemovePlaneteFromList(Planet::Ptr Planet);
+
+	void PrintPlanetsList();
 
 private:
 
