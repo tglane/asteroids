@@ -88,6 +88,7 @@ bool DataModel::endOfRound()
 
     performMovements(getSelfPlayer());
     findBattles();
+    BattlePhase();
     m_self->PrintPlanetsList();
     m_enemy->PrintPlanetsList();
     BattleReport();
@@ -389,6 +390,7 @@ void DataModel::findBattles()
                 Player::Ptr Tempplayer = Planets->getOwner();
                 Tempplayer->RemovePlaneteFromList(Planets);
                 Planets->setOwner(Planets->getInvader());
+                Planets->getOwner()->addPlanet(Planets);
                 Planets->addShips(Planets->getInvaderShips());
                 
 
@@ -602,6 +604,27 @@ void DataModel::WinCondition()
     if(NumberOfPlanets == CountOfPlanets)
     {
         std::cout << "Gewonnen" <<std::endl;
+
+
+    }
+
+}
+
+void DataModel::BattlePhase()
+{
+    std::list<std::shared_ptr<Battle>> BattlePhase = m_battles;
+    for (std::list<std::shared_ptr<Battle>>::iterator it = BattlePhase.begin(); it != BattlePhase.end(); ++it)  
+    {
+        std::shared_ptr<Battle> BattleDetail = *it;
+        std::cout << "Kampfphase" << std::endl;
+        std::cout << BattleDetail->m_location->getName() << std::endl;
+        std::cout << BattleDetail->m_player1->getPlayerName() << std::endl;
+        std::cout << BattleDetail->m_numberShips1 << std::endl;
+        std::cout << "" << std::endl;
+        std::cout << BattleDetail->m_player2->getPlayerName() << std::endl;
+        std::cout << BattleDetail->m_numberShips2 << std::endl;
+
+        
 
 
     }

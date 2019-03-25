@@ -144,6 +144,8 @@ public:
 
     void WinCondition();
 
+    void BattlePhase();
+
 private:
 
     int m_playerid;
