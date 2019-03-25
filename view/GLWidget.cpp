@@ -216,6 +216,7 @@ void GLWidget::paintGL()
 
 void GLWidget::step(map<Qt::Key, bool>& keyStates)
 {
+
     int elapsed_time = m_fpsTimer.restart();
 
     // Get keyboard states and handle model movement
@@ -285,6 +286,7 @@ void GLWidget::step(map<Qt::Key, bool>& keyStates)
             }
         }
     }
+
     // Trigger update, i.e., redraw via paintGL()
     this->update();
 }

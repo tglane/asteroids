@@ -1,4 +1,5 @@
 #include "DataModel.hpp"
+#include "view/MainWindow.hpp"
 #include <iostream>
 #include <fstream>
 #include <utility>
@@ -264,6 +265,10 @@ void DataModel::switchWindow(int Id)
     if(Id == MAIN2D || Id == MAIN3D)
     {
         m_mainWindow->window()->showFullScreen();
+    }
+    if(Id == MAIN3D)
+    {
+        ((MainWindow*)m_widgets[Id])->activate(true);
     }
     m_mainWindow->setCurrentWidget(m_widgets[Id]);
 }

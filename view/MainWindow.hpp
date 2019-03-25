@@ -22,7 +22,8 @@
 #include "GLWidget.hpp"
 
 // TODO: Besser!
-#include "cmake-build-debug/ui_MainWindow.h"
+#include "build/ui_MainWindow.h"
+#include "datamodel/DataModel.hpp"
 
 namespace asteroids
 {
@@ -56,6 +57,13 @@ public:
 
     /// Returns the height of the windows
     int height();
+
+    /**
+     * @brief   Starts and stops the timer
+     * 
+     * @param active    determines if the timer should be started or stopped
+     */
+    void activate(bool active);
 
 public Q_SLOTS:
     /// Handle input
