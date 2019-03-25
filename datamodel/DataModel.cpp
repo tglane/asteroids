@@ -276,8 +276,8 @@ bool DataModel::updateAll(QJsonDocument &update) {
 	if (update.isObject() && !update.isEmpty())
 	{
 
-		int id;
-		int rubin;
+		int id = 0;
+		int rubin = 0;
 		std::string name;
 		std::list<Planet::Ptr> planets;
 		Player::Ptr player;
