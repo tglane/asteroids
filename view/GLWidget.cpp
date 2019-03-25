@@ -4,7 +4,7 @@
 #include <QMouseEvent>
 #include <SDL2/SDL.h>
 #include <QtGui/QPainter>
-//#include <SOIL.h>
+#include <math.h>
 
 GLWidget::GLWidget(QWidget* parent) : QOpenGLWidget(parent), m_gameOver(false) {}
 
@@ -165,6 +165,8 @@ void GLWidget::paintGL()
 
     drawHealth(painter, m_camera->getHealth(), m_enemy->getHealth());
 
+    drawMinimap(painter, m_camera, m_enemy);
+
     if (m_gameOver)
     {
         QPixmap won("../models/won.png");
@@ -177,43 +179,6 @@ void GLWidget::paintGL()
         QPixmap turnWarning("../models/turn_warning.png");
         painter.drawPixmap(0, 0, this->width(), this->height(), turnWarning);
     }
-
-    // paint with OpenGL
-//    glMatrixMode(GL_PROJECTION);
-//    glPushMatrix();
-//    glLoadIdentity();
-//    glOrtho(0.0, this->width(), this->height(), 0.0, -1.0, 10.0);
-//    glMatrixMode(GL_MODELVIEW);
-//    glPushMatrix();
-//    glLoadIdentity();
-//    glDisable(GL_CULL_FACE);
-//    glDisable(GL_DEPTH_TEST);
-//    glDepthMask(GL_FALSE);
-//    glClear(GL_DEPTH_BUFFER_BIT);
-//
-//    int width = this->width();
-//    int height = this->height();
-//    unsigned char* image = SOIL_load_image("../models/cockpit.png", &width, &height, 0, SOIL_LOAD_RGB);
-//    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
-//    glColor3f(1.0, 1.0, 1.0);
-//    glBegin(GL_QUADS);
-//    glTexCoord2f(0.0, 1.0);
-//    glVertex2f(0.0, this->height() * 0.7);
-//    glTexCoord2f(1.0, 1.0);
-//    glVertex2f(this->width(), this->height() * 0.7);
-//    glTexCoord2f(1.0, 1.0);
-//    glVertex2f(this->width(), this->height());
-//    glTexCoord2f(0.0, 0.0);
-//    glVertex2f(0.0, this->height());
-//    glEnd();
-//
-////     Making sure we can render 3d again
-//    glMatrixMode(GL_PROJECTION);
-//    glPopMatrix();
-//    glMatrixMode(GL_MODELVIEW);
-//    glPopMatrix();
-//    glEnable(GL_DEPTH_TEST);
-//    glDepthMask(GL_TRUE);
 }
 
 void GLWidget::step(map<Qt::Key, bool>& keyStates)
@@ -283,20 +248,49 @@ void GLWidget::step(map<Qt::Key, bool>& keyStates)
 
 void GLWidget::drawHealth(QPainter& painter, int healthPlayer, int healthEnemy)
 {
+    QPixmap playerHeart("../models/player_heart.png");
+    QPixmap enemyHeart("../models/enemy_heart.png");
+    QPixmap emptyHeart("../models/empty_heart.png");
+
     float size = this->width() / 30.0f;
     float gap = 0.1;
     int height = (int) (size - 2 * size * gap);
     int width = (int) (height * 1.1);
-
-    QPixmap playerHeart("../models/player_heart.png");
-    QPixmap enemyHeart("../models/enemy_heart.png");
-    QPixmap emptyHeart("../models/empty_heart.png");
 
     for (int i = 0; i < 10; i++)
     {
         painter.drawPixmap((int) (size * i + size * gap), (int) (size * gap), width, height, (i < healthPlayer) ? playerHeart : emptyHeart);
         painter.drawPixmap((int) (this->width() - size - (size * i + size * gap)), (int) (size * gap), width, height, (i < healthEnemy) ? enemyHeart : emptyHeart);
     }
+}
+
+void GLWidget::drawMinimap(QPainter& painter, Hittable::Ptr player, Hittable::Ptr enemy)
+{
+    QPixmap minimap("../models/minimap");
+    QPixmap playerMinimap("../models/player_minimap");
+    QPixmap enemyMinimap("../models/enemy_minimap");
+
+    float size = this->width() * 0.2F;
+    float originX = this->height() - size * 1.1F + size / 2;
+    float originY = this->width() - size * 1.1F + size / 2;
+    painter.translate(originY, originX);
+    painter.save();
+    painter.drawPixmap((int) (-size / 2), (int) (-size / 2), (int) size, (int) size, minimap);
+
+    int fighterHeight = 32;
+    int fighterWidth = fighterHeight / 2;
+
+    painter.translate(size / 10000 * player->getPosition()[0], -size / 10000 * player->getPosition()[1]);
+    painter.rotate(std::atan2(player->getXAxis()[0], player->getXAxis()[1]) * 180 / M_PI);
+    painter.drawPixmap(0 - fighterWidth / 2, 0 - fighterHeight / 2, fighterWidth, fighterHeight, playerMinimap);
+
+    painter.restore();
+
+    painter.translate(size / 10000 * enemy->getPosition()[0], -size / 10000 * enemy->getPosition()[1]);
+    painter.rotate(std::atan2(enemy->getXAxis()[0], enemy->getXAxis()[1]) * 180 / M_PI);
+    painter.drawPixmap(0 - fighterWidth / 2, 0 - fighterHeight / 2, fighterWidth, fighterHeight, enemyMinimap);
+
+    painter.resetTransform();
 }
 
 void GLWidget::resizeGL(int w, int h)
