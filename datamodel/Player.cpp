@@ -24,6 +24,11 @@ Player::Player(int identity, int rubin, int ships) : m_planets()
 	m_name = "Slave of the Universe";
 }
 
+void Player::setPlanetsList(std::list<std::shared_ptr<Planet>> planets)
+{
+	m_planets = planets;
+}
+
 void Player::addPlanet(std::shared_ptr<Planet> planet)
 {
 	m_planets.push_back(planet);
@@ -48,6 +53,16 @@ void Player::delShips(int ShipNumber)
 std::list<Planet::Ptr> Player::getPlanets()
 {
 	return m_planets;
+}
+
+void Player::setShips(int ships)
+{
+	m_ships = ships;
+}
+
+void Player::setMines(int mines)
+{
+	m_mines = mines;
 }
 
 void Player::setIdentity(int id){

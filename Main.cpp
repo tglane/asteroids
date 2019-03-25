@@ -53,6 +53,14 @@ int main(int argc, char** argv)
 	    std::cout << Test->getName() << std::endl;
 	
 	    std::cout << Test->getShips() << std::endl;
+    // Test
+    /*
+    model->getSelfPlayer()->addPlanet(model->getPlanets().find(1)->second);
+    model->getSelfPlayer()->addPlanet(model->getPlanets().find(2)->second);
+    model->getSelfPlayer()->addPlanet(model->getPlanets().find(3)->second);
+    model->createJson(model->getSelfPlayer());
+    */
+    //end test
 
     strategy::StartingDialog startWindow(model);
     startWindow.show();

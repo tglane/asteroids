@@ -99,6 +99,16 @@ std::shared_ptr<Player> Planet::getInvader()
 	return m_invader;
 }
 
+void Planet::setMines(int mines)
+{
+	m_mines = mines;
+}
+
+void Planet::setShips(int ships)
+{
+	m_ships = ships;
+}
+
 int Planet::getRubin() 
 {
 	return m_rubin;
@@ -128,6 +138,7 @@ int Planet::getPosY()
 {
 	return m_posy;
 }
+
 
 std::string Planet::getName()
 {

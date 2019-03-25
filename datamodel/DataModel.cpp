@@ -3,6 +3,8 @@
 #include <fstream>
 #include <utility>
 
+
+
 namespace asteroids{
 
 DataModel::DataModel(std::string filename) : m_players(), m_planets(), m_edges()
@@ -111,7 +113,7 @@ bool DataModel::buyShip(Planet::Ptr selectedPlanet, Player::Ptr m_self)
     return false;
 
 }
-//TODO: MoveOrder in entsprechende Liste
+
 bool DataModel::moveShips(Planet::Ptr from, Planet::Ptr to, int numShips) {
 
 	std::cout << "MoveOrder " << numShips << " Ships from Planet " << from->getName() << " to Planet " << to->getName() << std::endl;
@@ -254,8 +256,67 @@ void DataModel::switchWindow(int Id)
     Active->showFullScreen();
     
 }
+//TODO ordentliche Fehlerbehandlung + Doku + manche (unnötige) Felder in Player koennen mit Infos aus File nicht aktualisiert werden
+bool DataModel::updateAll(QJsonDocument &update) {
 
-void DataModel::updateAll(QJsonDocument update) {
+	if (update.isObject() && !update.isEmpty())
+	{
+
+		int id;
+		std::string name;
+		std::list<Planet::Ptr> planets;
+		Player::Ptr player;
+
+		QJsonObject all = update.object();
+		//all leeres Object, falls QJsonDokument Array und kein Object ist
+		if(all.empty()) return false;
+
+		QJsonObject::const_iterator it;
+		for (it = all.constBegin(); it != all.constEnd(); it++)
+		{
+			if(it.key() == "ID")
+			{
+				id = it.value().toInt();
+				//TODO Later getPlayerByID?
+				player = m_enemy;
+
+			}
+
+			if(it.key() == "Name")
+			{
+				name = it.value().toString().toStdString();
+			}
+
+			if(it.key() == "PlanetArray")
+			{
+				if(it.value().isArray())
+				{
+					QJsonArray array = it.value().toArray();
+					QJsonArray::const_iterator it1;
+					Planet::Ptr planet;
+					int ships;
+					int mines;
+
+					for (it1 = array.constBegin(); it1 != array.constEnd(); it1++)
+					{
+						planet = getPlanetFromId(it1->toObject(QJsonObject()).value("ID").toInt());
+						mines = it1->toObject(QJsonObject()).value("Mines").toInt();
+						ships = it1->toObject(QJsonObject()).value("Ships").toInt();
+
+						planet->setMines(mines);
+						planet->setShips(ships);
+
+						planets.push_back(planet);
+
+					}//End Iterator Array
+				}
+			}
+
+		}//End Iterator File
+
+		player->setPlanetsList(planets);
+	}
+	return true;
 
 }
 
@@ -304,8 +365,43 @@ QJsonDocument DataModel::createJson(Player::Ptr player)
 
     //insert id of the player
     main.insert("ID", player->getIdentity());
+    // Playername
+    main.insert("Name",  QString::fromStdString(player->getPlayerName()));
+    // amount of rubin
+    main.insert("Rubin", player->getIdentity());
 
-    return QJsonDocument();
+    //Json array
+    QJsonArray planeets;
+    
+    //Planets of the player
+    std::list<std::shared_ptr<Planet>> planetos = player->getPlanets();
+
+    //Iterate over all and add the to the json file
+    for(std::list<std::shared_ptr<Planet>>::iterator it = planetos.begin(); it != planetos.end(); ++it)
+    {
+        //The Planet and the qjson representations
+        Planet::Ptr planet = *it;
+        QJsonObject qPlanet;
+
+        // Add necessary information to representation
+        qPlanet.insert("ID", getIDFromPlanet(planet));
+        qPlanet.insert("Mines", planet->getMines());
+        qPlanet.insert("Ships", planet->getShips());
+
+        //Add to the json array
+        planeets.push_back(qPlanet);
+    }
+
+    //Add the array to the json file
+    main.insert("PlanetArray", planeets);
+
+    // Make qjsondocument out of it
+    QJsonDocument theDocument(main);
+
+    // In case the json document should be printed
+    //std::cout << theDocument.toJson().toStdString() << std::endl;
+
+    return theDocument;
 }
 
 
@@ -379,6 +475,16 @@ void DataModel::BattleReport()
     }
     m_battles.clear();
 
+int DataModel::getIDFromPlanet(Planet::Ptr planet)
+{
+    for(int i = 0; i < m_planets.size(); i++)
+    {
+        Planet::Ptr mapPlanet = m_planets.find(i)->second;
+        if(mapPlanet->getName() == planet->getName())
+        {
+            return i;
+        }
+    }
 }
 
 DataModel::~DataModel()

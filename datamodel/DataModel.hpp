@@ -15,6 +15,7 @@
 #include <QJsonDocument>
 #include <QString>
 
+
 #include "MoveOrder.hpp"
 #include "MineOrder.hpp"
 #include "ShipOrder.hpp"
@@ -102,7 +103,7 @@ public:
 
     Player::Ptr getEnemyPlayer(int id);
 
-    void updateAll(QJsonDocument update);
+    bool updateAll(QJsonDocument &update); // @suppress("Type cannot be resolved")
 
 
 
@@ -123,6 +124,8 @@ public:
     void performMovements(Player::Ptr player);
 
     void BattleReport();
+
+    int getIDFromPlanet(Planet::Ptr planet);
 
 private:
 
