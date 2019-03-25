@@ -6,6 +6,7 @@
 #include "datamodel/Planet.hpp"
 #include "datamodel/DataModel.hpp"
 #include "view/MainWindow.hpp"
+#include "view2D/StartingDialog.hpp"
 #include <QDesktopWidget>
 #include <QGraphicsOpacityEffect>
 #include <QGraphicsView>
@@ -20,12 +21,13 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
     ui(new Ui::MainWindow2D())
 {
     m_model = model;
-    m_model->addWindow(DataModel::MAIN2D, this);
 
     // Setup user interface
     ui->setupUi(this);
-    
-    resize(QDesktopWidget().availableGeometry(this).size());
+
+    // register the StackedWidget at datamodel for switching
+    m_model->addMainWindow(ui->centralwidget);
+    m_model->addWidget(DataModel::MAIN2D, ui->StrategyContent);
 
     scene = new QGraphicsScene(this);
     ui->Map->setScene(scene);
@@ -52,8 +54,6 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
     outlinePenHighlight.setWidth(1);
 
     std::map<int, Planet::Ptr> planets = m_model->getPlanets();
-
-    resizeEvent(NULL);
 
     int planet_size = 20;
 
@@ -143,9 +143,13 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
     // Insert 3D Window into Stacked Widget
     MainWindow* fightwindow = new MainWindow("../models/level.xml", m_model);
     ui->centralwidget->addWidget(fightwindow);
+    m_model->addWidget(DataModel::MAIN3D, fightwindow);
 
-    std::cout << ui->centralwidget->indexOf(fightwindow) << std::endl;
+    StartingDialog* startingDialog = new StartingDialog(m_model);
+    ui->centralwidget->addWidget(startingDialog);
+    m_model->addWidget(DataModel::START, startingDialog);
 
+    ui->centralwidget->setCurrentWidget(startingDialog);
 }
 
 void MainWindow2D::resizeEvent(QResizeEvent* event){

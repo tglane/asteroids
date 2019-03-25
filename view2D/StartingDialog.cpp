@@ -9,7 +9,6 @@ StartingDialog::StartingDialog(DataModel::Ptr model, QWidget* parent) :
     QMainWindow(parent), ui(new Ui::StartingDialog())
 {
     m_model = model;
-    m_model->addWindow(DataModel::START, this);
 
     ui->setupUi(this);
 
@@ -50,7 +49,6 @@ void StartingDialog::startGame(bool click)
         m_model->getSelfPlayer()->setPlayerName(name);
         // Call switching mechanism of datamodel
         m_model->switchWindow(DataModel::MAIN2D);
-        this->setVisible(false);
     }
     else
     {

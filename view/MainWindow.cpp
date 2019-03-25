@@ -33,8 +33,6 @@ MainWindow::MainWindow(const std::string& file, DataModel::Ptr model, QWidget* p
     // Set level
     m_widget->setLevelFile(file);
 
-    model->addWindow(DataModel::MAIN3D, this);
-
     // Create a timer object to trigger the main loop
     connect(m_timer.get(), SIGNAL(timeout()), this, SLOT(handleInput()));
     m_timer->start(1000 / 60.0);

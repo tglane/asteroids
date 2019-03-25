@@ -240,19 +240,26 @@ void DataModel::setStartPlanet(std::shared_ptr<Planet> startplanet)
 	m_self->addPlanet(startplanet);
 }
 
-void DataModel::addWindow(int Id, QMainWindow* Window)
+void DataModel::addMainWindow(QStackedWidget* window)
 {
-    m_Window[Id] = Window;
+    m_mainWindow = window;
+}
+
+void DataModel::addWidget(int Id, QWidget* widget)
+{
+    m_widgets.insert(std::pair<int, QWidget*>(Id, widget));
 }
 
 void DataModel::switchWindow(int Id)
 {
-    std::cout << "Hier" << std::endl;
-    QMainWindow* Active = m_Window[Id];
-    Active->showFullScreen();
-    std::cout << "Hier" << std::endl;
-    
+    if(Id == MAIN2D || Id == MAIN3D)
+    {
+        m_mainWindow->window()->showFullScreen();
+    }
+    m_mainWindow->setCurrentWidget(m_widgets[Id]);
 }
+
+
 //TODO ordentliche Fehlerbehandlung + Doku + manche (unnötige) Felder in Player koennen mit Infos aus File nicht aktualisiert werden
 bool DataModel::updateAll(QJsonDocument &update) {
 
