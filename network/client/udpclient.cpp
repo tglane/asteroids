@@ -125,6 +125,14 @@ void udpclient::readyRead()
     }
 }
 
+void udpclient::init_fight_slot(QJsonObject init_data)
+{
+    for(const QString& key : init_data.keys())
+    {
+        QJsonValue value = init_data.value(key);
+    }
+}
+
 void udpclient::setPosFromPackage(int recv_id, char *data)
 {
     int id = recv_id >> 24;

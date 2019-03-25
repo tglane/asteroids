@@ -35,8 +35,9 @@ using std::map;
 
 namespace asteroids{
 
-class DataModel
+class DataModel : public QObject
 {
+    Q_OBJECT
 
 public:
 
@@ -45,10 +46,8 @@ public:
 
     /**
      * @brief   Initilizes a new data model
-     * 
-     * @param filename  the mapfile including all planets and their connections
      */
-    DataModel(std::string filename);
+    DataModel();
 
     /**
      * @brief   Frees the memory
@@ -118,12 +117,22 @@ public:
      * @param player The player for which the information should be sent
      * @return the created Json File
      */
-    QJsonDocument createJson(Player::Ptr player);
+    QJsonObject createJson(Player::Ptr player);
 
 
     void performMovements();
 
     int getIDFromPlanet(Planet::Ptr planet);
+
+    void setOwnID(int id) { m_playerid = id; }
+
+    /**
+     * @brief   Loads all the planets from the given file
+     */
+    void getUniverse(std::string filename);
+
+signals:
+    void endround_signal();
 
 private:
 
@@ -136,10 +145,6 @@ private:
     int Minecost = 1000;
 
     int Minegain = 750;
-    /**
-     * @brief   Loads all the planets from the given file
-     */
-    void getUniverse(std::string filename);
 
     std::map<int, Player::Ptr> m_players;
 

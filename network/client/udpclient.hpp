@@ -7,6 +7,7 @@
 #include <QObject>
 #include <QUdpSocket>
 #include <memory>
+#include <QJsonObject>
 
 #include "math/Vector.hpp"
 #include "math/Quaternion.hpp"
@@ -47,11 +48,16 @@ public:
 signals:
 
 public slots:
-
     /**
-     * @brief
+     * @brief read incoming data from udp server
      */
     void readyRead();
+
+    /**
+     * @brief inits the udp data connection for the 3d fight
+     * @param init_data containing the position of the spaceships and asteroids
+     */
+    void init_fight_slot(QJsonObject init_data);
 
 private:
 

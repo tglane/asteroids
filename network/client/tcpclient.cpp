@@ -5,26 +5,42 @@
 #include <QDebug>
 #include "tcpclient.hpp"
 
-tcpclient::tcpclient(QString player_name, QString server_ip, QObject* parent)
-    : m_player_name(std::move(player_name)), m_server_ip(std::move(server_ip))
+tcpclient::tcpclient(asteroids::DataModel::Ptr datamodel, QString player_name, QString server_ip, QObject* parent)
+    : m_datamodel(std::move(datamodel)), m_player_name(std::move(player_name)), m_server_ip(std::move(server_ip))
 {
     m_socket = std::make_shared<QTcpSocket>(this);
+    m_socket->setSocketOption(QAbstractSocket::KeepAliveOption, 1);
 
     connect(m_socket.get(), SIGNAL(connected()), this, SLOT(send_init()));
     connect(m_socket.get(), SIGNAL(readyRead()), this, SLOT(recv_json()));
+    //connect(m_socket.get(), SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(error_out(QAbstractSocket::SocketError)));
+
+    connect_to_server();
 }
 
-void tcpclient::connect_to_server(string player_name)
+void tcpclient::connect_to_server()
 {
-    m_socket->connectToHost(m_server_ip, 1234);
-    if(!m_socket->waitForConnected(10000));
-    {
-        qDebug() << "Error: " << m_socket->errorString();
-    }
+    m_socket->connectToHost(m_server_ip, 1235);
+}
+
+void tcpclient::send_ready()
+{
+    QJsonArray init_array;
+    init_array.push_back("ready");
+    init_array.push_back(m_datamodel->createJson(m_datamodel->getSelfPlayer()));
+
+    QJsonDocument doc(init_array);
+
+    int size = doc.toJson().size();
+    m_socket->write((char*) &size, sizeof(size));
+
+    m_socket->write(doc.toJson());
+    m_socket->flush();
 }
 
 void tcpclient::send_init()
 {
+    std::cout << "afsdfgn" << std::endl;
     QJsonObject init_object;
     init_object.insert("player_name", QJsonValue::fromVariant(m_player_name));
 
@@ -50,24 +66,34 @@ void tcpclient::recv_json()
     QJsonDocument json_doc = QJsonDocument::fromJson(recv_json.toUtf8());
     QJsonArray recv_array = json_doc.array();
 
-    if(recv_array[0] == "init_res")
+    if(recv_array[0] == "init_res" && m_state == client_state::CONNECTING)
     {
         process_init_res(recv_array[1].toObject());
-    } else if(recv_array[0] == "strat_init")
+    }
+    else if(recv_array[0] == "strat_init" && m_state == client_state::READY)
     {
-        process_strat_init(recv_array[1].toObject());
-    } else if(recv_array[0] == "fight_init")
+        process_strat_init(recv_array);
+    }
+    else if(recv_array[0] == "state" && (m_state == client_state::END_ROUND || m_state == client_state::FIGHT))
     {
-        process_state(recv_array[1].toObject());
-    } else
+        process_state(recv_array);
+    }
+    else if (recv_array[0] == "fight_init" && (m_state == client_state::END_ROUND || m_state == client_state::FIGHT) )
     {
-        std::cout << m_state << " | " << recv_array[1].toString().toUtf8().constData() << std::endl;
+        emit fight_init_signal(recv_array[2].toObject());
+    }
+    else
+    {
+        std::cout << m_state << " | " << recv_array[0].toString().toStdString() << std::endl;
     }
 }
 
 void tcpclient::process_init_res(QJsonObject recv_obj)
 {
+    m_datamodel->setOwnID(recv_obj["id"].toInt());
+    m_datamodel->getUniverse(recv_obj["map"].toString().toStdString());
 
+    m_state = client_state::WAIT;
 
     QJsonArray init_array;
     init_array.push_back("ready");
@@ -76,16 +102,33 @@ void tcpclient::process_init_res(QJsonObject recv_obj)
 
     m_socket->write(doc.toJson());
     m_socket->flush();
+
+    m_state = client_state::READY;
 }
 
-
-
-void tcpclient::process_strat_init(QJsonObject recv_obj)
+void tcpclient::process_strat_init(QJsonArray recv_array)
 {
+    m_datamodel->getSelfPlayer()->setPlayerName(m_player_name.toStdString());
 
+    for(int i = 1; i < recv_array.size(); i++)
+    {
+        if(recv_array[i].toObject()["id"] != m_datamodel->getSelfPlayer()->getIdentity())
+        {
+            /* Sets enemy player name to the name sent from server */
+            m_datamodel->getEnemyPlayer(recv_array[i].toObject()["id"].toInt())->setPlayerName(recv_array[i].toObject()["player_name"].toString().toStdString());
+        }
+    }
+
+    m_state = client_state::ROUND;
 }
 
-void tcpclient::process_state(QJsonObject recv_obj)
+void tcpclient::process_state(QJsonArray recv_array)
 {
+    QJsonDocument doc;
+    doc.setObject(recv_array[1].toObject());
+    m_datamodel->updateAll(doc);
 
+    //TODO maybe not correct ---
+    doc.setObject(recv_array[2].toObject());
+    m_datamodel->updateAll(doc);
 }
