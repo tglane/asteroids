@@ -174,6 +174,29 @@ void GLWidget::paintGL()
 
     drawHealth(painter, m_camera->getHealth(), m_enemy->getHealth());
 
+    // Draw start timer
+    int time = m_startTimer.elapsed();
+    if (time >= 1000 && time < 2000)
+    {
+        QPixmap cd3("../models/three.png");
+        painter.drawPixmap(0, 0, this->width(), this->height(), cd3);
+    }
+    else if (time >= 2000 && time < 3000)
+    {
+        QPixmap cd2("../models/two.png");
+        painter.drawPixmap(0, 0, this->width(), this->height(), cd2);
+    }
+    else if (time >= 3000 && time < 4000)
+    {
+        QPixmap cd1("../models/one.png");
+        painter.drawPixmap(0, 0, this->width(), this->height(), cd1);
+    }
+    else if (time >= 4000 && time < 4500)
+    {
+        QPixmap cd0("../models/start.png");
+        painter.drawPixmap(0, 0, this->width(), this->height(), cd0);
+    }
+
     if (m_gameOver)
     {
         QPixmap won("../models/won.png");
@@ -202,45 +225,59 @@ void GLWidget::step(map<Qt::Key, bool>& keyStates)
             m_started = true;
         }
     }
-    else {
-        if (!m_gameOver) {
+    else
+    {
+        if (!m_gameOver)
+        {
             Hittable::Ptr player_ptr = std::static_pointer_cast<Hittable>(m_camera);
 
-            if (m_useGamepad) {
+            if (m_useGamepad)
+            {
                 m_controller.gamepadControl(player_ptr, m_physicsEngine, elapsed_time);
-            } else {
+            }
+            else
+            {
                 m_controller.keyControl(keyStates, player_ptr, m_physicsEngine, elapsed_time);
             }
 
             Vector3f player_pos = m_camera->getPosition();
-            if (std::abs(player_pos[0]) > 4500 || std::abs(player_pos[1]) > 4500 || std::abs(player_pos[2]) > 4500) {
+            if (std::abs(player_pos[0]) > 4500 || std::abs(player_pos[1]) > 4500 || std::abs(player_pos[2]) > 4500)
+            {
                 m_camera->outOfBound();
                 int time = m_camera->getTime();
-                if (time > 1000) {
+                if (time > 1000)
+                {
                     m_camera->restartTimer(time - 1000);
                     m_camera->setHealth(m_camera->getHealth() - 1);
-                    if (m_camera->getHealth() == 0) {
+                    if (m_camera->getHealth() == 0)
+                    {
                         m_gameOver = true;
                     }
                 }
                 m_outOfBound = true;
-            } else {
+            } else
+            {
                 m_camera->inBound();
                 m_outOfBound = false;
             }
 
             Vector3f enemy_pos = m_enemy->getPosition();
-            if (std::abs(enemy_pos[0]) > 4500 || std::abs(enemy_pos[1]) > 4500 || std::abs(enemy_pos[2]) > 4500) {
+            if (std::abs(enemy_pos[0]) > 4500 || std::abs(enemy_pos[1]) > 4500 || std::abs(enemy_pos[2]) > 4500)
+            {
                 m_enemy->outOfBound();
                 int time = m_enemy->getTime();
-                if (time > 1000) {
+                if (time > 1000)
+                {
                     m_enemy->restartTimer(time - 1000);
                     m_enemy->setHealth(m_enemy->getHealth() - 1);
-                    if (m_enemy->getHealth() == 0) {
+                    if (m_enemy->getHealth() == 0)
+                    {
                         m_gameOver = true;
                     }
                 }
-            } else {
+            }
+            else
+            {
                 m_enemy->inBound();
             }
         }
