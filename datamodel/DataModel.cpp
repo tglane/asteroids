@@ -79,7 +79,7 @@ bool DataModel::endOfRound()
     m_self->PrintPlanetsList();
     m_enemy->PrintPlanetsList();
     BattleReport();
-    WinCondition();
+    //WinCondition();
     m_self->PrintPlanetsList();
     m_enemy->PrintPlanetsList();
 
