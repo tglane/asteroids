@@ -99,7 +99,6 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
     QPalette palette;
     palette.setBrush(QPalette::Background, bkgnd);
     this->setPalette(palette);
-    //Einfach kopiert
 
     // Add the matching event to the next-round-button
     QPushButton* m_nextRound = ui->NextRound;

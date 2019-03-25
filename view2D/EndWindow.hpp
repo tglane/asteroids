@@ -20,7 +20,7 @@ class EndWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    EndWindow(bool victory, QWidget* parent = NULL);
+    EndWindow(asteroids::DataModel::Ptr model, QWidget* parent = NULL);
 
     ~EndWindow();
 
@@ -35,6 +35,8 @@ private:
 
     /// QT UI of the window
     Ui::EndWindow* ui;
+
+    asteroids::DataModel::Ptr m_model;
 
 };
 
