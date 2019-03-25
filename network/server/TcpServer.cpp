@@ -104,8 +104,15 @@ void TcpServer::handle_init(TcpClient& client, QJsonDocument& doc)
     qDebug() << "init received";
     qDebug() << doc;
 
+    int enemy_id;
+    for (auto i: clients) {
+        if (i.id != client.id) {
+            enemy_id = i.id;
+        }
+    }
     QJsonObject init;
-    init.insert("id", QJsonValue::fromVariant(client.id));
+    init.insert("player_id", QJsonValue::fromVariant(client.id));
+    init.insert("enemy_id", QJsonValue::fromVariant(enemy_id));
 
     QJsonArray array;
     array.push_back("init_resp");
