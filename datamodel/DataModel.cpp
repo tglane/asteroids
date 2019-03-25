@@ -378,7 +378,7 @@ void DataModel::findBattles()
         Planet::Ptr Planets = it->second;
         if(Planets->getInvader() != NULL)
         {
-            // In case the defender ships are not present anymore
+            // In case the defender ships are not present
             if(Planets->getShips() == 0)
             {
                 Planets->setOwner(Planets->getInvader());
@@ -470,7 +470,7 @@ QJsonDocument createJsonOrders(Player::Ptr player)
         QJsonObject qMineOrder;
 
         //Add Id
-        qMineOrder.insert("PlanetID", getIDFromPlanet(mineOrder->getPlanet()));
+        //qMineOrder.insert("PlanetID", getIDFromPlanet(mineOrder->getPlanet()));
 
         qMineOrders.push_back(qMineOrder);
         /*
@@ -520,16 +520,6 @@ void DataModel::performMovements(Player::Ptr player)
             destination->setOwner(player);
             destination->addShips(ships);
        
-        }else if(destination->getShips()==0){
-            //the destination planet is of another player but he cannot defend, planet acquired
-            destination->setOwner(m_self);
-            destination->addShips(ships);
-
-            m_self->addPlanet(destination);
-            std::cout <<"Speicherzugriffsfehler test before" << std::endl;
-            destination->setInvader(NULL);
-            std::cout <<"Speicherzugriffsfehler test" << std::endl;
-            destination->setInvaderShips(0);
         }else{
             //the destination planet is of another player but he might defend
             destination->setInvader(m_self);
