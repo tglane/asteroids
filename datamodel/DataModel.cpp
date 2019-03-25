@@ -441,6 +441,11 @@ QJsonDocument DataModel::createJsonPlayerStatus(Player::Ptr player)
     return theDocument;
 }
 
+QJsonDocument createJsonOrders(Player::Ptr player)
+{
+    return QJsonDocument();
+}
+
 
 void DataModel::performMovements(Player::Ptr player)
 {
