@@ -12,6 +12,8 @@
 #include "build/ui_StartingDialog.h"
 #include "datamodel/DataModel.hpp"
 
+#include "network/client/tcpclient.hpp"
+
 
 using asteroids::DataModel;
 using std::string;
@@ -70,6 +72,8 @@ private:
 
     // The model which manages the round based data
     DataModel::Ptr m_model;
+
+    tcpclient::Ptr m_tcpclient;
 };
 
 

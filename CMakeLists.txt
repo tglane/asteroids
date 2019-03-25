@@ -157,6 +157,14 @@ set(ASTEROID_SOURCES
     view/MainWindow.cpp 
     network/client/udpclient.cpp
         network/client/tcpclient.cpp
+        #network/server/TcpServer.cpp
+        network/server/UdpServer.cpp
+        network/server/ServerPhysicsEngine.cpp
+        #network/light_classes/light_asteroid.cpp
+        network/light_classes/light_bullet.cpp
+        network/light_classes/light_object.cpp
+        network/light_classes/light_ship.cpp
+        network/UdpPeer.cpp
     view/Controller.cpp
     Gamepad.cpp
     view/Camera.cpp  

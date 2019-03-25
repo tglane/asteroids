@@ -11,8 +11,8 @@
 #include <physics/Transformable.hpp>
 #include <physics/Hittable.hpp>
 #include <memory>
-#include <light_object.hpp>
-#include <light_ship.hpp>
+#include "network/light_classes/light_object.hpp"
+#include "network/light_classes/light_ship.hpp"
 
 #include "ServerPhysicsEngine.hpp"
 #include "../UdpPeer.hpp"

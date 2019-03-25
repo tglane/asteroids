@@ -19,6 +19,7 @@
 #include "datamodel/DataModel.hpp"
 
 
+
 namespace strategy
 {
 
@@ -104,6 +105,7 @@ public slots:
 
     void showPlayerName();
 
+
 private:
 
     /// QT UI of the window
@@ -118,6 +120,7 @@ private:
     std::map<int, MyEllipse*> view_planets;
 
     int currentPlanet;
+
 };
 
 

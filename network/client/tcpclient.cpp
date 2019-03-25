@@ -17,8 +17,9 @@ tcpclient::tcpclient(asteroids::DataModel::Ptr datamodel, QObject* parent)
 
 void tcpclient::connect_to_server(string name, string server_ip)
 {
-    m_player_name = QString::fromStdString("asdf");
-    m_server_ip = QString::fromStdString("127.0.0.1");
+    qDebug() << "trying to connect...";
+    m_player_name = QString::fromStdString(name);
+    m_server_ip = QString::fromStdString(server_ip);
 
     m_socket->connectToHost(m_server_ip, 1235);
 }
@@ -41,7 +42,7 @@ void tcpclient::send_ready()
 
 void tcpclient::send_init()
 {
-    std::cout << "afsdfgn" << std::endl;
+    std::cout << "enter send_init..." << std::endl;
     QJsonObject init_object;
     init_object.insert("player_name", QJsonValue::fromVariant(m_player_name));
 

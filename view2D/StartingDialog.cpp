@@ -16,12 +16,18 @@ StartingDialog::StartingDialog(DataModel::Ptr model, QWidget* parent) :
     ui->NameLabel->setStyleSheet("QLabel { color: white }");
     ui->ServerAddressLabel->setStyleSheet("QLabel { color: white }");
     ui->ChooseMapLabel->setStyleSheet("QLabel { color: white}");
+    ui->checkBoxLabel->setStyleSheet("QLabel { color: white}");
 
     QPixmap bkgnd("../models/box1.jpg");
     bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
     QPalette palette;
     palette.setBrush(QPalette::Background, bkgnd);
     this->setPalette(palette);
+
+    // Debug
+    ui->Name->setText("Banane");
+    ui->ServerAddress->setText("127.0.0.1");
+    ui->checkBoxLabel->setText("Be Server");
 
     QPushButton* startButton = ui->StartGame;
     connect(startButton, SIGNAL(clicked(bool)), this, SLOT(startGame(bool)));
@@ -44,15 +50,19 @@ void StartingDialog::exitGame(bool clicked)
 void StartingDialog::startGame(bool click)
 {
     std::string name = ui->Name->text().toStdString();
-    if(name != "" && name != "Please insert a name!")
+    QString ip_addr = ui->ServerAddress->text();
+    if(name != "" && name != "Please insert a name!" && ip_addr != "" && !ui->checkBox->isTristate())
     {
-        ui->ServerAddress->setText("192.168.0.42");
+        //ui->ServerAddress->setText(ip_addr);
         m_model->getSelfPlayer()->setPlayerName(name);
         // Call switching mechanism of datamodel
         //m_model->switchWindow(DataModel::MAIN2D);
         this->setVisible(false);
         /* emit signal to establish tcp connection */
+        tcpclient(m_model,this);
         emit connect_to_server(name, ui->ServerAddress->text().toStdString());
+    } else if (ui->checkBox->isTristate()) {
+
     }
     else
     {

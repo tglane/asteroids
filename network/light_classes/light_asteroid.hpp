@@ -14,7 +14,7 @@ class light_asteroid : public light_object {
 public:
 
     light_asteroid(int id, int speed, float size, std::vector<float> position, std::vector<float> direction)
-            : m_id(id), m_speed(speed), m_size(size), m_position(position), m_direction(direction)
+            : m_id(id), m_speed(speed), m_size(size), m_position(position), m_direction(direction);
 
     float get_size() { return m_size; }
 
