@@ -40,6 +40,7 @@ void PhysicsEngine::process()
     // Move all objects
     for (p_it = m_objects.begin(); p_it != m_objects.end(); p_it++)
     {
+        std::cout << "loop " << *p_it << std::endl;
         PhysicalObject::Ptr p = *p_it;
         p->move();
     }

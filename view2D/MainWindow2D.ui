@@ -6,90 +6,180 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1200</width>
-    <height>900</height>
+    <width>1188</width>
+    <height>774</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
-  <widget class="QWidget" name="centralwidget">
-   <property name="layoutDirection">
-    <enum>Qt::LeftToRight</enum>
-   </property>
-   <layout class="QGridLayout" name="gridLayout" rowstretch="0" columnstretch="0,0">
-    <property name="leftMargin">
-     <number>0</number>
+  <widget class="QStackedWidget" name="centralwidget">
+   <widget class="QWidget" name="StrategyContent">
+    <property name="layoutDirection">
+     <enum>Qt::LeftToRight</enum>
     </property>
-    <property name="topMargin">
-     <number>0</number>
-    </property>
-    <property name="rightMargin">
-     <number>0</number>
-    </property>
-    <property name="bottomMargin">
-     <number>0</number>
-    </property>
-    <item row="0" column="0">
-     <widget class="QWidget" name="MapWidget" native="true">
-      <layout class="QGridLayout" name="gridLayout_2">
-       <item row="0" column="0">
-        <widget class="QGraphicsView" name="Map">
-         <property name="lineWidth">
-          <number>0</number>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QPushButton" name="Fight">
-         <property name="text">
-          <string>Fight</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </item>
-    <item row="0" column="1">
-     <widget class="QWidget" name="ContextMenue" native="true">
-      <property name="minimumSize">
-       <size>
-        <width>300</width>
-        <height>0</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>300</width>
-        <height>16777215</height>
-       </size>
-      </property>
-      <widget class="QWidget" name="SpielerInfo" native="true">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>0</y>
-         <width>291</width>
-         <height>251</height>
-        </rect>
+    <layout class="QGridLayout" name="gridLayout" rowstretch="0" columnstretch="0,0">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <item row="0" column="0">
+      <widget class="QWidget" name="MapWidget" native="true">
+       <layout class="QGridLayout" name="gridLayout_2">
+        <item row="0" column="0">
+         <widget class="QGraphicsView" name="Map">
+          <property name="lineWidth">
+           <number>0</number>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QPushButton" name="Fight">
+          <property name="text">
+           <string>Fight</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QWidget" name="ContextMenue" native="true">
+       <property name="minimumSize">
+        <size>
+         <width>300</width>
+         <height>0</height>
+        </size>
        </property>
-       <widget class="QLabel" name="SpielerInfoLabel">
+       <property name="maximumSize">
+        <size>
+         <width>300</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <widget class="QWidget" name="SpielerInfo" native="true">
         <property name="geometry">
          <rect>
           <x>50</x>
           <y>0</y>
-          <width>201</width>
-          <height>20</height>
+          <width>291</width>
+          <height>251</height>
          </rect>
         </property>
-        <property name="text">
-         <string>Spielerinformation</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
+        <widget class="QLabel" name="SpielerInfoLabel">
+         <property name="geometry">
+          <rect>
+           <x>6</x>
+           <y>0</y>
+           <width>201</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Spielerinformation</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+        <widget class="QTableWidget" name="SpielerInfoTable">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>20</y>
+           <width>201</width>
+           <height>221</height>
+          </rect>
+         </property>
+         <property name="verticalScrollBarPolicy">
+          <enum>Qt::ScrollBarAlwaysOff</enum>
+         </property>
+         <property name="horizontalScrollBarPolicy">
+          <enum>Qt::ScrollBarAlwaysOff</enum>
+         </property>
+         <property name="autoScroll">
+          <bool>true</bool>
+         </property>
+         <property name="rowCount">
+          <number>5</number>
+         </property>
+         <property name="columnCount">
+          <number>2</number>
+         </property>
+         <attribute name="horizontalHeaderVisible">
+          <bool>false</bool>
+         </attribute>
+         <attribute name="verticalHeaderVisible">
+          <bool>false</bool>
+         </attribute>
+         <row/>
+         <row/>
+         <row/>
+         <row/>
+         <row/>
+         <column/>
+         <column/>
+         <item row="0" column="0">
+          <property name="text">
+           <string>Name</string>
+          </property>
+         </item>
+         <item row="0" column="1">
+          <property name="text">
+           <string/>
+          </property>
+         </item>
+         <item row="1" column="0">
+          <property name="text">
+           <string>Rubine</string>
+          </property>
+         </item>
+         <item row="1" column="1">
+          <property name="text">
+           <string/>
+          </property>
+         </item>
+         <item row="2" column="0">
+          <property name="text">
+           <string>Planeten</string>
+          </property>
+         </item>
+         <item row="2" column="1">
+          <property name="text">
+           <string/>
+          </property>
+         </item>
+         <item row="3" column="0">
+          <property name="text">
+           <string>Minen</string>
+          </property>
+         </item>
+         <item row="3" column="1">
+          <property name="text">
+           <string/>
+          </property>
+         </item>
+         <item row="4" column="0">
+          <property name="text">
+           <string>Schiffe</string>
+          </property>
+         </item>
+         <item row="4" column="1">
+          <property name="text">
+           <string/>
+          </property>
+         </item>
+        </widget>
        </widget>
-       <widget class="QTableWidget" name="SpielerInfoTable">
+       <widget class="QWidget" name="PlanetInfo" native="true">
         <property name="geometry">
          <rect>
           <x>40</x>
@@ -98,82 +188,120 @@
           <height>221</height>
          </rect>
         </property>
-        <property name="verticalScrollBarPolicy">
-         <enum>Qt::ScrollBarAlwaysOff</enum>
-        </property>
-        <property name="horizontalScrollBarPolicy">
-         <enum>Qt::ScrollBarAlwaysOff</enum>
-        </property>
-        <property name="autoScroll">
-         <bool>true</bool>
-        </property>
-        <property name="rowCount">
-         <number>5</number>
-        </property>
-        <property name="columnCount">
-         <number>2</number>
-        </property>
-        <attribute name="horizontalHeaderVisible">
-         <bool>false</bool>
-        </attribute>
-        <attribute name="verticalHeaderVisible">
-         <bool>false</bool>
-        </attribute>
-        <row/>
-        <row/>
-        <row/>
-        <row/>
-        <row/>
-        <column/>
-        <column/>
-        <item row="0" column="0">
-         <property name="text">
-          <string>Name</string>
+        <widget class="QLabel" name="PlanetenInfoLabel">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>0</y>
+           <width>241</width>
+           <height>20</height>
+          </rect>
          </property>
-        </item>
-        <item row="0" column="1">
          <property name="text">
-          <string/>
+          <string>Planeteninfo</string>
          </property>
-        </item>
-        <item row="1" column="0">
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+        <widget class="QComboBox" name="DestionationPlanet">
+         <property name="geometry">
+          <rect>
+           <x>150</x>
+           <y>150</y>
+           <width>131</width>
+           <height>31</height>
+          </rect>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="Colonize">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>200</y>
+           <width>99</width>
+           <height>27</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Colonize</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="BuildShip">
+         <property name="geometry">
+          <rect>
+           <x>180</x>
+           <y>120</y>
+           <width>99</width>
+           <height>27</height>
+          </rect>
+         </property>
          <property name="text">
           <string>Rubies</string>
          </property>
-        </item>
-        <item row="1" column="1">
          <property name="text">
-          <string/>
+          <string>&lt;PlanetName&gt;</string>
          </property>
-        </item>
-        <item row="2" column="0">
+         <property name="scaledContents">
+          <bool>false</bool>
+         </property>
+        </widget>
+        <widget class="QLabel" name="Info">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>40</y>
+           <width>281</width>
+           <height>41</height>
+          </rect>
+         </property>
          <property name="text">
           <string>Planets</string>
          </property>
-        </item>
-        <item row="2" column="1">
          <property name="text">
           <string/>
          </property>
-        </item>
-        <item row="3" column="0">
+        </widget>
+        <widget class="QPushButton" name="BuildMine">
+         <property name="geometry">
+          <rect>
+           <x>180</x>
+           <y>90</y>
+           <width>101</width>
+           <height>27</height>
+          </rect>
+         </property>
          <property name="text">
           <string>Mines</string>
          </property>
-        </item>
-        <item row="3" column="1">
          <property name="text">
           <string/>
          </property>
-        </item>
-        <item row="4" column="0">
+        </widget>
+        <widget class="QComboBox" name="SendShipNumber">
+         <property name="geometry">
+          <rect>
+           <x>90</x>
+           <y>150</y>
+           <width>51</width>
+           <height>31</height>
+          </rect>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="SendShip">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>150</y>
+           <width>81</width>
+           <height>31</height>
+          </rect>
+         </property>
          <property name="text">
           <string>Ships</string>
          </property>
-        </item>
-        <item row="4" column="1">
          <property name="text">
-          <string/>
+          <string>Mines: </string>
          </property>
         </item>
        </widget>
@@ -226,98 +354,33 @@
          <string>Colonize</string>
         </property>
        </widget>
-       <widget class="QPushButton" name="BuildShip">
+       <widget class="QPushButton" name="NextRound">
         <property name="geometry">
          <rect>
-          <x>180</x>
-          <y>120</y>
+          <x>50</x>
+          <y>260</y>
           <width>99</width>
-          <height>27</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Build Ship</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="PlanetName">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>20</y>
-          <width>261</width>
-          <height>21</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>&lt;PlanetName&gt;</string>
-        </property>
-        <property name="scaledContents">
-         <bool>false</bool>
-        </property>
-       </widget>
-       <widget class="QLabel" name="Info">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>40</y>
-          <width>281</width>
           <height>41</height>
          </rect>
         </property>
         <property name="text">
-         <string>&lt;Besitzer&gt;</string>
+         <string>Next Round</string>
         </property>
        </widget>
-       <widget class="QLabel" name="MineNumber">
+       <widget class="QLabel" name="Date">
         <property name="geometry">
          <rect>
-          <x>80</x>
-          <y>90</y>
-          <width>71</width>
-          <height>21</height>
+          <x>190</x>
+          <y>260</y>
+          <width>91</width>
+          <height>41</height>
          </rect>
         </property>
         <property name="text">
-         <string/>
+         <string>&lt;Date&gt;</string>
         </property>
        </widget>
-       <widget class="QPushButton" name="BuildMine">
-        <property name="geometry">
-         <rect>
-          <x>180</x>
-          <y>90</y>
-          <width>101</width>
-          <height>27</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Build Mine</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="ShipNumber">
-        <property name="geometry">
-         <rect>
-          <x>80</x>
-          <y>120</y>
-          <width>71</width>
-          <height>21</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
-       <widget class="QComboBox" name="SendShipNumber">
-        <property name="geometry">
-         <rect>
-          <x>90</x>
-          <y>150</y>
-          <width>51</width>
-          <height>31</height>
-         </rect>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="SendShip">
+       <widget class="QPushButton" name="ExitGame">
         <property name="geometry">
          <rect>
           <x>10</x>
@@ -353,7 +416,7 @@
          </rect>
         </property>
         <property name="text">
-         <string>Ships: </string>
+         <string>Exit Game</string>
         </property>
        </widget>
        <widget class="QLabel" name="MineOrdersLabel">

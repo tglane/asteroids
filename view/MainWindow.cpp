@@ -12,6 +12,7 @@
 #include "MainWindow.hpp"
 #include "io/LevelParser.hpp"
 #include "io/TextureFactory.hpp"
+#include "datamodel/DataModel.hpp"
 
 #include <iostream>
 #include <QTimer>
@@ -20,7 +21,7 @@
 namespace asteroids
 {
 
-MainWindow::MainWindow(const std::string& file, QWidget* parent) :
+MainWindow::MainWindow(const std::string& file, DataModel::Ptr model, QWidget* parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow()),
     m_timer(new QTimer())

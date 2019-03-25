@@ -14,6 +14,7 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QString>
+#include <QStackedWidget>
 
 
 #include "MoveOrder.hpp"
@@ -40,7 +41,7 @@ class DataModel
 
 public:
 
-    enum { START, MAIN2D, MAIN3D };
+    enum { MAIN2D, MAIN3D, START, END };
     using Ptr = std::shared_ptr<DataModel>;
 
     /**
@@ -95,7 +96,9 @@ public:
      */
     void setStartPlanet(std::shared_ptr<Planet> startplanet);
 
-    void addWindow(int Id, QMainWindow* Window);
+    void addMainWindow(QStackedWidget* window);
+
+    void addWidget(int Id, QWidget* widget);
 
     void switchWindow(int Id);
 
@@ -168,7 +171,9 @@ private:
     Player::Ptr  m_enemy;
 
     // Map of Windows
-    std::map<int, QMainWindow*> m_Window;
+    std::map<int, QWidget*> m_widgets;
+
+    QStackedWidget* m_mainWindow;
 
     // List of upcoming battles
     std::list<std::shared_ptr<Battle>> m_battles;
