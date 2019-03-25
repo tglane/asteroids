@@ -103,6 +103,10 @@ public:
 
     Player::Ptr getEnemyPlayer(int id);
 
+
+    /**
+     * @brief updates data and planets in the ownerships of the enemy by reading the given json file
+     */
     bool updateAll(QJsonDocument &update); // @suppress("Type cannot be resolved")
 
 
