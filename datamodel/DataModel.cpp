@@ -474,6 +474,7 @@ void DataModel::BattleReport()
         }
     }
     m_battles.clear();
+}
 
 int DataModel::getIDFromPlanet(Planet::Ptr planet)
 {
