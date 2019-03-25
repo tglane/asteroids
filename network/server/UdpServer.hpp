@@ -38,6 +38,9 @@ class UdpServer: public QObject
 {
     Q_OBJECT
 
+    signals:
+    void fightEnd(int winner_id);
+
 private slots:
     void handle_bullet(int id, Vector3f& position, Vector3f& velocity);
     void handle_position(int id, Vector3f& position, Vector3f& x_axis, Vector3f& y_axis, Vector3f& z_axis);

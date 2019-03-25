@@ -167,6 +167,12 @@ void UdpServer::tick()
     }
     if (game_over) {
         std::cout << "GAME OVER!!!!!!!!!!!!!!!" << std::endl;
+        int winner_id = 0;
+        for (auto cs: clients) {
+            if (cs.second.ship->getHealth() > 0 )
+                winner_id = cs.second.id;
+        }
+        emit fightEnd(winner_id);
         timer.stop();
     }
 }

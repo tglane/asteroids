@@ -35,6 +35,7 @@ class TcpServer: public QObject
 private slots:
     void onConnect();
     void readyRead();
+    void fightEnd(int id);
 
 private:
     char last_id = 1;
@@ -46,6 +47,8 @@ private:
     void send_strat_init();
     void send_state();
 
+    void fight_init();
+
     void handle_init(TcpClient& client, QJsonDocument& doc);
     void handle_ready(TcpClient& client, QJsonDocument& doc);
     void handle_state(TcpClient& client, QJsonDocument& doc);
@@ -56,7 +59,7 @@ private:
     int battle_count = 0;
 
 
-    UdpServer udpServer;
+    std::shared_ptr<UdpServer> udpServer;
 
     DataModel::Ptr m_datamodel;
 

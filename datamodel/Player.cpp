@@ -21,7 +21,7 @@ Player::Player(int identity, int rubin, int ships) : m_planets()
 	m_identity = identity;
 	m_rubin = rubin;
 	m_ships = ships;
-	m_name = "Slave of the Universe";
+	m_name = "Thanos";
 }
 
 void Player::setPlanetsList(std::list<std::shared_ptr<Planet>> planets)
@@ -163,6 +163,62 @@ std::list<std::shared_ptr<Planet>> Player::getListOfPLanets()
 {
 	return m_planets;
 
+}
+
+void Player::RemovePlaneteFromList(Planet::Ptr Planet)
+{
+	std::list<Planet::Ptr>::iterator it;
+	int Postion = 0;
+	std::list<Planet::Ptr>::iterator PostionRemove = m_planets.begin();
+    for(it = m_planets.begin(); it != m_planets.end(); ) 
+	{
+		Planet::Ptr PlanetsFromList = *it;
+		std::cout << Postion <<std::endl;
+		if(Planet == PlanetsFromList)
+		{
+			std::advance(PostionRemove, Postion);
+			std::cout << "test In Remove List before" <<std::endl;
+			it = m_planets.erase(PostionRemove);
+			std::cout << "test In Remove List after" <<std::endl;
+		}
+		else
+		{
+		it++;	
+		Postion++;
+		}
+		
+
+		
+	
+	}
+
+}
+
+void Player::PrintPlanetsList()
+{
+	std::cout << m_name << std::endl;
+	std::list<Planet::Ptr>::iterator it;
+    for(it = m_planets.begin(); it != m_planets.end(); it++) 
+	{
+		Planet::Ptr PlanetsFromList = *it;
+		std::cout << PlanetsFromList->getName() <<std::endl;
+	}
+
+}
+
+
+void Player::updateResources() {
+
+	std::list<std::shared_ptr<Planet>>::iterator i;
+	m_rubin = 0;
+	m_ships = 0;
+	for( i = m_planets.begin(); i != m_planets.end(); i++)
+	{
+		std::shared_ptr<Planet> planet = *i;
+		m_rubin += planet->getRubin();
+		m_ships += planet->getInvaderShips();
+
+	}
 }
 
 }

@@ -115,10 +115,32 @@ void TcpServer::handle_state(TcpClient& client, QJsonDocument& doc) {
     //m_datamodel->updateAll(obj_state);
 }
 
+void TcpServer::fight_init()
+{
+    udpServer = std::shared_ptr<UdpServer>(new UdpServer());
+    connect(udpServer.get(),SIGNAL(fightEnd(int)), this, SLOT(fightEnd(int)));
+    for (auto j: clients)
+    {
+        udpServer->add_client(j.id, j.socket->peerAddress(), j.socket->peerPort(), 10);
+    }
+
+    udpServer->start();
+
+    QJsonArray array;
+    array.push_back("fight_init");
+}
+
+void TcpServer::fightEnd(int id) {
+    // ToDo Datamodel
+    //udpServer.stop();
+    udpServer.reset();
+    send_battle();
+}
+
 void TcpServer::send_battle() {
     if (battle_count < m_battle_list.size()) {
         // ToDo
-        // fight_init();
+        fight_init();
         battle_count++;
 
     } else {
