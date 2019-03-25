@@ -118,7 +118,7 @@ public:
      * @param player The player for which the information should be sent
      * @return the created Json File
      */
-    QJsonDocument createJson(Player::Ptr player);
+    QJsonDocument createJsonPlayerStatus(Player::Ptr player);
 
 
     void performMovements(Player::Ptr player);

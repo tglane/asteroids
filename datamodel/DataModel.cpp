@@ -395,7 +395,7 @@ void DataModel::findBattles()
     }
 }
 
-QJsonDocument DataModel::createJson(Player::Ptr player)
+QJsonDocument DataModel::createJsonPlayerStatus(Player::Ptr player)
 {
     // main QJson object in the document
     QJsonObject main;
