@@ -44,11 +44,11 @@ public:
      */
     ~MainWindow2D();
 
-    void updatePlayerInfo();
-
     void updatePlanetInfo(int id);
 
 public slots:
+
+    void updatePlayerInfo();
 
     /**
      * @brief   Switches to the starting window

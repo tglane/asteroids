@@ -264,6 +264,7 @@ void DataModel::switchWindow(int Id)
     if(Id == MAIN2D || Id == MAIN3D)
     {
         m_mainWindow->window()->showFullScreen();
+        emit updateInfo();
     }
     m_mainWindow->setCurrentWidget(m_widgets[Id]);
 }
