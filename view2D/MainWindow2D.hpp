@@ -104,6 +104,11 @@ public slots:
 
     void showPlayerName();
 
+    /**
+     *  @brief  When new round are all the planets color updated
+     */
+    void updatePlanetColor();
+
 private:
 
     /// QT UI of the window

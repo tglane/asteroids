@@ -14,10 +14,23 @@ DataModel::DataModel(std::string filename) : m_players(), m_planets(), m_edges()
 
     // enemy/ies that run the programm on other devices
     // information from network is needed
-    m_enemy = Player::Ptr(new Player());
+    // m_enemy = Player::Ptr(new Player());
 
     // when networking issues are solved the map is loaded later
     getUniverse(filename);
+
+    Planet::Ptr Test = getPlanetFromId(5);
+ 	Planet::Ptr Test2 = getPlanetFromId(6);
+	Planet::Ptr Test3 = getPlanetFromId(7);
+	m_enemy = Player::Ptr(new Player(1,3000,0));
+	
+    Test->setOwner(m_enemy);
+    Test2->setOwner(m_enemy);
+    Test3->setOwner(m_enemy);
+    Test3->addShips(3);
+	m_enemy->addPlanet(Test);
+	m_enemy->addPlanet(Test2);
+	m_enemy->addPlanet(Test3);
 }
 
 void DataModel::getUniverse(std::string filename)
@@ -76,6 +89,7 @@ bool DataModel::endOfRound()
     performMovements(getSelfPlayer());
     findBattles();
     BattleReport();
+    WinCondition();
 
     calculateFinance(getSelfPlayer());
     // TODO Update players ressources, money, ships, planets, mines
@@ -483,7 +497,7 @@ void DataModel::BattleReport()
         if(BattleDetailResult->FightResultInvader == false)
         {
             std::cout << "Kampf verloren" << std::endl;
-            BattleDetailResult->m_player2->delShips(BattleDetailResult->m_numberShips2);
+            //BattleDetailResult->m_player2->delShips(BattleDetailResult->m_numberShips2);
         }
         if(BattleDetailResult->FightResultInvader == true)
         {
@@ -512,6 +526,32 @@ int DataModel::getIDFromPlanet(Planet::Ptr planet)
             return i;
         }
     }
+}
+
+void DataModel::WinCondition()
+{
+    std::map<int, Planet::Ptr>::iterator it;
+    int NumberOfPlanets = m_planets.size();
+    int CountOfPlanets = 0;
+    std::cout << "Anzahl der Planeten" << std::endl;
+    std::cout << NumberOfPlanets << std::endl;
+    for(it = m_planets.begin(); it != m_planets.end(); it++)  
+    {
+        Planet::Ptr Planets = it->second;
+        if(Planets->getOwner() == m_self)
+        {
+            CountOfPlanets++;
+        }
+
+    }  
+    std::cout << CountOfPlanets << std::endl;
+    if(NumberOfPlanets == CountOfPlanets)
+    {
+        std::cout << "Gewonnen" <<std::endl;
+
+
+    }
+
 }
 
 DataModel::~DataModel()

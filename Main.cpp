@@ -29,30 +29,31 @@ int main(int argc, char** argv)
     //asteroids::MainWindow mainWindow("../models/level.xml");
     //mainWindow.show();
 
-    Planet::Ptr Test = model->getPlanetFromId(5);
- 	Planet::Ptr Test2 = model->getPlanetFromId(6);
-	Planet::Ptr Test3 = model->getPlanetFromId(7);
-	Player::Ptr Testplayer = Player::Ptr(new Player(1,3000,0));
+    // Enemy wird in DataModel erzeugt
+    // Planet::Ptr Test = model->getPlanetFromId(5);
+ 	// Planet::Ptr Test2 = model->getPlanetFromId(6);
+	// Planet::Ptr Test3 = model->getPlanetFromId(7);
+	// Player::Ptr Testplayer = Player::Ptr(new Player(1,3000,0));
 	
-    Test->setOwner(Testplayer);
-    Test2->setOwner(Testplayer);
-    Test3->setOwner(Testplayer);
-    Test3->addShips(3);
-	Testplayer->addPlanet(Test);
-	Testplayer->addPlanet(Test2);
-	Testplayer->addPlanet(Test3);
+    // Test->setOwner(Testplayer);
+    // Test2->setOwner(Testplayer);
+    // Test3->setOwner(Testplayer);
+    // Test3->addShips(3);
+	// Testplayer->addPlanet(Test);
+	// Testplayer->addPlanet(Test2);
+	// Testplayer->addPlanet(Test3);
 	
-	    std::cout << "Player mit Name" << std::endl;
+	    // std::cout << "Player mit Name" << std::endl;
 	
-	    std::cout << Testplayer->getPlayerName() << std::endl;
+	    // std::cout << Testplayer->getPlayerName() << std::endl;
 	
-	    std::cout << Testplayer->getRubin() << std::endl;
+	    // std::cout << Testplayer->getRubin() << std::endl;
 	
-	    std::cout << "Planet mit Name" << std::endl;
+	    // std::cout << "Planet mit Name" << std::endl;
 	
-	    std::cout << Test->getName() << std::endl;
+	    // std::cout << Test->getName() << std::endl;
 	
-	    std::cout << Test->getShips() << std::endl;
+	    // std::cout << Test->getShips() << std::endl;
     // Test
 
     model->getSelfPlayer()->addPlanet(model->getPlanets().find(1)->second);
