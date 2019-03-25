@@ -84,6 +84,8 @@ public:
 
     Planet::Ptr getPlanetFromName(std::string name);
 
+    int getIDFromPlanetName(std::string name);
+
     std::list<std::pair<int,int>> getEdges();
 
     void calculateFinance(Player::Ptr Player);
@@ -172,6 +174,8 @@ private:
     std::map<int, Planet::Ptr>  m_planets;
 
     std::map<std::string, Planet::Ptr> m_nameToPlanets;
+
+    std::map<std::string, int> m_planetNameToId;
 
     std::list<std::pair<int, int>> m_edges;
 

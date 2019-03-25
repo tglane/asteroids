@@ -73,11 +73,17 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
         io->setFont(QFont("Helvetica",5));
         io->setZValue(1);
         scene->addItem(io);
+
+        // m_FighterAmount[i] = new QGraphicsTextItem;
+        // m_FighterAmount[i]->setPos(p->getPosX() + planet_size/2+6,p->getPosY() - planet_size/2 + 6);
+        // m_FighterAmount[i]->setPlainText(QString::fromStdString("✈"+p->get));
+        // m_FighterAmount[i]->setDefaultTextColor(Qt::white);
+        // m_FighterAmount[i]->setFont(QFont("Helvetica",5));
+        // m_FighterAmount[i]->setZValue(1);
+        // scene->addItem(m_FighterAmount[i]);
     }
 
     std::list<std::pair<int,int>> edges = m_model->getEdges();
-
-    //Linien einzeichnen
     for(std::list<std::pair<int,int>>::iterator it=edges.begin(); it != edges.end(); ++it){
         std::pair<int,int> coordinates = *it;
         int pos_1 = coordinates.first;
@@ -89,6 +95,19 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
                     p2->getPosX()+planet_size/2, 
                     p2->getPosY()+planet_size/2, 
                     outlinePenHighlight);
+        //Für die anzahl der zurzeit gesendeten Flüge die unterwegs sind
+        QGraphicsTextItem *qgti = new QGraphicsTextItem;
+        qgti->setPos((p1->getPosX() + p2->getPosX())/2,(p1->getPosY() + p2->getPosY())/2);
+        qgti->setPlainText(QString::fromStdString(""));
+        qgti->setDefaultTextColor(Qt::white);
+        qgti->setFont(QFont("Helvetica",5));
+        qgti->setZValue(1);
+        scene->addItem(qgti);
+        if(pos_1<=pos_2){
+            m_fighterAmount[std::make_pair(pos_1,pos_2)]=qgti;
+        }else{
+            m_fighterAmount[std::make_pair(pos_2,pos_1)]=qgti;
+        }
     }
 
     //Öffne das Fighter-Minigame testweise in neuem Fenster
@@ -256,11 +275,20 @@ void MainWindow2D::endOfRound(bool click)
     // fuck this "unused" warnings! :D
     if(succes);
 
-
     updatePlayerInfo();
     updatePlanetInfo(currentPlanet);
     updatePlanetColor();
 
+    //Anzeige der aktuellen Flüge löschen
+    std::list<std::pair<int,int>> edges = m_model->getEdges();
+    for(std::list<std::pair<int,int>>::iterator it=edges.begin(); it != edges.end(); ++it){
+        std::pair<int,int> coordinates = *it;
+        int pos_1 = coordinates.first;
+        int pos_2 = coordinates.second;
+        QGraphicsTextItem *qgti = m_fighterAmount[std::make_pair(pos_1,pos_2)];
+        qgti->setPlainText(QString::fromStdString(""));
+        qgti->update();
+    }
     // TODO wait for response of server, block the window until all players are ready
 }
 
@@ -341,9 +369,35 @@ void MainWindow2D::sendShips(bool click)
     
     Planet::Ptr to = m_model->getPlanetFromName(ui->DestionationPlanet->currentText().toStdString());
     Planet::Ptr from = m_model->getPlanetFromId(currentPlanet);
-    m_model->moveShips(from, to, ui->SendShipNumber->currentText().toInt());
+    int ships = ui->SendShipNumber->currentText().toInt();
+    m_model->moveShips(from, to, ships);
     updatePlanetInfo(currentPlanet);
     updatePlayerInfo();
+        //Flüge an Kanten hinzufügen
+        int pos_1 = currentPlanet;
+        int pos_2 = m_model->getIDFromPlanetName(ui->DestionationPlanet->currentText().toStdString());
+        if(pos_1<=pos_2){
+            QGraphicsTextItem *qgti = m_fighterAmount[std::make_pair(pos_1,pos_2)];
+            QString qs = qgti->toPlainText();
+            std::string s = qs.toStdString();
+            int fighter = atoi(s.c_str());
+            fighter+=ships;
+            std::cout<<fighter<<std::endl;
+            std::string ships_string = std::to_string(fighter);
+            qgti->setPlainText(QString::fromStdString(ships_string));
+            qgti->update();
+        }else{
+            QGraphicsTextItem *qgti = m_fighterAmount[std::make_pair(pos_2,pos_1)];
+            QString qs = qgti->toPlainText();
+            std::string s = qs.toStdString();
+            int fighter = atoi(s.c_str());
+            fighter+=ships;
+            std::cout<<fighter<<std::endl;
+            std::string ships_string = std::to_string(fighter);
+            qgti->setPlainText(QString::fromStdString(ships_string));
+            qgti->update();
+        }
+    
 }
 
 void MainWindow2D::exitGame(bool click)
