@@ -30,16 +30,21 @@ public:
 
     using Ptr = std::shared_ptr<tcpclient>;
 
-    tcpclient(asteroids::DataModel::Ptr datamodel, QString player_name, QString server_ip, QObject* parent = 0);
+    tcpclient(asteroids::DataModel::Ptr datamodel, QObject* parent = 0);
 
-    void connect_to_server();
+
 
 public slots:
+    /**
+     * Sends ready package after a round in the 2d game part
+     */
     void send_ready();
 
-private slots:
+    void connect_to_server(string name, string server_ip);
+
     void send_init();
 
+private slots:
     void recv_json();
 
     void error_out(QAbstractSocket::SocketError) { std::cout << "error" << std::endl; }

@@ -12,7 +12,8 @@ TcpServer::TcpServer()
     connect(&server, SIGNAL(newConnection()), this, SLOT(onConnect()));
     //connect(&server, SIGNAL(disconnected()), this, SLOT(onDisconnect()));
 
-    m_datamodel = DataModel::Ptr(new DataModel("../models/Level-1.map"));
+    m_datamodel = DataModel::Ptr(new DataModel());
+    m_datamodel->getUniverse("../models/Level-1.map");
 
     if(!server.listen(QHostAddress::Any, 1235))
     {
