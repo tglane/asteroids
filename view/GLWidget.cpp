@@ -1,20 +1,22 @@
-
 #include "GLWidget.hpp"
 #include "io/LevelParser.hpp"
 
 
 #include "io/TextureFactory.hpp"
 #include <QMouseEvent>
-
 #include <SDL2/SDL.h>
+#include <QtGui/QPainter>
+#include <math.h>
 
-GLWidget::GLWidget(QWidget* parent)
-    : QOpenGLWidget(parent),
-      m_camera(Vector3f(0.0f, 0.0f, -700.0f), 0.05f, 5.0f),
-      m_rotationSpeed(0.02),
-      m_moveSpeed(1.0)
-{
-}
+GLWidget::GLWidget(QWidget* parent) :
+    QOpenGLWidget(parent),
+    m_started(false),
+    m_gameOver(false),
+    m_outOfBound(false),
+    m_cockpit("../models/cockpit.png"),
+    m_playerHeart("../models/player_heart.png"),
+    m_enemyHeart("../models/enemy_heart.png"),
+    m_emptyHeart("../models/empty_heart.png") {}
 
 void GLWidget::setLevelFile(const std::string& file)
 {
@@ -94,7 +96,6 @@ void GLWidget::initializeGL()
     glDepthFunc(GL_LESS);
     glShadeModel (GL_SMOOTH);
 
-
     // Set our OpenGL version.
     // SDL_GL_CONTEXT_CORE gives us only the newer version, deprecated functions are disabled
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
@@ -112,10 +113,25 @@ void GLWidget::initializeGL()
     SDL_GL_SetSwapInterval(1);
 
     // Load level
-    LevelParser lp(m_levelFile, m_actor, m_skybox, m_asteroidField);
+    LevelParser lp(m_levelFile, m_enemy, m_skybox, m_asteroidField);
+    m_enemy->fixArrow();
+    m_enemy->setId(1);
+    m_enemy->setHealth(10);
 
     // Setup physics
     m_physicsEngine = make_shared<PhysicsEngine>();
+
+    m_camera = make_shared<Camera>();
+    m_camera->setId(0);
+    m_camera->setHealth(10);
+    m_camera->setPosition(Vector3f(2500, 0, 0));
+    m_camera->setXAxis(Vector3f(-1, 0, 0));
+    m_camera->setYAxis(Vector3f(0, -1, 0));
+
+    Hittable::Ptr player_ptr = std::static_pointer_cast<Hittable>(m_camera);
+    m_physicsEngine->addHittable(player_ptr);
+    Hittable::Ptr enemy_ptr = std::static_pointer_cast<Hittable>(m_enemy);
+    m_physicsEngine->addHittable(enemy_ptr);
 
     // Add asteroids to physics engine
     std::list<Asteroid::Ptr> asteroids;
@@ -125,134 +141,209 @@ void GLWidget::initializeGL()
         PhysicalObject::Ptr p = std::static_pointer_cast<PhysicalObject>(*it);
         m_physicsEngine->addDestroyable(p);
     }
+
+    m_useGamepad = m_controller.gamepadAvailable();
+
+    m_fpsTimer.start();
+    m_startTimer.start();
 }
 
 void GLWidget::paintGL()
 {
     // Clear bg color and enable depth test (z-Buffer)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glEnable(GL_DEPTH_TEST);
 
-    m_camera.apply();
+    m_camera->apply();
 
     // Render stuff
-    m_skybox->render(m_camera);
+    m_skybox->render();
 
     // Render all physical objects
     m_physicsEngine->render();
 
-    m_actor->render();
+    if (m_enemy->getHealth() > 0)
+    {
+        m_enemy->render();
+    }
+
+    glDisable(GL_DEPTH_TEST);
+
+    // Draw cockpit
+    QPainter painter(this);
+    painter.drawPixmap(0, 0, this->width(), this->height(), m_cockpit);
+
+    drawHealth(painter, m_camera->getHealth(), m_enemy->getHealth());
+
+    drawMinimap(painter, m_camera, m_enemy);
+
+    // Draw start timer
+    int time = m_startTimer.elapsed();
+    if (time >= 1000 && time < 2000)
+    {
+        QPixmap cd3("../models/three.png");
+        painter.drawPixmap(0, 0, this->width(), this->height(), cd3);
+    }
+    else if (time >= 2000 && time < 3000)
+    {
+        QPixmap cd2("../models/two.png");
+        painter.drawPixmap(0, 0, this->width(), this->height(), cd2);
+    }
+    else if (time >= 3000 && time < 4000)
+    {
+        QPixmap cd1("../models/one.png");
+        painter.drawPixmap(0, 0, this->width(), this->height(), cd1);
+    }
+    else if (time >= 4000 && time < 4500)
+    {
+        QPixmap cd0("../models/start.png");
+        painter.drawPixmap(0, 0, this->width(), this->height(), cd0);
+    }
+
+    if (m_gameOver)
+    {
+        QPixmap won("../models/won.png");
+        QPixmap lost("../models/lost.png");
+        painter.drawPixmap(0, 0, this->width(), this->height(), (m_camera->getHealth() > 0) ? won : lost);
+    }
+
+    if (m_outOfBound && !m_gameOver)
+    {
+        QPixmap turnWarning("../models/turn_warning.png");
+        painter.drawPixmap(0, 0, this->width(), this->height(), turnWarning);
+    }
 }
 
 void GLWidget::step(map<Qt::Key, bool>& keyStates)
 {
+
+    int elapsed_time = m_fpsTimer.restart();
+
     // Get keyboard states and handle model movement
-    m_physicsEngine->process();
+    m_gameOver = m_physicsEngine->process(elapsed_time) || m_gameOver;
 
-    if (keyStates[Qt::Key_Up])
+    if (!m_started)
     {
-        m_actor->rotate(Transformable::YAW_LEFT, m_rotationSpeed);
+        if (m_startTimer.elapsed() >= 4000)
+        {
+            m_started = true;
+        }
     }
-    if (keyStates[Qt::Key_Down])
+    else
     {
-        m_actor->rotate(Transformable::YAW_RIGHT, m_rotationSpeed);
-    }
-       if (keyStates[Qt::Key_Left])
-    {
-        m_actor->rotate(Transformable::ROLL_LEFT, m_rotationSpeed);
-    }
-    if (keyStates[Qt::Key_Right])
-    {
-        m_actor->rotate(Transformable::ROLL_RIGHT, m_rotationSpeed);
-    }
-   
-    if (keyStates[Qt::Key_W])
-    {
-        m_actor->move(Transformable::FORWARD, m_moveSpeed);
-    }
-    if (keyStates[Qt::Key_S])
-    {
-        m_actor->move(Transformable::BACKWARD, m_moveSpeed);
-    }
-    if (keyStates[Qt::Key_A])
-    {
-        m_actor->move(Transformable::STRAFE_LEFT, m_moveSpeed);
-    }
-    if (keyStates[Qt::Key_D])
-    {
-        m_actor->move(Transformable::STRAFE_RIGHT, m_moveSpeed);
-    }
+        if (!m_gameOver)
+        {
+            Hittable::Ptr player_ptr = std::static_pointer_cast<Hittable>(m_camera);
 
-    // Add a bullet to physics engine
-    if(keyStates[Qt::Key_Space])
-    {
-        Bullet::Ptr bullet = make_shared<Bullet>(Bullet(m_actor->getPosition(), m_actor->getDirection()));
-        m_physicsEngine->addBullet(bullet);
+            if (m_useGamepad)
+            {
+                m_controller.gamepadControl(player_ptr, m_physicsEngine, elapsed_time);
+            }
+            else
+            {
+                m_controller.keyControl(keyStates, player_ptr, m_physicsEngine, elapsed_time);
+            }
+
+            Vector3f player_pos = m_camera->getPosition();
+            if (std::abs(player_pos[0]) > 4500 || std::abs(player_pos[1]) > 4500 || std::abs(player_pos[2]) > 4500)
+            {
+                m_camera->outOfBound();
+                int time = m_camera->getTime();
+                if (time > 1000)
+                {
+                    m_camera->restartTimer(time - 1000);
+                    m_camera->setHealth(m_camera->getHealth() - 1);
+                    if (m_camera->getHealth() == 0)
+                    {
+                        m_gameOver = true;
+                    }
+                }
+                m_outOfBound = true;
+            } else
+            {
+                m_camera->inBound();
+                m_outOfBound = false;
+            }
+
+            Vector3f enemy_pos = m_enemy->getPosition();
+            if (std::abs(enemy_pos[0]) > 4500 || std::abs(enemy_pos[1]) > 4500 || std::abs(enemy_pos[2]) > 4500)
+            {
+                m_enemy->outOfBound();
+                int time = m_enemy->getTime();
+                if (time > 1000)
+                {
+                    m_enemy->restartTimer(time - 1000);
+                    m_enemy->setHealth(m_enemy->getHealth() - 1);
+                    if (m_enemy->getHealth() == 0)
+                    {
+                        m_gameOver = true;
+                    }
+                }
+            }
+            else
+            {
+                m_enemy->inBound();
+            }
+        }
     }
 
     // Trigger update, i.e., redraw via paintGL()
     this->update();
 }
 
-void GLWidget::mouseMoveEvent(QMouseEvent* event)
+void GLWidget::drawHealth(QPainter& painter, int healthPlayer, int healthEnemy)
 {
-    bool l_pressed = (event->buttons() & Qt::LeftButton) != 0;
-    bool r_pressed = (event->buttons() & Qt::RightButton) != 0;
+    QPixmap playerHeart("../models/player_heart.png");
+    QPixmap enemyHeart("../models/enemy_heart.png");
+    QPixmap emptyHeart("../models/empty_heart.png");
 
-    QPoint delta = event->pos() - m_mousePos;
-    m_mousePos = event->pos();
+    float size = this->width() / 30.0f;
+    float gap = 0.1;
+    int height = (int) (size - 2 * size * gap);
+    int width = (int) (height * 1.1);
 
-    // Handle motion for pressed L button while R is not
-    // pressed
-    if (l_pressed & !r_pressed)
+    for (int i = 0; i < 10; i++)
     {
-        if (delta.x() > -3)
-        {
-            m_camera.turn(Camera::RIGHT);
-        }
-        if (delta.x() < 3)
-        {
-            m_camera.turn(Camera::LEFT);
-        }
-        if (delta.y() > 3)
-        {
-            m_camera.turn(Camera::UP);
-        }
-        if (delta.y() < -3)
-        {
-            m_camera.turn(Camera::DOWN);
-        }
+        painter.drawPixmap((int) (size * i + size * gap), (int) (size * gap), width, height, (i < healthPlayer) ? m_playerHeart : m_emptyHeart);
+        painter.drawPixmap((int) (this->width() - size - (size * i + size * gap)), (int) (size * gap), width, height, (i < healthEnemy) ? m_enemyHeart : m_emptyHeart);
     }
+}
 
-    // Handle motion for pressed R button while L is not
-    // pressed
-    if (r_pressed & !l_pressed)
-    {
-        if (delta.x() > 3)
-        {
-            m_camera.move(Camera::LEFT);
-        }
-        if (delta.x() < -3)
-        {
-            m_camera.move(Camera::RIGHT);
-        }
-        if (delta.y() > 3)
-        {
-            m_camera.move(Camera::FORWARD);
-        }
-        if (delta.y() < -3)
-        {
-            m_camera.move(Camera::BACKWARD);
-        }
-    }
+void GLWidget::drawMinimap(QPainter& painter, Hittable::Ptr player, Hittable::Ptr enemy)
+{
+    QPixmap minimap("../models/minimap");
+    QPixmap playerMinimap("../models/player_minimap");
+    QPixmap enemyMinimap("../models/enemy_minimap");
+
+    float size = this->width() * 0.2F;
+    float originX = this->height() - size * 1.1F + size / 2;
+    float originY = this->width() - size * 1.1F + size / 2;
+    painter.translate(originY, originX);
+    painter.save();
+    painter.drawPixmap((int) (-size / 2), (int) (-size / 2), (int) size, (int) size, minimap);
+
+    int fighterHeight = (int) (this->width() * 0.025);
+    int fighterWidth = fighterHeight / 2;
+
+    painter.translate(size / 10000 * player->getPosition()[0], -size / 10000 * player->getPosition()[1]);
+    painter.rotate(std::atan2(player->getXAxis()[0], player->getXAxis()[1]) * 180 / M_PI);
+    painter.drawPixmap(0 - fighterWidth / 2, 0 - fighterHeight / 2, fighterWidth, fighterHeight, playerMinimap);
+
+    painter.restore();
+
+    painter.translate(size / 10000 * enemy->getPosition()[0], -size / 10000 * enemy->getPosition()[1]);
+    painter.rotate(std::atan2(enemy->getXAxis()[0], enemy->getXAxis()[1]) * 180 / M_PI);
+    painter.drawPixmap(0 - fighterWidth / 2, 0 - fighterHeight / 2, fighterWidth, fighterHeight, enemyMinimap);
+
+    painter.resetTransform();
 }
 
 void GLWidget::resizeGL(int w, int h)
 {
-    float ratio = width() * 1.0 / height();
+    float ratio = (float) width() / height();
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glViewport(0, 0, width(), height());
     gluPerspective(45, ratio, 1, 10000);
-
     glMatrixMode(GL_MODELVIEW);
 }

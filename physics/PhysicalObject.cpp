@@ -29,7 +29,6 @@ PhysicalObject::PhysicalObject(Renderable::Ptr r, Vector<float> direction, Vecto
 {
     this->m_renderable = r;
     this->m_accel = accel;
-    this->m_direction = direction;
     this->m_position = position;
     this->m_speed = speed;
     this->m_mass = mass;

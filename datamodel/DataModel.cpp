@@ -1,4 +1,5 @@
 #include "DataModel.hpp"
+#include "view/MainWindow.hpp"
 #include <iostream>
 #include <fstream>
 #include <utility>
@@ -14,23 +15,10 @@ DataModel::DataModel(std::string filename) : m_players(), m_planets(), m_edges()
 
     // enemy/ies that run the programm on other devices
     // information from network is needed
-    // m_enemy = Player::Ptr(new Player());
+    m_enemy = Player::Ptr(new Player());
 
     // when networking issues are solved the map is loaded later
     getUniverse(filename);
-
-    Planet::Ptr Test = getPlanetFromId(5);
- 	Planet::Ptr Test2 = getPlanetFromId(6);
-	Planet::Ptr Test3 = getPlanetFromId(7);
-	m_enemy = Player::Ptr(new Player(1,3000,0));
-	
-    Test->setOwner(m_enemy);
-    Test2->setOwner(m_enemy);
-    Test3->setOwner(m_enemy);
-    Test3->addShips(3);
-	m_enemy->addPlanet(Test);
-	m_enemy->addPlanet(Test2);
-	m_enemy->addPlanet(Test3);
 }
 
 void DataModel::getUniverse(std::string filename)
@@ -93,7 +81,7 @@ bool DataModel::endOfRound()
     m_self->PrintPlanetsList();
     m_enemy->PrintPlanetsList();
     BattleReport();
-    WinCondition();
+    //WinCondition();
     m_self->PrintPlanetsList();
     m_enemy->PrintPlanetsList();
 
@@ -164,7 +152,7 @@ bool DataModel::buyMine(Planet::Ptr selectedPlanet, Player::Ptr m_self)
     std::cout << selectedPlanet->getMinesBuild() << std::endl;
     std::cout << selectedPlanet->getMines() << std::endl;
     /*test druck ende*/
-    if(selectedPlanet->getMinesHidden() < selectedPlanet->getMines())
+    if(selectedPlanet->getMinesHidden() + selectedPlanet->getMinesBuild() < selectedPlanet->getMines())
     {
         int Player_Rubin_Number = m_self->getRubin();
         if(Player_Rubin_Number >= Minecost)
@@ -195,9 +183,11 @@ void DataModel::TransaktionMine()
     {
         std::shared_ptr<MineOrder> NewOrder = *it;
 
-        Planet::Ptr NewShipToPlanet = NewOrder->getPlanet();
+        Planet::Ptr NewMineOnPlanet = NewOrder->getPlanet();
 
-        NewShipToPlanet->setMinesBuild();
+        NewMineOnPlanet->setMinesBuild();
+
+        NewMineOnPlanet->resetMinesHidden();
     }
 
 }
@@ -213,6 +203,8 @@ void DataModel::TransaktionShip()
         Planet::Ptr NewShipToPlanet = NewOrder->getPlanet();
 
         NewShipToPlanet->addShips(1);
+
+        NewShipToPlanet->resetShipsOrdered();
     }
 
 
@@ -266,18 +258,32 @@ void DataModel::setStartPlanet(std::shared_ptr<Planet> startplanet)
 	m_self->addPlanet(startplanet);
 }
 
-void DataModel::addWindow(int Id, QMainWindow* Window)
+void DataModel::addMainWindow(QStackedWidget* window)
 {
-    m_Window[Id] = Window;
+    m_mainWindow = window;
+}
+
+void DataModel::addWidget(int Id, QWidget* widget)
+{
+    m_widgets.insert(std::pair<int, QWidget*>(Id, widget));
 }
 
 void DataModel::switchWindow(int Id)
 {
-    QMainWindow* Active = m_Window[Id];
-    Active->showFullScreen();
-    
+    if(Id == MAIN2D || Id == MAIN3D)
+    {
+        m_mainWindow->window()->showFullScreen();
+        emit updateInfo();
+    }
+    if(Id == MAIN3D)
+    {
+        ((MainWindow*)m_widgets[Id])->activate(true);
+    }
+    m_mainWindow->setCurrentWidget(m_widgets[Id]);
 }
 
+
+//TODO ordentliche Fehlerbehandlung + Doku + manche (unnötige) Felder in Player koennen mit Infos aus File nicht aktualisiert werden
 bool DataModel::updateAll(QJsonDocument &update) {
 
 	if (update.isObject() && !update.isEmpty())
@@ -286,6 +292,7 @@ bool DataModel::updateAll(QJsonDocument &update) {
 		int id = 0;
 
 		int rubin = 0;
+		int id;
 		std::string name;
 		std::list<Planet::Ptr> planets;
 		Player::Ptr player;
@@ -308,11 +315,6 @@ bool DataModel::updateAll(QJsonDocument &update) {
 			if(it.key() == "Name")
 			{
 				name = it.value().toString().toStdString();
-			}
-
-			if(it.key() == "Rubin")
-			{
-				rubin = it.value().toInt();
 			}
 
 			if(it.key() == "PlanetArray")
@@ -381,27 +383,9 @@ bool DataModel::updateAll(QJsonDocument &update) {
 				else return false; //InvadePlanets is not an Array
 			}
 
-
-
 		}//End Iterator File
 
-		std::cout <<  "ID of " << name << " is: " << id << std::endl;
-		std::cout << "Planets in his ownership: " << std::endl;
-		std::cout << "rubin in his ownership: " << rubin << std::endl;
-
-		std::list<std::shared_ptr<Planet>>::iterator i;
-		for(i = planets.begin(); i != planets.end(); i++)
-		{
-			Planet::Ptr planet = *i;
-
-			std::cout << "Name: " << planet->getName() << std::endl;
-			std::cout << "Minen: " << planet->getMines() << std::endl;
-			std::cout << "Ships: " << planet->getShips() << std::endl;
-		}
-
 		player->setPlanetsList(planets);
-		player->updateResources();
-		std::cout << "updateAll() finished" << std::endl;
 	}
 	return true;
 
@@ -449,7 +433,7 @@ void DataModel::findBattles()
     }
 }
 
-QJsonDocument DataModel::createJsonPlayerStatus(Player::Ptr player)
+QJsonDocument DataModel::createJson(Player::Ptr player)
 {
     // main QJson object in the document
     QJsonObject main;
@@ -512,8 +496,8 @@ QJsonDocument DataModel::createJsonPlayerStatus(Player::Ptr player)
     // Make qjsondocument out of it
     QJsonDocument theDocument(main);
 
-    //In case the json document should be printed
-    std::cout << theDocument.toJson().toStdString() << std::endl;
+    // In case the json document should be printed
+    //std::cout << theDocument.toJson().toStdString() << std::endl;
 
     return theDocument;
 }
@@ -612,7 +596,7 @@ void DataModel::BattleReport()
         if(BattleDetailResult->FightResultInvader == false)
         {
             std::cout << "Kampf verloren" << std::endl;
-            //BattleDetailResult->m_player2->delShips(BattleDetailResult->m_numberShips2);
+            BattleDetailResult->m_player2->delShips(BattleDetailResult->m_numberShips2);
         }
         if(BattleDetailResult->FightResultInvader == true)
         {
@@ -632,7 +616,7 @@ void DataModel::BattleReport()
 int DataModel::getIDFromPlanet(Planet::Ptr planet)
 {
     // go over all planets in planets
-    for(int i = 0; i < (int)m_planets.size(); i++)
+    for(int i = 0; i < m_planets.size(); i++)
     {
         // Get planet with index i
         Planet::Ptr mapPlanet = m_planets.find(i)->second;
@@ -678,6 +662,7 @@ void DataModel::WinCondition()
 
     }
 
+    return -1;
 }
 
 void DataModel::BattlePhase()

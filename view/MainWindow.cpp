@@ -12,29 +12,45 @@
 #include "MainWindow.hpp"
 #include "io/LevelParser.hpp"
 #include "io/TextureFactory.hpp"
+#include "datamodel/DataModel.hpp"
 
 #include <iostream>
 #include <QTimer>
 #include <QKeyEvent>
+#include <QPixmap>
+#include <QLabel>
 
 namespace asteroids
 {
 
-MainWindow::MainWindow(const std::string& file, QWidget* parent) :
+MainWindow::MainWindow(const std::string& file, DataModel::Ptr model, QWidget* parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow()),
     m_timer(new QTimer())
+
 {
     // Setup user interface
     ui->setupUi(this);
-    m_widget = ui->centralWidget->findChild<GLWidget*>(QString("openGLWidget"));
+    m_widget = ui->openGLWidget;
 
     // Set level
     m_widget->setLevelFile(file);
 
     // Create a timer object to trigger the main loop
     connect(m_timer.get(), SIGNAL(timeout()), this, SLOT(handleInput()));
-    m_timer->start(1000 / 60.0);
+    //m_timer->start(1000/60.0);    start timer when window is activated
+}
+
+void MainWindow::activate(bool active)
+{
+    if(active && !m_timer->isActive())
+    {
+        m_timer->start(1000/60.0);
+    }
+    else if(!active && m_timer->isActive())
+    {
+        m_timer->stop();
+    }
 }
 
 int MainWindow::width()

@@ -37,7 +37,7 @@ namespace asteroids
          * @param nShips1 Number of ships which player 1 has available in the battle
          * @param nShips2 Number of ships which player 2 has available in the battle 
          */
-        Battle(std::shared_ptr<Planet> location, Player::Ptr p1, Player::Ptr p2, int nShips1, int nShips2, bool FightResultInvader1);
+        Battle(std::shared_ptr<Planet> location, Player::Ptr p1, Player::Ptr p2, int nShips1, int nShips2, bool FightResultInvader);
 
         public:
 
@@ -66,16 +66,7 @@ namespace asteroids
          */
         int m_numberShips2;
 
-        /**
-         * @brief Number of Ships player 1 has lost
-         */
-        int m_numberShipsLost1;
-
-        /**
-         * @brief Number of Ships player 2 has lost
-         */
-        int m_numberShipsLost2;
-
+        //bool invaderWon;
 
         bool FightResultInvader;
 

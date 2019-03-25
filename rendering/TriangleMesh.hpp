@@ -114,6 +114,8 @@ public:
 	 */
 	void scale(float s);
 
+	void fixArrow();
+
 protected:
 
     /// Number of vertices

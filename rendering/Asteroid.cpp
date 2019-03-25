@@ -31,9 +31,9 @@ Asteroid::Asteroid(
     // cout << mass << " " << rotation << " " << speed << " " << accell << " " << radius << endl;
 
     //Randomize Heading
-    rotate(PITCH_LEFT, Randomizer::instance()->getRandomNumber(0, 3.14159265));
-    rotate(YAW_LEFT  , Randomizer::instance()->getRandomNumber(0, 3.14159265));
-    rotate(ROLL_LEFT , Randomizer::instance()->getRandomNumber(0, 3.14159265));
+    rotate(PITCH_DOWN, Randomizer::instance()->getRandomNumber(0, 3.14159265));
+    rotate(YAW_COUNTERCLOCKWISE  , Randomizer::instance()->getRandomNumber(0, 3.14159265));
+    rotate(ROLL_CLOCKWISE , Randomizer::instance()->getRandomNumber(0, 3.14159265));
 
     m_scale     = radius / MODEL_RADIUS;
 
@@ -61,13 +61,11 @@ void Asteroid::copy(const Asteroid& other)
     TexturedMesh *mesh = static_cast<TexturedMesh *>(other.m_renderable.get());
     m_renderable = TexturedMesh::Ptr(new TexturedMesh(*mesh));
     m_radius = other.m_radius;
-    m_rotation = other.m_rotation;
     m_xAxis = other.m_xAxis;
     m_yAxis = other.m_yAxis;
     m_zAxis = other.m_zAxis;
     m_scale = other.m_scale;
     m_speed = other.m_speed;
-    m_direction = other.m_direction;
 }
 
 void Asteroid::render()

@@ -93,6 +93,7 @@ find_package( Qt5
     Core
     Widgets
     OpenGL
+        Gamepad
     REQUIRED
 )
 
@@ -134,6 +135,7 @@ set(ASTEROID_SOURCES
     physics/PhysicalObject.cpp
     physics/PhysicsEngine.cpp
     physics/ParticleEngine.cpp
+    physics/Hittable.cpp
     rendering/Bullet.cpp
     rendering/ParticleEffect.cpp
     rendering/Sphere.cpp
@@ -159,17 +161,27 @@ set(ASTEROID_SOURCES
     view2D/StartingDialog.cpp
     view2D/MainWindow2D.cpp
     view2D/MyEllipse.cpp
+    view2D/EndWindow.cpp
+    view2D/GameWindow.cpp
+    view/Camera.cpp
+    view/Controller.cpp
+    Gamepad.cpp
 )
+
 set(ASTEROID_MOCS
     view/MainWindow.hpp
     view2D/MainWindow2D.hpp
     view2D/StartingDialog.hpp
+    view2D/EndWindow.hpp
+    view2D/GameWindow.hpp
 )
 
 set(ASTEROID_UIS
     view/MainWindow.ui
     view2D/MainWindow2D.ui
     view2D/StartingDialog.ui
+    view2D/EndWindow.ui
+    view2D/GameWindow.ui
 )
 
 set(CMAKE_AUTOMOC ON)
@@ -213,4 +225,5 @@ add_executable(asteroids
 # External library dependencys
 ###############################################################################
 
-target_link_libraries(asteroids ${ASTEROID_DEPENDS})
+#target_link_libraries(asteroids SOIL)
+target_link_libraries(asteroids Qt5::Gamepad ${ASTEROID_DEPENDS})
