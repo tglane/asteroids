@@ -287,6 +287,7 @@ bool DataModel::updateAll(QJsonDocument &update) {
 		if(all.empty()) return false;
 
 		QJsonObject::const_iterator it;
+
 		for (it = all.constBegin(); it != all.constEnd(); it++)
 		{
 			if(it.key() == "ID")
@@ -294,8 +295,6 @@ bool DataModel::updateAll(QJsonDocument &update) {
 				id = it.value().toInt();
 
 				player = this->getEnemyPlayer(it.value().toInt());
-
-
 			}
 
 			if(it.key() == "Name")
@@ -331,7 +330,50 @@ bool DataModel::updateAll(QJsonDocument &update) {
 						planets.push_back(planet);
 
 					}//End Iterator Array
+
 				}
+				else return false; //PlanetArray is not an Array
+			}
+
+
+			/**
+			 * when the planet is not already colonialized, the player of this file will become the owner
+			 * else the player of this file becomes the invader
+			 *
+			 * also updates invaderShips/Ships on the planet
+			 *
+			 */
+			if(it.key() == "InvadePlanets")
+			{
+				if(it.value().isArray())
+				{
+					QJsonArray array = it.value().toArray();
+					QJsonArray::const_iterator it1;
+
+					Planet::Ptr planet;
+
+					int ships;
+
+					for (it1 = array.constBegin(); it1 != array.constEnd(); it1++)
+					{
+						planet = getPlanetFromId(it1->toObject(QJsonObject()).value("ID").toInt());
+						ships = it1->toObject(QJsonObject()).value("Ships").toInt();
+
+						if(planet->getOwner()->getIdentity() != id
+								&& planet->getOwner()->getIdentity() != 0 )
+						{
+							planet->setOwner(player);
+							planet->setShips(ships);
+						}
+						else
+						{
+							planet->setInvader(player);
+							planet->setInvaderShips(ships);
+						}
+					}
+
+				}
+				else return false; //InvadePlanets is not an Array
 			}
 
 
