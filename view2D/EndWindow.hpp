@@ -35,6 +35,8 @@ private:
     /// QT UI of the window
     Ui::EndWindow* ui;
 
+    asteroids::DataModel::Ptr m_model;
+
 };
 
 }

@@ -40,53 +40,7 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
     ui->SendShipNumber->setStyleSheet("background-color:#220044");
     ui->DestionationPlanet->setStyleSheet("background-color:#220044");
 
-    QGraphicsOpacityEffect * effect = new QGraphicsOpacityEffect(ui->ContextMenue);
-    effect->setOpacity(0.7);
-    ui->ContextMenue->setGraphicsEffect(effect);
-    effect = new QGraphicsOpacityEffect(ui->Fight);
-    effect->setOpacity(0.7);
-    ui->Fight->setGraphicsEffect(effect);
-    QPen outlinePenHighlight(Qt::gray);
-    outlinePenHighlight.setWidth(1);
-
-    std::map<int, Planet::Ptr> planets = m_model->getPlanets();
-
-    int planet_size = 20;
-
-    //Erstelle die Elipsen und füge sie in die Map und in die QGraphicsScene ein 
-    for(int i = 0; i < (int)planets.size(); i++){
-        Planet::Ptr p = planets.at(i);
-        view_planets[i] = new MyEllipse(p->getPosX(), p->getPosY());
-        view_planets[i]->setZValue(1);
-        scene->addItem(view_planets[i]);
-        QVariant ellipse_ID(i);
-        view_planets[i]->setData(1, ellipse_ID);
-        connect(view_planets[i], SIGNAL(show_planetInfo(int)), this, SLOT(choose_planet(int)));
-
-        QGraphicsTextItem * io = new QGraphicsTextItem;
-        io->setPos(p->getPosX() + planet_size/2,p->getPosY() - planet_size/2);
-        io->setPlainText(QString::fromStdString(p->getName()));
-        io->setDefaultTextColor(Qt::white);
-        io->setFont(QFont("Helvetica",5));
-        io->setZValue(1);
-        scene->addItem(io);
-    }
-
-    std::list<std::pair<int,int>> edges = m_model->getEdges();
-
-    //Linien einzeichnen
-    for(std::list<std::pair<int,int>>::iterator it=edges.begin(); it != edges.end(); ++it){
-        std::pair<int,int> coordinates = *it;
-        int pos_1 = coordinates.first;
-        int pos_2 = coordinates.second;
-        Planet::Ptr p1 = planets.at(pos_1);
-        Planet::Ptr p2 = planets.at(pos_2);
-        scene->addLine(p1->getPosX()+planet_size/2, 
-                    p1->getPosY()+planet_size/2, 
-                    p2->getPosX()+planet_size/2, 
-                    p2->getPosY()+planet_size/2, 
-                    outlinePenHighlight);
-    }
+    
 
     //Öffne das Fighter-Minigame testweise in neuem Fenster
     QPushButton* m_button = ui->Fight;
@@ -99,7 +53,6 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
     QPalette palette;
     palette.setBrush(QPalette::Background, bkgnd);
     this->setPalette(palette);
-    //Einfach kopiert
 
     // Add the matching event to the next-round-button
     QPushButton* m_nextRound = ui->NextRound;
@@ -131,6 +84,10 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
     connect(m_exit, SIGNAL(clicked(bool)), this, SLOT(exitGame(bool)));
 
     currentPlanet = -1;
+
+    currentYear = 2019;
+    QString qyear = QString::fromUtf8("Year: ");
+    ui->Date->setText(qyear + QString::number(currentYear));
 
     ui->PlanetInfo->setVisible(false);
 
@@ -228,6 +185,9 @@ void MainWindow2D::endOfRound(bool click)
     // fuck this "unused" warnings! :D
     if(succes);
 
+    currentYear++;
+    QString qyear = QString::fromUtf8("Year: ");
+    ui->Date->setText(qyear + QString::number(currentYear));
 
     updatePlayerInfo();
     updatePlanetInfo(currentPlanet);
@@ -341,6 +301,57 @@ void MainWindow2D::updatePlayerInfo()
         new QLabel(QString::number(m_model->getSelfPlayer()->getMines())));
     ui->SpielerInfoTable->setCellWidget(4, 1, 
         new QLabel(QString::number(m_model->getSelfPlayer()->getShips())));
+
+
+
+    QGraphicsOpacityEffect * effect = new QGraphicsOpacityEffect(ui->ContextMenue);
+    effect->setOpacity(0.7);
+    ui->ContextMenue->setGraphicsEffect(effect);
+    effect = new QGraphicsOpacityEffect(ui->Fight);
+    effect->setOpacity(0.7);
+    ui->Fight->setGraphicsEffect(effect);
+    QPen outlinePenHighlight(Qt::gray);
+    outlinePenHighlight.setWidth(1);
+
+
+    std::map<int, Planet::Ptr> planets = m_model->getPlanets();
+
+    int planet_size = 20;
+
+    //Erstelle die Elipsen und füge sie in die Map und in die QGraphicsScene ein 
+    for(int i = 0; i < (int)planets.size(); i++){
+        Planet::Ptr p = planets.at(i);
+        view_planets[i] = new MyEllipse(p->getPosX(), p->getPosY());
+        view_planets[i]->setZValue(1);
+        scene->addItem(view_planets[i]);
+        QVariant ellipse_ID(i);
+        view_planets[i]->setData(1, ellipse_ID);
+        connect(view_planets[i], SIGNAL(show_planetInfo(int)), this, SLOT(choose_planet(int)));
+
+        QGraphicsTextItem * io = new QGraphicsTextItem;
+        io->setPos(p->getPosX() + planet_size/2,p->getPosY() - planet_size/2);
+        io->setPlainText(QString::fromStdString(p->getName()));
+        io->setDefaultTextColor(Qt::white);
+        io->setFont(QFont("Helvetica",5));
+        io->setZValue(1);
+        scene->addItem(io);
+    }
+
+    std::list<std::pair<int,int>> edges = m_model->getEdges();
+
+    //Linien einzeichnen
+    for(std::list<std::pair<int,int>>::iterator it=edges.begin(); it != edges.end(); ++it){
+        std::pair<int,int> coordinates = *it;
+        int pos_1 = coordinates.first;
+        int pos_2 = coordinates.second;
+        Planet::Ptr p1 = planets.at(pos_1);
+        Planet::Ptr p2 = planets.at(pos_2);
+        scene->addLine(p1->getPosX()+planet_size/2, 
+                    p1->getPosY()+planet_size/2, 
+                    p2->getPosX()+planet_size/2, 
+                    p2->getPosY()+planet_size/2, 
+                    outlinePenHighlight);
+    }
 }
 
 void MainWindow2D::updatePlanetInfo(int id)
