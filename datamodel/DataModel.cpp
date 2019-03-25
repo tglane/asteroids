@@ -10,11 +10,14 @@ namespace asteroids{
 DataModel::DataModel(std::string filename) : m_players(), m_planets(), m_edges()
 {
     // player which runs this programm
-    m_self = Player::Ptr(new Player(1,3000,0));
+    //m_self = Player::Ptr(new Player(1,3000,0));
 
     // enemy/ies that run the programm on other devices
     // information from network is needed
-    m_enemy = Player::Ptr(new Player());
+    //m_enemy = Player::Ptr(new Player());
+
+    m_players[1] = Player::Ptr(new Player(1,3000,1));
+    m_players[2] = Player::Ptr(new Player(2,4000,0));
 
     // when networking issues are solved the map is loaded later
     getUniverse(filename);
@@ -328,6 +331,10 @@ Player::Ptr DataModel::getSelfPlayer()
 Player::Ptr DataModel::getEnemyPlayer(int id)
 {
     return m_enemy;
+}
+
+Player::Ptr DataModel::getPlayer(int id) {
+    return m_players[id];
 }
 
 void DataModel::findBattles()

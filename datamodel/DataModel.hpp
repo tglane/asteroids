@@ -101,6 +101,8 @@ public:
 
     Player::Ptr getSelfPlayer();
 
+    Player::Ptr getPlayer(int id);
+
     Player::Ptr getEnemyPlayer(int id);
 
     bool updateAll(QJsonDocument &update); // @suppress("Type cannot be resolved")

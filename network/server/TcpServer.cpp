@@ -11,6 +11,8 @@ TcpServer::TcpServer()
     state = WAITING;
     connect(&server, SIGNAL(newConnection()), this, SLOT(onConnect()));
 
+    m_datamodel = DataModel::Ptr(new DataModel("../models/Level-1.map"));
+
     if(!server.listen(QHostAddress::Any, 1236))
     {
         qDebug() << "Error: " << server.errorString();
