@@ -1,7 +1,6 @@
 #include "view2D/StartingDialog.hpp"
 #include "view2D/MainWindow2D.hpp"
 #include <iostream>
-#include <string>
 
 namespace strategy{
 
@@ -45,12 +44,15 @@ void StartingDialog::exitGame(bool clicked)
 void StartingDialog::startGame(bool click)
 {
     std::string name = ui->Name->text().toStdString();
-    if(name != "")
+    if(name != "" && name != "Please insert a name!")
     {
+        ui->ServerAddress->setText("192.168.0.42");
         m_model->getSelfPlayer()->setPlayerName(name);
         // Call switching mechanism of datamodel
-        m_model->switchWindow(DataModel::MAIN2D);
+        //m_model->switchWindow(DataModel::MAIN2D);
         this->setVisible(false);
+        /* emit signal to establish tcp connection */
+        emit connect_to_server(name, ui->ServerAddress->text().toStdString());
     }
     else
     {

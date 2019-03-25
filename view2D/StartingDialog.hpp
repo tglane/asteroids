@@ -7,12 +7,14 @@
 #include <QPushButton>
 #include <QGraphicsEllipseItem>
 #include <QMouseEvent>
+#include <string>
 
 #include "build/ui_StartingDialog.h"
 #include "datamodel/DataModel.hpp"
 
 
 using asteroids::DataModel;
+using std::string;
 
 namespace strategy
 {
@@ -57,6 +59,9 @@ public slots:
     void exitGame(bool click);
 
     void startGame(bool click);
+
+signals:
+    void connect_to_server(string, string);
 
 private:
 

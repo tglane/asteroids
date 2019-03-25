@@ -20,14 +20,12 @@
 
 int main(int argc, char** argv)
 {
-
+    QApplication a(argc, argv);
     DataModel::Ptr model = std::make_shared<DataModel>();
 
     //TODO add input for player name and server io
-    tcpclient::Ptr tcp_client(std::make_shared<tcpclient>(model, "player_test_woo", "192.168.0.42"));
+    tcpclient::Ptr tcp_client(std::make_shared<tcpclient>(model));
     QAbstractSocket::connect(model.get(), SIGNAL(endround_signal()), tcp_client.get(), SLOT(send_ready()));
-
-    QApplication a(argc, argv);
 
     strategy::MainWindow2D mainWindow2D(model);
 
@@ -44,6 +42,8 @@ int main(int argc, char** argv)
     //end test
 
     strategy::StartingDialog startWindow(model);
+    QObject::connect(&startWindow, SIGNAL(connect_to_server(string, string)), tcp_client.get(), SLOT(connect_to_server(string, string)));
+
     startWindow.show();
     return a.exec();
 }

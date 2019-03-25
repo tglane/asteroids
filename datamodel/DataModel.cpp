@@ -20,7 +20,6 @@ DataModel::DataModel() : m_players(), m_planets(), m_edges()
 
 void DataModel::getUniverse(std::string filename)
 {
-
     std::ifstream f;
     f.open(filename);
 
