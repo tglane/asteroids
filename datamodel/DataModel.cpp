@@ -54,6 +54,7 @@ void DataModel::getUniverse(std::string filename)
 
             m_planets[i] = p;
             m_nameToPlanets[name] = p;
+            m_planetNameToId[name] = i;
         }
 
         // add the edges to the map
@@ -503,6 +504,11 @@ int DataModel::getIDFromPlanet(Planet::Ptr planet)
             return i;
         }
     }
+}
+
+int DataModel::getIDFromPlanetName(std::string name){
+    return m_planetNameToId[name];
+
 }
 
 void DataModel::WinCondition()
