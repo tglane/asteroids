@@ -7,7 +7,6 @@
 #include "build/ui_EndWindow.h"
 #include "datamodel/DataModel.hpp"
 
-
 namespace strategy
 {
 
@@ -20,7 +19,7 @@ class EndWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    EndWindow(bool victory, QWidget* parent = NULL);
+    EndWindow(asteroids::DataModel::Ptr model, QWidget* parent = NULL);
 
     ~EndWindow();
 

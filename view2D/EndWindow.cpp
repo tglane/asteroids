@@ -1,17 +1,15 @@
 #include "view2D/EndWindow.hpp"
-#include "view2D/MainWindow2D.hpp"
-
 
 namespace strategy {
 
-EndWindow::EndWindow(bool victory, QWidget* parent) : 
+EndWindow::EndWindow(asteroids::DataModel::Ptr model, QWidget* parent) : 
     QMainWindow(parent), ui(new Ui::EndWindow())
 {
     ui->setupUi(this);
 
     ui->ResultLabel->setStyleSheet("QLabel { color: white }");
     QPixmap bkgnd;
-    if (victory)
+    if (true)
     {
         ui->ResultLabel->setText("Victory!");
         bkgnd = QPixmap("../models/victory.jpg");

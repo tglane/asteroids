@@ -320,7 +320,7 @@ void MainWindow2D::sendShips(bool click)
 
 void MainWindow2D::exitGame(bool click)
 {
-    QCoreApplication::quit();
+    m_model->switchWindow(DataModel::END);
 }
 
 MyEllipse* MainWindow2D::getEllipseById(int id)
