@@ -4,22 +4,26 @@
 
 namespace strategy {
 
-EndWindow::EndWindow(bool victory, QWidget* parent) : 
+EndWindow::EndWindow(DataModel::Ptr model, QWidget* parent) : 
     QMainWindow(parent), ui(new Ui::EndWindow())
 {
+    m_model = model;
     ui->setupUi(this);
 
     ui->ResultLabel->setStyleSheet("QLabel { color: white }");
     QPixmap bkgnd;
-    if (victory)
+    switch(m_model->getResult())
     {
-        ui->ResultLabel->setText("Victory!");
-        bkgnd = QPixmap("../models/victory.jpg");
-    } else {
-        ui->ResultLabel->setText("Defeat!");
-        bkgnd = QPixmap("../models/defeat.jpg");
-
+        case 1:
+            ui->ResultLabel->setText("Victory!");
+            bkgnd = QPixmap("../models/victory.jpg");
+        case 2:
+            ui->ResultLabel->setText("Defeat!");
+            bkgnd = QPixmap("../models/defeat.jpg");
+        default:
+            ui->ResultLabel->setText("Error!");
     }
+
 
     bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
     QPalette palette;

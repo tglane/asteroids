@@ -140,10 +140,15 @@ public:
 
     int getMineCost() { return Minecost; }
 
+    int getResult() { return result; }
+
 signals:
     void updateInfo();
 
 private:
+
+    // 0 = not finished, 1 = victory, 2 = defeat
+    int result = 0;
 
     int m_playerid;
 
