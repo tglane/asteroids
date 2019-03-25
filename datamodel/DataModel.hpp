@@ -125,6 +125,10 @@ public:
 
     int getIDFromPlanet(Planet::Ptr planet);
 
+    int getShipCost() { return Shipcost; }
+
+    int getMineCost() { return Minecost; }
+
 private:
 
     int m_playerid;

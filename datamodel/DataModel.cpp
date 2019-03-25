@@ -138,7 +138,7 @@ bool DataModel::buyMine(Planet::Ptr selectedPlanet, Player::Ptr m_self)
     std::cout << selectedPlanet->getMinesBuild() << std::endl;
     std::cout << selectedPlanet->getMines() << std::endl;
     /*test druck ende*/
-    if(selectedPlanet->getMinesHidden() < selectedPlanet->getMines())
+    if(selectedPlanet->getMinesHidden() + selectedPlanet->getMinesBuild() < selectedPlanet->getMines())
     {
         int Player_Rubin_Number = m_self->getRubin();
         if(Player_Rubin_Number >= Minecost)
@@ -169,9 +169,11 @@ void DataModel::TransaktionMine()
     {
         std::shared_ptr<MineOrder> NewOrder = *it;
 
-        Planet::Ptr NewShipToPlanet = NewOrder->getPlanet();
+        Planet::Ptr NewMineOnPlanet = NewOrder->getPlanet();
 
-        NewShipToPlanet->setMinesBuild();
+        NewMineOnPlanet->setMinesBuild();
+
+        NewMineOnPlanet->resetMinesHidden();
     }
 
 }
@@ -187,6 +189,8 @@ void DataModel::TransaktionShip()
         Planet::Ptr NewShipToPlanet = NewOrder->getPlanet();
 
         NewShipToPlanet->addShips(1);
+
+        NewShipToPlanet->resetShipsOrdered();
     }
 
 
