@@ -36,8 +36,9 @@ using std::map;
 
 namespace asteroids{
 
-class DataModel
+class DataModel : public QObject
 {
+    Q_OBJECT
 
 public:
 
@@ -138,6 +139,9 @@ public:
     int getShipCost() { return Shipcost; }
 
     int getMineCost() { return Minecost; }
+
+signals:
+    void updateInfo();
 
 private:
 

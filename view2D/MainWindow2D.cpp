@@ -134,7 +134,7 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
 
     ui->PlanetInfo->setVisible(false);
 
-    updatePlayerInfo();
+    connect(m_model.get(), SIGNAL(updateInfo()), this, SLOT(updatePlayerInfo()));
 
 }
 
