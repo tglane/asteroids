@@ -21,9 +21,9 @@
     <property name="geometry">
      <rect>
       <x>440</x>
-      <y>640</y>
+      <y>570</y>
       <width>311</width>
-      <height>91</height>
+      <height>161</height>
      </rect>
     </property>
     <property name="autoFillBackground">
@@ -62,13 +62,16 @@
      </font>
     </property>
     <property name="mouseTracking">
-     <bool>false</bool>
+     <bool>true</bool>
     </property>
     <property name="acceptDrops">
      <bool>false</bool>
     </property>
     <property name="text">
-     <string>Result</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:72pt;&quot;&gt;Result&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
   </widget>
