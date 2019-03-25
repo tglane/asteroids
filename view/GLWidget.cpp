@@ -323,6 +323,7 @@ void GLWidget::drawHealth(QPainter& painter, int totalHealthPlayer, int totalHea
 void GLWidget::drawMinimap(QPainter& painter, Hittable::Ptr player, Hittable::Ptr enemy)
 {
     QPixmap minimap("../models/minimap");
+    QPixmap heightMinimap("../models/height_minimap");
     QPixmap playerMinimap("../models/player_minimap");
     QPixmap enemyMinimap("../models/enemy_minimap");
 
@@ -338,13 +339,27 @@ void GLWidget::drawMinimap(QPainter& painter, Hittable::Ptr player, Hittable::Pt
 
     painter.translate(size / 10000 * player->getPosition()[0], -size / 10000 * player->getPosition()[1]);
     painter.rotate(std::atan2(player->getXAxis()[0], player->getXAxis()[1]) * 180 / M_PI);
-    painter.drawPixmap(0 - fighterWidth / 2, 0 - fighterHeight / 2, fighterWidth, fighterHeight, playerMinimap);
+    painter.drawPixmap(-fighterWidth / 2, -fighterHeight / 2, fighterWidth, fighterHeight, playerMinimap);
 
     painter.restore();
+    painter.save();
 
     painter.translate(size / 10000 * enemy->getPosition()[0], -size / 10000 * enemy->getPosition()[1]);
     painter.rotate(std::atan2(enemy->getXAxis()[0], enemy->getXAxis()[1]) * 180 / M_PI);
-    painter.drawPixmap(0 - fighterWidth / 2, 0 - fighterHeight / 2, fighterWidth, fighterHeight, enemyMinimap);
+    painter.drawPixmap(-fighterWidth / 2, -fighterHeight / 2, fighterWidth, fighterHeight, enemyMinimap);
+
+    // Height display
+    painter.restore();
+    float heightMinimapWidth = size * 0.1;
+    painter.translate(-size / 2 - heightMinimapWidth / 2, -size / 2);
+    painter.drawPixmap(-heightMinimapWidth, 0, (int) heightMinimapWidth, (int) size, heightMinimap);
+    painter.rotate(90);
+    painter.save();
+    painter.translate(size / 2 - size / 10000 * player->getPosition()[2], 0);
+    painter.drawPixmap((int) (-heightMinimapWidth / 4), 0, (int) (heightMinimapWidth / 2), (int) heightMinimapWidth, playerMinimap);
+    painter.restore();
+    painter.translate(size / 2 - size / 10000 * enemy->getPosition()[2], 0);
+    painter.drawPixmap((int) (-heightMinimapWidth / 4), 0, (int) (heightMinimapWidth / 2), (int) heightMinimapWidth, enemyMinimap);
 
     painter.resetTransform();
 }
