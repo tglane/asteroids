@@ -160,12 +160,14 @@ set(ASTEROID_SOURCES
     view2D/MainWindow2D.cpp
     view2D/MyEllipse.cpp
     view2D/EndWindow.cpp
+    view2D/GameWindow.cpp
 )
 set(ASTEROID_MOCS
     view/MainWindow.hpp
     view2D/MainWindow2D.hpp
     view2D/StartingDialog.hpp
     view2D/EndWindow.hpp
+    view2D/GameWindow.hpp
 )
 
 set(ASTEROID_UIS
@@ -173,6 +175,7 @@ set(ASTEROID_UIS
     view2D/MainWindow2D.ui
     view2D/StartingDialog.ui
     view2D/EndWindow.ui
+    view2D/GameWindow.ui
 )
 
 set(CMAKE_AUTOMOC ON)
