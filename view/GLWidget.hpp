@@ -26,7 +26,7 @@
 #include "rendering/Skybox.hpp"
 #include "util/AsteroidField.hpp"
 #include "physics/PhysicsEngine.hpp"
-#include "network/udpclient/udpclient.hpp"
+#include "network/client/udpclient.hpp"
 #include "view/Controller.hpp"
 
 using namespace asteroids;

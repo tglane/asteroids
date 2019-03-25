@@ -7,6 +7,7 @@
 #include <QObject>
 #include <QUdpSocket>
 #include <memory>
+#include <QJsonObject>
 
 #include "math/Vector.hpp"
 #include "math/Quaternion.hpp"
@@ -17,6 +18,8 @@ class udpclient: public QObject {
     Q_OBJECT
 
 public:
+
+    using Ptr = std::shared_ptr<udpclient>;
 
     explicit udpclient(QObject *parent = 0);
 
@@ -45,11 +48,16 @@ public:
 signals:
 
 public slots:
-
     /**
-     * @brief
+     * @brief read incoming data from udp server
      */
     void readyRead();
+
+    /**
+     * @brief inits the udp data connection for the 3d fight
+     * @param init_data containing the position of the spaceships and asteroids
+     */
+    void init_fight_slot(QJsonObject init_data);
 
 private:
 
@@ -57,7 +65,7 @@ private:
 
     void createNewBulletFromPackage(int recv_seq_nr, int recv_id, char* data);
 
-    QUdpSocket *socket;
+    std::shared_ptr<QUdpSocket> socket;
 
     int m_id;
 

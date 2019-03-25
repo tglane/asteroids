@@ -7,7 +7,7 @@
 
 namespace asteroids{
 
-DataModel::DataModel(std::string filename) : m_players(), m_planets(), m_edges()
+DataModel::DataModel() : m_players(), m_planets(), m_edges()
 {
     // player which runs this programm
     //m_self = Player::Ptr(new Player(1,3000,0));
@@ -22,9 +22,8 @@ DataModel::DataModel(std::string filename) : m_players(), m_planets(), m_edges()
 
     // m_enemy = Player::Ptr(new Player());
 
-
     // when networking issues are solved the map is loaded later
-    getUniverse(filename);
+    //getUniverse(filename);
 
     //Planet::Ptr Test = getPlanetFromId(5);
  	//Planet::Ptr Test2 = getPlanetFromId(6);
@@ -38,6 +37,7 @@ DataModel::DataModel(std::string filename) : m_players(), m_planets(), m_edges()
 	//m_enemy->addPlanet(Test);
 	//m_enemy->addPlanet(Test2);
 	//m_enemy->addPlanet(Test3);
+
 }
 
 void DataModel::getUniverse(std::string filename)
@@ -110,6 +110,9 @@ bool DataModel::endOfRound()
 
     // TODO make a json-data-package from the data and send it to the server
     //      listen for the response, start fights or next round
+
+    //Call tcpclient slot to send data
+    emit endround_signal();
 
     // return if network response was succesful
     return true;
@@ -459,6 +462,7 @@ std::vector<std::shared_ptr<Battle>> DataModel::findBattles()
     }
     return m_battles;
 }
+
 
 QJsonObject DataModel::createJsonPlayerStatus(Player::Ptr player)
 {

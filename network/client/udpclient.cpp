@@ -9,14 +9,14 @@ udpclient::udpclient(QObject *parent)
     std::cout << "Enter player_id (int):" << std::endl;
     std::cin >> m_id;
 
-    m_ip = "127.0.0.1";
+    m_ip = "192.168.0.42";
 
-    socket = new QUdpSocket(this);
+    socket = std::make_shared<QUdpSocket>(this);
     seq_number = 1;
 
     socket->bind(QHostAddress(QString("0.0.0.0")), 1234);
 
-    connect(socket, SIGNAL(readyRead()), this, SLOT(readyRead()));
+    connect(socket.get(), SIGNAL(readyRead()), this, SLOT(readyRead()));
 }
 
 void udpclient::send_position(asteroids::Vector<float> position, asteroids::Vector<float> velocity, asteroids::Vector<float> xAxis, asteroids::Vector<float> yAxis, asteroids::Vector<float> zAxis)
@@ -122,6 +122,14 @@ void udpclient::readyRead()
             break;
         default:
             break;
+    }
+}
+
+void udpclient::init_fight_slot(QJsonObject init_data)
+{
+    for(const QString& key : init_data.keys())
+    {
+        QJsonValue value = init_data.value(key);
     }
 }
 

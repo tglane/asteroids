@@ -7,7 +7,7 @@
 #include "Gamepad.hpp"
 #include "physics/Hittable.hpp"
 #include "physics/PhysicsEngine.hpp"
-#include "network/udpclient/udpclient.hpp"
+#include "network/client/udpclient.hpp"
 
 namespace asteroids
 {

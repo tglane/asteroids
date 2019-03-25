@@ -15,15 +15,19 @@
 #include "view2D/MainWindow2D.hpp"
 #include "view2D/StartingDialog.hpp"
 
-
+#include "network/client/tcpclient.hpp"
+#include "network/client/udpclient.hpp"
 
 int main(int argc, char** argv)
 {
 
-    DataModel::Ptr model = DataModel::Ptr(new DataModel("../models/Level-1.map"));
+    DataModel::Ptr model = std::make_shared<DataModel>();
+
+    //TODO add input for player name and server io
+    tcpclient::Ptr tcp_client(std::make_shared<tcpclient>(model, "player_test_woo", "192.168.0.42"));
+    QAbstractSocket::connect(model.get(), SIGNAL(endround_signal()), tcp_client.get(), SLOT(send_ready()));
 
     QApplication a(argc, argv);
-
 
     strategy::MainWindow2D mainWindow2D(model);
 
@@ -67,7 +71,6 @@ int main(int argc, char** argv)
 
     strategy::StartingDialog startWindow(model);
     startWindow.show();
-
     return a.exec();
 }
 
