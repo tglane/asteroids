@@ -86,6 +86,11 @@ public:
 
     virtual void render() override;
 
+    virtual int radius()
+    {
+        return (int) m_radius;
+    }
+
 
 protected:
 

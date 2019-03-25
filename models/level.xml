@@ -1,5 +1,5 @@
 <level>
-  <skybox width="1024">
+  <skybox width="10000">
     <file1>box1.jpg</file1>
     <file2>box2.jpg</file2>
     <file3>box3.jpg</file3>
@@ -14,7 +14,7 @@
     <size_max>5</size_max>
   </asteroids>
   <actor filename="arrow.3ds">
-    <spawn_x>0</spawn_x>
+    <spawn_x>-2500</spawn_x>
     <spawn_y>0</spawn_y>
     <spawn_z>0</spawn_z>
     <move_speed>10</move_speed>

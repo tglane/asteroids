@@ -17,6 +17,8 @@
 #include <iostream>
 #include <QTimer>
 #include <QKeyEvent>
+#include <QPixmap>
+#include <QLabel>
 
 namespace asteroids
 {
@@ -25,10 +27,11 @@ MainWindow::MainWindow(const std::string& file, DataModel::Ptr model, QWidget* p
     QMainWindow(parent),
     ui(new Ui::MainWindow()),
     m_timer(new QTimer())
+
 {
     // Setup user interface
     ui->setupUi(this);
-    m_widget = ui->centralWidget->findChild<GLWidget*>(QString("openGLWidget"));
+    m_widget = ui->openGLWidget;
 
     // Set level
     m_widget->setLevelFile(file);

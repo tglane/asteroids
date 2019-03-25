@@ -25,8 +25,6 @@ Transformable::Transformable()
     m_zAxis         = Vector<float>(0.0, 0.0, 1.0);
     m_position      = Vector<float>(0.0, 0.0, 0.0);
 
-    m_rotation.fromAxis(Vector<float>(0.0, 0.0, 1.0), 0.0f);
-
     // Set tranformation matrix to unit matrix
     for(int i = 0; i < 16; i++)
     {
@@ -36,13 +34,11 @@ Transformable::Transformable()
     m_transformation[5 ] = 1.0f;
     m_transformation[10] = 1.0f;
     m_transformation[15] = 1.0f;
-
-    m_direction = m_xAxis * -1.0;
 }
 
 void Transformable::move()
 {
-    m_position = m_position + m_direction * m_speed;
+    m_position = m_position + m_xAxis * m_speed;
 }
 
 void Transformable::move(MoveTransform axis)
@@ -51,12 +47,12 @@ void Transformable::move(MoveTransform axis)
 }
 
 
-void Transformable::rotate(RotationTransfrom axis)
+void Transformable::rotate(RotationTransform axis)
 {
     rotate(axis, m_rotationSpeed);
 }
 
-void Transformable::rotate(RotationTransfrom axis, float s)
+void Transformable::rotate(RotationTransform axis, float s)
 {
 
     Quaternion nq;
@@ -64,43 +60,39 @@ void Transformable::rotate(RotationTransfrom axis, float s)
     // Get the wanted operation and calculate the new coordinates
     switch(axis)
     {
-    case PITCH_LEFT:
-     nq.fromAxis(m_yAxis, s);
-        m_xAxis = nq * m_xAxis;
-        m_zAxis = nq * m_zAxis;
-        break;
-    case PITCH_RIGHT:
-        nq.fromAxis(m_yAxis, -s);
-        m_xAxis = nq * m_xAxis;
-        m_zAxis = nq * m_zAxis;
-        break;
+        case ROLL_CLOCKWISE:
+            nq.fromAxis(m_xAxis, s);
+            m_yAxis = nq * m_yAxis;
+            m_zAxis = nq * m_zAxis;
+            break;
+        case ROLL_COUNTERCLOCKWISE:
+            nq.fromAxis(m_xAxis, -s);
+            m_yAxis = nq * m_yAxis;
+            m_zAxis = nq * m_zAxis;
+            break;
 
-    case YAW_LEFT:
-        nq.fromAxis(m_xAxis, s);
-        m_yAxis = nq * m_yAxis;
-        m_zAxis = nq * m_zAxis;
-        break;
-    case YAW_RIGHT:
-        nq.fromAxis(m_xAxis, -s);
-        m_yAxis = nq * m_yAxis;
-        m_zAxis = nq * m_zAxis;
-        break;
+        case PITCH_DOWN:
+            nq.fromAxis(m_yAxis, s);
+            m_xAxis = nq * m_xAxis;
+            m_zAxis = nq * m_zAxis;
+            break;
+        case PITCH_UP:
+            nq.fromAxis(m_yAxis, -s);
+            m_xAxis = nq * m_xAxis;
+            m_zAxis = nq * m_zAxis;
+            break;
 
-    case ROLL_LEFT:
-        nq.fromAxis(m_zAxis, s);
-        m_yAxis = nq * m_yAxis;
-        m_xAxis = nq * m_xAxis;
-        break;
-    case ROLL_RIGHT:
-        nq.fromAxis(m_zAxis, -s);
-        m_yAxis = nq * m_yAxis;
-        m_xAxis = nq * m_xAxis;
-        break;
+        case YAW_COUNTERCLOCKWISE:
+            nq.fromAxis(m_zAxis, s);
+            m_xAxis = nq * m_xAxis;
+            m_yAxis = nq * m_yAxis;
+            break;
+        case YAW_CLOCKWISE:
+            nq.fromAxis(m_zAxis, -s);
+            m_xAxis = nq * m_xAxis;
+            m_yAxis = nq * m_yAxis;
+            break;
     }
-
-    // Update mesh rotation
-    m_rotation = m_rotation * nq;
-    m_direction = m_xAxis * -1.0;
 }
 
 void Transformable::move(MoveTransform axis, float speed)
@@ -110,24 +102,24 @@ void Transformable::move(MoveTransform axis, float speed)
     // Determine the correct axis of the local system
     switch(axis)
     {
-    case FORWARD:
-        direction = m_xAxis * -1.0;
-        break;
-    case BACKWARD:
-        direction = m_xAxis;
-        break;
-    case STRAFE_LEFT:
-        direction = m_zAxis;
-        break;
-    case STRAFE_RIGHT:
-        direction = m_zAxis * -1.0;
-        break;
-    case LIFT_UP:
-        direction = m_yAxis;
-        break;
-    case LIFT_DOWN:
-        direction = m_yAxis * -1.0;
-        break;
+        case FORWARD:
+            direction = m_xAxis;
+            break;
+        case BACKWARD:
+            direction = m_xAxis * -1.0;
+            break;
+        case STRAFE_LEFT:
+            direction = m_yAxis;
+            break;
+        case STRAFE_RIGHT:
+            direction = m_yAxis * -1.0;
+            break;
+        case LIFT_UP:
+            direction = m_zAxis;
+            break;
+        case LIFT_DOWN:
+            direction = m_zAxis * -1.0;
+            break;
     }
 
     // Update mesh position
@@ -158,5 +150,16 @@ void Transformable::computeMatrix()
 
 }
 
+void Transformable::setXAxis(const Vector<float> &m_xAxis) {
+    Transformable::m_xAxis = m_xAxis;
+}
+
+void Transformable::setYAxis(const Vector<float> &m_yAxis) {
+    Transformable::m_yAxis = m_yAxis;
+}
+
+void Transformable::setZAxis(const Vector<float> &m_zAxis) {
+    Transformable::m_zAxis = m_zAxis;
+}
 
 }

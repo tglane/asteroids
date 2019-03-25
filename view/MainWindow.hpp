@@ -21,8 +21,8 @@
 
 #include "GLWidget.hpp"
 
-#include "../build/ui_MainWindow.h"
-#include "datamodel/DataModel.hpp"
+// TODO: Besser!
+#include "cmake-build-debug/ui_MainWindow.h"
 
 namespace asteroids
 {

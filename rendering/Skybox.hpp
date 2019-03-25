@@ -52,7 +52,7 @@ public:
     /**
      * @brief Renders the Skybox
      */
-    virtual void render(Camera& cam);
+    virtual void render();
 
 private:
 
