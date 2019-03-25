@@ -49,7 +49,7 @@ void TcpServer::send_state()
         array.push_back("state");
         for (auto j: clients) {
             Player::Ptr temp_player = m_datamodel->getPlayer(j.id);
-            array.push_back(m_datamodel->createJson(temp_player));
+            array.push_back(m_datamodel->createJsonPlayerStatus(temp_player));
         }
         QJsonDocument doc(array);
         int size = doc.toJson().size();
@@ -187,7 +187,7 @@ void TcpServer::handle_init(TcpClient& client, QJsonDocument& doc)
     }
     qDebug() << client.socket->peerAddress();
 
-    udpServer.add_client(client.id, client.socket->peerAddress(), client.socket->peerPort(), 100);
+    udpServer->add_client(client.id, client.socket->peerAddress(), client.socket->peerPort(), 100);
 }
 
 
