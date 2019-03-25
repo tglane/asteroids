@@ -103,6 +103,10 @@ public:
 
     Player::Ptr getEnemyPlayer(int id);
 
+
+    /**
+     * @brief updates data and planets in the ownerships of the enemy by reading the given json file
+     */
     bool updateAll(QJsonDocument &update); // @suppress("Type cannot be resolved")
 
 
@@ -118,8 +122,14 @@ public:
      * @param player The player for which the information should be sent
      * @return the created Json File
      */
-    QJsonDocument createJson(Player::Ptr player);
+    QJsonDocument createJsonPlayerStatus(Player::Ptr player);
 
+    /**
+     * @brief Creates Json File, which includes player identification, player rubin status, and orders
+     * @param player The player for which the information should be sent
+     * @return the created Json File
+     */
+    QJsonDocument createJsonOrders(Player::Ptr player);
 
     void performMovements(Player::Ptr player);
 

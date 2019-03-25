@@ -175,6 +175,10 @@ public:
 	void RemovePlaneteFromList(Planet::Ptr Planet);
 
 	void PrintPlanetsList();
+	/**
+	 * @brief updates number of rubin and ships by the values of the planets in our ownership
+	 */
+	void updateResources();
 
 private:
 
