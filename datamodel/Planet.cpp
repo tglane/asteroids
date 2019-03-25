@@ -24,7 +24,8 @@ Planet::Planet(std::string name, int posx, int posy, int mines, int rubin) : m_n
 	m_minesbuild = 0;
 	m_minesHidden = 0;
 	m_ships = 0;
-	m_owner = NULL;
+	m_owner = nullptr;
+	m_invader = nullptr;
 	m_invaderShips = 0;
 }
 

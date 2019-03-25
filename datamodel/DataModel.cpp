@@ -275,13 +275,14 @@ void DataModel::switchWindow(int Id)
     Active->showFullScreen();
     
 }
-//TODO ordentliche Fehlerbehandlung + Doku + manche (unnötige) Felder in Player koennen mit Infos aus File nicht aktualisiert werden
+
 bool DataModel::updateAll(QJsonDocument &update) {
 
 	if (update.isObject() && !update.isEmpty())
 	{
 
 		int id = 0;
+
 		int rubin = 0;
 		std::string name;
 		std::list<Planet::Ptr> planets;
@@ -339,8 +340,6 @@ bool DataModel::updateAll(QJsonDocument &update) {
 				}
 				else return false; //PlanetArray is not an Array
 			}
-
-
 			/**
 			 * when the planet is not already colonialized, the player of this file will become the owner
 			 * else the player of this file becomes the invader
@@ -364,8 +363,7 @@ bool DataModel::updateAll(QJsonDocument &update) {
 						planet = getPlanetFromId(it1->toObject(QJsonObject()).value("ID").toInt());
 						ships = it1->toObject(QJsonObject()).value("Ships").toInt();
 
-						if(planet->getOwner()->getIdentity() != id
-								&& planet->getOwner()->getIdentity() != 0 )
+						if(planet->getOwner() == nullptr)
 						{
 							planet->setOwner(player);
 							planet->setShips(ships);
