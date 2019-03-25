@@ -399,9 +399,9 @@ QJsonDocument DataModel::createJson(Player::Ptr player)
 
     QJsonDocument theDocument(main);
 
-    std::cout << theDocument.toJson().toStdString() << std::endl;
+    //std::cout << theDocument.toJson().toStdString() << std::endl;
 
-    return QJsonDocument();
+    return theDocument;
 }
 
 
