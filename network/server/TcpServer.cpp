@@ -186,6 +186,7 @@ void TcpServer::readyRead()
             int size;
             i.socket->read((char*) &size, 4);
             QByteArray data = i.socket->read(size);
+            qDebug() << data;
             QJsonDocument doc = QJsonDocument::fromJson(QString(data).toUtf8());
             QJsonArray array = doc.array();
             QString ident(array[0].toString().toUtf8());
