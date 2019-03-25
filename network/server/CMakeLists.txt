@@ -18,7 +18,14 @@ set(SERVER_SRC
     ../../physics/PhysicalObject.cpp
     ../../physics/PhysicalBullet.cpp
     ../../physics/BasePhysicsEngine.cpp
-    ../../physics/Hittable.cpp)
+    ../../physics/Hittable.cpp
+    ../../datamodel/DataModel.cpp
+    ../../datamodel/Planet.cpp
+    ../../datamodel/Player.cpp
+    ../../datamodel/ShipOrder.cpp
+    ../../datamodel/MoveOrder.cpp
+    ../../datamodel/Battle.cpp
+    ../../datamodel/MineOrder.cpp)
 
 set(SERVER_HDR
     UdpServer.hpp
