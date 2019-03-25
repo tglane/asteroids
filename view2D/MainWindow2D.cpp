@@ -180,7 +180,6 @@ void MainWindow2D::choose_planet(int id)
             QPixmap pix("../models/surface/my1.jpg");
             ellipse->myBrush = QBrush(pix);
         } 
-        
         // TODO Players are now saved in a map with their id
         //      iterate over all players if getOwner() != NULL
         else if (planets.at(id)->getOwner()==m_model->getEnemyPlayer(1)){
@@ -199,7 +198,7 @@ void MainWindow2D::choose_planet(int id)
             MyEllipse* otherEllipse = getEllipseById(currentPlanet);
             if(planets.at(currentPlanet)->getOwner()==m_model->getSelfPlayer()){
                 QPixmap otherpix("../models/surface/my1.jpg");
-                ellipse->myBrush = QBrush(otherpix);
+                otherEllipse->myBrush = QBrush(otherpix);
             // TODO Players are now saved in a map with their id
             //      iterate over all players if getOwner() != NULL
             } else if (planets.at(currentPlanet)->getOwner()==m_model->getEnemyPlayer(1)){
@@ -230,6 +229,26 @@ void MainWindow2D::choose_planet(int id)
     }
 }
 
+void MainWindow2D::updatePlanetColor(){
+    std::map<int, Planet::Ptr> planets = m_model->getPlanets();
+    for(int id = 0; id < (int)planets.size(); id++){
+        if(id!=currentPlanet){
+            MyEllipse* ellipse = getEllipseById(id);
+            if(planets.at(id)->getOwner()==m_model->getSelfPlayer()){
+                QPixmap pix("../models/surface/my1.jpg");
+                ellipse->myBrush = QBrush(pix);
+            }else if (planets.at(id)->getOwner()==m_model->getEnemyPlayer(1)){
+                QPixmap pix("../models/surface/other1.jpg");
+                ellipse->myBrush = QBrush(pix);
+            } else{
+                QPixmap pix("../models/surface/neutral1.jpg");
+                ellipse->myBrush = QBrush(pix);  
+            }
+            ellipse->update();
+        }
+    }
+}
+
 void MainWindow2D::endOfRound(bool click)
 {
     bool succes = m_model->endOfRound();
@@ -240,6 +259,7 @@ void MainWindow2D::endOfRound(bool click)
 
     updatePlayerInfo();
     updatePlanetInfo(currentPlanet);
+    updatePlanetColor();
 
     // TODO wait for response of server, block the window until all players are ready
 }
