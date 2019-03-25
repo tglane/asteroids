@@ -431,9 +431,12 @@ void DataModel::performMovements()
 
 int DataModel::getIDFromPlanet(Planet::Ptr planet)
 {
+    // go over all planets in planets
     for(int i = 0; i < m_planets.size(); i++)
     {
+        // Get planet with index i
         Planet::Ptr mapPlanet = m_planets.find(i)->second;
+        // If they're the same planets correct planet has been found
         if(mapPlanet->getName() == planet->getName())
         {
             return i;
