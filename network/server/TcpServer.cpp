@@ -13,7 +13,7 @@ TcpServer::TcpServer()
 
     m_datamodel = DataModel::Ptr(new DataModel("../models/Level-1.map"));
 
-    if(!server.listen(QHostAddress::Any, 1236))
+    if(!server.listen(QHostAddress::Any, 1235))
     {
         qDebug() << "Error: " << server.errorString();
     }
@@ -28,34 +28,23 @@ void TcpServer::onConnect()
 {
     qDebug() << "Client connected";
     if (state != WAITING) {
-        return;
+        return; 
     }
+    qDebug() << "Client connected 2";
 
     TcpClient client(last_id++, server.nextPendingConnection());
+    client.socket->setSocketOption(QAbstractSocket::KeepAliveOption, 1);
     clients.push_back(client);
 
     connect(client.socket.get(), SIGNAL(readyRead()), this, SLOT(readyRead()));
 
 }
 
-void TcpServer::send_strat_init()
-{
-    for (auto client: clients)
-    {
-        QJsonArray array;
-        array.push_back("strat_init");
-        QJsonDocument doc(array);
-
-        int size = doc.toJson().size();
-        client.socket->write((char*)&size, 4);
-        client.socket->write(doc.toJson());
-    }
-}
-
 void TcpServer::send_state()
 {
     for (auto client: clients)
     {
+        qDebug() << "Sending state";
         QJsonArray array;
         array.push_back("state");
         for (auto j: clients) {
@@ -75,28 +64,29 @@ void TcpServer::handle_ready(TcpClient& client, QJsonDocument& doc)
     qDebug() << doc;
     if (state == WAIT_READY)
     {
-
-        QJsonArray array;
-        array.push_back("strat_init");
-
-        for (auto i: clients)
-        {
-            QJsonObject player_obj;
-            player_obj.insert("id", QJsonValue::fromVariant(client.id));
-            Player::Ptr player = m_datamodel->getPlayer(client.id);
-            player_obj.insert("player_name", QJsonValue::fromVariant(QString::fromStdString(player->getPlayerName())));
-
-            array.push_back(player_obj);
-        }
-
-        QJsonDocument res(array);
-        int size = res.toJson().size();
-        client.socket->write((char*)&size, 4);
-        client.socket->write(res.toJson());
-
         ready_count++;
         if (clients.size() == ready_count) {
-            send_strat_init();
+            for (auto j: clients) {
+                QJsonArray array;
+                array.push_back("strat_init");
+                qDebug() << "Sending strat_init";
+
+                for (auto i: clients)
+                {
+                    QJsonObject player_obj;
+                    player_obj.insert("id", QJsonValue::fromVariant(client.id));
+                    Player::Ptr player = m_datamodel->getPlayer(client.id);
+                    player_obj.insert("player_name", QJsonValue::fromVariant(QString::fromStdString(player->getPlayerName())));
+
+                    array.push_back(player_obj);
+                }
+
+                QJsonDocument res(array);
+                int size = res.toJson().size();
+                j.socket->write((char*)&size, 4);
+                j.socket->write(res.toJson());
+            }
+
             qDebug() << "state changed: ROUND";
             state = ROUND;
             ready_count = 0;
@@ -122,7 +112,7 @@ void TcpServer::handle_ready(TcpClient& client, QJsonDocument& doc)
 void TcpServer::handle_state(TcpClient& client, QJsonDocument& doc) {
     QJsonArray array_state = doc.array();
     QJsonObject obj_state = array_state[1].toObject();
-    m_datamodel->updateAll(obj_state);
+    //m_datamodel->updateAll(obj_state);
 }
 
 void TcpServer::send_battle() {
@@ -152,6 +142,8 @@ void TcpServer::handle_init(TcpClient& client, QJsonDocument& doc)
 
     m_datamodel->getPlayer(client.id)->setPlayerName(name.toUtf8().constData());
 
+
+    qDebug() << "Sending init_res";
     QJsonObject init_res;
     init_res.insert("id", QJsonValue::fromVariant(client.id));
     init_res.insert("map", QJsonValue::fromVariant("../models/Level-1.map"));
@@ -186,6 +178,7 @@ void TcpServer::readyRead()
             int size;
             i.socket->read((char*) &size, 4);
             QByteArray data = i.socket->read(size);
+            qDebug() << data;
             QJsonDocument doc = QJsonDocument::fromJson(QString(data).toUtf8());
             QJsonArray array = doc.array();
             QString ident(array[0].toString().toUtf8());
