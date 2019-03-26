@@ -633,7 +633,6 @@ int DataModel::getIDFromPlanet(Planet::Ptr planet)
 
 int DataModel::getIDFromPlanetName(std::string name){
     return m_planetNameToId[name];
-
 }
 
 void DataModel::WinCondition()
