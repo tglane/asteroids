@@ -42,6 +42,7 @@ void DataModel::getUniverse(std::string filename)
 
             m_planets[i] = p;
             m_nameToPlanets[name] = p;
+            m_planetNameToId[name] = i;
         }
 
         // add the edges to the map
@@ -76,6 +77,7 @@ bool DataModel::endOfRound()
 
     performMovements(getSelfPlayer());
     findBattles();
+    BattlePhase();
     m_self->PrintPlanetsList();
     m_enemy->PrintPlanetsList();
     BattleReport();
@@ -278,16 +280,17 @@ void DataModel::switchWindow(int Id)
         ((MainWindow*)m_widgets[Id])->activate(true);
     }
     m_mainWindow->setCurrentWidget(m_widgets[Id]);
+    
 }
 
-
-//TODO ordentliche Fehlerbehandlung + Doku + manche (unnötige) Felder in Player koennen mit Infos aus File nicht aktualisiert werden
 bool DataModel::updateAll(QJsonDocument &update) {
 
 	if (update.isObject() && !update.isEmpty())
 	{
 
-		int id;
+		int id = 0;
+
+		int rubin = 0;
 		std::string name;
 		std::list<Planet::Ptr> planets;
 		Player::Ptr player;
@@ -339,8 +342,6 @@ bool DataModel::updateAll(QJsonDocument &update) {
 				}
 				else return false; //PlanetArray is not an Array
 			}
-
-
 			/**
 			 * when the planet is not already colonialized, the player of this file will become the owner
 			 * else the player of this file becomes the invader
@@ -364,8 +365,7 @@ bool DataModel::updateAll(QJsonDocument &update) {
 						planet = getPlanetFromId(it1->toObject(QJsonObject()).value("ID").toInt());
 						ships = it1->toObject(QJsonObject()).value("Ships").toInt();
 
-						if(planet->getOwner()->getIdentity() != id
-								&& planet->getOwner()->getIdentity() != 0 )
+						if(planet->getOwner() == nullptr || planet->getOwner()->getIdentity() == id)
 						{
 							planet->setOwner(player);
 							planet->setShips(ships);
@@ -413,6 +413,7 @@ void DataModel::findBattles()
                 Player::Ptr Tempplayer = Planets->getOwner();
                 Tempplayer->RemovePlaneteFromList(Planets);
                 Planets->setOwner(Planets->getInvader());
+                Planets->getOwner()->addPlanet(Planets);
                 Planets->addShips(Planets->getInvaderShips());
                 
 
@@ -467,6 +468,29 @@ QJsonDocument DataModel::createJson(Player::Ptr player)
     //Add the array to the json file
     main.insert("PlanetArray", planeets);
 
+    //Json array for invasion
+    QJsonArray qInvasions;
+
+    //Go over all planets and if there is a fight, add it to json file 
+    for(std::map<int, Planet::Ptr>::iterator it = m_planets.begin(); it != m_planets.end(); it++)
+    {
+        //A planet in the list
+        Planet::Ptr planet = it->second;
+        // In this case an invasion is happening on this planet
+        if(planet->getInvader() != NULL)
+        {
+            //planet representation
+            QJsonObject qInvasion;
+
+            qInvasion.insert("ID", getIDFromPlanet(planet));
+            qInvasion.insert("InvaderShips", planet->getInvaderShips());
+
+            qInvasions.push_back(qInvasion);
+        }
+    }
+
+    main.insert("InvadePlanets", qInvasions);
+
     // Make qjsondocument out of it
     QJsonDocument theDocument(main);
 
@@ -476,6 +500,7 @@ QJsonDocument DataModel::createJson(Player::Ptr player)
     return theDocument;
 }
 
+/*
 QJsonDocument createJsonOrders(Player::Ptr player)
 {
     // main QJson object in the document
@@ -505,7 +530,7 @@ QJsonDocument createJsonOrders(Player::Ptr player)
         //qMineOrder.insert("PlanetID", getIDFromPlanet(mineOrder->getPlanet()));
 
         qMineOrders.push_back(qMineOrder);
-        /*
+       
         //The Planet and the qjson representations
         Planet::Ptr planet = *it;
         QJsonObject qPlanet;
@@ -517,12 +542,12 @@ QJsonDocument createJsonOrders(Player::Ptr player)
 
         //Add to the json array
         planeets.push_back(qPlanet);
-        */
+        
     }
 
     return QJsonDocument();
 }
-
+*/
 
 void DataModel::performMovements(Player::Ptr player)
 {
@@ -599,7 +624,63 @@ int DataModel::getIDFromPlanet(Planet::Ptr planet)
             return i;
         }
     }
-    return -1;
+    
+    // If we get to this point, the planet was not found in the map of all planets
+    std::cerr << "Achtung, die ID des Planeten " << planet->getName() << "wurde nicht gefunden"; 
+    std::cerr << "Es wurde ID 0 ausgegeben" << std::endl; 
+    return 0;
+}
+
+int DataModel::getIDFromPlanetName(std::string name){
+    return m_planetNameToId[name];
+
+}
+
+void DataModel::WinCondition()
+{
+    std::map<int, Planet::Ptr>::iterator it;
+    int NumberOfPlanets = m_planets.size();
+    int CountOfPlanets = 0;
+    std::cout << "Anzahl der Planeten" << std::endl;
+    std::cout << NumberOfPlanets << std::endl;
+    for(it = m_planets.begin(); it != m_planets.end(); it++)  
+    {
+        Planet::Ptr Planets = it->second;
+        if(Planets->getOwner() == m_self)
+        {
+            CountOfPlanets++;
+        }
+
+    }  
+    std::cout << CountOfPlanets << std::endl;
+    if(NumberOfPlanets == CountOfPlanets)
+    {
+        std::cout << "Gewonnen" <<std::endl;
+
+
+    }
+
+}
+
+void DataModel::BattlePhase()
+{
+    std::list<std::shared_ptr<Battle>> BattlePhase = m_battles;
+    for (std::list<std::shared_ptr<Battle>>::iterator it = BattlePhase.begin(); it != BattlePhase.end(); ++it)  
+    {
+        std::shared_ptr<Battle> BattleDetail = *it;
+        std::cout << "Kampfphase" << std::endl;
+        std::cout << BattleDetail->m_location->getName() << std::endl;
+        std::cout << BattleDetail->m_player1->getPlayerName() << std::endl;
+        std::cout << BattleDetail->m_numberShips1 << std::endl;
+        std::cout << "" << std::endl;
+        std::cout << BattleDetail->m_player2->getPlayerName() << std::endl;
+        std::cout << BattleDetail->m_numberShips2 << std::endl;
+
+        
+
+
+    }
+
 }
 
 DataModel::~DataModel()

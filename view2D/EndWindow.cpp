@@ -1,8 +1,10 @@
 #include "view2D/EndWindow.hpp"
+#include "view2D/MainWindow2D.hpp"
+
 
 namespace strategy {
 
-EndWindow::EndWindow(asteroids::DataModel::Ptr model, QWidget* parent) : 
+EndWindow::EndWindow(DataModel::Ptr model, QWidget* parent) : 
     QMainWindow(parent), ui(new Ui::EndWindow())
 {
     m_model = model;
