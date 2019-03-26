@@ -554,6 +554,41 @@ QJsonObject DataModel::createBattleJson(Battle::Ptr battle)
     return main;
 }
 
+Battle::Ptr DataModel::readBattleJson(QJsonObject battle)
+{
+    //Json objekt soll nicht leer sein 
+    if (battle.isEmpty())
+    {
+        std::cerr << "Input QJsondocument in readBattleJson not a proper qjsondocument" << std::endl;
+        return Battle::Ptr();
+    }
+
+    Planet::Ptr location;
+
+    // Iterator für das gegebene json objekt
+	QJsonObject::const_iterator it;
+
+    //locationId
+    if(it.key() != "locationID")
+    {
+        std::cerr << "Something is wrong in given QJsondocument at locationID" << std::endl;
+        return Battle::Ptr();
+    } 
+    location = getPlanetFromId(it.value().toInt());
+    
+
+    /*
+	for (it = battle.constBegin(); it != battle.constEnd(); it++)
+	{
+		if(it.key() == "locationID")
+        {
+            
+        } 
+    }
+    */
+    
+}
+
 /*
 QJsonDocument createJsonOrders(Player::Ptr player)
 {
