@@ -43,6 +43,7 @@ void DataModel::getUniverse(std::string filename)
         for(int i = 0; i < numvertex; i++)
         {
             f >> name >> posx >> posy >> mines;
+            std::cout << name << " " << i << std::endl;
             Planet::Ptr p = Planet::Ptr(new Planet(name, posx, posy, mines));
 
             m_planets[i] = p;
@@ -60,6 +61,7 @@ void DataModel::getUniverse(std::string filename)
             m_edges.push_back(std::make_pair(from, to));
             m_planets.at(from)->addNeighbour(m_planets.at(to));
             m_planets.at(to)->addNeighbour(m_planets.at(from));
+            std::cout << "Hier" << std::endl;
         }
 
         f.close();
