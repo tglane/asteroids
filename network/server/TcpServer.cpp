@@ -140,7 +140,14 @@ void TcpServer::fight_init()
     }
     for (auto j: clients)
     {
-        udpServer->add_client(j.id, j.socket->peerAddress(), j.socket->peerPort(), 10);
+        Vector3f position;
+        if (j.id % 2 == 0) {
+            position = Vector3f(-2500, 0, 0);
+        } else {
+            position = Vector3f(2500, 0, 0);
+        }
+
+        udpServer->add_client(j.id, j.socket->peerAddress(), j.socket->peerPort(), position, 10);
         QJsonArray array;
         array.push_back("fight_init");
 
@@ -171,11 +178,41 @@ void TcpServer::fight_init()
             asteroid_array.push_back(asteroid_obj);
         }
 
+        QJsonArray player_array;
+        for (auto i: clients) {
+            Vector3f position;
+            if (i.id % 2 == 0) {
+                position = Vector3f(-2500, 0, 0);
+            } else {
+                position = Vector3f(2500, 0, 0);
+            }
+            QJsonObject player_obj;
+            Vector3f x_axis = Vector3f(1, 0, 0);
+            Vector3f y_axis = Vector3f(0, 1, 0);
+            Vector3f z_axis = Vector3f(0, 0, 1);
+            player_obj.insert("position_x", QJsonValue::fromVariant(position[0]));
+            player_obj.insert("position_y", QJsonValue::fromVariant(position[1]));
+            player_obj.insert("position_z", QJsonValue::fromVariant(position[2]));
+            player_obj.insert("x_axis_x", QJsonValue::fromVariant(x_axis[0]));
+            player_obj.insert("x_axis_y", QJsonValue::fromVariant(x_axis[1]));
+            player_obj.insert("x_axis_z", QJsonValue::fromVariant(x_axis[2]));
+            player_obj.insert("y_axis_x", QJsonValue::fromVariant(y_axis[0]));
+            player_obj.insert("y_axis_y", QJsonValue::fromVariant(y_axis[1]));
+            player_obj.insert("y_axis_z", QJsonValue::fromVariant(y_axis[2]));
+            player_obj.insert("z_axis_x", QJsonValue::fromVariant(z_axis[0]));
+            player_obj.insert("z_axis_y", QJsonValue::fromVariant(z_axis[1]));
+            player_obj.insert("z_axis_z", QJsonValue::fromVariant(z_axis[2]));
+            player_obj.insert("id", QJsonValue::fromVariant(i.id));
+        }
+
+
         QJsonObject obj;
         obj.insert("asteroids", asteroid_array);
+        obj.insert("players", player_array);
         array.push_back(obj);
 
         QJsonDocument res(array);
+        qDebug() << res;
         int size = res.toJson().size();
         j.socket->write((char*)&size, 4);
         j.socket->write(res.toJson());

@@ -195,7 +195,7 @@ void tcpclient::process_fight_init(QJsonObject recv_obj)
         m_physicsEngine->addDestroyable(asteroid);
     }
 
-    QJsonArray player_arr = recv_obj["player"].toArray();
+    QJsonArray player_arr = recv_obj["players"].toArray();
     for(auto player_value : player_arr)
     {
         QJsonObject player_object = player_value.toObject();

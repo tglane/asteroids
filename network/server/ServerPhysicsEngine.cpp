@@ -34,11 +34,12 @@ std::list<std::pair<int, int>> ServerPhysicsEngine::detect_collisions()
     while (b_it != m_bullets.end())
     {
         PhysicalBullet::Ptr b = b_it->second;
-        std::cout << "bullet " << b->get_id() << std::endl;
         // Check for collisions with present objects
         p_it = m_objects.begin();
         while (p_it != m_objects.end())
         {
+
+            std::cout << "bullet" << b->get_id() << "ast " << p_it->second->get_id() << std::endl;
             if (p_it->second->collision(b->getPosition(), b->radius()))
             {
                 // Mark bulled as killed
