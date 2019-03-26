@@ -711,14 +711,14 @@ Player::Ptr DataModel::getPlayerByID(int i)
     if(m_players.empty())
     {
         std::cerr << "Playerliste ist leer, es kann noch kein spieler gefunden werden" << std::endl;
-        return Player::Ptr(new Player(1));
+        return Player::Ptr(new Player(-1));
     }
     std::map<int, Player::Ptr>::iterator it = m_players.find(i);
     // Player in Liste?
     if(m_players.end() == it)
     {
         std::cerr << "Spieler wurde anhand von ID nicht gefunden" << std::endl;
-        return Player::Ptr(new Player(1));
+        return Player::Ptr(new Player(-1));
     }
     return it->second;
 }
