@@ -32,7 +32,7 @@ AsteroidField::AsteroidField(int quantity)
                 Randomizer::instance()->getRandomVertex(1000),          // Position
                 0,        // Mass
                 0,
-                Randomizer::instance()->getRandomNumber(0, 0.05),          // Speed
+                0,          // Speed
                 0,          // Acceleration
                 Randomizer::instance()->getRandomNumber(20, 100),         // Radius
                 next_id++
