@@ -241,13 +241,14 @@ void MainWindow2D::updatePlanetColor(){
 
 void MainWindow2D::colonize(bool click)
 {
+    // now you may end your round
+    ui->NextRound->setVisible(true);
+
     Planet::Ptr p = m_model->getPlanetFromId(currentPlanet);
 
     m_model->setStartPlanet(p);
 
     ui->Colonize->setVisible(false);
-    std::cout << "Colonize!" << std::endl;
-    std::cout<<currentPlanet<<std::endl;
     MyEllipse* otherEllipse = getEllipseById(currentPlanet);
     QPixmap otherpix("../models/surface/my2.jpg");
     otherEllipse->myBrush = QBrush(otherpix);
@@ -395,15 +396,21 @@ void MainWindow2D::updatePlanetInfo(int id)
         ui->ShipOrdersValue->setVisible(false);
     } else {
         // Enable entsprechende Felder, wenn Planet besessen wird
-        ui->SendShip->setVisible(true);
-        ui->BuildMine->setVisible(true);
-        ui->BuildShip->setVisible(true);
-        ui->SendShipNumber->setVisible(true);
-        ui->DestionationPlanet->setVisible(true);
-        ui->MineOrdersLabel->setVisible(true);
-        ui->MineOrdersValue->setVisible(true);
+        if (p->getShips() > 0)
+        {
+            ui->SendShip->setVisible(true);
+            ui->SendShipNumber->setVisible(true);
+            ui->DestionationPlanet->setVisible(true);
+        } else {
+            ui->SendShip->setVisible(false);
+            ui->SendShipNumber->setVisible(false);
+            ui->DestionationPlanet->setVisible(false);
+        }
+        
         ui->ShipOrdersLabel->setVisible(true);
         ui->ShipOrdersValue->setVisible(true);
+        ui->MineOrdersLabel->setVisible(true);
+        ui->MineOrdersValue->setVisible(true);
 
         /* Schiffe und Minen können nur mit genügend Rubinen gekauft werden */
         if (m_model->getSelfPlayer()->getRubin() < m_model->getShipCost())
@@ -470,6 +477,7 @@ void MainWindow2D::initPlanets()
 {
     if (!map_created)
     {
+        ui->NextRound->setVisible(false);
         QPen outlinePenHighlight(Qt::gray);
         outlinePenHighlight.setWidth(1);
 
