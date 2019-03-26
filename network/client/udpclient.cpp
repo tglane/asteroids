@@ -6,7 +6,6 @@ udpclient::udpclient(int id, QString ip, int port, QObject *parent)
  : QObject(parent)
 {
     m_id = id;
-
     m_ip = ip;
 
     socket = std::make_shared<QUdpSocket>(this);
@@ -76,6 +75,8 @@ void udpclient::send_position(asteroids::Vector<float> position, asteroids::Vect
 
     /* Send own position data to server */
     socket->writeDatagram(data, QHostAddress(m_ip), 1235);
+
+    send_not_acknowledged();
 }
 
 void udpclient::readyRead()
@@ -302,21 +303,22 @@ void udpclient::createNewBulletFromPackage(int recv_seq_nr, int recv_id, char* d
 void udpclient::recv_ack(int recv_seq_nr, int recv_id)
 {
     recv_id = recv_id >> 24;
-    if(recv_id == m_id)
-    {
-        m_not_acknowledged.erase(recv_seq_nr);
-    }
+    m_not_acknowledged.erase(recv_seq_nr);
 }
 
 void udpclient::send_not_acknowledged()
 {
-    for(auto it = m_not_acknowledged.begin(); it != m_not_acknowledged.end(); it++)
+    std::cout << m_not_acknowledged.size() << std::endl;
+    for(auto it = m_not_acknowledged.begin(); it != m_not_acknowledged.end(); )
     {
         if((seq_number - it->first) > 50)
         {
-            m_not_acknowledged.erase(it->first);
+            it = m_not_acknowledged.erase(it);
         }
-
-        //socket->writeDatagram(it->second, QHostAddress(m_ip), 1235);
+        else
+        {
+            socket->writeDatagram(it->second, QHostAddress(m_ip), 1235);
+            it++;
+        }
     }
 }
