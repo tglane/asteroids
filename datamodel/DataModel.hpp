@@ -126,7 +126,19 @@ public:
      */
     QJsonDocument createJson(Player::Ptr player);
 
+    /**
+     * @brief creates QJsonobject representation of given Battle
+     * @param battle the battle to be made into a json document 
+     * @return QJsonobject representation of given Battle
+     */
     QJsonObject createBattleJson(Battle::Ptr battle);
+
+    /**
+     * @brief reads a given qjsondocument and creates an instance of a battle
+     * @param battle the Qjsondocument from which a battle should be read and created
+     * @return The battle that was saved in the json document
+     */
+    Battle::Ptr readBattleJson(QJsonObject battle);
 
     /**
      * OBSOLETE

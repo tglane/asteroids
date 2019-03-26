@@ -454,6 +454,26 @@ void DataModel::findBattles()
     }
 }
 
+int DataModel::getIDFromPlanet(Planet::Ptr planet)
+{
+    // go over all planets in planets
+    for(int i = 0; i < ((int) m_planets.size()); i++)
+    {
+        // Get planet with index i
+        Planet::Ptr mapPlanet = m_planets.find(i)->second;
+        // If they're the same planets correct planet has been found
+        if(mapPlanet->getName() == planet->getName())
+        {
+            return i;
+        }
+    }
+    
+    // If we get to this point, the planet was not found in the map of all planets
+    std::cerr << "Achtung, die ID des Planeten " << planet->getName() << "wurde nicht gefunden"; 
+    std::cerr << "Es wurde ID 0 ausgegeben" << std::endl; 
+    return 0;
+}
+
 QJsonDocument DataModel::createJson(Player::Ptr player)
 {
     // main QJson object in the document
@@ -523,11 +543,134 @@ QJsonDocument DataModel::createJson(Player::Ptr player)
     return theDocument;
 }
 
-QJsonObject createBattleJson(Battle::Ptr battle)
+QJsonObject DataModel::createBattleJson(Battle::Ptr battle)
 {
     // main QJson object in the document
     QJsonObject main;
+    
+    main.insert("locationID", getIDFromPlanet(battle->m_location));
+    main.insert("playerID1", battle->m_player1->getIdentity());
+    main.insert("playerID2", battle->m_player2->getIdentity());
+    main.insert("numberShips1", battle->m_numberShips1);
+    main.insert("numberShips2", battle->m_numberShips2);
+    main.insert("numberShipsLost1", battle->m_numberShipsLost1);
+    main.insert("numberShipsLost2", battle->m_numberShipsLost2);
+    main.insert("invaderWon", battle->FightResultInvader);
+
     return main;
+}
+
+Battle::Ptr DataModel::readBattleJson(QJsonObject battle)
+{
+    //Json objekt soll nicht leer sein 
+    if (battle.isEmpty())
+    {
+        std::cerr << "Input QJsondocument in readBattleJson not a proper qjsondocument" << std::endl;
+        return Battle::Ptr();
+    }
+
+    Planet::Ptr location;
+    Player::Ptr player1;
+    Player::Ptr player2;
+    int numberShips1;
+    int numberShips2;
+    int numberShipsLost1;
+    int numberShipsLost2;
+    bool invaderWon;
+
+    // Iterator für das gegebene json objekt
+	QJsonObject::const_iterator it;
+
+    //locationId
+    if(it.key() != "locationID")
+    {
+        //wrong key at this point
+        std::cerr << "Something is wrong in given QJsondocument at locationID" << std::endl;
+        return Battle::Ptr();
+    } 
+    //read value at this point
+    location = getPlanetFromId(it.value().toInt());
+    //move on iterator
+    it++;
+
+    //Player1
+    if(it.key() != "playerID1")
+    {
+        std::cerr << "Something is wrong in given QJsondocument at playerID1" << std::endl;
+        return Battle::Ptr();
+    } 
+    player1 = getPlayerByID(it.value().toInt());
+    it++;
+
+    //Player2
+    if(it.key() != "playerID2")
+    {
+        std::cerr << "Something is wrong in given QJsondocument at playerID2" << std::endl;
+        return Battle::Ptr();
+    } 
+    player2 = getPlayerByID(it.value().toInt());
+    it++;
+
+    //numberShips1
+    if(it.key() != "numberShips1")
+    {
+        std::cerr << "Something is wrong in given QJsondocument at numberShips1" << std::endl;
+        return Battle::Ptr();
+    } 
+    numberShips1 = it.value().toInt();
+    it++;
+
+    //numberShips2
+    if(it.key() != "numberShips2")
+    {
+        std::cerr << "Something is wrong in given QJsondocument at numberShips2" << std::endl;
+        return Battle::Ptr();
+    } 
+    numberShips2 = it.value().toInt();
+    it++;
+
+    //numberShipsLost1
+    if(it.key() != "numberShipsLost1")
+    {
+        std::cerr << "Something is wrong in given QJsondocument at numberShipsLost1" << std::endl;
+        return Battle::Ptr();
+    } 
+    numberShipsLost1 = it.value().toInt();
+    it++;
+
+    //numberShipsLost2
+    if(it.key() != "numberShipsLost2")
+    {
+        std::cerr << "Something is wrong in given QJsondocument at numberShipsLost2" << std::endl;
+        return Battle::Ptr();
+    } 
+    numberShipsLost2 = it.value().toInt();
+    it++;
+
+    //invaderWon
+    if(it.key() != "invaderWon")
+    {
+        std::cerr << "Something is wrong in given QJsondocument at invaderWon" << std::endl;
+        return Battle::Ptr();
+    } 
+    invaderWon = it.value().toBool();
+    it++;
+    
+    Battle::Ptr createdBattle(new Battle(location, player1, player2, numberShips1, numberShips2, invaderWon));
+    createdBattle->m_numberShipsLost1 = numberShipsLost1;
+    createdBattle->m_numberShipsLost2 = numberShipsLost2;
+
+    return createdBattle;
+    /*
+	for (it = battle.constBegin(); it != battle.constEnd(); it++)
+	{
+		if(it.key() == "locationID")
+        {
+            
+        } 
+    }
+    */
+    
 }
 
 /*
@@ -639,26 +782,6 @@ void DataModel::BattleReport()
         }
     }
     m_battles.clear();
-}
-
-int DataModel::getIDFromPlanet(Planet::Ptr planet)
-{
-    // go over all planets in planets
-    for(int i = 0; i < ((int) m_planets.size()); i++)
-    {
-        // Get planet with index i
-        Planet::Ptr mapPlanet = m_planets.find(i)->second;
-        // If they're the same planets correct planet has been found
-        if(mapPlanet->getName() == planet->getName())
-        {
-            return i;
-        }
-    }
-    
-    // If we get to this point, the planet was not found in the map of all planets
-    std::cerr << "Achtung, die ID des Planeten " << planet->getName() << "wurde nicht gefunden"; 
-    std::cerr << "Es wurde ID 0 ausgegeben" << std::endl; 
-    return 0;
 }
 
 int DataModel::getIDFromPlanetName(std::string name){
