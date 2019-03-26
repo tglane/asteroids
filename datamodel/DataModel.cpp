@@ -16,11 +16,25 @@ DataModel::DataModel(std::string filename) : m_players(), m_planets(), m_edges()
 
     // enemy/ies that run the programm on other devices
     // information from network is needed
-    m_enemy = Player::Ptr(new Player());
-    addPlayer(m_enemy);
+    //m_enemy = Player::Ptr(new Player());
+    
 
     // when networking issues are solved the map is loaded later
     getUniverse(filename);
+
+    Planet::Ptr Test = getPlanetFromId(5);
+ 	Planet::Ptr Test2 = getPlanetFromId(6);
+	Planet::Ptr Test3 = getPlanetFromId(7);
+	m_enemy = Player::Ptr(new Player(1,3000,0));
+	
+    Test->setOwner(m_enemy);
+    Test2->setOwner(m_enemy);
+    Test3->setOwner(m_enemy);
+    Test3->addShips(3);
+	m_enemy->addPlanet(Test);
+	m_enemy->addPlanet(Test2);
+	m_enemy->addPlanet(Test3);
+    addPlayer(m_enemy);
 }
 
 void DataModel::getUniverse(std::string filename)
@@ -83,7 +97,7 @@ bool DataModel::endOfRound()
     m_self->PrintPlanetsList();
     m_enemy->PrintPlanetsList();
     BattleReport();
-    //WinCondition();
+    WinCondition();
     m_self->PrintPlanetsList();
     m_enemy->PrintPlanetsList();
 
@@ -250,6 +264,7 @@ void DataModel::calculateFinance(Player::Ptr Player)
   
 void DataModel::startGame()
 {
+    emit initMap();
 
 }
 

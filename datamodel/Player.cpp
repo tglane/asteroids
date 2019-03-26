@@ -21,7 +21,7 @@ Player::Player(int identity, int rubin, int ships) : m_planets()
 	m_identity = identity;
 	m_rubin = rubin;
 	m_ships = ships;
-	m_name = "Slave of the Universe";
+	m_name = "Thanos";
 }
 
 void Player::setPlanetsList(std::list<std::shared_ptr<Planet>> planets)
