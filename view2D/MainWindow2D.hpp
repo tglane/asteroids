@@ -44,12 +44,16 @@ public:
      */
     ~MainWindow2D();
 
+    /**
+     * @brief update all displayed information if a planet is choosen
+     */
     void updatePlanetInfo(int id);
-    
-    void initMap();
 
 public slots:
 
+    /**
+     * @brief update all displayed information about the player
+     */
     void updatePlayerInfo();
 
     /**
@@ -98,14 +102,21 @@ public slots:
     void sendShips(bool click);
 
     /**
-     * @brief   Is calle when exit Button is pressed, 
+     * @brief   Is called when exit Button is pressed, 
      */
     void exitGame(bool click);
 
+    /**
+     * @brief   returns an ellipse to a given id
+     */
     MyEllipse* getEllipseById(int id);
 
     void updatePlanetColor();
 
+    /**
+     * @brief   draw the map of planets and the edges between them;
+     *          should only be executed once
+     */
     void initPlanets();
 
 
