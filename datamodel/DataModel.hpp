@@ -15,6 +15,10 @@
 #include <QJsonDocument>
 #include <QString>
 #include <QStackedWidget>
+<<<<<<< HEAD
+=======
+
+>>>>>>> e8ee9cf29f9d4e755c9d05d0ae5c544411574138
 
 
 #include "MoveOrder.hpp"
@@ -39,6 +43,10 @@ namespace asteroids{
 class DataModel : public QObject
 {
     Q_OBJECT
+<<<<<<< HEAD
+=======
+
+>>>>>>> e8ee9cf29f9d4e755c9d05d0ae5c544411574138
 
 public:
 
@@ -161,10 +169,21 @@ public:
 signals:
     void updateInfo();
 
+    int getShipCost() { return Shipcost; }
+
+    int getMineCost() { return Minecost; }
+
+    int getResult() { return result; }
+
+signals:
+    void updateInfo();
+
+
 private:
 
     // 0 = not finished, 1 = victory, 2 = defeat
     int result = 0;
+
 
     int m_playerid;
 

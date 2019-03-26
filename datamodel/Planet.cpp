@@ -28,6 +28,10 @@ Planet::Planet(std::string name, int posx, int posy, int mines, int rubin) : m_n
 	m_invader = nullptr;
 	m_invaderShips = 0;
 	m_ships_ordered = 0;
+<<<<<<< HEAD
+=======
+
+>>>>>>> e8ee9cf29f9d4e755c9d05d0ae5c544411574138
 }
 
 

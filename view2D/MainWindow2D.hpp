@@ -117,10 +117,6 @@ private:
 
     std::map<int, MyEllipse*> view_planets;
 
-    //std::map<int, QGraphicsTextItem*> m_fighterAmount;
-
-    std::map<std::pair<int,int>, QGraphicsTextItem*> m_fighterAmount;
-
     int currentPlanet;
 
     int currentYear;

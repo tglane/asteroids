@@ -189,6 +189,10 @@ namespace asteroids
 		int m_ships;
 		int m_invaderShips;
 		int m_ships_ordered;
+<<<<<<< HEAD
+=======
+
+>>>>>>> e8ee9cf29f9d4e755c9d05d0ae5c544411574138
 
 		std::shared_ptr<Player> m_owner;
 		std::shared_ptr<Player> m_invader;

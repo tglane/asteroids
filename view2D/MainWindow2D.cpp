@@ -40,74 +40,7 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
     ui->SendShipNumber->setStyleSheet("background-color:#220044");
     ui->DestionationPlanet->setStyleSheet("background-color:#220044");
 
-    QGraphicsOpacityEffect * effect = new QGraphicsOpacityEffect(ui->ContextMenue);
-    effect->setOpacity(0.7);
-    ui->ContextMenue->setGraphicsEffect(effect);
-    effect = new QGraphicsOpacityEffect(ui->Fight);
-    effect->setOpacity(0.7);
-    ui->Fight->setGraphicsEffect(effect);
-    QPen outlinePenHighlight(Qt::gray);
-    outlinePenHighlight.setWidth(1);
-
-    std::map<int, Planet::Ptr> planets = m_model->getPlanets();
-
-    resizeEvent(NULL);
-
-    int planet_size = 20;
-
-    //Erstelle die Elipsen und füge sie in die Map und in die QGraphicsScene ein 
-    for(int i = 0; i < (int)planets.size(); i++){
-        Planet::Ptr p = planets.at(i);
-        view_planets[i] = new MyEllipse(p->getPosX(), p->getPosY());
-        view_planets[i]->setZValue(1);
-        scene->addItem(view_planets[i]);
-        QVariant ellipse_ID(i);
-        view_planets[i]->setData(1, ellipse_ID);
-        connect(view_planets[i], SIGNAL(show_planetInfo(int)), this, SLOT(choose_planet(int)));
-
-        QGraphicsTextItem * io = new QGraphicsTextItem;
-        io->setPos(p->getPosX() + planet_size/2,p->getPosY() - planet_size/2);
-        io->setPlainText(QString::fromStdString(p->getName()));
-        io->setDefaultTextColor(Qt::white);
-        io->setFont(QFont("Helvetica",5));
-        io->setZValue(1);
-        scene->addItem(io);
-
-        // m_FighterAmount[i] = new QGraphicsTextItem;
-        // m_FighterAmount[i]->setPos(p->getPosX() + planet_size/2+6,p->getPosY() - planet_size/2 + 6);
-        // m_FighterAmount[i]->setPlainText(QString::fromStdString("✈"+p->get));
-        // m_FighterAmount[i]->setDefaultTextColor(Qt::white);
-        // m_FighterAmount[i]->setFont(QFont("Helvetica",5));
-        // m_FighterAmount[i]->setZValue(1);
-        // scene->addItem(m_FighterAmount[i]);
-    }
-
-    std::list<std::pair<int,int>> edges = m_model->getEdges();
-    for(std::list<std::pair<int,int>>::iterator it=edges.begin(); it != edges.end(); ++it){
-        std::pair<int,int> coordinates = *it;
-        int pos_1 = coordinates.first;
-        int pos_2 = coordinates.second;
-        Planet::Ptr p1 = planets.at(pos_1);
-        Planet::Ptr p2 = planets.at(pos_2);
-        scene->addLine(p1->getPosX()+planet_size/2, 
-                    p1->getPosY()+planet_size/2, 
-                    p2->getPosX()+planet_size/2, 
-                    p2->getPosY()+planet_size/2, 
-                    outlinePenHighlight);
-        //Für die anzahl der zurzeit gesendeten Flüge die unterwegs sind
-        QGraphicsTextItem *qgti = new QGraphicsTextItem;
-        qgti->setPos((p1->getPosX() + p2->getPosX())/2,(p1->getPosY() + p2->getPosY())/2);
-        qgti->setPlainText(QString::fromStdString(""));
-        qgti->setDefaultTextColor(Qt::white);
-        qgti->setFont(QFont("Helvetica",5));
-        qgti->setZValue(1);
-        scene->addItem(qgti);
-        if(pos_1<=pos_2){
-            m_fighterAmount[std::make_pair(pos_1,pos_2)]=qgti;
-        }else{
-            m_fighterAmount[std::make_pair(pos_2,pos_1)]=qgti;
-        }
-    }
+    
 
     //Öffne das Fighter-Minigame testweise in neuem Fenster
     QPushButton* m_button = ui->Fight;
@@ -259,16 +192,6 @@ void MainWindow2D::endOfRound(bool click)
     updatePlayerInfo();
     updatePlanetInfo(currentPlanet);
 
-    //Anzeige der aktuellen Flüge löschen
-    std::list<std::pair<int,int>> edges = m_model->getEdges();
-    for(std::list<std::pair<int,int>>::iterator it=edges.begin(); it != edges.end(); ++it){
-        std::pair<int,int> coordinates = *it;
-        int pos_1 = coordinates.first;
-        int pos_2 = coordinates.second;
-        QGraphicsTextItem *qgti = m_fighterAmount[std::make_pair(pos_1,pos_2)];
-        qgti->setPlainText(QString::fromStdString(""));
-        qgti->update();
-    }
     // TODO wait for response of server, block the window until all players are ready
 }
 
@@ -348,38 +271,11 @@ void MainWindow2D::sendShips(bool click)
     std::cout << "Send Ship from " << m_model->getPlanetFromId(currentPlanet)->getName() << 
         " to " << ui->DestionationPlanet->currentText().toStdString() << std::endl;
     
-    std::string planetname = ui->DestionationPlanet->currentText().toStdString();
-    Planet::Ptr to = m_model->getPlanetFromName(planetname);
+    Planet::Ptr to = m_model->getPlanetFromName(ui->DestionationPlanet->currentText().toStdString());
     Planet::Ptr from = m_model->getPlanetFromId(currentPlanet);
-    int ships = ui->SendShipNumber->currentText().toInt();
-    m_model->moveShips(from, to, ships);
+    m_model->moveShips(from, to, ui->SendShipNumber->currentText().toInt());
     updatePlanetInfo(currentPlanet);
     updatePlayerInfo();
-        //Flüge an Kanten hinzufügen
-        int pos_1 = currentPlanet;
-        int pos_2 = m_model->getIDFromPlanetName(planetname);
-        if(pos_1<=pos_2){
-            QGraphicsTextItem *qgti = m_fighterAmount[std::make_pair(pos_1,pos_2)];
-            QString qs = qgti->toPlainText();
-            std::string s = qs.toStdString();
-            int fighter = atoi(s.c_str());
-            fighter+=ships;
-            std::cout<<fighter<<std::endl;
-            std::string ships_string = std::to_string(fighter);
-            qgti->setPlainText(QString::fromStdString(ships_string));
-            qgti->update();
-        }else{
-            QGraphicsTextItem *qgti = m_fighterAmount[std::make_pair(pos_2,pos_1)];
-            QString qs = qgti->toPlainText();
-            std::string s = qs.toStdString();
-            int fighter = atoi(s.c_str());
-            fighter+=ships;
-            std::cout<<fighter<<std::endl;
-            std::string ships_string = std::to_string(fighter);
-            qgti->setPlainText(QString::fromStdString(ships_string));
-            qgti->update();
-        }
-    
 }
 
 void MainWindow2D::exitGame(bool click)

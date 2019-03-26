@@ -153,6 +153,7 @@ bool DataModel::buyMine(Planet::Ptr selectedPlanet, Player::Ptr m_self)
     std::cout << selectedPlanet->getMines() << std::endl;
     /*test druck ende*/
     if(selectedPlanet->getMinesHidden() + selectedPlanet->getMinesBuild() < selectedPlanet->getMines())
+    if(selectedPlanet->getMinesHidden()  + selectedPlanet->getMinesBuild() < selectedPlanet->getMines())
     {
         int Player_Rubin_Number = m_self->getRubin();
         if(Player_Rubin_Number >= Minecost)
@@ -280,6 +281,7 @@ void DataModel::switchWindow(int Id)
         ((MainWindow*)m_widgets[Id])->activate(true);
     }
     m_mainWindow->setCurrentWidget(m_widgets[Id]);
+    
 }
 
 
