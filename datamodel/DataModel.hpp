@@ -156,8 +156,23 @@ public:
 
     int getResult() { return result; }
 
+    /**
+     * @brief adds player to map of players
+     * @param Player to be added
+     */
+    void addPlayer(Player::Ptr player);
+
+    /**
+     * @brief returns the Player which holds the given id
+     * @param i The ID of the player to be found
+     * @return the player which holds this id, if player with given is nonexistant 
+     *         new player with id -1 is returned
+     */
+    Player::Ptr getPlayerByID(int i);
+
 signals:
     void updateInfo();
+    void initMap();
 
 public slots:
 

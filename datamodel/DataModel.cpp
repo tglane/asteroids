@@ -12,13 +12,29 @@ DataModel::DataModel(std::string filename) : m_players(), m_planets(), m_edges()
 {
     // player which runs this programm
     m_self = Player::Ptr(new Player(1,3000,0));
+    addPlayer(m_self);
 
     // enemy/ies that run the programm on other devices
     // information from network is needed
-    m_enemy = Player::Ptr(new Player());
+    //m_enemy = Player::Ptr(new Player());
+    
 
     // when networking issues are solved the map is loaded later
     getUniverse(filename);
+
+    Planet::Ptr Test = getPlanetFromId(5);
+ 	Planet::Ptr Test2 = getPlanetFromId(6);
+	Planet::Ptr Test3 = getPlanetFromId(7);
+	m_enemy = Player::Ptr(new Player(1,3000,0));
+	
+    Test->setOwner(m_enemy);
+    Test2->setOwner(m_enemy);
+    Test3->setOwner(m_enemy);
+    Test3->addShips(3);
+	m_enemy->addPlanet(Test);
+	m_enemy->addPlanet(Test2);
+	m_enemy->addPlanet(Test3);
+    addPlayer(m_enemy);
 }
 
 void DataModel::getUniverse(std::string filename)
@@ -81,7 +97,7 @@ bool DataModel::endOfRound()
     m_self->PrintPlanetsList();
     m_enemy->PrintPlanetsList();
     BattleReport();
-    //WinCondition();
+    WinCondition();
     m_self->PrintPlanetsList();
     m_enemy->PrintPlanetsList();
 
@@ -248,6 +264,7 @@ void DataModel::calculateFinance(Player::Ptr Player)
   
 void DataModel::startGame()
 {
+    emit initMap();
 
 }
 
@@ -290,7 +307,7 @@ bool DataModel::updateAll(QJsonDocument &update) {
 
 		int id = 0;
 
-		int rubin = 0;
+		//int rubin = 0;
 		std::string name;
 		std::list<Planet::Ptr> planets;
 		Player::Ptr player;
@@ -614,7 +631,7 @@ void DataModel::BattleReport()
 int DataModel::getIDFromPlanet(Planet::Ptr planet)
 {
     // go over all planets in planets
-    for(int i = 0; i < m_planets.size(); i++)
+    for(int i = 0; i < ((int) m_planets.size()); i++)
     {
         // Get planet with index i
         Planet::Ptr mapPlanet = m_planets.find(i)->second;
@@ -633,7 +650,6 @@ int DataModel::getIDFromPlanet(Planet::Ptr planet)
 
 int DataModel::getIDFromPlanetName(std::string name){
     return m_planetNameToId[name];
-
 }
 
 void DataModel::WinCondition()
@@ -656,6 +672,7 @@ void DataModel::WinCondition()
     if(NumberOfPlanets == CountOfPlanets)
     {
         std::cout << "Gewonnen" <<std::endl;
+        switchWindow(DataModel::END);
 
 
     }
@@ -681,6 +698,29 @@ void DataModel::BattlePhase()
 
     }
 
+}
+
+void DataModel::addPlayer(Player::Ptr player)
+{
+    m_players.insert(std::pair<int, Player::Ptr>(player->getIdentity(),player));
+}
+
+Player::Ptr DataModel::getPlayerByID(int i)
+{
+    // Playerliste leer?
+    if(m_players.empty())
+    {
+        std::cerr << "Playerliste ist leer, es kann noch kein spieler gefunden werden" << std::endl;
+        return Player::Ptr(new Player(-1));
+    }
+    std::map<int, Player::Ptr>::iterator it = m_players.find(i);
+    // Player in Liste?
+    if(m_players.end() == it)
+    {
+        std::cerr << "Spieler wurde anhand von ID nicht gefunden" << std::endl;
+        return Player::Ptr(new Player(-1));
+    }
+    return it->second;
 }
 
 DataModel::~DataModel()
