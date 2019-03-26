@@ -49,6 +49,10 @@ public:
     /// Handles keyboard input and updates the physics engine
     void step(map<Qt::Key, bool>& keyStates);
 
+    void drawHealth(QPainter& painter, int totalHealthPlayer, int totalHealthEnemy);
+
+    void drawMinimap(QPainter& painter, Hittable::Ptr player, Hittable::Ptr enemy);
+
 protected:
 
     /// Init OpenGL
@@ -59,9 +63,6 @@ protected:
 
     /// Handle new window dimenions
     virtual void resizeGL(int w, int h) override;
-
-    /// Handle mouse movement
-    virtual void mouseMoveEvent(QMouseEvent* event) override;
 
 private:
 
@@ -84,14 +85,30 @@ private:
     PhysicsEngine::Ptr          m_physicsEngine;
 
     /// timer for correct speed with low fps
-    QTime                       m_timer;
+    QTime                       m_fpsTimer;
+
+    QTime                       m_startTimer;
 
     Controller                  m_controller;
 
     /// Udpclient to send pos/mov/rot to the server
     udpclient                   m_client;
 
+    bool                        m_started;
+
     bool                        m_gameOver;
+
+    bool                        m_outOfBound;
+
+    bool                        m_useGamepad;
+
+    QPixmap                     m_cockpit;
+
+    QPixmap                     m_playerHeart;
+
+    QPixmap                     m_enemyHeart;
+
+    QPixmap                     m_emptyHeart;
 };
 
 #endif

@@ -88,6 +88,11 @@ public:
 
     int get_id() { return m_id; };
 
+    virtual int radius()
+    {
+        return (int) m_radius;
+    }
+
 
 protected:
     unsigned int id;

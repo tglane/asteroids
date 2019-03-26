@@ -14,6 +14,8 @@ Q_OBJECT
 
 public:
 
+    explicit Gamepad(QObject *parent = nullptr);
+
     bool init();
 
     bool isAPressed() const;
@@ -23,6 +25,10 @@ public:
     double getLeftX() const;
 
     double getLeftY() const;
+
+    bool isR1Pressed() const;
+
+    bool isL1Pressed() const;
 
 private:
 
@@ -35,6 +41,10 @@ private:
     double m_leftX;
 
     double m_leftY;
+
+    bool m_l1Pressed;
+
+    bool m_r1Pressed;
 
 };
 

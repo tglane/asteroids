@@ -39,11 +39,7 @@ bool BasePhysicsEngine::process(int elapsed_time)
     map<int, PhysicalObject::Ptr>::iterator p_it;
     map<int, PhysicalBullet::Ptr>::iterator b_it;
 
-    bool gameOver = false;
-    if (m_hittables.size() == 1)
-    {
-        gameOver = true;
-    }
+    bool gameOver = m_hittables.size() == 1;
 
     // Move all objects
     for (p_it = m_objects.begin(); p_it != m_objects.end(); p_it++)

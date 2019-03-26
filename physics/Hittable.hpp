@@ -2,7 +2,9 @@
 #define CPP18_ASTEROIDS_HITTABLE_HPP
 
 #include <QtCore/QTime>
+#include <rendering/Asteroid.hpp>
 #include "rendering/Bullet.hpp"
+#include "physics/PhysicalBullet.hpp"
 #include "Transformable.hpp"
 
 namespace asteroids {
@@ -24,7 +26,9 @@ public:
 
     int getHealth();
 
-    bool hit(PhysicalBullet& b);
+    bool hitBullet(PhysicalBullet& b);
+
+    bool hitAsteroid(PhysicalObject& p);
 
     void outOfBound();
 

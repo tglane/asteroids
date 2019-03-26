@@ -11,7 +11,6 @@
  */
 
 #include "PhysicsEngine.hpp"
-
 #include <iostream>
 using namespace std;
 
@@ -51,7 +50,6 @@ void PhysicsEngine::render()
     }
 
     m_particles.render();
-    //cout << m_bullets.size() << endl;
 }
 
 void PhysicsEngine::process_collisions(int id_one, int id_two)

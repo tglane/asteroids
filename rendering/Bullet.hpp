@@ -50,6 +50,7 @@ public:
      * @brief Renders the bullet via glutSolidSphere.
      */
 	void render() override;
+
 private:
     Sphere m_sphere;
 
