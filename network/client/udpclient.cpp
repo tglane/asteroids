@@ -194,7 +194,6 @@ void udpclient::send_bullet(asteroids::Vector3f position, asteroids::Vector3f xA
     char seqn_char[sizeof(int)];
     memcpy(seqn_char, &seq_number, sizeof(seqn_char));
     data.append(seqn_char, sizeof(seqn_char));
-    seq_number++;
 
     /* Append id of player to packet */
     int id = m_id << 24;
@@ -207,13 +206,15 @@ void udpclient::send_bullet(asteroids::Vector3f position, asteroids::Vector3f xA
                                                                                      xAxis, 0, id));
     m_physicsEngine->addBullet(bullet);
 
+    asteroids::Vector3f corrected_bull_pos(position - zAxis * 42);
+
     /* Append position to packet */
     char vec_char[sizeof(float)];
-    memcpy(vec_char, &position[0], sizeof(vec_char));
+    memcpy(vec_char, &corrected_bull_pos[0], sizeof(vec_char));
     data.append(vec_char, sizeof(vec_char));
-    memcpy(vec_char, &position[1], sizeof(vec_char));
+    memcpy(vec_char, &corrected_bull_pos[1], sizeof(vec_char));
     data.append(vec_char, sizeof(vec_char));
-    memcpy(vec_char, &position[2], sizeof(vec_char));
+    memcpy(vec_char, &corrected_bull_pos[2], sizeof(vec_char));
     data.append(vec_char, sizeof(vec_char));
 
     /* Append velocity to package */
@@ -229,6 +230,7 @@ void udpclient::send_bullet(asteroids::Vector3f position, asteroids::Vector3f xA
 
     /* Add new bullet to not acknowledged */
     m_not_acknowledged.insert(std::pair<int, QByteArray>(seq_number, data));
+    seq_number++;
 }
 
 void udpclient::recv_collision(int recv_seq_nr, char* data)
@@ -308,7 +310,6 @@ void udpclient::recv_ack(int recv_seq_nr, int recv_id)
 
 void udpclient::send_not_acknowledged()
 {
-    std::cout << m_not_acknowledged.size() << std::endl;
     for(auto it = m_not_acknowledged.begin(); it != m_not_acknowledged.end(); )
     {
         if((seq_number - it->first) > 50)
@@ -317,7 +318,10 @@ void udpclient::send_not_acknowledged()
         }
         else
         {
-            socket->writeDatagram(it->second, QHostAddress(m_ip), 1235);
+            if((seq_number - it->first) > 10)
+            {
+                socket->writeDatagram(it->second, QHostAddress(m_ip), 1235);
+            }
             it++;
         }
     }

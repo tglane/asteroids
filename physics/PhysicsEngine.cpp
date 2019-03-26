@@ -54,12 +54,25 @@ void PhysicsEngine::render()
 
 void PhysicsEngine::process_collisions(int id_one, int id_two)
 {
-    check_id_type(id_one);
-    check_id_type(id_two);
+    int first = check_id_type(id_one);
+    int second = check_id_type(id_two);
     m_particles.update();
+
+    /* Add life to player when he hits an asteroid */
+    if(first == 1 && second == 0)
+    {
+        int shooter_id = id_two & 0xFF000000;
+        if(m_hittables.count(shooter_id) == 1)
+        {
+            int health = m_hittables[shooter_id]->getHealth();
+            if (m_hittables[shooter_id]->getHealth() < 10) {
+                m_hittables[shooter_id]->setHealth(health + 1);
+            }
+        }
+    }
 }
 
-void PhysicsEngine::check_id_type(int id_to_check)
+int PhysicsEngine::check_id_type(int id_to_check)
 {
     if((id_to_check >> 24) == 0)
     {
@@ -69,6 +82,7 @@ void PhysicsEngine::check_id_type(int id_to_check)
             m_particles.addEffect(ParticleEffect::createExplosionSphere(m_objects[id_to_check]->getPosition()));
             m_objects.erase(id_to_check);
         }
+        return 0; // Means Asteroid
     }
     else
     {
@@ -80,6 +94,7 @@ void PhysicsEngine::check_id_type(int id_to_check)
                 m_bullets[id_to_check]->destroy();
                 m_bullets.erase(id_to_check);
             }
+            return 1; // Means Bullet
         }
         else
         {
@@ -97,6 +112,7 @@ void PhysicsEngine::check_id_type(int id_to_check)
                     m_hittables.erase(id_to_check);
                 }
             }
+            return 2; // Means Player
         }
     }
 }
