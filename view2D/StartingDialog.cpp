@@ -46,11 +46,11 @@ void StartingDialog::startGame(bool click)
     if(name != "" && name != "Please insert a name!")
     {
         ui->ServerAddress->setText("192.168.0.42");
-        m_model->getSelfPlayer()->setPlayerName(name);
+        //m_model->getSelfPlayer()->setPlayerName(name);
         // Call switching mechanism of datamodel
 
         //m_model->switchWindow(DataModel::MAIN2D);
-        this->setVisible(false);
+        //this->setVisible(false);
         /* emit signal to establish tcp connection */
         emit connect_to_server(name, ui->ServerAddress->text().toStdString());
 

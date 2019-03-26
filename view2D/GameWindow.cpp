@@ -21,9 +21,9 @@ GameWindow::GameWindow(DataModel::Ptr model, QWidget* parent) :
 
 
     // Insert 3D Window into Stacked Widget
-    MainWindow* fightwindow = new MainWindow("../models/level.xml");
+    /*MainWindow* fightwindow = new MainWindow("../models/level.xml");
     ui->centralwidget->addWidget(fightwindow);
-    m_model->addWidget(DataModel::MAIN3D, fightwindow);
+    m_model->addWidget(DataModel::MAIN3D, fightwindow);*/
 
     StartingDialog* startingDialog = new StartingDialog(m_model);
     ui->centralwidget->addWidget(startingDialog);
