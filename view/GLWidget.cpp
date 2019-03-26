@@ -14,7 +14,10 @@ GLWidget::GLWidget(QWidget* parent) :
     m_cockpit("../models/cockpit.png"),
     m_playerHeart("../models/player_heart.png"),
     m_enemyHeart("../models/enemy_heart.png"),
-    m_emptyHeart("../models/empty_heart.png") {}
+    m_emptyHeart("../models/empty_heart.png")
+{
+
+}
 
 void GLWidget::setLevelFile(const std::string& file)
 {
@@ -110,6 +113,8 @@ void GLWidget::initializeGL()
     // This makes our buffer swap syncronized with the monitor's vertical refresh
     SDL_GL_SetSwapInterval(1);
 
+    // TODO: Alles in den Konstruktor
+
     // Load level
     LevelParser lp(m_levelFile, m_enemy, m_skybox, m_asteroidField);
     m_enemy->fixArrow();
@@ -130,6 +135,9 @@ void GLWidget::initializeGL()
     m_physicsEngine->addHittable(player_ptr);
     Hittable::Ptr enemy_ptr = std::static_pointer_cast<Hittable>(m_enemy);
     m_physicsEngine->addHittable(enemy_ptr);
+
+    test = std::make_shared<Missile>(enemy_ptr);
+    test->fixMissile();
 
     // Add asteroids to physics engine
     std::list<Asteroid::Ptr> asteroids;
@@ -164,6 +172,8 @@ void GLWidget::paintGL()
     {
         m_enemy->render();
     }
+
+    test->render();
 
     glDisable(GL_DEPTH_TEST);
 
@@ -218,7 +228,7 @@ void GLWidget::step(map<Qt::Key, bool>& keyStates)
 
     // Get keyboard states and handle model movement
     m_gameOver = m_physicsEngine->process(elapsed_time) || m_gameOver;
-
+    m_started = true; // TODO: raus
     if (!m_started)
     {
         if (m_startTimer.elapsed() >= 4000)
@@ -239,6 +249,28 @@ void GLWidget::step(map<Qt::Key, bool>& keyStates)
             else
             {
                 m_controller.keyControl(keyStates, player_ptr, m_physicsEngine, elapsed_time);
+            }
+
+            test->run();
+            if (keyStates[Qt::Key_R])
+            {
+                test->move(Transformable::FORWARD, 10);
+            }
+            if (keyStates[Qt::Key_T])
+            {
+                test->rotate(Transformable::PITCH_UP, 0.05);
+            }
+            if (keyStates[Qt::Key_F])
+            {
+                test->rotate(Transformable::YAW_COUNTERCLOCKWISE, 0.05);
+            }
+            if (keyStates[Qt::Key_G])
+            {
+                test->rotate(Transformable::PITCH_DOWN, 0.05);
+            }
+            if (keyStates[Qt::Key_H])
+            {
+                test->rotate(Transformable::YAW_CLOCKWISE, 0.05);
             }
 
             Vector3f player_pos = m_camera->getPosition();

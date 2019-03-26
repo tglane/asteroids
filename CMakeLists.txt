@@ -150,6 +150,7 @@ set(ASTEROID_SOURCES
     view/Camera.cpp
     view/Controller.cpp
     Gamepad.cpp
+    Missile.cpp
 )
 
 set(ASTEROID_MOCS

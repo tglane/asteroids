@@ -26,6 +26,7 @@
 #include "util/AsteroidField.hpp"
 #include "physics/PhysicsEngine.hpp"
 #include "view/Controller.hpp"
+#include "Missile.hpp"
 
 using namespace asteroids;
 using std::shared_ptr;
@@ -81,6 +82,8 @@ private:
     
     /// Physics 
     PhysicsEngine::Ptr          m_physicsEngine;
+
+    Missile::Ptr test;
 
     /// timer for correct speed with low fps
     QTime                       m_fpsTimer;

@@ -12,7 +12,7 @@ const vector<Transformable::RotationTransform> Controller::mapToAngle = {Transfo
                                                                          Transformable::YAW_COUNTERCLOCKWISE,
                                                                          Transformable::YAW_CLOCKWISE};
 const int Controller::framesToMaxSpeed = 30;
-const float Controller::minSpeed = 100;
+const float Controller::minSpeed = 0; // TODO: wieder richtig auf 100!
 const float Controller::maxSpeed = 1000;
 const int Controller::framesToMaxRot = 30;
 const float Controller::maxRot = 0.05;
