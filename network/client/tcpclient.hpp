@@ -13,6 +13,7 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <memory>
+#include <view/MainWindow.hpp>
 
 #include "physics/PhysicsEngine.hpp"
 #include "view/Camera.hpp"
@@ -68,6 +69,8 @@ private:
     QString m_player_name;
 
     QString m_server_ip;
+
+    std::shared_ptr<asteroids::MainWindow> m_mainwindow;
 
     asteroids::DataModel::Ptr m_datamodel;
 

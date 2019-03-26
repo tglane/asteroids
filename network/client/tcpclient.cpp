@@ -15,13 +15,13 @@ tcpclient::tcpclient(asteroids::DataModel::Ptr datamodel, QObject* parent)
     connect(m_socket.get(), SIGNAL(connected()), this, SLOT(send_init()));
     connect(m_socket.get(), SIGNAL(readyRead()), this, SLOT(recv_json()));
 
-    connect_to_server("ASDF", "127.0.0.1");
+    connect_to_server("ASDF", "192.168.0.42");
 }
 
 void tcpclient::connect_to_server(string name, string server_ip)
 {
-    m_player_name = QString::fromStdString("asdf");
-    m_server_ip = QString::fromStdString("127.0.0.1");
+    m_player_name = QString::fromStdString(name);
+    m_server_ip = QString::fromStdString(server_ip);
 
     m_socket->connectToHost(m_server_ip, 1235);
 }
@@ -89,11 +89,12 @@ void tcpclient::recv_json()
     {
         m_udpclient = std::shared_ptr<udpclient>(new udpclient(m_datamodel->getSelfPlayer()->getIdentity(), m_server_ip));
         m_udpclient->init_fight_slot(recv_array[2].toObject());
+        std::cout << "fight iniz" << std::endl;
 
-
-        asteroids::MainWindow mainWindow("../models/level.xml");
-        //mainWindow.showFullScreen();
-        mainWindow.show();
+        m_mainwindow = std::make_shared<asteroids::MainWindow>("../models/level.xml");
+        //m_mainwindow->showFullScreen();
+        m_mainwindow->show();
+        m_mainwindow->ui->openGLWidget->setClient(m_udpclient);
     }
     else
     {
