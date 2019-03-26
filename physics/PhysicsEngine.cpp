@@ -90,6 +90,7 @@ void PhysicsEngine::check_id_type(int id_to_check)
                 if((health -1) % 10 == 0)
                 {
                     m_particles.addEffect(ParticleEffect::createExplosionSphere(m_hittables[id_to_check]->getPosition()));
+                    m_particles.addEffect(ParticleEffect::createExplosionRing(m_hittables[id_to_check]->getPosition()));
                 }
                 if((health - 1) == 0)
                 {
