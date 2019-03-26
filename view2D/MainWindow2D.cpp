@@ -54,6 +54,18 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
     palette.setBrush(QPalette::Background, bkgnd);
     this->setPalette(palette);
 
+
+    // Set sidebar look
+    QGraphicsOpacityEffect * effect = new QGraphicsOpacityEffect(ui->ContextMenue);
+    effect->setOpacity(0.7);
+    ui->ContextMenue->setGraphicsEffect(effect);
+    effect = new QGraphicsOpacityEffect(ui->Fight);
+    effect->setOpacity(0.7);
+    ui->Fight->setGraphicsEffect(effect);
+    QPen outlinePenHighlight(Qt::gray);
+    outlinePenHighlight.setWidth(1);
+
+
     // Add the matching event to the next-round-button
     QPushButton* m_nextRound = ui->NextRound;
     connect(m_nextRound, SIGNAL(clicked(bool)), this, SLOT(endOfRound(bool)));
@@ -303,17 +315,7 @@ void MainWindow2D::updatePlayerInfo()
         new QLabel(QString::number(m_model->getSelfPlayer()->getShips())));
 
 
-
-    QGraphicsOpacityEffect * effect = new QGraphicsOpacityEffect(ui->ContextMenue);
-    effect->setOpacity(0.7);
-    ui->ContextMenue->setGraphicsEffect(effect);
-    effect = new QGraphicsOpacityEffect(ui->Fight);
-    effect->setOpacity(0.7);
-    ui->Fight->setGraphicsEffect(effect);
-    QPen outlinePenHighlight(Qt::gray);
-    outlinePenHighlight.setWidth(1);
-
-
+    // HIER WEITER SCHAUEN
     std::map<int, Planet::Ptr> planets = m_model->getPlanets();
 
     int planet_size = 20;
@@ -442,6 +444,13 @@ void MainWindow2D::updatePlanetInfo(int id)
     ui->MineOrdersValue->setText(QString::number(p->getMinesHidden()));
     ui->ShipOrdersValue->setText(QString::number(p->getShipsOrdered()));
 }
+
+
+void MainWindow2D::initMap()
+{
+
+}
+
 
 void MainWindow2D::showPlayerName()
 {

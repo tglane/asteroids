@@ -45,6 +45,8 @@ public:
     ~MainWindow2D();
 
     void updatePlanetInfo(int id);
+    
+    void initMap();
 
 public slots:
 
@@ -103,6 +105,7 @@ public slots:
     MyEllipse* getEllipseById(int id);
 
     void showPlayerName();
+
 
 private:
 
