@@ -448,6 +448,26 @@ void DataModel::findBattles()
     }
 }
 
+int DataModel::getIDFromPlanet(Planet::Ptr planet)
+{
+    // go over all planets in planets
+    for(int i = 0; i < ((int) m_planets.size()); i++)
+    {
+        // Get planet with index i
+        Planet::Ptr mapPlanet = m_planets.find(i)->second;
+        // If they're the same planets correct planet has been found
+        if(mapPlanet->getName() == planet->getName())
+        {
+            return i;
+        }
+    }
+    
+    // If we get to this point, the planet was not found in the map of all planets
+    std::cerr << "Achtung, die ID des Planeten " << planet->getName() << "wurde nicht gefunden"; 
+    std::cerr << "Es wurde ID 0 ausgegeben" << std::endl; 
+    return 0;
+}
+
 QJsonDocument DataModel::createJson(Player::Ptr player)
 {
     // main QJson object in the document
@@ -517,10 +537,20 @@ QJsonDocument DataModel::createJson(Player::Ptr player)
     return theDocument;
 }
 
-QJsonObject createBattleJson(Battle::Ptr battle)
+QJsonObject DataModel::createBattleJson(Battle::Ptr battle)
 {
     // main QJson object in the document
     QJsonObject main;
+    
+    main.insert("locationID", getIDFromPlanet(battle->m_location));
+    main.insert("playerID1", battle->m_player1->getIdentity());
+    main.insert("playerID2", battle->m_player2->getIdentity());
+    main.insert("numberShips1", battle->m_numberShips1);
+    main.insert("numberShips2", battle->m_numberShips2);
+    main.insert("numberShipsLost1", battle->m_numberShipsLost1);
+    main.insert("numberShipsLost2", battle->m_numberShipsLost2);
+    main.insert("invaderWon", battle->FightResultInvader);
+
     return main;
 }
 
@@ -633,26 +663,6 @@ void DataModel::BattleReport()
         }
     }
     m_battles.clear();
-}
-
-int DataModel::getIDFromPlanet(Planet::Ptr planet)
-{
-    // go over all planets in planets
-    for(int i = 0; i < ((int) m_planets.size()); i++)
-    {
-        // Get planet with index i
-        Planet::Ptr mapPlanet = m_planets.find(i)->second;
-        // If they're the same planets correct planet has been found
-        if(mapPlanet->getName() == planet->getName())
-        {
-            return i;
-        }
-    }
-    
-    // If we get to this point, the planet was not found in the map of all planets
-    std::cerr << "Achtung, die ID des Planeten " << planet->getName() << "wurde nicht gefunden"; 
-    std::cerr << "Es wurde ID 0 ausgegeben" << std::endl; 
-    return 0;
 }
 
 int DataModel::getIDFromPlanetName(std::string name){

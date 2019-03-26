@@ -128,6 +128,10 @@ public:
      */
     QJsonDocument createJson(Player::Ptr player);
 
+    /**
+     * @brief creates QJsonobject representation of given Battle
+     * @return QJsonobject representation of given Battle
+     */
     QJsonObject createBattleJson(Battle::Ptr battle);
 
     /**
