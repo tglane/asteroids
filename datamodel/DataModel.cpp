@@ -25,7 +25,7 @@ DataModel::DataModel(std::string filename) : m_players(), m_planets(), m_edges()
     Planet::Ptr Test = getPlanetFromId(5);
  	Planet::Ptr Test2 = getPlanetFromId(6);
 	Planet::Ptr Test3 = getPlanetFromId(7);
-	m_enemy = Player::Ptr(new Player(1,3000,0));
+	m_enemy = Player::Ptr(new Player(2,3000,0));
 	
     Test->setOwner(m_enemy);
     Test2->setOwner(m_enemy);
@@ -143,7 +143,7 @@ bool DataModel::moveShips(Planet::Ptr from, Planet::Ptr to, int numShips) {
 
 	std::cout << "MoveOrder " << numShips << " Ships from Planet " << from->getName() << " to Planet " << to->getName() << std::endl;
 
-	if(from->getShips() >= numShips)
+	if(from->getShips() >= numShips && numShips > 0)
 	{
 		MoveOrder::Ptr move = MoveOrder::Ptr(new MoveOrder(from, to, numShips));
 		m_self->putListMoveOrder(move);
@@ -517,6 +517,13 @@ QJsonDocument DataModel::createJson(Player::Ptr player)
     return theDocument;
 }
 
+QJsonObject createBattleJson(Battle::Ptr battle)
+{
+    // main QJson object in the document
+    QJsonObject main;
+    return main;
+}
+
 /*
 QJsonDocument createJsonOrders(Player::Ptr player)
 {
@@ -676,7 +683,6 @@ void DataModel::WinCondition()
 
 
     }
-
 }
 
 void DataModel::BattlePhase()
