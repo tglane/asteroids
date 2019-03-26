@@ -164,6 +164,10 @@ public:
      */
     void addPlayer(Player::Ptr player);
 
+    /**
+     * @brief returns the Player which holds the given id
+     * @return the player which holds this id, if player with given id nonexistant 
+     */
     Player::Ptr getPlayerByID(int i);
 
 signals:
