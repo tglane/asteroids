@@ -159,6 +159,8 @@ QJsonObject createJsonPlayerStatus(Player::Ptr player);
     void BattlePhase();
     void setOwnID(int id) { m_playerid = id; }
 
+    int getOwnID() { return m_playerid; }
+
     /**
      * @brief   Loads all the planets from the given file
      */

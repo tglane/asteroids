@@ -87,7 +87,7 @@ void tcpclient::recv_json()
     }
     else if (recv_array[0] == "fight_init" && (m_state == client_state::END_ROUND || m_state == client_state::FIGHT) )
     {
-        m_udpclient = std::shared_ptr<udpclient>(new udpclient(m_datamodel->getSelfPlayer()->getIdentity(), m_server_ip));
+        m_udpclient = std::shared_ptr<udpclient>(new udpclient(m_datamodel->getOwnID(), m_server_ip));
         m_udpclient->init_fight_slot(recv_array[2].toObject());
         std::cout << "fight iniz" << std::endl;
 
