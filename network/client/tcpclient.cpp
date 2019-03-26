@@ -4,6 +4,7 @@
 
 #include <QDebug>
 #include "tcpclient.hpp"
+#include "view/MainWindow.hpp"
 
 tcpclient::tcpclient(asteroids::DataModel::Ptr datamodel, QObject* parent)
     : m_datamodel(std::move(datamodel))
@@ -13,6 +14,8 @@ tcpclient::tcpclient(asteroids::DataModel::Ptr datamodel, QObject* parent)
 
     connect(m_socket.get(), SIGNAL(connected()), this, SLOT(send_init()));
     connect(m_socket.get(), SIGNAL(readyRead()), this, SLOT(recv_json()));
+
+    connect_to_server("ASDF", "127.0.0.1");
 }
 
 void tcpclient::connect_to_server(string name, string server_ip)
@@ -84,7 +87,13 @@ void tcpclient::recv_json()
     }
     else if (recv_array[0] == "fight_init" && (m_state == client_state::END_ROUND || m_state == client_state::FIGHT) )
     {
-        emit fight_init_signal(recv_array[2].toObject());
+        m_udpclient = std::shared_ptr<udpclient>(new udpclient(m_datamodel->getSelfPlayer()->getIdentity(), m_server_ip));
+        m_udpclient->init_fight_slot(recv_array[2].toObject());
+
+
+        asteroids::MainWindow mainWindow("../models/level.xml");
+        //mainWindow.showFullScreen();
+        mainWindow.show();
     }
     else
     {
@@ -97,7 +106,7 @@ void tcpclient::process_init_res(QJsonObject recv_obj)
     m_datamodel->setOwnID(recv_obj["id"].toInt());
     m_datamodel->getUniverse(recv_obj["map"].toString().toStdString());
 
-    m_datamodel->switchWindow(asteroids::DataModel::MAIN2D);
+    //m_datamodel->switchWindow(asteroids::DataModel::MAIN2D);
 
     m_state = client_state::WAIT;
 
@@ -113,6 +122,8 @@ void tcpclient::process_init_res(QJsonObject recv_obj)
     m_socket->flush();
 
     m_state = client_state::READY;
+
+    send_ready();
 }
 
 void tcpclient::process_strat_init(QJsonArray recv_array)
@@ -131,6 +142,9 @@ void tcpclient::process_strat_init(QJsonArray recv_array)
     }
 
     m_state = client_state::ROUND;
+
+    send_ready();
+    m_state = client_state::END_ROUND;
 }
 
 void tcpclient::process_state(QJsonArray recv_array)

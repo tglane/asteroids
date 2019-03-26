@@ -21,7 +21,7 @@ public:
 
     using Ptr = std::shared_ptr<udpclient>;
 
-    explicit udpclient(QObject *parent = 0);
+    udpclient(int id, QString ip, QObject *parent = 0);
 
     /**
      * @brief Sends own position, flight direction and rotation to the server

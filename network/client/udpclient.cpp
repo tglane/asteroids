@@ -2,14 +2,12 @@
 #include "udpclient.hpp"
 #include <iostream>
 
-udpclient::udpclient(QObject *parent)
+udpclient::udpclient(int id, QString ip, QObject *parent)
  : QObject(parent)
 {
-    // enter id -- only for testing
-    std::cout << "Enter player_id (int):" << std::endl;
-    std::cin >> m_id;
+    m_id = id;
 
-    m_ip = "192.168.0.42";
+    m_ip = ip;
 
     socket = std::make_shared<QUdpSocket>(this);
     seq_number = 1;

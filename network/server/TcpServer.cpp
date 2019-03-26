@@ -104,7 +104,8 @@ void TcpServer::handle_ready(TcpClient& client, QJsonDocument& doc)
         ready_count++;
         handle_state(client, doc);
         if (clients.size() == ready_count) {
-            m_battle_list = m_datamodel->findBattles();
+            //m_battle_list = m_datamodel->findBattles();
+            //m_battle_list = std::vector<Battle::Ptr>{Battle::Ptr(nullptr)};
 
             state = FIGHT;
             battle_count = 0;
@@ -164,16 +165,18 @@ void TcpServer::fightEnd(int id, int health_left) {
 }
 
 void TcpServer::send_battle() {
-    if (battle_count < m_battle_list.size()) {
+    //if (battle_count < m_battle_list.size()) {
         // ToDo
         fight_init();
         battle_count++;
 
+        /*
     } else {
         state = ROUND;
         qDebug() << "state changed: ROUND";
         send_state();
     }
+        */
 }
 
 void TcpServer::handle_init(TcpClient& client, QJsonDocument& doc)

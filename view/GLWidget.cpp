@@ -116,20 +116,12 @@ void GLWidget::initializeGL()
     LevelParser lp(m_levelFile, m_enemy, m_skybox, m_asteroidField);
     m_enemy->fixArrow();
 
-    if (m_client.get_id() == 42) {
-        m_enemy->setId(43 << 24);
-    } else {
-        m_enemy->setId(42 << 24);
-    }
-    m_enemy->setHealth(10);
 
 
     // Setup physics
     m_physicsEngine = make_shared<PhysicsEngine>();
 
     m_camera = make_shared<Camera>();
-    m_camera->setId(m_client.get_id() << 24);
-    m_camera->setHealth(10);
     m_camera->setPosition(Vector3f(2500, 0, 0));
     m_camera->setXAxis(Vector3f(-1, 0, 0));
     m_camera->setYAxis(Vector3f(0, -1, 0));
@@ -150,13 +142,28 @@ void GLWidget::initializeGL()
     }
 
     //TODO start udpclient
-    m_client.setOtherFighter(m_enemy); //added
-    m_client.setPhysicsPtr(m_physicsEngine); //added
 
     m_useGamepad = m_controller.gamepadAvailable();
 
     m_fpsTimer.start();
     m_startTimer.start();
+}
+
+void GLWidget::setClient(udpclient::Ptr client) {
+    m_client = client;
+
+    if (m_client->get_id() == 42) {
+        m_enemy->setId(43 << 24);
+    } else {
+        m_enemy->setId(42 << 24);
+    }
+    m_enemy->setHealth(10);
+
+    m_camera->setId(m_client->get_id() << 24);
+    m_camera->setHealth(10);
+
+    m_client->setOtherFighter(m_enemy); //added
+    m_client->setPhysicsPtr(m_physicsEngine); //added
 }
 
 void GLWidget::paintGL()
@@ -246,11 +253,11 @@ void GLWidget::step(map<Qt::Key, bool>& keyStates)
 
             if (m_useGamepad)
             {
-                m_controller.gamepadControl(player_ptr, m_physicsEngine, m_client, elapsed_time);
+                m_controller.gamepadControl(player_ptr, m_physicsEngine, *m_client, elapsed_time);
             }
             else
             {
-                m_controller.keyControl(keyStates, player_ptr, m_physicsEngine, m_client, elapsed_time);
+                m_controller.keyControl(keyStates, player_ptr, m_physicsEngine, *m_client, elapsed_time);
             }
 
             Vector3f player_pos = m_camera->getPosition();
@@ -296,7 +303,7 @@ void GLWidget::step(map<Qt::Key, bool>& keyStates)
         }
     }
 
-    m_client.send_position(m_camera->getPosition(), Vector3f(), m_camera->getXAxis(), m_camera->getYAxis(), m_camera->getZAxis());
+    m_client->send_position(m_camera->getPosition(), Vector3f(), m_camera->getXAxis(), m_camera->getYAxis(), m_camera->getZAxis());
 
     // Trigger update, i.e., redraw via paintGL()
     this->update();

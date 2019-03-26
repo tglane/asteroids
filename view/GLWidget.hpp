@@ -53,6 +53,7 @@ public:
 
     void drawMinimap(QPainter& painter, Hittable::Ptr player, Hittable::Ptr enemy);
 
+    void setClient(udpclient::Ptr client);
 protected:
 
     /// Init OpenGL
@@ -92,7 +93,7 @@ private:
     Controller                  m_controller;
 
     /// Udpclient to send pos/mov/rot to the server
-    udpclient                   m_client;
+    udpclient::Ptr               m_client;
 
     bool                        m_started;
 
