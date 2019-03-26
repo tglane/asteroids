@@ -238,6 +238,8 @@ private:
 
     // List of upcoming battles
     std::list<std::shared_ptr<Battle>> m_battles;
+
+    std::string m_filename;
 };
 
 }

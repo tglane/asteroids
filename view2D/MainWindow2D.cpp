@@ -48,61 +48,8 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
     effect = new QGraphicsOpacityEffect(ui->Fight);
     effect->setOpacity(0.7);
     ui->Fight->setGraphicsEffect(effect);
-    QPen outlinePenHighlight(Qt::gray);
-    outlinePenHighlight.setWidth(1);
-
-
-    std::map<int, Planet::Ptr> planets = m_model->getPlanets();
-
-    int planet_size = 20;
-
-    //Erstelle die Elipsen und füge sie in die Map und in die QGraphicsScene ein 
-    for(int i = 0; i < (int)planets.size(); i++){
-        Planet::Ptr p = planets.at(i);
-        view_planets[i] = new MyEllipse(p->getPosX(), p->getPosY());
-        view_planets[i]->setZValue(1);
-        scene->addItem(view_planets[i]);
-        QVariant ellipse_ID(i);
-        view_planets[i]->setData(1, ellipse_ID);
-        connect(view_planets[i], SIGNAL(show_planetInfo(int)), this, SLOT(choose_planet(int)));
-
-        QGraphicsTextItem * io = new QGraphicsTextItem;
-        io->setPos(p->getPosX() + planet_size/2,p->getPosY() - planet_size/2);
-        io->setPlainText(QString::fromStdString(p->getName()));
-        io->setDefaultTextColor(Qt::white);
-        io->setFont(QFont("Helvetica",5));
-        io->setZValue(1);
-        scene->addItem(io);
-    }
-
-    std::list<std::pair<int,int>> edges = m_model->getEdges();
-
-    //Linien einzeichnen
-    for(std::list<std::pair<int,int>>::iterator it=edges.begin(); it != edges.end(); ++it){
-        std::pair<int,int> coordinates = *it;
-        int pos_1 = coordinates.first;
-        int pos_2 = coordinates.second;
-        Planet::Ptr p1 = planets.at(pos_1);
-        Planet::Ptr p2 = planets.at(pos_2);
-        scene->addLine(p1->getPosX()+planet_size/2, 
-                    p1->getPosY()+planet_size/2, 
-                    p2->getPosX()+planet_size/2, 
-                    p2->getPosY()+planet_size/2, 
-                    outlinePenHighlight);
-        //Für die anzahl der zurzeit gesendeten Flüge die unterwegs sind
-        QGraphicsTextItem *qgti = new QGraphicsTextItem;
-        qgti->setPos((p1->getPosX() + p2->getPosX())/2,(p1->getPosY() + p2->getPosY())/2);
-        qgti->setPlainText(QString::fromStdString(""));
-        qgti->setDefaultTextColor(Qt::white);
-        qgti->setFont(QFont("Helvetica",5));
-        qgti->setZValue(1);
-        scene->addItem(qgti);
-        if(pos_1<=pos_2){
-            m_fighterAmount[std::make_pair(pos_1,pos_2)]=qgti;
-        }else{
-            m_fighterAmount[std::make_pair(pos_2,pos_1)]=qgti;
-        }
-    }
+    
+    //initPlanets();
 
     //Öffne das Fighter-Minigame testweise in neuem Fenster
     QPushButton* m_button = ui->Fight;
@@ -156,10 +103,13 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
 
     connect(m_model.get(), SIGNAL(updateInfo()), this, SLOT(updatePlayerInfo()));
 
+    connect(m_model.get(), SIGNAL(initMap()), this, SLOT(initPlanets()));
+
 }
 
 void MainWindow2D::resizeEvent(QResizeEvent* event){
-    ui->Map->fitInView(0, 500, 500, 1, Qt::KeepAspectRatio);
+    ui->Map->fitInView(0, 0, scene_width, scene_height, Qt::KeepAspectRatio);
+    std::cout << ui->Map->viewport()->width() << " " << ui->Map->viewport()->height() << std::endl;
 }
 
 MainWindow2D::~MainWindow2D() 
@@ -517,17 +467,74 @@ void MainWindow2D::updatePlanetInfo(int id)
     ui->ShipOrdersValue->setText(QString::number(p->getShipsOrdered()));
 }
 
-
-void MainWindow2D::initMap()
+void MainWindow2D::initPlanets()
 {
+    if (!map_created)
+    {
+        QPen outlinePenHighlight(Qt::gray);
+        outlinePenHighlight.setWidth(1);
 
+        std::map<int, Planet::Ptr> planets = m_model->getPlanets();
+
+        int planet_size = 20;
+
+        //Erstelle die Elipsen und füge sie in die Map und in die QGraphicsScene ein 
+        for(int i = 0; i < (int)planets.size(); i++){
+            Planet::Ptr p = planets.at(i);
+            view_planets[i] = new MyEllipse(p->getPosX(), p->getPosY());
+            view_planets[i]->setZValue(1);
+            scene->addItem(view_planets[i]);
+            QVariant ellipse_ID(i);
+            view_planets[i]->setData(1, ellipse_ID);
+            connect(view_planets[i], SIGNAL(show_planetInfo(int)), this, SLOT(choose_planet(int)));
+
+            QGraphicsTextItem * io = new QGraphicsTextItem;
+            io->setPos(p->getPosX() + planet_size/2,p->getPosY() - planet_size/2);
+            io->setPlainText(QString::fromStdString(p->getName()));
+            io->setDefaultTextColor(Qt::white);
+            io->setFont(QFont("Helvetica",5));
+            io->setZValue(1);
+            scene->addItem(io);
+        }
+
+        std::list<std::pair<int,int>> edges = m_model->getEdges();
+
+        //Linien einzeichnen
+        for(std::list<std::pair<int,int>>::iterator it=edges.begin(); it != edges.end(); ++it){
+            std::pair<int,int> coordinates = *it;
+            int pos_1 = coordinates.first;
+            int pos_2 = coordinates.second;
+            Planet::Ptr p1 = planets.at(pos_1);
+            Planet::Ptr p2 = planets.at(pos_2);
+            scene->addLine(p1->getPosX()+planet_size/2, 
+                        p1->getPosY()+planet_size/2, 
+                        p2->getPosX()+planet_size/2, 
+                        p2->getPosY()+planet_size/2, 
+                        outlinePenHighlight);
+            //Für die anzahl der zurzeit gesendeten Flüge die unterwegs sind
+            QGraphicsTextItem *qgti = new QGraphicsTextItem;
+            qgti->setPos((p1->getPosX() + p2->getPosX())/2,(p1->getPosY() + p2->getPosY())/2);
+            qgti->setPlainText(QString::fromStdString(""));
+            qgti->setDefaultTextColor(Qt::white);
+            qgti->setFont(QFont("Helvetica",5));
+            qgti->setZValue(1);
+            scene->addItem(qgti);
+            if(pos_1<=pos_2){
+                m_fighterAmount[std::make_pair(pos_1,pos_2)]=qgti;
+            }else{
+                m_fighterAmount[std::make_pair(pos_2,pos_1)]=qgti;
+            }
+        }
+        map_created = true;
+    } else {
+        std::cout << "Error MainWindow2D initPlanets: Versucht Map ein weiteres Mal zu zeichnen!" << std::endl;
+    }
 }
 
-
-void MainWindow2D::showPlayerName()
+void MainWindow2D::setMapSize(int width, int height)
 {
-    ui->SpielerInfoTable->setCellWidget(0, 1, 
-        new QLabel(QString::fromStdString(m_model->getSelfPlayer()->getPlayerName())));
+    scene_width = width;
+    scene_height = height;
 }
 
 }

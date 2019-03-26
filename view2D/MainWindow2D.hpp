@@ -104,12 +104,17 @@ public slots:
 
     MyEllipse* getEllipseById(int id);
 
-    void showPlayerName();
-
     void updatePlanetColor();
+
+    void initPlanets();
+
+    void setMapSize(int width, int height);
 
 
 private:
+
+    int scene_height;
+    int scene_width;
 
     /// QT UI of the window
     Ui::MainWindow2D* ui;
@@ -127,6 +132,8 @@ private:
     int currentPlanet;
 
     int currentYear;
+
+    bool map_created = false;
 };
 
 
