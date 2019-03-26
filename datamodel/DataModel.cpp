@@ -690,6 +690,11 @@ void DataModel::addPlayer(Player::Ptr player)
     m_players.insert(std::pair<int, Player::Ptr>(player->getIdentity(),player));
 }
 
+Player::Ptr DataModel::getPlayerByID(int i)
+{
+    return m_players.find(i)->second;
+}
+
 DataModel::~DataModel()
 {
 

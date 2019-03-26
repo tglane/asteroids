@@ -164,7 +164,7 @@ public:
      */
     void addPlayer(Player::Ptr player);
 
-    
+    Player::Ptr getPlayerByID(int i);
 
 signals:
     void updateInfo();
