@@ -39,7 +39,7 @@ private slots:
     void fightEnd(int id,int  health_left);
 
 private:
-    char last_id = 1;
+    char last_id = 42;
 
     ServerState state;
     QTcpServer server;

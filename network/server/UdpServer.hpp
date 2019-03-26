@@ -62,6 +62,7 @@ private:
 public:
     UdpServer();
     void add_client(int id, QHostAddress addr, int port, int health);
+    ServerPhysicsEngine& get_physics_engine() { return physics_engine; }
     void start();
 };
 
