@@ -49,7 +49,7 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
     effect->setOpacity(0.7);
     ui->Fight->setGraphicsEffect(effect);
     
-    initPlanets();
+    //initPlanets();
 
     //Öffne das Fighter-Minigame testweise in neuem Fenster
     QPushButton* m_button = ui->Fight;
@@ -108,7 +108,8 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
 }
 
 void MainWindow2D::resizeEvent(QResizeEvent* event){
-    ui->Map->fitInView(0, 0, scene_height, scene_width, Qt::KeepAspectRatio);
+    ui->Map->fitInView(0, 0, scene_width, scene_height, Qt::KeepAspectRatio);
+    std::cout << ui->Map->viewport()->width() << " " << ui->Map->viewport()->height() << std::endl;
 }
 
 MainWindow2D::~MainWindow2D() 
@@ -528,6 +529,12 @@ void MainWindow2D::initPlanets()
     } else {
         std::cout << "Error MainWindow2D initPlanets: Versucht Map ein weiteres Mal zu zeichnen!" << std::endl;
     }
+}
+
+void MainWindow2D::setMapSize(int width, int height)
+{
+    scene_width = width;
+    scene_height = height;
 }
 
 }

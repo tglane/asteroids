@@ -1,5 +1,6 @@
 #include "DataModel.hpp"
 #include "view/MainWindow.hpp"
+#include "view2D/MainWindow2D.hpp"
 #include <iostream>
 #include <fstream>
 #include <utility>
@@ -20,21 +21,8 @@ DataModel::DataModel(std::string filename) : m_players(), m_planets(), m_edges()
     
 
     // when networking issues are solved the map is loaded later
-    getUniverse(filename);
+    m_filename = filename;
 
-    Planet::Ptr Test = getPlanetFromId(5);
- 	Planet::Ptr Test2 = getPlanetFromId(6);
-	Planet::Ptr Test3 = getPlanetFromId(7);
-	m_enemy = Player::Ptr(new Player(2,3000,0));
-	
-    Test->setOwner(m_enemy);
-    Test2->setOwner(m_enemy);
-    Test3->setOwner(m_enemy);
-    Test3->addShips(3);
-	m_enemy->addPlanet(Test);
-	m_enemy->addPlanet(Test2);
-	m_enemy->addPlanet(Test3);
-    addPlayer(m_enemy);
 }
 
 void DataModel::getUniverse(std::string filename)
@@ -45,10 +33,11 @@ void DataModel::getUniverse(std::string filename)
 
     if(f.is_open())
     {
-        int numvertex, posx, posy, mines;
+        int numvertex, width, height, posx, posy, mines;
         std::string name;
 
-        f >> numvertex;
+        f >> numvertex >> width >> height;
+        ((strategy::MainWindow2D*)m_widgets[DataModel::MAIN2D])->setMapSize(width, height);
 
         // initialize all planets and add them to the map
         for(int i = 0; i < numvertex; i++)
@@ -264,6 +253,23 @@ void DataModel::calculateFinance(Player::Ptr Player)
   
 void DataModel::startGame()
 {
+    getUniverse(m_filename);
+
+    Planet::Ptr Test = getPlanetFromId(5);
+ 	Planet::Ptr Test2 = getPlanetFromId(6);
+	Planet::Ptr Test3 = getPlanetFromId(7);
+	m_enemy = Player::Ptr(new Player(2,3000,0));
+	
+    Test->setOwner(m_enemy);
+    Test2->setOwner(m_enemy);
+    Test3->setOwner(m_enemy);
+    Test3->addShips(3);
+	m_enemy->addPlanet(Test);
+	m_enemy->addPlanet(Test2);
+	m_enemy->addPlanet(Test3);
+    addPlayer(m_enemy);
+
+
     emit initMap();
 
 }
