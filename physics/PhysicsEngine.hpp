@@ -61,7 +61,7 @@ public:
     bool process(int elapsed_time);
 
     void process_collisions(int id_one, int id_two);
-    void check_id_type(int id_to_check);
+    int check_id_type(int id_to_check);
 
     /// Getter for current highest IDs
     int get_curr_bull_id() { return ++curr_bull_id; }
