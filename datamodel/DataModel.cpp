@@ -563,6 +563,7 @@ Battle::Ptr DataModel::readBattleJson(QJsonObject battle)
         return Battle::Ptr();
     }
 
+    //werte die in battle reingeschreiben werdne müssen
     Planet::Ptr location;
     Player::Ptr player1;
     Player::Ptr player2;
@@ -572,98 +573,82 @@ Battle::Ptr DataModel::readBattleJson(QJsonObject battle)
     int numberShipsLost2;
     bool invaderWon;
 
-    // Iterator für das gegebene json objekt
-	QJsonObject::const_iterator it;
+    //Anzahl der in der json datei gelesenen werte
+    int readLines = 0;
 
-    //locationId
-    if(it.key() != "locationID")
+    // iterieren über alle werte in der qjsondatei
+    for (QJsonObject::const_iterator it = battle.constBegin(); it != battle.constEnd(); it++)
     {
-        //wrong key at this point
-        std::cerr << "Something is wrong in given QJsondocument at locationID" << std::endl;
-        return Battle::Ptr();
-    } 
-    //read value at this point
-    location = getPlanetFromId(it.value().toInt());
-    //move on iterator
-    it++;
+        //locationId
+        if(it.key() == "locationID")
+        {
+            //read value at this point
+            location = getPlanetFromId(it.value().toInt());
+            readLines++;
+        } 
 
-    //Player1
-    if(it.key() != "playerID1")
-    {
-        std::cerr << "Something is wrong in given QJsondocument at playerID1" << std::endl;
-        return Battle::Ptr();
-    } 
-    player1 = getPlayerByID(it.value().toInt());
-    it++;
+        //Player1
+        if(it.key() == "playerID1")
+        {
+            player1 = getPlayerByID(it.value().toInt());
+            readLines++;
+        } 
 
-    //Player2
-    if(it.key() != "playerID2")
-    {
-        std::cerr << "Something is wrong in given QJsondocument at playerID2" << std::endl;
-        return Battle::Ptr();
-    } 
-    player2 = getPlayerByID(it.value().toInt());
-    it++;
+        //Player2
+        if(it.key() == "playerID2")
+        {
+            player2 = getPlayerByID(it.value().toInt());
+            readLines++;
+        } 
 
-    //numberShips1
-    if(it.key() != "numberShips1")
-    {
-        std::cerr << "Something is wrong in given QJsondocument at numberShips1" << std::endl;
-        return Battle::Ptr();
-    } 
-    numberShips1 = it.value().toInt();
-    it++;
+        //numberShips1
+        if(it.key() == "numberShips1")
+        {
+            numberShips1 = it.value().toInt();
+            readLines++;
+        } 
 
-    //numberShips2
-    if(it.key() != "numberShips2")
-    {
-        std::cerr << "Something is wrong in given QJsondocument at numberShips2" << std::endl;
-        return Battle::Ptr();
-    } 
-    numberShips2 = it.value().toInt();
-    it++;
+        //numberShips2
+        if(it.key() == "numberShips2")
+        {
+            numberShips2 = it.value().toInt();
+            readLines++;
+        } 
 
-    //numberShipsLost1
-    if(it.key() != "numberShipsLost1")
-    {
-        std::cerr << "Something is wrong in given QJsondocument at numberShipsLost1" << std::endl;
-        return Battle::Ptr();
-    } 
-    numberShipsLost1 = it.value().toInt();
-    it++;
+        //numberShipsLost1
+        if(it.key() == "numberShipsLost1")
+        {
+            numberShipsLost1 = it.value().toInt();
+            readLines++;
+        }
 
-    //numberShipsLost2
-    if(it.key() != "numberShipsLost2")
-    {
-        std::cerr << "Something is wrong in given QJsondocument at numberShipsLost2" << std::endl;
-        return Battle::Ptr();
-    } 
-    numberShipsLost2 = it.value().toInt();
-    it++;
+        //numberShipsLost2
+        if(it.key() == "numberShipsLost2")
+        {
+            numberShipsLost2 = it.value().toInt();
+            readLines++;
+        } 
 
-    //invaderWon
-    if(it.key() != "invaderWon")
+        if(it.key() == "invaderWon")
+        {
+            invaderWon = it.value().toBool();
+            readLines++;
+        }
+
+    }
+
+    //Not all necessary information 
+    if(readLines < 8)
     {
-        std::cerr << "Something is wrong in given QJsondocument at invaderWon" << std::endl;
+        std::cerr << "Not all necessary information have been read, returned battle not correct" << std::endl;
         return Battle::Ptr();
-    } 
-    invaderWon = it.value().toBool();
-    it++;
+    }
     
     Battle::Ptr createdBattle(new Battle(location, player1, player2, numberShips1, numberShips2, invaderWon));
     createdBattle->m_numberShipsLost1 = numberShipsLost1;
     createdBattle->m_numberShipsLost2 = numberShipsLost2;
 
     return createdBattle;
-    /*
-	for (it = battle.constBegin(); it != battle.constEnd(); it++)
-	{
-		if(it.key() == "locationID")
-        {
-            
-        } 
-    }
-    */
     
 }
 
