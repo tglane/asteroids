@@ -148,14 +148,7 @@ public:
      */
     int getIDFromPlanet(Planet::Ptr planet);
 
-    int getShipCost() { return Shipcost; }
-
-    int getMineCost() { return Minecost; }
-
-    int getResult() { return result; }
-
-signals:
-    void updateInfo();
+    void WinCondition();
 
     void BattlePhase();
 
