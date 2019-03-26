@@ -65,41 +65,42 @@ void tcpclient::send_init()
 
 void tcpclient::recv_json()
 {
-    int size;
-    m_socket->read((char*) &size, 4);
+    if(last_size == 0)
+    {
+        m_socket->read((char*) &last_size, 4);
+    }
 
-    QByteArray recv_data(m_socket->readAll());
-    QString recv_json(recv_data);
-    QJsonDocument json_doc = QJsonDocument::fromJson(recv_json.toUtf8());
-    QJsonArray recv_array = json_doc.array();
+    if(m_socket->bytesAvailable() == last_size)
+    {
+        QByteArray recv_data(m_socket->readAll());
+        QString recv_json(recv_data);
+        QJsonDocument json_doc = QJsonDocument::fromJson(recv_json.toUtf8());
+        QJsonArray recv_array = json_doc.array();
 
-    if(recv_array[0] == "init_res" && m_state == client_state::CONNECTING)
-    {
-        process_init_res(recv_array[1].toObject());
-    }
-    else if(recv_array[0] == "strat_init" && m_state == client_state::READY)
-    {
-        process_strat_init(recv_array);
-    }
-    else if(recv_array[0] == "state" && (m_state == client_state::END_ROUND || m_state == client_state::FIGHT))
-    {
-        process_state(recv_array);
-    }
-    else if (recv_array[0] == "fight_init" && (m_state == client_state::END_ROUND || m_state == client_state::FIGHT) )
-    {
-        m_udpclient = std::shared_ptr<udpclient>(new udpclient(m_datamodel->getOwnID(), m_server_ip, m_socket->localPort()));
-        m_udpclient->init_fight_slot(recv_array[2].toObject());
-        std::cout << "fight iniz" << std::endl;
+        if(recv_array[0] == "init_res" && m_state == client_state::CONNECTING)
+        {
+            process_init_res(recv_array[1].toObject());
+        }
+        else if(recv_array[0] == "strat_init" && m_state == client_state::READY)
+        {
+            process_strat_init(recv_array);
+        }
+        else if(recv_array[0] == "state" && (m_state == client_state::END_ROUND || m_state == client_state::FIGHT))
+        {
+            process_state(recv_array);
+        }
+        else if (recv_array[0] == "fight_init" && (m_state == client_state::END_ROUND || m_state == client_state::FIGHT) )
+        {
+            process_fight_init(recv_array[1].toObject());
+        }
+        else
+        {
+            std::cout << m_state << " | " << recv_array[0].toString().toStdString() << std::endl;
+        }
 
-        m_mainwindow = std::make_shared<asteroids::MainWindow>("../models/level.xml");
-        //m_mainwindow->showFullScreen();
-        m_mainwindow->show();
-        m_mainwindow->ui->openGLWidget->setClient(m_udpclient);
+        last_size = 0;
     }
-    else
-    {
-        std::cout << m_state << " | " << recv_array[0].toString().toStdString() << std::endl;
-    }
+
 }
 
 void tcpclient::process_init_res(QJsonObject recv_obj)
@@ -157,4 +158,61 @@ void tcpclient::process_state(QJsonArray recv_array)
     //TODO maybe not correct ---
     doc.setObject(recv_array[2].toObject());
     //m_datamodel->updateAll(doc);
+}
+
+void tcpclient::process_fight_init(QJsonObject recv_obj)
+{
+    /* Initialize the udp client for the connection during 3d fight */
+    m_udpclient = std::make_shared<udpclient>(m_datamodel->getOwnID(), m_server_ip, m_socket->localPort());
+    m_udpclient->init_fight_slot(recv_obj);
+    std::cout << "fight init" << std::endl;
+
+    /* Initialize new window for 3d part */
+    m_mainwindow = std::make_shared<asteroids::MainWindow>("../models/level.xml");
+    //m_mainwindow->showFullScreen();
+    m_mainwindow->show();
+    m_physicsEngine = m_mainwindow->ui->openGLWidget->getPhysicsEngine();
+
+    /* Parse fight_init package */
+    QJsonArray asteroids_arr = recv_obj["asteroids"].toArray();
+    for(auto asteroid_value : asteroids_arr)
+    {
+        QJsonObject asteroid_object = asteroid_value.toObject();
+        asteroids::Vector3f pos(asteroid_object["position_x"].toDouble(), asteroid_object["position_y"].toDouble(), asteroid_object["position_z"].toDouble());
+        asteroids::Vector3f xAxis(asteroid_object["x_axis_x"].toDouble(), asteroid_object["x_axis_y"].toDouble(), asteroid_object["x_axis_z"].toDouble());
+        asteroids::Vector3f yAxis(asteroid_object["y_axis_x"].toDouble(), asteroid_object["y_axis_y"].toDouble(), asteroid_object["y_axis_z"].toDouble());
+        asteroids::Vector3f zAxis(asteroid_object["z_axis_x"].toDouble(), asteroid_object["z_axis_y"].toDouble(), asteroid_object["z_axis_z"].toDouble());
+        float speed = asteroid_object["speed"].toDouble();
+        float radius = asteroid_object["radius"].toDouble();
+        int id = asteroid_object["id"].toInt();
+
+        //TODO filename for asteroid texture?
+        TexturedMesh::Ptr mesh = std::static_pointer_cast<TexturedMesh>(TriangleMeshFactory::instance().getMesh("../models/asteroid.3ds"));
+        Asteroid::Ptr asteroid = std::make_shared<Asteroid>(mesh, Vector3f(), pos, 0, 0, speed, 0, radius, id);
+        asteroid->setXAxis(xAxis);
+        asteroid->setYAxis(yAxis);
+        asteroid->setZAxis(zAxis);
+        m_physicsEngine->addDestroyable(asteroid);
+    }
+
+    /**QJsonArray player_arr = recv_obj["player"].toArray();
+    for(auto player_value : player_arr)
+    {
+        QJsonObject player_object = player_value.toObject();
+        asteroids::Vector3f pos(player_object["position_x"].toDouble(), player_object["position_y"].toDouble(), player_object["position_z"].toDouble());
+        asteroids::Vector3f xAxis(player_object["x_axis_x"].toDouble(), player_object["x_axis_y"].toDouble(), player_object["x_axis_z"].toDouble());
+        asteroids::Vector3f yAxis(player_object["y_axis_x"].toDouble(), player_object["y_axis_y"].toDouble(), player_object["y_axis_z"].toDouble());
+        asteroids::Vector3f zAxis(player_object["z_axis_x"].toDouble(), player_object["z_axis_y"].toDouble(), player_object["z_axis_z"].toDouble());
+
+        if(player_object["id"].toInt() == m_datamodel->getOwnID())
+        {
+
+        }
+        else
+        {
+
+        }
+    }*/
+
+    m_mainwindow->ui->openGLWidget->setClient(m_udpclient);
 }
