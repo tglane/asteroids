@@ -104,9 +104,9 @@ public slots:
 
     MyEllipse* getEllipseById(int id);
 
-    void showPlayerName();
-
     void updatePlanetColor();
+
+    void initPlanets();
 
 
 private:
@@ -130,6 +130,8 @@ private:
     int currentPlanet;
 
     int currentYear;
+
+    bool map_created = false;
 };
 
 
