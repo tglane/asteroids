@@ -161,6 +161,8 @@ public:
 signals:
     void updateInfo();
 
+    void initMap();
+
 
 private:
 
