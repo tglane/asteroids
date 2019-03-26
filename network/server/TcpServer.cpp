@@ -181,14 +181,18 @@ void TcpServer::fight_init()
         QJsonArray player_array;
         for (auto i: clients) {
             Vector3f position;
+            Vector3f x_axis;
+            Vector3f y_axis;
             if (i.id % 2 == 0) {
-                position = Vector3f(-2500, 0, 0);
+                position = Vector3f(-1000, 0, 0);
+                x_axis = Vector3f(1, 0, 0);
+                 y_axis = Vector3f(0, 1, 0);
             } else {
-                position = Vector3f(2500, 0, 0);
+                position = Vector3f(1000, 0, 0);
+                x_axis = Vector3f(-1, 0, 0);
+                y_axis = Vector3f(0, -1, 0);
             }
             QJsonObject player_obj;
-            Vector3f x_axis = Vector3f(1, 0, 0);
-            Vector3f y_axis = Vector3f(0, 1, 0);
             Vector3f z_axis = Vector3f(0, 0, 1);
             player_obj.insert("position_x", QJsonValue::fromVariant(position[0]));
             player_obj.insert("position_y", QJsonValue::fromVariant(position[1]));
@@ -203,6 +207,7 @@ void TcpServer::fight_init()
             player_obj.insert("z_axis_y", QJsonValue::fromVariant(z_axis[1]));
             player_obj.insert("z_axis_z", QJsonValue::fromVariant(z_axis[2]));
             player_obj.insert("id", QJsonValue::fromVariant(i.id));
+            player_array.push_back(player_obj);
         }
 
 
