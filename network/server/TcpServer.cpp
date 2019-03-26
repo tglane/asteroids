@@ -5,6 +5,7 @@
 
 #include <QApplication>
 
+#include <util/AsteroidField.hpp>
 TcpServer::TcpServer()
     : server(this)
 {
@@ -126,17 +127,61 @@ void TcpServer::handle_state(TcpClient& client, QJsonDocument& doc) {
 
 void TcpServer::fight_init()
 {
+    AsteroidField asteroids(20);
+    std::list<PhysicalObject::Ptr> asteroid_list;
+    asteroids.getAsteroids(asteroid_list);
+
+    qDebug() << "sending fight_init";
     udpServer = std::shared_ptr<UdpServer>(new UdpServer());
     connect(udpServer.get(),SIGNAL(fightEnd(int,int)), this, SLOT(fightEnd(int,int)));
+
+    for (auto i: asteroid_list) {
+        udpServer->get_physics_engine().addDestroyable(i);
+    }
     for (auto j: clients)
     {
         udpServer->add_client(j.id, j.socket->peerAddress(), j.socket->peerPort(), 10);
+        QJsonArray array;
+        array.push_back("fight_init");
+
+        QJsonArray asteroid_array;
+        for (auto i: asteroid_list) {
+            QJsonObject asteroid_obj;
+            Vector3f position = i->getPosition();
+            Vector3f x_axis = i->getXAxis();
+            Vector3f y_axis = i->getYAxis();
+            Vector3f z_axis = i->getZAxis();
+
+            asteroid_obj.insert("position_x", QJsonValue::fromVariant(position[0]));
+            asteroid_obj.insert("position_y", QJsonValue::fromVariant(position[1]));
+            asteroid_obj.insert("position_z", QJsonValue::fromVariant(position[2]));
+            asteroid_obj.insert("x_axis_x", QJsonValue::fromVariant(x_axis[0]));
+            asteroid_obj.insert("x_axis_y", QJsonValue::fromVariant(x_axis[1]));
+            asteroid_obj.insert("x_axis_z", QJsonValue::fromVariant(x_axis[2]));
+            asteroid_obj.insert("y_axis_x", QJsonValue::fromVariant(y_axis[0]));
+            asteroid_obj.insert("y_axis_y", QJsonValue::fromVariant(y_axis[1]));
+            asteroid_obj.insert("y_axis_z", QJsonValue::fromVariant(y_axis[2]));
+            asteroid_obj.insert("z_axis_x", QJsonValue::fromVariant(z_axis[0]));
+            asteroid_obj.insert("z_axis_y", QJsonValue::fromVariant(z_axis[1]));
+            asteroid_obj.insert("z_axis_z", QJsonValue::fromVariant(z_axis[2]));
+            asteroid_obj.insert("speed", QJsonValue::fromVariant(i->getSpeed()));
+            asteroid_obj.insert("radius", QJsonValue::fromVariant(i->radius()));
+            asteroid_obj.insert("id", QJsonValue::fromVariant(i->get_id()));
+
+            asteroid_array.push_back(asteroid_obj);
+        }
+
+        QJsonObject obj;
+        obj.insert("asteroids", asteroid_array);
+        array.push_back(obj);
+
+        QJsonDocument res(array);
+        int size = res.toJson().size();
+        j.socket->write((char*)&size, 4);
+        j.socket->write(res.toJson());
     }
 
     udpServer->start();
-
-    QJsonArray array;
-    array.push_back("fight_init");
 }
 
 void TcpServer::fightEnd(int id, int health_left) {
@@ -210,7 +255,7 @@ void TcpServer::handle_init(TcpClient& client, QJsonDocument& doc)
 
     init_count++;
     qDebug() << init_count;
-    if (init_count == 1) {
+    if (init_count == 2) {
         qDebug() << "state changed: WAIT_READY";
         state = WAIT_READY;
     }

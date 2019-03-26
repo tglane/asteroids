@@ -71,6 +71,7 @@ public:
     void multiplySpeed(int factor);
 
 
+    float getSpeed();
     /**
      * @brief checks of collision with a other object
      * @param p the other object, that could collision

@@ -25,7 +25,9 @@ set(SERVER_SRC
     ../../datamodel/ShipOrder.cpp
     ../../datamodel/MoveOrder.cpp
     ../../datamodel/Battle.cpp
-    ../../datamodel/MineOrder.cpp)
+    ../../datamodel/MineOrder.cpp
+    ../../util/AsteroidField.cpp
+    ../../math/Randomizer.cpp)
 
 set(SERVER_HDR
     UdpServer.hpp

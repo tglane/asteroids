@@ -98,4 +98,9 @@ bool PhysicalObject::alive()
     return m_alive;
 }
 
+float PhysicalObject::getSpeed()
+{
+    return m_speed;
+}
+
 }

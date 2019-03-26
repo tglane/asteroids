@@ -33,15 +33,6 @@ UdpServer::UdpServer() : peer(QHostAddress::Any, 1235)
     physics_engine.addHittable(clients[43].ship);*/
 
 
-    PhysicalObject::Ptr a(new PhysicalObject(Vector3f(), Vector3f(1000, 0, 0), 0, 0, 0, 0, 100, 1));
-    PhysicalObject::Ptr b(new PhysicalObject(Vector3f(), Vector3f(-1000, 0, 0), 0, 0, 0, 0, 100, 2));
-    PhysicalObject::Ptr c(new PhysicalObject(Vector3f(), Vector3f(0, 1000, 0), 0, 0, 0, 0, 100, 3));
-    PhysicalObject::Ptr d(new PhysicalObject(Vector3f(), Vector3f(0, -1000, 0), 0, 0, 0, 0, 100, 4));
-    physics_engine.addDestroyable(a);
-    physics_engine.addDestroyable(b);
-    physics_engine.addDestroyable(c);
-    physics_engine.addDestroyable(d);
-
     //time.start();
 }
 
@@ -127,7 +118,7 @@ bool UdpServer::check_client_id(int id) // QNetworkDatagram &datagram)
 
 void UdpServer::tick()
 {
-    std::cout << "============ tick =============" << std::endl;
+    //std::cout << "============ tick =============" << std::endl;
     int time_elapsed = time.restart();
     bool game_over = physics_engine.process(time_elapsed);
     auto collisions = physics_engine.detect_collisions();
