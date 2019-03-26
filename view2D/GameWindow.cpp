@@ -51,7 +51,8 @@ GameWindow::GameWindow(DataModel::Ptr model, QWidget* parent) :
 
 GameWindow::~GameWindow()
 {
-
+    if (ui)
+        delete ui;
 }
 
 
