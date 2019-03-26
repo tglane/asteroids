@@ -34,6 +34,7 @@ std::list<std::pair<int, int>> ServerPhysicsEngine::detect_collisions()
     while (b_it != m_bullets.end())
     {
         PhysicalBullet::Ptr b = b_it->second;
+        std::cout << "bullet " << b->get_id() << std::endl;
         // Check for collisions with present objects
         p_it = m_objects.begin();
         while (p_it != m_objects.end())
@@ -49,6 +50,8 @@ std::list<std::pair<int, int>> ServerPhysicsEngine::detect_collisions()
                         h.second->setHealth(h.second->getHealth() + 1);
                     }
                 }
+
+                std::cout << "collison " << b->get_id() << " " << p_it->second->get_id() << std::endl;
 
                 collisions.push_back(std::pair<int, int>(b->get_id(), p_it->second->get_id()));
 

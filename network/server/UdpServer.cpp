@@ -118,7 +118,7 @@ bool UdpServer::check_client_id(int id) // QNetworkDatagram &datagram)
 
 void UdpServer::tick()
 {
-    std::cout << "============ tick =============" << std::endl;
+    //std::cout << "============ tick =============" << std::endl;
     int time_elapsed = time.restart();
     bool game_over = physics_engine.process(time_elapsed);
     auto collisions = physics_engine.detect_collisions();

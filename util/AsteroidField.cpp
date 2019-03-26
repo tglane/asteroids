@@ -28,12 +28,12 @@ AsteroidField::AsteroidField(int quantity)
 	for(int i = 0; i < quantity; i++)
 	{
 	  PhysicalObject::Ptr p = make_shared<PhysicalObject>(PhysicalObject(
-                Randomizer::instance()->getRandomVertex(1.0),           // Orientation
+                                                              Vector3f(),
                 Randomizer::instance()->getRandomVertex(1000),          // Position
-                Randomizer::instance()->getRandomNumber(0, 100),        // Mass
+                0,        // Mass
                 0,
                 Randomizer::instance()->getRandomNumber(0, 0.05),          // Speed
-                Randomizer::instance()->getRandomNumber(0, 0),          // Acceleration
+                0,          // Acceleration
                 Randomizer::instance()->getRandomNumber(20, 100),         // Radius
                 next_id++
                                                         ));
