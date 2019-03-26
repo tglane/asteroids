@@ -168,6 +168,14 @@ namespace asteroids
 
 		void setMinesBuild();
 
+		int getShipsOrdered();
+
+		void incShipsOrdered();
+
+		void resetShipsOrdered();
+
+		void resetMinesHidden() { m_minesHidden = 0; }
+
 
 	private:
 		std::string m_name;
@@ -180,6 +188,8 @@ namespace asteroids
 		int m_rubin;
 		int m_ships;
 		int m_invaderShips;
+		int m_ships_ordered;
+
 
 		std::shared_ptr<Player> m_owner;
 		std::shared_ptr<Player> m_invader;

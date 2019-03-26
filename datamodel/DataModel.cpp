@@ -1,4 +1,5 @@
 #include "DataModel.hpp"
+#include "view/MainWindow.hpp"
 #include <iostream>
 #include <fstream>
 #include <utility>
@@ -164,7 +165,7 @@ bool DataModel::buyMine(Planet::Ptr selectedPlanet, Player::Ptr m_self)
     std::cout << selectedPlanet->getMinesBuild() << std::endl;
     std::cout << selectedPlanet->getMines() << std::endl;
     /*test druck ende*/
-    if(selectedPlanet->getMinesHidden() < selectedPlanet->getMines())
+    if(selectedPlanet->getMinesHidden()  + selectedPlanet->getMinesBuild() < selectedPlanet->getMines())
     {
         int Player_Rubin_Number = m_self->getRubin();
         if(Player_Rubin_Number >= Minecost)
@@ -195,9 +196,11 @@ void DataModel::TransaktionMine()
     {
         std::shared_ptr<MineOrder> NewOrder = *it;
 
-        Planet::Ptr NewShipToPlanet = NewOrder->getPlanet();
+        Planet::Ptr NewMineOnPlanet = NewOrder->getPlanet();
 
-        NewShipToPlanet->setMinesBuild();
+        NewMineOnPlanet->setMinesBuild();
+
+        NewMineOnPlanet->resetMinesHidden();
     }
 
 }
@@ -213,6 +216,8 @@ void DataModel::TransaktionShip()
         Planet::Ptr NewShipToPlanet = NewOrder->getPlanet();
 
         NewShipToPlanet->addShips(1);
+
+        NewShipToPlanet->resetShipsOrdered();
     }
 
 
@@ -266,15 +271,28 @@ void DataModel::setStartPlanet(std::shared_ptr<Planet> startplanet)
 	m_self->addPlanet(startplanet);
 }
 
-void DataModel::addWindow(int Id, QMainWindow* Window)
+void DataModel::addMainWindow(QStackedWidget* window)
 {
-    m_Window[Id] = Window;
+    m_mainWindow = window;
+}
+
+void DataModel::addWidget(int Id, QWidget* widget)
+{
+    m_widgets.insert(std::pair<int, QWidget*>(Id, widget));
 }
 
 void DataModel::switchWindow(int Id)
 {
-    QMainWindow* Active = m_Window[Id];
-    Active->showFullScreen();
+    if(Id == MAIN2D || Id == MAIN3D)
+    {
+        m_mainWindow->window()->showFullScreen();
+        emit updateInfo();
+    }
+    if(Id == MAIN3D)
+    {
+        ((MainWindow*)m_widgets[Id])->activate(true);
+    }
+    m_mainWindow->setCurrentWidget(m_widgets[Id]);
     
 }
 

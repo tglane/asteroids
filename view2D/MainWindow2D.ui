@@ -77,6 +77,7 @@
         <property name="geometry">
          <rect>
           <x>6</x>
+          <x>50</x>
           <y>0</y>
           <width>201</width>
           <height>20</height>
@@ -93,6 +94,7 @@
         <property name="geometry">
          <rect>
           <x>10</x>
+          <x>40</x>
           <y>20</y>
           <width>201</width>
           <height>221</height>
@@ -139,16 +141,15 @@
         <item row="1" column="0">
          <property name="text">
           <string>Rubine</string>
+          <string>Rubies</string>
          </property>
         </item>
         <item row="1" column="1">
-         <property name="text">
-          <string/>
-         </property>
         </item>
         <item row="2" column="0">
          <property name="text">
           <string>Planeten</string>
+          <string>Planets</string>
          </property>
         </item>
         <item row="2" column="1">
@@ -159,6 +160,7 @@
         <item row="3" column="0">
          <property name="text">
           <string>Minen</string>
+          <string>Mines</string>
          </property>
         </item>
         <item row="3" column="1">
@@ -169,6 +171,7 @@
         <item row="4" column="0">
          <property name="text">
           <string>Schiffe</string>
+          <string>Ships</string>
          </property>
         </item>
         <item row="4" column="1">
@@ -185,6 +188,7 @@
          <y>300</y>
          <width>291</width>
          <height>241</height>
+         <height>401</height>
         </rect>
        </property>
        <widget class="QLabel" name="PlanetenInfoLabel">
@@ -219,6 +223,9 @@
           <x>10</x>
           <y>200</y>
           <width>99</width>
+          <x>8</x>
+          <y>370</y>
+          <width>271</width>
           <height>27</height>
          </rect>
         </property>
@@ -321,6 +328,7 @@
         <property name="geometry">
          <rect>
           <x>0</x>
+          <x>10</x>
           <y>150</y>
           <width>81</width>
           <height>31</height>
@@ -356,6 +364,58 @@
          <string>Ships: </string>
         </property>
        </widget>
+       <widget class="QLabel" name="MineOrdersLabel">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>190</y>
+          <width>101</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Mine-Orders: </string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="ShipOrdersLabel">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>220</y>
+          <width>101</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Ship-Orders: </string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="MineOrdersValue">
+        <property name="geometry">
+         <rect>
+          <x>130</x>
+          <y>190</y>
+          <width>91</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+       <widget class="QLabel" name="ShipOrdersValue">
+        <property name="geometry">
+         <rect>
+          <x>130</x>
+          <y>220</y>
+          <width>91</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
       </widget>
       <widget class="QPushButton" name="NextRound">
        <property name="geometry">
@@ -388,8 +448,10 @@
         <rect>
          <x>0</x>
          <y>570</y>
+         <y>766</y>
          <width>291</width>
          <height>27</height>
+         <height>61</height>
         </rect>
        </property>
        <property name="text">
