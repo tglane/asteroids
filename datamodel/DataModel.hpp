@@ -158,6 +158,14 @@ public:
 
     int getResult() { return result; }
 
+    /**
+     * @brief adds player to map of players
+     * @param Player to be added
+     */
+    void addPlayer(Player::Ptr player);
+
+    Player::Ptr getPlayerByID(int i);
+
 signals:
     void updateInfo();
 
