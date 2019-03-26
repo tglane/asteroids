@@ -60,11 +60,7 @@ LevelParser::LevelParser(const std::string& file, SpaceCraft::Ptr& spaceCraft, S
         }
         else if (v.first == "asteroids")
         {
-            af = std::make_shared<AsteroidField>(AsteroidField(v.second.get<int>("count", 0), 
-                path + v.second.get<std::string>("<xmlattr>.filename", "error"),
-                v.second.get<float>("range_max", 2500.0f),
-                v.second.get<float>("size_min", 3.0f),
-                v.second.get<float>("size_max", 5.0f)
+            af = std::make_shared<AsteroidField>(AsteroidField(v.second.get<int>("count", 0)
             ));
         }
         else if (v.first == "actor")
