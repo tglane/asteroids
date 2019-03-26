@@ -64,6 +64,11 @@ private:
     /// receive new data state after a strat round
     void process_state(QJsonArray recv_array);
 
+    /// receive the init package for the 3d fight
+    void process_fight_init(QJsonObject recv_obj);
+
+    int last_size = 0;
+
     client_state m_state; /// Represents tcp client state
 
     QString m_player_name;
@@ -76,9 +81,10 @@ private:
 
     udpclient::Ptr m_udpclient;
 
+    asteroids::PhysicsEngine::Ptr m_physicsEngine;
+
     std::shared_ptr<QTcpSocket> m_socket;
 
 };
-
 
 #endif //CPP18_ASTEROIDS_TCPCLIENT_HPP

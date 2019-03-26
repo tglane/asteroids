@@ -54,6 +54,9 @@ public:
     void drawMinimap(QPainter& painter, Hittable::Ptr player, Hittable::Ptr enemy);
 
     void setClient(udpclient::Ptr client);
+
+    PhysicsEngine::Ptr getPhysicsEngine() { return m_physicsEngine; }
+
 protected:
 
     /// Init OpenGL

@@ -133,13 +133,13 @@ void GLWidget::initializeGL()
 
     // Add asteroids to physics engine
     //TODO get asteroids from server via tcpclient
-    std::list<Asteroid::Ptr> asteroids;
+    /**std::list<Asteroid::Ptr> asteroids;
     m_asteroidField->getAsteroids(asteroids);
     for (auto it = asteroids.begin(); it != asteroids.end(); it++)
     {
         PhysicalObject::Ptr p = std::static_pointer_cast<PhysicalObject>(*it);
         m_physicsEngine->addDestroyable(p);
-    }
+    }*/
 
     //TODO start udpclient
 
