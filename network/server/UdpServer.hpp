@@ -61,7 +61,7 @@ private:
     QTime time;
 public:
     UdpServer();
-    void add_client(int id, QHostAddress addr, int port, int health);
+    void add_client(int id, QHostAddress addr, int port, Vector3f& pos, int health);
     ServerPhysicsEngine& get_physics_engine() { return physics_engine; }
     void start();
 };

@@ -195,7 +195,7 @@ void tcpclient::process_fight_init(QJsonObject recv_obj)
         m_physicsEngine->addDestroyable(asteroid);
     }
 
-    /**QJsonArray player_arr = recv_obj["player"].toArray();
+    QJsonArray player_arr = recv_obj["players"].toArray();
     for(auto player_value : player_arr)
     {
         QJsonObject player_object = player_value.toObject();
@@ -206,13 +206,19 @@ void tcpclient::process_fight_init(QJsonObject recv_obj)
 
         if(player_object["id"].toInt() == m_datamodel->getOwnID())
         {
-
+            m_mainwindow->ui->openGLWidget->getCamera()->setPosition(pos);
+            m_mainwindow->ui->openGLWidget->getCamera()->setXAxis(xAxis);
+            m_mainwindow->ui->openGLWidget->getCamera()->setYAxis(yAxis);
+            m_mainwindow->ui->openGLWidget->getCamera()->setZAxis(zAxis);
         }
         else
         {
-
+            m_mainwindow->ui->openGLWidget->getEnemy()->setPosition(pos);
+            m_mainwindow->ui->openGLWidget->getEnemy()->setXAxis(xAxis);
+            m_mainwindow->ui->openGLWidget->getEnemy()->setYAxis(yAxis);
+            m_mainwindow->ui->openGLWidget->getEnemy()->setZAxis(zAxis);
         }
-    }*/
+    }
 
     m_mainwindow->ui->openGLWidget->setClient(m_udpclient);
 }

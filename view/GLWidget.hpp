@@ -57,6 +57,10 @@ public:
 
     PhysicsEngine::Ptr getPhysicsEngine() { return m_physicsEngine; }
 
+    Camera::Ptr getCamera() { return m_camera; }
+
+    SpaceCraft::Ptr getEnemy() { return m_enemy; }
+
 protected:
 
     /// Init OpenGL

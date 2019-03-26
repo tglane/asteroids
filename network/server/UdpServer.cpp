@@ -177,13 +177,14 @@ void UdpServer::start()
     time.start();
 }
 
-void UdpServer::add_client(int id, QHostAddress addr, int port, int health)
+void UdpServer::add_client(int id, QHostAddress addr, int port, Vector3f& pos, int health)
 {
 
     clients[id] = UdpClient(id);
     clients[id].address = addr;
     clients[id].port = port;
     clients[id].ship->setHealth(health);
+    clients[id].ship->setPosition(pos);
 
     physics_engine.addHittable(clients[id].ship);
 }
