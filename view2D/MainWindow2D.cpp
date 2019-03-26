@@ -40,7 +40,9 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
     ui->SendShipNumber->setStyleSheet("background-color:#220044");
     ui->DestionationPlanet->setStyleSheet("background-color:#220044");
 
-     QGraphicsOpacityEffect * effect = new QGraphicsOpacityEffect(ui->ContextMenue);
+
+    //Set sidebar look
+    QGraphicsOpacityEffect * effect = new QGraphicsOpacityEffect(ui->ContextMenue);
     effect->setOpacity(0.7);
     ui->ContextMenue->setGraphicsEffect(effect);
     effect = new QGraphicsOpacityEffect(ui->Fight);
@@ -114,6 +116,7 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
     palette.setBrush(QPalette::Background, bkgnd);
     this->setPalette(palette);
 
+
     // Add the matching event to the next-round-button
     QPushButton* m_nextRound = ui->NextRound;
     connect(m_nextRound, SIGNAL(clicked(bool)), this, SLOT(endOfRound(bool)));
@@ -170,7 +173,7 @@ MainWindow2D::~MainWindow2D()
 
 void MainWindow2D::fight(bool click)
 {
-    m_model->switchWindow(DataModel::MAIN3D);
+    m_model->switchWindow(DataModel::SWITCH);
 }
 
 void MainWindow2D::choose_planet(int id)
@@ -370,7 +373,8 @@ void MainWindow2D::sendShips(bool click)
     m_model->moveShips(from, to, ships);
     updatePlanetInfo(currentPlanet);
     updatePlayerInfo();
-
+    if(ships >0)
+    {
     //Flüge an Kanten hinzufügen
         int pos_1 = currentPlanet;
         int pos_2 = m_model->getIDFromPlanetName(planetname);
@@ -395,7 +399,7 @@ void MainWindow2D::sendShips(bool click)
             qgti->setPlainText(QString::fromStdString(ships_string));
             qgti->update();
         }
-
+    }
 }
 
 void MainWindow2D::exitGame(bool click)
@@ -512,6 +516,13 @@ void MainWindow2D::updatePlanetInfo(int id)
     ui->MineOrdersValue->setText(QString::number(p->getMinesHidden()));
     ui->ShipOrdersValue->setText(QString::number(p->getShipsOrdered()));
 }
+
+
+void MainWindow2D::initMap()
+{
+
+}
+
 
 void MainWindow2D::showPlayerName()
 {

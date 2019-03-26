@@ -25,7 +25,7 @@ DataModel::DataModel(std::string filename) : m_players(), m_planets(), m_edges()
     Planet::Ptr Test = getPlanetFromId(5);
  	Planet::Ptr Test2 = getPlanetFromId(6);
 	Planet::Ptr Test3 = getPlanetFromId(7);
-	m_enemy = Player::Ptr(new Player(1,3000,0));
+	m_enemy = Player::Ptr(new Player(2,3000,0));
 	
     Test->setOwner(m_enemy);
     Test2->setOwner(m_enemy);
@@ -143,7 +143,7 @@ bool DataModel::moveShips(Planet::Ptr from, Planet::Ptr to, int numShips) {
 
 	std::cout << "MoveOrder " << numShips << " Ships from Planet " << from->getName() << " to Planet " << to->getName() << std::endl;
 
-	if(from->getShips() >= numShips)
+	if(from->getShips() >= numShips && numShips > 0)
 	{
 		MoveOrder::Ptr move = MoveOrder::Ptr(new MoveOrder(from, to, numShips));
 		m_self->putListMoveOrder(move);
@@ -709,7 +709,7 @@ void DataModel::BattlePhase()
         std::cout << BattleDetail->m_player2->getPlayerName() << std::endl;
         std::cout << BattleDetail->m_numberShips2 << std::endl;
 
-        
+        switchWindow(DataModel::SWITCH);
 
 
     }

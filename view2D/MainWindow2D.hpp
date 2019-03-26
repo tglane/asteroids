@@ -45,6 +45,8 @@ public:
     ~MainWindow2D();
 
     void updatePlanetInfo(int id);
+    
+    void initMap();
 
 public slots:
 
