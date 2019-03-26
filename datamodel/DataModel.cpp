@@ -656,6 +656,7 @@ void DataModel::WinCondition()
     if(NumberOfPlanets == CountOfPlanets)
     {
         std::cout << "Gewonnen" <<std::endl;
+        switchWindow(DataModel::END);
 
 
     }

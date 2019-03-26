@@ -8,6 +8,7 @@ EndWindow::EndWindow(DataModel::Ptr model, QWidget* parent) :
     QMainWindow(parent), ui(new Ui::EndWindow())
 {
     m_model = model;
+    m_model->addWidget(DataModel::END,this);
     ui->setupUi(this);
 
     ui->ResultLabel->setStyleSheet("QLabel { color: white }");
