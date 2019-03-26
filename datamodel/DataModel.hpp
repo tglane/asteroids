@@ -86,6 +86,8 @@ public:
 
     Planet::Ptr getPlanetFromName(std::string name);
 
+    int getIDFromPlanetName(std::string name);
+
     std::list<std::pair<int,int>> getEdges();
 
     void calculateFinance(Player::Ptr Player);
@@ -113,17 +115,27 @@ public:
 
     /**
      * @brief   Finds occuring battles at the end of each round,
-     *          fills list of battles
+     *          fills list of battles, and gives planets to invaders
+     *          on planets that dont have defenders,
      */
     void findBattles();
 
     /**
-     * @brief Creates Json File, which includes information about a certain player and his planets
+     * @brief Creates Json File, which includes information about a certain player and his planets, 
+     *        and his invasions
      * @param player The player for which the information should be sent
      * @return the created Json File
      */
     QJsonDocument createJson(Player::Ptr player);
 
+    /**
+     * OBSOLETE
+     * @brief Creates Json File, which includes player identification, player rubin status, and orders
+     * @param player The player for which the information should be sent
+     * @return the created Json File
+     
+    QJsonDocument createJsonOrders(Player::Ptr player);
+    */
 
     void performMovements(Player::Ptr player);
 
@@ -144,6 +156,18 @@ public:
 
 signals:
     void updateInfo();
+
+    void BattlePhase();
+
+    int getShipCost() { return Shipcost; }
+
+    int getMineCost() { return Minecost; }
+
+    int getResult() { return result; }
+
+signals:
+    void updateInfo();
+
 
 private:
 
@@ -170,6 +194,8 @@ private:
     std::map<int, Planet::Ptr>  m_planets;
 
     std::map<std::string, Planet::Ptr> m_nameToPlanets;
+
+    std::map<std::string, int> m_planetNameToId;
 
     std::list<std::pair<int, int>> m_edges;
 
