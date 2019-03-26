@@ -517,6 +517,13 @@ QJsonDocument DataModel::createJson(Player::Ptr player)
     return theDocument;
 }
 
+QJsonObject createBattleJson(Battle::Ptr battle)
+{
+    // main QJson object in the document
+    QJsonObject main;
+    return main;
+}
+
 /*
 QJsonDocument createJsonOrders(Player::Ptr player)
 {
@@ -676,7 +683,6 @@ void DataModel::WinCondition()
 
 
     }
-
 }
 
 void DataModel::BattlePhase()
