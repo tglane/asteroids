@@ -159,7 +159,7 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
 }
 
 void MainWindow2D::resizeEvent(QResizeEvent* event){
-    ui->Map->fitInView(0, 500, 500, 1, Qt::KeepAspectRatio);
+    ui->Map->fitInView(0, 0, scene_height, scene_width, Qt::KeepAspectRatio);
 }
 
 MainWindow2D::~MainWindow2D() 

@@ -111,6 +111,9 @@ public slots:
 
 private:
 
+    final int scene_height = 750;
+    final int scene_width = 1000;
+
     /// QT UI of the window
     Ui::MainWindow2D* ui;
 

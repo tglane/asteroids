@@ -700,8 +700,6 @@ void DataModel::BattlePhase()
         std::cout << BattleDetail->m_numberShips2 << std::endl;
 
         switchWindow(DataModel::SWITCH);
-
-
     }
 
 }
