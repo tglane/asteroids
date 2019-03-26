@@ -104,6 +104,9 @@ public slots:
 
     void showPlayerName();
 
+    void updatePlanetColor();
+
+
 private:
 
     /// QT UI of the window
@@ -116,6 +119,8 @@ private:
     DataModel::Ptr m_model;
 
     std::map<int, MyEllipse*> view_planets;
+
+    std::map<std::pair<int,int>, QGraphicsTextItem*> m_fighterAmount;
 
     int currentPlanet;
 
