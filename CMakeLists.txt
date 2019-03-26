@@ -33,8 +33,6 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 # special optimization flags
 ###############################################################################
 
-
-
 set( CMAKE_CXX_FLAGS         "-O3 -Wall -std=c++14" )
 set( CMAKE_CXX_FLAGS_RELEASE "-O3 -msse3 -Wno-deprecated-declarations -Wno-unused -Wcpp" )
 set( CMAKE_CXX_FLAGS_DEBUG   "-g -Wall" )
@@ -154,12 +152,9 @@ set(ASTEROID_SOURCES
     util/ColorMap.cpp   
     util/Util.cpp
     view/GLWidget.cpp
-    view/MainWindow.cpp 
+    view/MainWindow.cpp
     network/client/udpclient.cpp
         network/client/tcpclient.cpp
-    view/Controller.cpp
-    Gamepad.cpp
-    view/Camera.cpp  
     datamodel/DataModel.cpp
     datamodel/Planet.cpp
     datamodel/Player.cpp
@@ -170,18 +165,27 @@ set(ASTEROID_SOURCES
     view2D/StartingDialog.cpp
     view2D/MainWindow2D.cpp
     view2D/MyEllipse.cpp
+    view2D/EndWindow.cpp
+    view2D/GameWindow.cpp
+    view/Camera.cpp
+    view/Controller.cpp
+    Gamepad.cpp
 )
 
 set(ASTEROID_MOCS
     view/MainWindow.hpp
     view2D/MainWindow2D.hpp
     view2D/StartingDialog.hpp
+    view2D/EndWindow.hpp
+    view2D/GameWindow.hpp
 )
 
 set(ASTEROID_UIS
     view/MainWindow.ui
     view2D/MainWindow2D.ui
     view2D/StartingDialog.ui
+    view2D/EndWindow.ui
+    view2D/GameWindow.ui
 )
 
 set(CMAKE_AUTOMOC ON)

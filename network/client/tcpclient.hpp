@@ -73,6 +73,8 @@ private:
 
     QString m_player_name;
 
+    int m_player_id;
+
     QString m_server_ip;
 
     std::shared_ptr<asteroids::MainWindow> m_mainwindow;

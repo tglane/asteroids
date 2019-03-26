@@ -12,14 +12,11 @@
 #include "view/MainWindow.hpp"
 #include "datamodel/DataModel.hpp"
 #include "datamodel/Player.hpp"
-#include "view2D/MainWindow2D.hpp"
-#include "view2D/StartingDialog.hpp"
+#include "view2D/GameWindow.hpp"
 
 #include "network/client/tcpclient.hpp"
 #include "network/client/udpclient.hpp"
 
-
-#include "view/MainWindow.hpp"
 
 
 int main(int argc, char** argv)
@@ -29,27 +26,13 @@ int main(int argc, char** argv)
     model->getUniverse("../models/Level-01.map");
 
     //TODO add input for player name and server io
-    tcpclient::Ptr tcp_client(std::make_shared<tcpclient>(model));
-    QAbstractSocket::connect(model.get(), SIGNAL(endround_signal()), tcp_client.get(), SLOT(send_ready()));
+//    tcpclient::Ptr tcp_client(std::make_shared<tcpclient>(model));
+//    QAbstractSocket::connect(model.get(), SIGNAL(endround_signal()), tcp_client.get(), SLOT(send_ready()));
 
-    //strategy::MainWindow2D mainWindow2D(model);
+    strategy::GameWindow gamewindow(model);
 
-    //asteroids::MainWindow mainWindow("../models/level.xml");
-    //mainWindow.show();
+    gamewindow.show();
 
-    // Test
-    /*
-    model->getSelfPlayer()->addPlanet(model->getPlanets().find(1)->second);
-    model->getSelfPlayer()->addPlanet(model->getPlanets().find(2)->second);
-    model->getSelfPlayer()->addPlanet(model->getPlanets().find(3)->second);
-    model->createJson(model->getSelfPlayer());
-    */
-    //end test
-
-    //strategy::StartingDialog startWindow(model);
-    //QObject::connect(&startWindow, SIGNAL(connect_to_server(string, string)), tcp_client.get(), SLOT(connect_to_server(string, string)));
-
-    //startWindow.show();
     return a.exec();
 }
 

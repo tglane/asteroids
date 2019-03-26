@@ -8,7 +8,6 @@ StartingDialog::StartingDialog(DataModel::Ptr model, QWidget* parent) :
     QMainWindow(parent), ui(new Ui::StartingDialog())
 {
     m_model = model;
-    m_model->addWindow(DataModel::START, this);
 
     ui->setupUi(this);
 
@@ -28,7 +27,7 @@ StartingDialog::StartingDialog(DataModel::Ptr model, QWidget* parent) :
 
     QPushButton* exitButton = ui->ExitGame;
     connect(exitButton, SIGNAL(clicked(bool)), this, SLOT(exitGame(bool)));
-    
+
 }
 
 StartingDialog::~StartingDialog()
@@ -49,10 +48,14 @@ void StartingDialog::startGame(bool click)
         ui->ServerAddress->setText("192.168.0.42");
         m_model->getSelfPlayer()->setPlayerName(name);
         // Call switching mechanism of datamodel
+
         //m_model->switchWindow(DataModel::MAIN2D);
         this->setVisible(false);
         /* emit signal to establish tcp connection */
         emit connect_to_server(name, ui->ServerAddress->text().toStdString());
+
+        m_model->switchWindow(DataModel::MAIN2D);
+
     }
     else
     {

@@ -14,6 +14,7 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QString>
+#include <QStackedWidget>
 
 
 #include "MoveOrder.hpp"
@@ -41,18 +42,23 @@ class DataModel : public QObject
 
 public:
 
-    enum { START, MAIN2D, MAIN3D };
+    enum { MAIN2D, MAIN3D, START, END, SWITCH };
     using Ptr = std::shared_ptr<DataModel>;
 
     /**
      * @brief   Initilizes a new data model
+     * 
+     * @param filename  the mapfile including all planets and their connections
      */
     DataModel();
 
+    DataModel(std::string level, int id, std::string player_name );
     /**
      * @brief   Frees the memory
      */
     ~DataModel();
+
+    DataModel(std::string filename);
 
     // many getter, setter/update methods for all the games data
     std::map<int, Planet::Ptr> getPlanets();
@@ -96,24 +102,15 @@ public:
      */
     void setStartPlanet(std::shared_ptr<Planet> startplanet);
 
-    void addWindow(int Id, QMainWindow* Window);
+    void addMainWindow(QStackedWidget* window);
 
-    void switchWindow(int Id);
+    void addWidget(int Id, QWidget* widget);
 
     Player::Ptr getSelfPlayer();
 
-    Player::Ptr getPlayer(int id);
-
     Player::Ptr getEnemyPlayer(int id);
 
-
-    bool updateAll(QJsonObject &update); // @suppress("Type cannot be resolved")
-
-
-    /**
-     * @brief updates data and planets in the ownerships of the enemy by reading the given json file
-     */
-
+    bool updateAll(QJsonDocument &update); // @suppress("Type cannot be resolved")
 
 
 
@@ -122,7 +119,7 @@ public:
      *          fills list of battles, and gives planets to invaders
      *          on planets that dont have defenders,
      */
-    std::vector<std::shared_ptr<Battle>> findBattles();
+    void findBattles();
 
     /**
      * @brief Creates Json File, which includes information about a certain player and his planets, 
@@ -130,8 +127,13 @@ public:
      * @param player The player for which the information should be sent
      * @return the created Json File
      */
-QJsonObject createJsonPlayerStatus(Player::Ptr player);
+    QJsonDocument createJson(Player::Ptr player);
 
+    /**
+     * @brief creates QJsonobject representation of given Battle
+     * @return QJsonobject representation of given Battle
+     */
+    QJsonObject createBattleJson(Battle::Ptr battle);
 
     /**
      * OBSOLETE
@@ -144,6 +146,8 @@ QJsonObject createJsonPlayerStatus(Player::Ptr player);
 
     void performMovements(Player::Ptr player);
 
+    void constructPlayer(int id, std::string player_name);
+
     void BattleReport();
 
     /**
@@ -153,24 +157,45 @@ QJsonObject createJsonPlayerStatus(Player::Ptr player);
      */
     int getIDFromPlanet(Planet::Ptr planet);
 
-
     void WinCondition();
 
     void BattlePhase();
-    void setOwnID(int id) { m_playerid = id; }
 
-    int getOwnID() { return m_playerid; }
+    int getShipCost() { return Shipcost; }
+
+    int getMineCost() { return Minecost; }
+
+    int getResult() { return result; }
 
     /**
-     * @brief   Loads all the planets from the given file
+     * @brief adds player to map of players
+     * @param Player to be added
      */
+    void addPlayer(Player::Ptr player);
+
+    /**
+     * @brief returns the Player which holds the given id
+     * @param i The ID of the player to be found
+     * @return the player which holds this id, if player with given is nonexistant 
+     *         new player with id -1 is returned
+     */
+    Player::Ptr getPlayerByID(int i);
+
     void getUniverse(std::string filename);
 
 signals:
-    void endround_signal();
+    void updateInfo();
+    void initMap();
+
+public slots:
+
+    void switchWindow(int Id);
 
 
 private:
+
+    // 0 = not finished, 1 = victory, 2 = defeat
+    int result = 0;
 
     int m_playerid;
 
@@ -181,6 +206,9 @@ private:
     int Minecost = 1000;
 
     int Minegain = 750;
+    /**
+     * @brief   Loads all the planets from the given file
+     */
 
     std::map<int, Player::Ptr> m_players;
 
@@ -200,10 +228,12 @@ private:
     Player::Ptr  m_enemy;
 
     // Map of Windows
-    std::map<int, QMainWindow*> m_Window;
+    std::map<int, QWidget*> m_widgets;
+
+    QStackedWidget* m_mainWindow;
 
     // List of upcoming battles
-    std::vector<std::shared_ptr<Battle>> m_battles;
+    std::list<std::shared_ptr<Battle>> m_battles;
 };
 
 }
