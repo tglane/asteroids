@@ -12,10 +12,12 @@ DataModel::DataModel(std::string filename) : m_players(), m_planets(), m_edges()
 {
     // player which runs this programm
     m_self = Player::Ptr(new Player(1,3000,0));
+    addPlayer(m_self);
 
     // enemy/ies that run the programm on other devices
     // information from network is needed
     m_enemy = Player::Ptr(new Player());
+    addPlayer(m_enemy);
 
     // when networking issues are solved the map is loaded later
     getUniverse(filename);
@@ -681,6 +683,11 @@ void DataModel::BattlePhase()
 
     }
 
+}
+
+void DataModel::addPlayer(Player::Ptr player)
+{
+    m_players.insert(std::pair<int, Player::Ptr>(player->getIdentity(),player));
 }
 
 DataModel::~DataModel()
