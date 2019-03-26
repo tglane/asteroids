@@ -15,7 +15,7 @@ tcpclient::tcpclient(asteroids::DataModel::Ptr datamodel, QObject* parent)
     connect(m_socket.get(), SIGNAL(connected()), this, SLOT(send_init()));
     connect(m_socket.get(), SIGNAL(readyRead()), this, SLOT(recv_json()));
 
-    connect_to_server("ASDF", "192.168.0.42");
+    connect_to_server("ASDF", "127.0.0.1");
 }
 
 void tcpclient::connect_to_server(string name, string server_ip)
