@@ -231,17 +231,13 @@ void udpclient::send_bullet(asteroids::Vector3f position, asteroids::Vector3f xA
 }
 
 void udpclient::recv_collision(int recv_seq_nr, char* data)
-{
-    std::cout << "collision received" << std::endl;
-
-    /* Parse recevived IDs of colliding objects and process collisions */
+{/* Parse recevived IDs of colliding objects and process collisions */
 
     int id_one, id_two;
     memcpy(&id_one, data, sizeof(int));
     data += sizeof(int);
     memcpy(&id_two, data, sizeof(int));
     data += sizeof(int);
-    //TODO parse health from package
     m_physicsEngine->process_collisions(id_one, id_two);
 
     /* Send acknowledge to server */

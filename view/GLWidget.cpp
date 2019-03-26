@@ -116,8 +116,6 @@ void GLWidget::initializeGL()
     LevelParser lp(m_levelFile, m_enemy, m_skybox, m_asteroidField);
     m_enemy->fixArrow();
 
-
-
     // Setup physics
     m_physicsEngine = make_shared<PhysicsEngine>();
 
@@ -125,23 +123,6 @@ void GLWidget::initializeGL()
     m_camera->setPosition(Vector3f(2500, 0, 0));
     m_camera->setXAxis(Vector3f(-1, 0, 0));
     m_camera->setYAxis(Vector3f(0, -1, 0));
-
-    Hittable::Ptr player_ptr = std::static_pointer_cast<Hittable>(m_camera);
-    m_physicsEngine->addHittable(player_ptr);
-    Hittable::Ptr enemy_ptr = std::static_pointer_cast<Hittable>(m_enemy);
-    m_physicsEngine->addHittable(enemy_ptr);
-
-    // Add asteroids to physics engine
-    //TODO get asteroids from server via tcpclient
-    /**std::list<Asteroid::Ptr> asteroids;
-    m_asteroidField->getAsteroids(asteroids);
-    for (auto it = asteroids.begin(); it != asteroids.end(); it++)
-    {
-        PhysicalObject::Ptr p = std::static_pointer_cast<PhysicalObject>(*it);
-        m_physicsEngine->addDestroyable(p);
-    }*/
-
-    //TODO start udpclient
 
     m_useGamepad = m_controller.gamepadAvailable();
 
@@ -164,6 +145,9 @@ void GLWidget::setClient(udpclient::Ptr client) {
 
     m_client->setOtherFighter(m_enemy); //added
     m_client->setPhysicsPtr(m_physicsEngine); //added
+
+    m_physicsEngine->addHittable(m_camera);
+    m_physicsEngine->addHittable(m_enemy);
 }
 
 void GLWidget::paintGL()

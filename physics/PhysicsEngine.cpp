@@ -65,6 +65,7 @@ void PhysicsEngine::check_id_type(int id_to_check)
     {
         if(m_objects.count(id_to_check) == 1)
         {
+            /* Asteroid/Destroyable collision */
             m_particles.addEffect(ParticleEffect::createExplosionSphere(m_objects[id_to_check]->getPosition()));
             m_objects.erase(id_to_check);
         }
@@ -73,7 +74,7 @@ void PhysicsEngine::check_id_type(int id_to_check)
     {
         if((id_to_check & 0xFFFFFF) != 0)
         {
-
+            /* Bullet collision */
             if(m_bullets.count(id_to_check) == 1) {
 
                 m_bullets[id_to_check]->destroy();
@@ -82,14 +83,16 @@ void PhysicsEngine::check_id_type(int id_to_check)
         }
         else
         {
-            //TODO change health of spaceship if collision with spaceship
+            /* Player collision */
             if(m_hittables.count(id_to_check) == 1) {
                 int health = m_hittables[id_to_check]->getHealth();
                 m_hittables[id_to_check]->setHealth(health - 1);
-                std::cout << health << std::endl;
-                if (health <= 1)
+                if((health -1) % 10 == 0)
                 {
                     m_particles.addEffect(ParticleEffect::createExplosionSphere(m_hittables[id_to_check]->getPosition()));
+                }
+                if((health - 1) == 0)
+                {
                     m_hittables.erase(id_to_check);
                 }
             }
