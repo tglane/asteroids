@@ -26,10 +26,13 @@ int main(int argc, char** argv)
     model->getUniverse("../models/Level-01.map");
 
     //TODO add input for player name and server io
-//    tcpclient::Ptr tcp_client(std::make_shared<tcpclient>(model));
-//    QAbstractSocket::connect(model.get(), SIGNAL(endround_signal()), tcp_client.get(), SLOT(send_ready()));
+    tcpclient::Ptr tcp_client(std::make_shared<tcpclient>(model));
+    QAbstractSocket::connect(model.get(), SIGNAL(endround_signal()), tcp_client.get(), SLOT(send_ready()));
+
 
     strategy::GameWindow gamewindow(model);
+
+    QObject::connect(tcp_client.get(), SIGNAL(start_round()), &gamewindow, SLOT(start_round()));
 
     gamewindow.show();
 

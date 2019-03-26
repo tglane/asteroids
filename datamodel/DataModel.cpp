@@ -292,10 +292,10 @@ void DataModel::switchWindow(int Id)
     
 }
 
-bool DataModel::updateAll(QJsonDocument &update) {
+bool DataModel::updateAll(QJsonObject &update) {
 
-	if (update.isObject() && !update.isEmpty())
-	{
+	//if (update.isObject() && !update.isEmpty())
+	//{
 
 		int id = 0;
 
@@ -304,7 +304,7 @@ bool DataModel::updateAll(QJsonDocument &update) {
 		std::list<Planet::Ptr> planets;
 		Player::Ptr player;
 
-		QJsonObject all = update.object();
+		QJsonObject all = update;
 
 		if(all.empty()) return false; //QJsonDocument contains not an Object
 
@@ -390,7 +390,7 @@ bool DataModel::updateAll(QJsonDocument &update) {
 				else return false; //InvadePlanets is not an Array
 			}
 
-		}//End Iterator File
+		//}//End Iterator File
 
 		player->setPlanetsList(planets);
 	}
@@ -460,7 +460,7 @@ int DataModel::getIDFromPlanet(Planet::Ptr planet)
     return 0;
 }
 
-QJsonDocument DataModel::createJson(Player::Ptr player)
+QJsonObject DataModel::createJson(Player::Ptr player)
 {
     // main QJson object in the document
     QJsonObject main;
@@ -521,12 +521,12 @@ QJsonDocument DataModel::createJson(Player::Ptr player)
     main.insert("InvadePlanets", qInvasions);
 
     // Make qjsondocument out of it
-    QJsonDocument theDocument(main);
+    //QJsonDocument theDocument(main);
 
     // In case the json document should be printed
     //std::cout << theDocument.toJson().toStdString() << std::endl;
 
-    return theDocument;
+    return main;
 }
 
 QJsonObject DataModel::createBattleJson(Battle::Ptr battle)

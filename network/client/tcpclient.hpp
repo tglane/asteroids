@@ -52,6 +52,7 @@ private slots:
 
 signals:
     void fight_init_signal(QJsonObject);
+    void start_round();
 
 private:
 

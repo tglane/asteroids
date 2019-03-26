@@ -44,6 +44,10 @@ GameWindow::GameWindow(DataModel::Ptr model, QWidget* parent) :
 
 }
 
+void GameWindow::start_round() {
+    m_model->switchWindow(DataModel::MAIN2D);
+}
+
 GameWindow::~GameWindow()
 {
 

@@ -50,7 +50,7 @@ public:
     /// Returns the height of the windows
     //int height();
 public slots:
-
+    void start_round();
     
 
 private:

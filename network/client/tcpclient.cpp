@@ -143,7 +143,7 @@ void tcpclient::process_strat_init(QJsonArray recv_array)
             m_datamodel->constructPlayer(recv_array[i].toObject()["id"].toInt(),recv_array[i].toObject()["player_name"].toString().toStdString());
         }
     }
-
+    emit start_round();
     m_state = client_state::ROUND;
 
     send_ready();

@@ -16,6 +16,8 @@ StartingDialog::StartingDialog(DataModel::Ptr model, QWidget* parent) :
     ui->ServerAddressLabel->setStyleSheet("QLabel { color: white }");
     ui->ChooseMapLabel->setStyleSheet("QLabel { color: white}");
 
+    ui->Name->setText("Siegbert");
+
     QPixmap bkgnd("../models/box1.jpg");
     bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
     QPalette palette;
@@ -46,15 +48,9 @@ void StartingDialog::startGame(bool click)
     if(name != "" && name != "Please insert a name!")
     {
         ui->ServerAddress->setText("192.168.0.42");
-        //m_model->getSelfPlayer()->setPlayerName(name);
-        // Call switching mechanism of datamodel
 
-        //m_model->switchWindow(DataModel::MAIN2D);
-        //this->setVisible(false);
-        /* emit signal to establish tcp connection */
         emit connect_to_server(name, ui->ServerAddress->text().toStdString());
-
-        m_model->switchWindow(DataModel::MAIN2D);
+        //m_model->switchWindow(DataModel::MAIN2D);
 
     }
     else

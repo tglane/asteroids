@@ -60,6 +60,8 @@ public slots:
 
     void startGame(bool click);
 
+
+
 signals:
     void connect_to_server(string, string);
 

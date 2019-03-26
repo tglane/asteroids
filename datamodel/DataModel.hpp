@@ -110,7 +110,7 @@ public:
 
     Player::Ptr getEnemyPlayer(int id);
 
-    bool updateAll(QJsonDocument &update); // @suppress("Type cannot be resolved")
+    bool updateAll(QJsonObject &update); // @suppress("Type cannot be resolved")
 
 
 
@@ -127,7 +127,7 @@ public:
      * @param player The player for which the information should be sent
      * @return the created Json File
      */
-    QJsonDocument createJson(Player::Ptr player);
+    QJsonObject createJson(Player::Ptr player);
 
     /**
      * @brief creates QJsonobject representation of given Battle
