@@ -370,7 +370,8 @@ void MainWindow2D::sendShips(bool click)
     m_model->moveShips(from, to, ships);
     updatePlanetInfo(currentPlanet);
     updatePlayerInfo();
-
+    if(ships >0)
+    {
     //Flüge an Kanten hinzufügen
         int pos_1 = currentPlanet;
         int pos_2 = m_model->getIDFromPlanetName(planetname);
@@ -395,7 +396,7 @@ void MainWindow2D::sendShips(bool click)
             qgti->setPlainText(QString::fromStdString(ships_string));
             qgti->update();
         }
-
+    }
 }
 
 void MainWindow2D::exitGame(bool click)
