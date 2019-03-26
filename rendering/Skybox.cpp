@@ -26,7 +26,7 @@ Skybox::Skybox(int width, string files[6])
     }
 }
 
-void Skybox::render(Camera& cam)
+void Skybox::render()
 {
     // Enable/Disable features
 
@@ -36,8 +36,6 @@ void Skybox::render(Camera& cam)
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_LIGHTING);
     glDisable(GL_BLEND);
-
-    cam.applyRotationOnly();
 
     // Set color
     glColor3f(1.0f, 1.0f, 1.0f);

@@ -152,4 +152,15 @@ void TriangleMesh::render()
 	}
 }
 
-} // namespace asteroids 
+void TriangleMesh::fixArrow()
+{
+	for (int i = 0; i < m_numVertices; i++)
+	{
+		m_vertexBuffer[3 * i + 0] = -m_vertexBuffer[3 * i + 0];
+		m_vertexBuffer[3 * i + 1] = -m_vertexBuffer[3 * i + 1];
+		m_normalBuffer[3 * i + 0] = -m_normalBuffer[3 * i + 0];
+		m_normalBuffer[3 * i + 1] = -m_normalBuffer[3 * i + 1];
+	}
+}
+
+}

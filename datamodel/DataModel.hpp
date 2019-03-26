@@ -14,6 +14,7 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QString>
+#include <QStackedWidget>
 
 
 #include "MoveOrder.hpp"
@@ -35,12 +36,13 @@ using std::map;
 
 namespace asteroids{
 
-class DataModel
+class DataModel : public QObject
 {
+    Q_OBJECT
 
 public:
 
-    enum { START, MAIN2D, MAIN3D };
+    enum { MAIN2D, MAIN3D, START, END };
     using Ptr = std::shared_ptr<DataModel>;
 
     /**
@@ -97,7 +99,9 @@ public:
      */
     void setStartPlanet(std::shared_ptr<Planet> startplanet);
 
-    void addWindow(int Id, QMainWindow* Window);
+    void addMainWindow(QStackedWidget* window);
+
+    void addWidget(int Id, QWidget* widget);
 
     void switchWindow(int Id);
 
@@ -105,10 +109,6 @@ public:
 
     Player::Ptr getEnemyPlayer(int id);
 
-
-    /**
-     * @brief updates data and planets in the ownerships of the enemy by reading the given json file
-     */
     bool updateAll(QJsonDocument &update); // @suppress("Type cannot be resolved")
 
 
@@ -126,7 +126,7 @@ public:
      * @param player The player for which the information should be sent
      * @return the created Json File
      */
-    QJsonDocument createJsonPlayerStatus(Player::Ptr player);
+    QJsonDocument createJson(Player::Ptr player);
 
     /**
      * OBSOLETE
@@ -152,7 +152,20 @@ public:
 
     void BattlePhase();
 
+    int getShipCost() { return Shipcost; }
+
+    int getMineCost() { return Minecost; }
+
+    int getResult() { return result; }
+
+signals:
+    void updateInfo();
+
+
 private:
+
+    // 0 = not finished, 1 = victory, 2 = defeat
+    int result = 0;
 
     int m_playerid;
 
@@ -186,7 +199,9 @@ private:
     Player::Ptr  m_enemy;
 
     // Map of Windows
-    std::map<int, QMainWindow*> m_Window;
+    std::map<int, QWidget*> m_widgets;
+
+    QStackedWidget* m_mainWindow;
 
     // List of upcoming battles
     std::list<std::shared_ptr<Battle>> m_battles;

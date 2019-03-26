@@ -27,6 +27,7 @@ Planet::Planet(std::string name, int posx, int posy, int mines, int rubin) : m_n
 	m_owner = nullptr;
 	m_invader = nullptr;
 	m_invaderShips = 0;
+	m_ships_ordered = 0;
 }
 
 
@@ -168,6 +169,21 @@ void Planet::setMinesBuild()
 {
 	m_minesbuild += 1;
 	m_owner->incMines();
+}
+
+int Planet::getShipsOrdered()
+{
+	return m_ships_ordered;
+}
+
+void Planet::incShipsOrdered()
+{
+	m_ships_ordered++;
+}
+
+void Planet::resetShipsOrdered()
+{
+	m_ships_ordered = 0;
 }
 
 }

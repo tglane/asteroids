@@ -56,6 +56,7 @@ public:
      */
     void addDestroyable(PhysicalObject::Ptr& d);
 
+    void addHittable(Hittable::Ptr& h);
 
     /**
      * @brief   Adds a bullet to the scene. Takes ownership of the given pointer
@@ -70,7 +71,7 @@ public:
     /**
      * @brief   The engine's main loop
      */
-    void process();
+    bool process(int elapsed_time);
 
 private:
 
@@ -82,6 +83,7 @@ private:
 
     ParticleEngine               m_particles;
 
+    list<Hittable::Ptr>          m_hittables;
 
 };
 

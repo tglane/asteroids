@@ -14,7 +14,7 @@
 
 #include "Renderable.hpp"
 #include "TriangleMesh.hpp"
-#include "physics/Transformable.hpp"
+#include "physics/Hittable.hpp"
 #include "math/Vector.hpp"
 
 #include <memory>
@@ -25,7 +25,7 @@ namespace asteroids
  * @brief A class to render a cicle to the screen
  * 
  */
-class SpaceCraft : public Renderable, public Transformable
+class SpaceCraft : public Renderable, public Hittable
 {
 public:
 
@@ -62,11 +62,13 @@ public:
      */
     bool hasMesh() const;
 
+    void fixArrow();
+
 private:
     TriangleMesh::Ptr m_mesh;
 
 };
 
-} // namespace asteroids
+}
 
 #endif

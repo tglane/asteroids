@@ -16,12 +16,16 @@
 
 #include <GL/glew.h>
 #include <QOpenGLWidget>
+#include <QtGui/QPainter>
+#include <QtCore/QTimer>
+#include <QtCore/QTime>
 
 #include "view/Camera.hpp"
 #include "rendering/SpaceCraft.hpp"
 #include "rendering/Skybox.hpp"
 #include "util/AsteroidField.hpp"
 #include "physics/PhysicsEngine.hpp"
+#include "view/Controller.hpp"
 
 using namespace asteroids;
 using std::shared_ptr;
@@ -43,6 +47,10 @@ public:
     /// Handles keyboard input and updates the physics engine
     void step(map<Qt::Key, bool>& keyStates);
 
+    void drawHealth(QPainter& painter, int healthPlayer, int healthEnemy);
+
+    void drawMinimap(QPainter& painter, Hittable::Ptr player, Hittable::Ptr enemy);
+
 protected:
 
     /// Init OpenGL
@@ -54,19 +62,16 @@ protected:
     /// Handle new window dimenions
     virtual void resizeGL(int w, int h) override;
 
-    /// Handle mouse movement
-    virtual void mouseMoveEvent(QMouseEvent* event) override;
-
 private:
 
     /// Name of the given level file
     string                      m_levelFile;
 
     /// The virtual camera
-    Camera						m_camera;
+    Camera::Ptr					m_camera;
 
     /// A pointer to the Actor
-    SpaceCraft::Ptr  	        m_actor;
+    SpaceCraft::Ptr  	        m_enemy;
 
     /// A skybox for the scene
     Skybox::Ptr			        m_skybox;
@@ -77,14 +82,28 @@ private:
     /// Physics 
     PhysicsEngine::Ptr          m_physicsEngine;
 
-    /// Rotation speed of the actor
-    float                       m_rotationSpeed;
+    /// timer for correct speed with low fps
+    QTime                       m_fpsTimer;
 
-    /// Translation speed of the actor
-    float                       m_moveSpeed;
+    QTime                       m_startTimer;
 
-    /// Last set mouse position
-    QPoint                      m_mousePos;
+    Controller                  m_controller;
+
+    bool                        m_started;
+
+    bool                        m_gameOver;
+
+    bool                        m_outOfBound;
+
+    bool                        m_useGamepad;
+
+    QPixmap                     m_cockpit;
+
+    QPixmap                     m_playerHeart;
+
+    QPixmap                     m_enemyHeart;
+
+    QPixmap                     m_emptyHeart;
 };
 
 #endif

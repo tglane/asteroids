@@ -27,7 +27,7 @@ class Transformable
 {
 public:
     enum MoveTransform {FORWARD, BACKWARD, STRAFE_LEFT, STRAFE_RIGHT, LIFT_UP, LIFT_DOWN};
-    enum RotationTransfrom{YAW_LEFT, YAW_RIGHT, PITCH_LEFT, PITCH_RIGHT, ROLL_LEFT, ROLL_RIGHT};
+    enum RotationTransform{YAW_COUNTERCLOCKWISE, YAW_CLOCKWISE, PITCH_DOWN, PITCH_UP, ROLL_CLOCKWISE, ROLL_COUNTERCLOCKWISE};
 
     Transformable();
     virtual ~Transformable() = default;
@@ -37,9 +37,9 @@ public:
      * @param axis axis to rotate
      * @param speed speed of rotation
      */
-    void rotate(RotationTransfrom axis, float speed);
+    void rotate(RotationTransform axis, float speed);
 
-    void rotate(RotationTransfrom axis);
+    void rotate(RotationTransform axis);
 
     /**
      * @brief   Moves a triangle mesh at the given axis with the given speed
@@ -51,25 +51,6 @@ public:
     virtual void move(MoveTransform axis);
 
     virtual void move();
-
-    /**
-     * @brief Sets a new flight direction
-     * @param dir   The new direction
-     */
-    void setDirection(Vector<float> dir)
-    {
-        m_direction = dir;
-    }
-
-
-    /**
-     * @brief Return the current flight direction
-     */
-    Vector<float> getDirection()
-    {
-       return m_direction;
-    }
-
 
     /**
      * @brief gives the current position
@@ -122,6 +103,12 @@ public:
      */
     Vector<float> getZAxis() { return m_zAxis;}
 
+    void setXAxis(const Vector<float> &m_xAxis);
+
+    void setYAxis(const Vector<float> &m_yAxis);
+
+    void setZAxis(const Vector<float> &m_zAxis);
+
 protected:
 
     /**
@@ -154,17 +141,6 @@ protected:
      * @brief   The current position of the mesh object
      */
     Vector<float>    m_position;
-
-    /**
-     * @brief   A quaternion representing the current rotation
-     */
-    Quaternion  m_rotation;
-
-
-    /**
-     * @brief   The current moving direction
-     */
-    Vector<float>   m_direction;
 
     /**
      * @brief   The current moving speed

@@ -5,6 +5,8 @@
 #include "MainWindow2D.hpp"
 #include "datamodel/Planet.hpp"
 #include "datamodel/DataModel.hpp"
+#include "view/MainWindow.hpp"
+#include "view2D/StartingDialog.hpp"
 #include <QDesktopWidget>
 #include <QGraphicsOpacityEffect>
 #include <QGraphicsView>
@@ -19,12 +21,9 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
     ui(new Ui::MainWindow2D())
 {
     m_model = model;
-    m_model->addWindow(DataModel::MAIN2D, this);
 
     // Setup user interface
     ui->setupUi(this);
-    
-    resize(QDesktopWidget().availableGeometry(this).size());
 
     scene = new QGraphicsScene(this);
     ui->Map->setScene(scene);
@@ -41,7 +40,7 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
     ui->SendShipNumber->setStyleSheet("background-color:#220044");
     ui->DestionationPlanet->setStyleSheet("background-color:#220044");
 
-    QGraphicsOpacityEffect * effect = new QGraphicsOpacityEffect(ui->ContextMenue);
+     QGraphicsOpacityEffect * effect = new QGraphicsOpacityEffect(ui->ContextMenue);
     effect->setOpacity(0.7);
     ui->ContextMenue->setGraphicsEffect(effect);
     effect = new QGraphicsOpacityEffect(ui->Fight);
@@ -50,9 +49,8 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
     QPen outlinePenHighlight(Qt::gray);
     outlinePenHighlight.setWidth(1);
 
-    std::map<int, Planet::Ptr> planets = m_model->getPlanets();
 
-    resizeEvent(NULL);
+    std::map<int, Planet::Ptr> planets = m_model->getPlanets();
 
     int planet_size = 20;
 
@@ -73,17 +71,11 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
         io->setFont(QFont("Helvetica",5));
         io->setZValue(1);
         scene->addItem(io);
-
-        // m_FighterAmount[i] = new QGraphicsTextItem;
-        // m_FighterAmount[i]->setPos(p->getPosX() + planet_size/2+6,p->getPosY() - planet_size/2 + 6);
-        // m_FighterAmount[i]->setPlainText(QString::fromStdString("✈"+p->get));
-        // m_FighterAmount[i]->setDefaultTextColor(Qt::white);
-        // m_FighterAmount[i]->setFont(QFont("Helvetica",5));
-        // m_FighterAmount[i]->setZValue(1);
-        // scene->addItem(m_FighterAmount[i]);
     }
 
     std::list<std::pair<int,int>> edges = m_model->getEdges();
+
+    //Linien einzeichnen
     for(std::list<std::pair<int,int>>::iterator it=edges.begin(); it != edges.end(); ++it){
         std::pair<int,int> coordinates = *it;
         int pos_1 = coordinates.first;
@@ -95,19 +87,6 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
                     p2->getPosX()+planet_size/2, 
                     p2->getPosY()+planet_size/2, 
                     outlinePenHighlight);
-        //Für die anzahl der zurzeit gesendeten Flüge die unterwegs sind
-        QGraphicsTextItem *qgti = new QGraphicsTextItem;
-        qgti->setPos((p1->getPosX() + p2->getPosX())/2,(p1->getPosY() + p2->getPosY())/2);
-        qgti->setPlainText(QString::fromStdString(""));
-        qgti->setDefaultTextColor(Qt::white);
-        qgti->setFont(QFont("Helvetica",5));
-        qgti->setZValue(1);
-        scene->addItem(qgti);
-        if(pos_1<=pos_2){
-            m_fighterAmount[std::make_pair(pos_1,pos_2)]=qgti;
-        }else{
-            m_fighterAmount[std::make_pair(pos_2,pos_1)]=qgti;
-        }
     }
 
     //Öffne das Fighter-Minigame testweise in neuem Fenster
@@ -121,7 +100,6 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
     QPalette palette;
     palette.setBrush(QPalette::Background, bkgnd);
     this->setPalette(palette);
-    //Einfach kopiert
 
     // Add the matching event to the next-round-button
     QPushButton* m_nextRound = ui->NextRound;
@@ -152,16 +130,16 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
     QPushButton* m_exit = ui->ExitGame;
     connect(m_exit, SIGNAL(clicked(bool)), this, SLOT(exitGame(bool)));
 
-
-    // Somehow there's a Segmentation fault if the Fighterwindow is initialized here like
-    // FighterWindow = new asteroids::MainWindow("...")
-    FighterWindow = NULL;
-
     currentPlanet = -1;
+
+    currentYear = 2019;
+    QString qyear = QString::fromUtf8("Year: ");
+    ui->Date->setText(qyear + QString::number(currentYear));
 
     ui->PlanetInfo->setVisible(false);
 
-    updatePlayerInfo();
+    connect(m_model.get(), SIGNAL(updateInfo()), this, SLOT(updatePlayerInfo()));
+
 }
 
 void MainWindow2D::resizeEvent(QResizeEvent* event){
@@ -179,9 +157,7 @@ MainWindow2D::~MainWindow2D()
 
 void MainWindow2D::fight(bool click)
 {
-    std::cout << "Fight" << std::endl;
-    FighterWindow = new asteroids::MainWindow("../models/level.xml");
-    FighterWindow->show();
+    m_model->switchWindow(DataModel::MAIN3D);
 }
 
 void MainWindow2D::choose_planet(int id)
@@ -199,6 +175,7 @@ void MainWindow2D::choose_planet(int id)
             QPixmap pix("../models/surface/my1.jpg");
             ellipse->myBrush = QBrush(pix);
         } 
+        
         // TODO Players are now saved in a map with their id
         //      iterate over all players if getOwner() != NULL
         else if (planets.at(id)->getOwner()==m_model->getEnemyPlayer(1)){
@@ -217,7 +194,7 @@ void MainWindow2D::choose_planet(int id)
             MyEllipse* otherEllipse = getEllipseById(currentPlanet);
             if(planets.at(currentPlanet)->getOwner()==m_model->getSelfPlayer()){
                 QPixmap otherpix("../models/surface/my1.jpg");
-                otherEllipse->myBrush = QBrush(otherpix);
+                ellipse->myBrush = QBrush(otherpix);
             // TODO Players are now saved in a map with their id
             //      iterate over all players if getOwner() != NULL
             } else if (planets.at(currentPlanet)->getOwner()==m_model->getEnemyPlayer(1)){
@@ -248,26 +225,6 @@ void MainWindow2D::choose_planet(int id)
     }
 }
 
-void MainWindow2D::updatePlanetColor(){
-    std::map<int, Planet::Ptr> planets = m_model->getPlanets();
-    for(int id = 0; id < (int)planets.size(); id++){
-        if(id!=currentPlanet){
-            MyEllipse* ellipse = getEllipseById(id);
-            if(planets.at(id)->getOwner()==m_model->getSelfPlayer()){
-                QPixmap pix("../models/surface/my1.jpg");
-                ellipse->myBrush = QBrush(pix);
-            }else if (planets.at(id)->getOwner()==m_model->getEnemyPlayer(1)){
-                QPixmap pix("../models/surface/other1.jpg");
-                ellipse->myBrush = QBrush(pix);
-            } else{
-                QPixmap pix("../models/surface/neutral1.jpg");
-                ellipse->myBrush = QBrush(pix);  
-            }
-            ellipse->update();
-        }
-    }
-}
-
 void MainWindow2D::endOfRound(bool click)
 {
     bool succes = m_model->endOfRound();
@@ -275,20 +232,13 @@ void MainWindow2D::endOfRound(bool click)
     // fuck this "unused" warnings! :D
     if(succes);
 
+    currentYear++;
+    QString qyear = QString::fromUtf8("Year: ");
+    ui->Date->setText(qyear + QString::number(currentYear));
+
     updatePlayerInfo();
     updatePlanetInfo(currentPlanet);
-    updatePlanetColor();
 
-    //Anzeige der aktuellen Flüge löschen
-    std::list<std::pair<int,int>> edges = m_model->getEdges();
-    for(std::list<std::pair<int,int>>::iterator it=edges.begin(); it != edges.end(); ++it){
-        std::pair<int,int> coordinates = *it;
-        int pos_1 = coordinates.first;
-        int pos_2 = coordinates.second;
-        QGraphicsTextItem *qgti = m_fighterAmount[std::make_pair(pos_1,pos_2)];
-        qgti->setPlainText(QString::fromStdString(""));
-        qgti->update();
-    }
     // TODO wait for response of server, block the window until all players are ready
 }
 
@@ -328,6 +278,7 @@ void MainWindow2D::buildShip(bool click)
     if (m_model->buyShip(p, p->getOwner()))
     {
         std::cout << "Build Ship!" << std::endl;
+        p->incShipsOrdered();
         updatePlanetInfo(currentPlanet);
         updatePlayerInfo();
     } else {
@@ -367,43 +318,16 @@ void MainWindow2D::sendShips(bool click)
     std::cout << "Send Ship from " << m_model->getPlanetFromId(currentPlanet)->getName() << 
         " to " << ui->DestionationPlanet->currentText().toStdString() << std::endl;
     
-    std::string planetname = ui->DestionationPlanet->currentText().toStdString();
-    Planet::Ptr to = m_model->getPlanetFromName(planetname);
+    Planet::Ptr to = m_model->getPlanetFromName(ui->DestionationPlanet->currentText().toStdString());
     Planet::Ptr from = m_model->getPlanetFromId(currentPlanet);
-    int ships = ui->SendShipNumber->currentText().toInt();
-    m_model->moveShips(from, to, ships);
+    m_model->moveShips(from, to, ui->SendShipNumber->currentText().toInt());
     updatePlanetInfo(currentPlanet);
     updatePlayerInfo();
-        //Flüge an Kanten hinzufügen
-        int pos_1 = currentPlanet;
-        int pos_2 = m_model->getIDFromPlanetName(planetname);
-        if(pos_1<=pos_2){
-            QGraphicsTextItem *qgti = m_fighterAmount[std::make_pair(pos_1,pos_2)];
-            QString qs = qgti->toPlainText();
-            std::string s = qs.toStdString();
-            int fighter = atoi(s.c_str());
-            fighter+=ships;
-            std::cout<<fighter<<std::endl;
-            std::string ships_string = std::to_string(fighter);
-            qgti->setPlainText(QString::fromStdString(ships_string));
-            qgti->update();
-        }else{
-            QGraphicsTextItem *qgti = m_fighterAmount[std::make_pair(pos_2,pos_1)];
-            QString qs = qgti->toPlainText();
-            std::string s = qs.toStdString();
-            int fighter = atoi(s.c_str());
-            fighter+=ships;
-            std::cout<<fighter<<std::endl;
-            std::string ships_string = std::to_string(fighter);
-            qgti->setPlainText(QString::fromStdString(ships_string));
-            qgti->update();
-        }
-    
 }
 
 void MainWindow2D::exitGame(bool click)
 {
-    QCoreApplication::quit();
+    m_model->switchWindow(DataModel::END);
 }
 
 MyEllipse* MainWindow2D::getEllipseById(int id)
@@ -424,6 +348,7 @@ void MainWindow2D::updatePlayerInfo()
         new QLabel(QString::number(m_model->getSelfPlayer()->getMines())));
     ui->SpielerInfoTable->setCellWidget(4, 1, 
         new QLabel(QString::number(m_model->getSelfPlayer()->getShips())));
+
 }
 
 void MainWindow2D::updatePlanetInfo(int id)
@@ -438,6 +363,10 @@ void MainWindow2D::updatePlanetInfo(int id)
         ui->BuildShip->setVisible(false);
         ui->SendShipNumber->setVisible(false);
         ui->DestionationPlanet->setVisible(false);
+        ui->MineOrdersLabel->setVisible(false);
+        ui->MineOrdersValue->setVisible(false);
+        ui->ShipOrdersLabel->setVisible(false);
+        ui->ShipOrdersValue->setVisible(false);
     } else {
         // Enable entsprechende Felder, wenn Planet besessen wird
         ui->SendShip->setVisible(true);
@@ -445,6 +374,25 @@ void MainWindow2D::updatePlanetInfo(int id)
         ui->BuildShip->setVisible(true);
         ui->SendShipNumber->setVisible(true);
         ui->DestionationPlanet->setVisible(true);
+        ui->MineOrdersLabel->setVisible(true);
+        ui->MineOrdersValue->setVisible(true);
+        ui->ShipOrdersLabel->setVisible(true);
+        ui->ShipOrdersValue->setVisible(true);
+
+        /* Schiffe und Minen können nur mit genügend Rubinen gekauft werden */
+        if (m_model->getSelfPlayer()->getRubin() < m_model->getShipCost())
+        {
+            ui->BuildShip->setVisible(false);
+        } else {
+            ui->BuildShip->setVisible(true);
+        }
+        if (m_model->getSelfPlayer()->getRubin() < m_model->getMineCost())
+        {
+            ui->BuildMine->setVisible(false);
+        } else {
+            ui->BuildMine->setVisible(true);
+        }
+
 
         std::list<Planet::Ptr> neighbour_list = p->getNeighbours();
 
@@ -469,7 +417,15 @@ void MainWindow2D::updatePlanetInfo(int id)
 
     // Planeteninfo ausfüllen
     ui->PlanetName->setText(QString::fromStdString(p->getName()));
-    ui->MineNumber->setText(QString::number(p->getMinesBuild()));
+
+    QString mineText = QString::number(p->getMinesBuild()) + " / " + QString::number(p->getMines());
+    ui->MineNumber->setText(mineText);
+    // Verstecke den Button, wenn die max. Minenanzahl erreicht ist
+    if (p->getMinesBuild() + p->getMinesHidden() == p->getMines())
+    {
+        ui->BuildMine->setVisible(false);
+    }
+
     ui->ShipNumber->setText(QString::number(p->getShips()));
     if (p->getOwner() == NULL)
     {
@@ -479,6 +435,9 @@ void MainWindow2D::updatePlanetInfo(int id)
     {
         ui->Info->setText(QString::fromStdString(p->getOwner()->getPlayerName()));
     }
+
+    ui->MineOrdersValue->setText(QString::number(p->getMinesHidden()));
+    ui->ShipOrdersValue->setText(QString::number(p->getShipsOrdered()));
 }
 
 void MainWindow2D::showPlayerName()
