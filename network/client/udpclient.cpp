@@ -2,7 +2,7 @@
 #include "udpclient.hpp"
 #include <iostream>
 
-udpclient::udpclient(int id, QString ip, QObject *parent)
+udpclient::udpclient(int id, QString ip, int port, QObject *parent)
  : QObject(parent)
 {
     m_id = id;
@@ -12,7 +12,7 @@ udpclient::udpclient(int id, QString ip, QObject *parent)
     socket = std::make_shared<QUdpSocket>(this);
     seq_number = 1;
 
-    socket->bind(QHostAddress(QString("0.0.0.0")), 1234);
+    socket->bind(QHostAddress(QString("0.0.0.0")), port);
 
     connect(socket.get(), SIGNAL(readyRead()), this, SLOT(readyRead()));
 }

@@ -87,7 +87,7 @@ void tcpclient::recv_json()
     }
     else if (recv_array[0] == "fight_init" && (m_state == client_state::END_ROUND || m_state == client_state::FIGHT) )
     {
-        m_udpclient = std::shared_ptr<udpclient>(new udpclient(m_datamodel->getOwnID(), m_server_ip));
+        m_udpclient = std::shared_ptr<udpclient>(new udpclient(m_datamodel->getOwnID(), m_server_ip, m_socket->localPort()));
         m_udpclient->init_fight_slot(recv_array[2].toObject());
         std::cout << "fight iniz" << std::endl;
 
@@ -135,7 +135,7 @@ void tcpclient::process_strat_init(QJsonArray recv_array)
 
     for(int i = 1; i < recv_array.size(); i++)
     {
-        if(recv_array[i].toObject()["id"] != m_datamodel->getSelfPlayer()->getIdentity())
+        if(recv_array[i].toObject()["id"] != m_datamodel->getOwnID())
         {
             /* Sets enemy player name to the name sent from server */
             m_datamodel->getEnemyPlayer(recv_array[i].toObject()["id"].toInt())->setPlayerName(recv_array[i].toObject()["player_name"].toString().toStdString());
