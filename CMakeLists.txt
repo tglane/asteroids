@@ -154,8 +154,9 @@ set(ASTEROID_SOURCES
     view/GLWidget.cpp
     view/MainWindow.cpp
     network/client/udpclient.cpp
-        network/client/tcpclient.cpp
+    network/client/tcpclient.cpp
     datamodel/DataModel.cpp
+    datamodel/DataModel_Server.cpp
     datamodel/Planet.cpp
     datamodel/Player.cpp
     datamodel/MineOrder.cpp
@@ -178,6 +179,8 @@ set(ASTEROID_MOCS
     view2D/StartingDialog.hpp
     view2D/EndWindow.hpp
     view2D/GameWindow.hpp
+    datamodel/DataModel.hpp
+    datamodel/DataModel_Server.hpp
 )
 
 set(ASTEROID_UIS
