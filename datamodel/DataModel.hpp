@@ -128,6 +128,8 @@ public:
      */
     QJsonDocument createJson(Player::Ptr player);
 
+    QJsonObject createBattleJson(Battle::Ptr battle);
+
     /**
      * OBSOLETE
      * @brief Creates Json File, which includes player identification, player rubin status, and orders
@@ -164,7 +166,15 @@ public:
      */
     void addPlayer(Player::Ptr player);
 
+    /**
+     * @brief returns the Player which holds the given id
+     * @param i The ID of the player to be found
+     * @return the player which holds this id, if player with given is nonexistant 
+     *         new player with id -1 is returned
+     */
     Player::Ptr getPlayerByID(int i);
+
+
 
 signals:
     void updateInfo();
