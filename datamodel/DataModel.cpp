@@ -676,7 +676,7 @@ void DataModel::BattlePhase()
         std::cout << BattleDetail->m_player2->getPlayerName() << std::endl;
         std::cout << BattleDetail->m_numberShips2 << std::endl;
 
-        
+        switchWindow(DataModel::SWITCH);
 
 
     }

@@ -160,7 +160,7 @@ MainWindow2D::~MainWindow2D()
 
 void MainWindow2D::fight(bool click)
 {
-    m_model->switchWindow(DataModel::MAIN3D);
+    m_model->switchWindow(DataModel::SWITCH);
 }
 
 void MainWindow2D::choose_planet(int id)
@@ -446,7 +446,7 @@ void MainWindow2D::updatePlanetInfo(int id)
 
 void MainWindow2D::initMap()
 {
-    
+
 }
 
 

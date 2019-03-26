@@ -42,7 +42,7 @@ class DataModel : public QObject
 
 public:
 
-    enum { MAIN2D, MAIN3D, START, END };
+    enum { MAIN2D, MAIN3D, START, END, SWITCH };
     using Ptr = std::shared_ptr<DataModel>;
 
     /**
@@ -103,8 +103,6 @@ public:
 
     void addWidget(int Id, QWidget* widget);
 
-    void switchWindow(int Id);
-
     Player::Ptr getSelfPlayer();
 
     Player::Ptr getEnemyPlayer(int id);
@@ -160,6 +158,10 @@ public:
 
 signals:
     void updateInfo();
+
+public slots:
+
+    void switchWindow(int Id);
 
 
 private:
