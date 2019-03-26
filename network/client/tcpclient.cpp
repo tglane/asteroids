@@ -174,6 +174,8 @@ void tcpclient::process_fight_init(QJsonObject recv_obj)
     m_physicsEngine = m_mainwindow->ui->openGLWidget->getPhysicsEngine();
 
     /* Parse fight_init package */
+    qDebug() << recv_obj;
+
     QJsonArray asteroids_arr = recv_obj["asteroids"].toArray();
     for(auto asteroid_value : asteroids_arr)
     {
