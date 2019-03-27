@@ -356,6 +356,11 @@ bool DataModel_Server::updateAll(QJsonObject &update) {
             planet->setShips(ships);
             planet->setOwner(player);
 
+            if(planet->getShipyardBuilt() != shipyard && !(planet->getShipyardBuilt()))
+            {
+            	planet->buildShipyard();
+            }
+
             planets.push_back(planet);
 
         }//End Iterator Array
