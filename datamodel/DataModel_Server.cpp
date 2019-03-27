@@ -4,7 +4,6 @@
 #include <utility>
 
 
-
 namespace asteroids{
 
 DataModel_Server::DataModel_Server() : m_players(), m_planets(), m_edges()
@@ -95,11 +94,11 @@ bool DataModel_Server::endOfRound()
     std::cout << "End of Round!" << std::endl;
 
     performMovements(getSelfPlayer());
-    findBattles();
-    BattlePhase();
+    //findBattles();
+    //BattlePhase();
     m_self->PrintPlanetsList();
     m_enemy->PrintPlanetsList();
-    BattleReport();
+    //BattleReport();
     WinCondition();
     m_self->PrintPlanetsList();
     m_enemy->PrintPlanetsList();
@@ -431,6 +430,19 @@ int DataModel_Server::getIDFromPlanet(Planet::Ptr planet)
 
 QJsonObject DataModel_Server::createJson(Player::Ptr player)
 {
+
+    for (auto i: m_planets) {
+        std::cout << "planet: "
+                 << i.first
+                 << " " << i.second->getName();
+        if (i.second->getOwner() != nullptr) {
+            std::cout << " owner: " << i.second->getOwner()->getIdentity();
+        }
+        if (i.second->getInvader() != nullptr) {
+            std::cout << " invader: " << i.second->getInvader()->getIdentity();
+        }
+        std::cout << std::endl;
+    }
     // main QJson object in the document
     QJsonObject main;
 
