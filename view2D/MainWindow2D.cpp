@@ -569,6 +569,7 @@ void MainWindow2D::initPlanets()
     } else {
         std::cout << "Error MainWindow2D initPlanets: Versucht Map ein weiteres Mal zu zeichnen!" << std::endl;
     }
+    //ui->Map->update(0, 0, scene_width*2, scene_height*2);
 }
 
 void MainWindow2D::setMapSize(int width, int height)

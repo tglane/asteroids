@@ -77,11 +77,12 @@ void DataModel::addWidget(int Id, QWidget* widget)
 
 void DataModel::switchWindow(int Id)
 {
+    ((strategy::GameWindow*)m_mainWindow)->content()->setCurrentWidget(m_widgets[Id]);
     if(Id == MAIN2D || Id == MAIN3D)
     {
-        ((strategy::MainWindow2D*)m_widgets[MAIN2D])->resizeEvent(NULL);
-        m_mainWindow->showFullScreen();
+        //((strategy::MainWindow2D*)m_widgets[MAIN2D])->resizeEvent(NULL);
         emit updateInfo();
+        m_mainWindow->showFullScreen();
     }
     if(Id == MAIN3D)
     {
@@ -92,7 +93,6 @@ void DataModel::switchWindow(int Id)
     {
         emit ((strategy::GameWindow*)m_mainWindow)->play();
     }
-    ((strategy::GameWindow*)m_mainWindow)->content()->setCurrentWidget(m_widgets[Id]);  
 }
 
 DataModel::~DataModel(){}
