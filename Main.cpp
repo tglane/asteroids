@@ -23,7 +23,7 @@ int main(int argc, char** argv)
 {
     QApplication a(argc, argv);
 
-    DataModel::Ptr model = DataModel::Ptr(new DataModel("../models/Level-2.map"));
+    DataModel::Ptr model = DataModel::Ptr(new DataModel());
     
     //TODO add input for player name and server io
     tcpclient::Ptr tcp_client(std::make_shared<tcpclient>(model));
