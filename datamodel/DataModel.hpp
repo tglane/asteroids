@@ -62,6 +62,10 @@ public:
 
     void addMainWindow(QMainWindow* window);
 
+    void addWidget(int Id, QWidget* widget);
+
+    void getUniverse(std::string filename);
+
 
 public slots:
 

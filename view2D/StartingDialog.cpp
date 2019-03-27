@@ -52,11 +52,11 @@ void StartingDialog::startGame(bool click)
         
         m_model->startGame();
 
-        // Call switching mechanism of datamodel
-        m_model->switchWindow(DataModel::MAIN2D);
         ui->ServerAddress->setText("127.0.0.1");
 
         emit connect_to_server(name, ui->ServerAddress->text().toStdString());
+        
+        // Call switching mechanism of datamodel
         //m_model->switchWindow(DataModel::MAIN2D);
     }
     else

@@ -46,7 +46,7 @@ void DataModel_Server::getUniverse(std::string filename)
         int numvertex, posx, posy, mines;
         std::string name;
 
-        f >> numvertex;
+        f >> numvertex >> posx >> posy;
 
         // initialize all planets and add them to the map
         for(int i = 0; i < numvertex; i++)
