@@ -6,7 +6,7 @@
 
 namespace strategy{
 
-GameWindow::GameWindow(DataModel::Ptr model, QWidget* parent) : 
+GameWindow::GameWindow(DataModel::Ptr model, tcpclient::Ptr tcp_client, QWidget* parent) :
     QMainWindow(parent), ui(new Ui::GameWindow())
 {
     m_model = model;
@@ -26,6 +26,8 @@ GameWindow::GameWindow(DataModel::Ptr model, QWidget* parent) :
     m_model->addWidget(DataModel::MAIN3D, fightwindow);*/
 
     StartingDialog* startingDialog = new StartingDialog(m_model);
+    connect(startingDialog, SIGNAL(connect_to_server(string, string)), tcp_client.get(), SLOT(connect_to_server(string, string)));
+
     ui->centralwidget->addWidget(startingDialog);
     m_model->addWidget(DataModel::START, startingDialog);
 

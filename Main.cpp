@@ -30,7 +30,7 @@ int main(int argc, char** argv)
     QAbstractSocket::connect(model.get(), SIGNAL(endround_signal()), tcp_client.get(), SLOT(send_ready()));
 
 
-    strategy::GameWindow gamewindow(model);
+    strategy::GameWindow gamewindow(model, tcp_client);
 
     QObject::connect(tcp_client.get(), SIGNAL(start_round()), &gamewindow, SLOT(start_round()));
 

@@ -14,8 +14,6 @@ tcpclient::tcpclient(asteroids::DataModel::Ptr datamodel, QObject* parent)
 
     connect(m_socket.get(), SIGNAL(connected()), this, SLOT(send_init()));
     connect(m_socket.get(), SIGNAL(readyRead()), this, SLOT(recv_json()));
-
-    connect_to_server("ASDF", "127.0.0.1");
 }
 
 void tcpclient::connect_to_server(string name, string server_ip)
@@ -128,26 +126,21 @@ void tcpclient::process_init_res(QJsonObject recv_obj)
     send_ready();
 }
 
-void tcpclient::process_strat_init(QJsonArray recv_array)
-{
+void tcpclient::process_strat_init(QJsonArray recv_array) {
     //m_datamodel->getSelfPlayer()->setPlayerName(m_player_name.toStdString());
 
     std::cout << "strat_init" << std::endl;
 
-    for(int i = 1; i < recv_array.size(); i++)
-    {
-       // if(recv_array[i].toObject()["id"] != m_datamodel->getPlayerByID(recv_array[i].toObject()["id"].toInt())->get)
-        {
-            /* Sets enemy player name to the name sent from server */
-            //m_datamodel->getEnemyPlayer(recv_array[i].toObject()["id"].toInt())->setPlayerName(recv_array[i].toObject()["player_name"].toString().toStdString());
-            m_datamodel->constructPlayer(recv_array[i].toObject()["id"].toInt(),recv_array[i].toObject()["player_name"].toString().toStdString());
-        }
+    for (int i = 1; i < recv_array.size(); i++) {
+        m_datamodel->constructPlayer(recv_array[i].toObject()["id"].toInt(),
+                                      recv_array[i].toObject()["player_name"].toString().toStdString());
+
     }
     emit start_round();
     m_state = client_state::ROUND;
 
-    send_ready();
-    m_state = client_state::END_ROUND;
+    //send_ready();
+    //m_state = client_state::END_ROUND;
 }
 
 void tcpclient::process_state(QJsonArray recv_array)
