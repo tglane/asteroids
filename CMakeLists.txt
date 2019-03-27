@@ -95,6 +95,7 @@ find_package( Qt5
     OpenGL
     Gamepad
     Multimedia
+    Network
     REQUIRED
 )
 
@@ -102,7 +103,7 @@ include_directories(${Qt5Widgets_INCLUDE_DIRS})
 include_directories(${Qt5Core_INCLUDE_DIRS})
 include_directories(${Qt5OpenGL_INCLUDE_DIRS})
 include_directories(${Qt5Multimedia_INCLUDE_DIRS})
-
+include_directories(${Qt5Network_INCLUDE_DIRS})
 
 ###############################################################################
 # Compile external libraries
@@ -135,9 +136,12 @@ set(ASTEROID_SOURCES
     math/Randomizer.cpp
     physics/Transformable.cpp
     physics/PhysicalObject.cpp
+    physics/PhysicalBullet.cpp
     physics/PhysicsEngine.cpp
+    physics/BasePhysicsEngine.cpp
     physics/ParticleEngine.cpp
     physics/Hittable.cpp
+    physics/PhysicalBullet.cpp
     rendering/Bullet.cpp
     rendering/ParticleEffect.cpp
     rendering/Sphere.cpp
@@ -151,9 +155,11 @@ set(ASTEROID_SOURCES
     util/ColorMap.cpp   
     util/Util.cpp
     view/GLWidget.cpp
-    view/MainWindow.cpp 
-    view/Camera.cpp  
+    view/MainWindow.cpp
+    network/client/udpclient.cpp
+    network/client/tcpclient.cpp
     datamodel/DataModel.cpp
+    datamodel/DataModel_Server.cpp
     datamodel/Planet.cpp
     datamodel/Player.cpp
     datamodel/MineOrder.cpp
@@ -178,6 +184,8 @@ set(ASTEROID_MOCS
     view2D/EndWindow.hpp
     view2D/GameWindow.hpp
     view2D/SwitchingWindowInfo.hpp
+    datamodel/DataModel.hpp
+    datamodel/DataModel_Server.hpp
 )
 
 set(ASTEROID_UIS
@@ -210,6 +218,7 @@ set(ASTEROID_DEPENDS
     ${JPEG_LIBRARIES}
     ${Qt5Widgets_LIBRARIES}
     ${Qt5Multimedia_LIBRARIES}
+    ${Qt5Network_LIBRARIES}
     c3dsreader
 )
 

@@ -1,7 +1,6 @@
 #include "view2D/StartingDialog.hpp"
 #include "view2D/MainWindow2D.hpp"
 #include <iostream>
-#include <string>
 
 namespace strategy{
 
@@ -16,6 +15,8 @@ StartingDialog::StartingDialog(DataModel::Ptr model, QWidget* parent) :
     ui->NameLabel->setStyleSheet("QLabel { color: white }");
     ui->ServerAddressLabel->setStyleSheet("QLabel { color: white }");
     ui->ChooseMapLabel->setStyleSheet("QLabel { color: white}");
+
+    ui->Name->setText("Siegbert");
 
     QPixmap bkgnd("../models/box1.jpg");
     bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
@@ -45,14 +46,18 @@ void StartingDialog::exitGame(bool clicked)
 void StartingDialog::startGame(bool click)
 {
     std::string name = ui->Name->text().toStdString();
-    if(name != "")
+    if(name != "" && name != "Please insert a name!")
     {
-        m_model->getSelfPlayer()->setPlayerName(name);
+        //m_model->getSelfPlayer()->setPlayerName(name);
         
         m_model->startGame();
 
+        ui->ServerAddress->setText("127.0.0.1");
+
+        emit connect_to_server(name, ui->ServerAddress->text().toStdString());
+        
         // Call switching mechanism of datamodel
-        m_model->switchWindow(DataModel::MAIN2D);
+        //m_model->switchWindow(DataModel::MAIN2D);
     }
     else
     {

@@ -43,13 +43,13 @@ public:
      * @param accel
      * @param radius the collision ball
      */
-    PhysicalObject(
-        Renderable::Ptr r, 
+    PhysicalObject( 
         Vector<float> direction, 
         Vector<float> position, 
         float mass, float momentum, float speed, 
-        float accel, float radius);
+        float accel, float radius, int id);
 
+    PhysicalObject(int id);
     PhysicalObject();
 
     /**
@@ -62,6 +62,8 @@ public:
      */
     virtual void destroy();
 
+    virtual void render() {};
+
     /**
      * @brief multiply the speed by factor
      * @param factor the
@@ -69,6 +71,7 @@ public:
     void multiplySpeed(int factor);
 
 
+    float getSpeed();
     /**
      * @brief checks of collision with a other object
      * @param p the other object, that could collision
@@ -84,7 +87,7 @@ public:
      * */
     bool alive();
 
-    virtual void render() override;
+    int get_id() { return m_id; };
 
     virtual int radius()
     {
@@ -93,6 +96,8 @@ public:
 
 
 protected:
+    unsigned int id;
+
 
     /**
      * the rotation
@@ -130,7 +135,7 @@ protected:
      */
     bool m_alive;
 
-    Renderable::Ptr m_renderable;
+    int m_id;
 
 };
 

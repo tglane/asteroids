@@ -42,20 +42,20 @@ void ParticleEngine::render()
     std::list<ParticleEffect::Ptr>::iterator it;
     for(it = m_effects.begin(); it != m_effects.end(); it++)
     {
-        (*it)->render();   
-    }   
+        (*it)->render();
+    }
 }
 
 void ParticleEngine::update()
 {
     std::list<ParticleEffect::Ptr>::iterator it;
-    
+
     for(it = m_effects.begin(); it != m_effects.end(); it++)
     {
         if((*it)->update())
         {
             it = m_effects.erase(it);
-        }        
+        }
     }
 }
 

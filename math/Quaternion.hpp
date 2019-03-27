@@ -90,6 +90,12 @@ public:
 	 * @return Vector3f
 	 */
 	Vector3f operator* (const Vector3f& vec) const;
+
+	/// Getter for internal fields x, y, z, w
+	float getX() { return x; }
+	float getY() { return y; }
+	float getZ() { return z; }
+	float getW() { return w; }
   
 private:
 

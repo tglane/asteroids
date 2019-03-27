@@ -11,6 +11,7 @@
 
 #include "build/ui_GameWindow.h"
 #include "datamodel/DataModel.hpp"
+#include "network/client/tcpclient.hpp"
 
 
 using asteroids::DataModel;
@@ -36,7 +37,7 @@ public:
      * @brief Construct a new Main Window object
      *
      */
-    GameWindow(DataModel::Ptr model, QWidget* parent = NULL);
+    GameWindow(DataModel::Ptr model, tcpclient::Ptr tcp_client, QWidget* parent = NULL);
 
     /**
      * @brief Destroys the Main Window object
@@ -51,6 +52,7 @@ public:
 
     /// Returns the height of the windows
     //int height();
+
 signals:
     void play();
 
@@ -58,6 +60,8 @@ signals:
 
     void pause();
 
+public slots:
+    void start_round();
     
 
 private:
