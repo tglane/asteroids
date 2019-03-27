@@ -51,7 +51,7 @@ void StartingDialog::startGame(bool click)
     {
         //m_model->getSelfPlayer()->setPlayerName(name);
         
-        m_model->startGame();
+
 
         //ui->ServerAddress->setText("127.0.0.1");
 
