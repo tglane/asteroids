@@ -26,6 +26,8 @@ public:
 
     ~SwitchingWindowInfo();
 
+    void resizeEvent(QResizeEvent* event);
+
 
 private:
 

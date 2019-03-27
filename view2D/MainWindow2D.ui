@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1200</width>
-    <height>900</height>
+    <width>1193</width>
+    <height>878</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -67,9 +67,9 @@
       <widget class="QWidget" name="SpielerInfo" native="true">
        <property name="geometry">
         <rect>
-         <x>10</x>
+         <x>0</x>
          <y>0</y>
-         <width>291</width>
+         <width>301</width>
          <height>251</height>
         </rect>
        </property>
@@ -78,9 +78,15 @@
          <rect>
           <x>50</x>
           <y>0</y>
-          <width>201</width>
-          <height>20</height>
+          <width>301</width>
+          <height>31</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>14</pointsize>
+          <underline>true</underline>
+         </font>
         </property>
         <property name="text">
          <string>Spielerinformation</string>
@@ -98,6 +104,13 @@
           <height>221</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <pointsize>14</pointsize>
+          <weight>50</weight>
+          <bold>false</bold>
+         </font>
+        </property>
         <property name="verticalScrollBarPolicy">
          <enum>Qt::ScrollBarAlwaysOff</enum>
         </property>
@@ -106,6 +119,15 @@
         </property>
         <property name="autoScroll">
          <bool>true</bool>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>35</width>
+          <height>35</height>
+         </size>
+        </property>
+        <property name="textElideMode">
+         <enum>Qt::ElideMiddle</enum>
         </property>
         <property name="rowCount">
          <number>5</number>
@@ -116,8 +138,17 @@
         <attribute name="horizontalHeaderVisible">
          <bool>false</bool>
         </attribute>
+        <attribute name="horizontalHeaderCascadingSectionResizes">
+         <bool>false</bool>
+        </attribute>
+        <attribute name="horizontalHeaderDefaultSectionSize">
+         <number>130</number>
+        </attribute>
         <attribute name="verticalHeaderVisible">
          <bool>false</bool>
+        </attribute>
+        <attribute name="verticalHeaderDefaultSectionSize">
+         <number>41</number>
         </attribute>
         <row/>
         <row/>
@@ -140,11 +171,29 @@
          <property name="text">
           <string>Rubies</string>
          </property>
+         <property name="font">
+          <font>
+           <weight>50</weight>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>../models/rubin.png</normaloff>../models/rubin.png</iconset>
+         </property>
         </item>
-        <item row="1" column="1"/>
+        <item row="1" column="1">
+         <property name="text">
+          <string/>
+         </property>
+        </item>
         <item row="2" column="0">
          <property name="text">
           <string>Planets</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>../models/planet.png</normaloff>../models/planet.png</iconset>
          </property>
         </item>
         <item row="2" column="1">
@@ -156,6 +205,10 @@
          <property name="text">
           <string>Mines</string>
          </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>../models/pickaxe.png</normaloff>../models/pickaxe.png</iconset>
+         </property>
         </item>
         <item row="3" column="1">
          <property name="text">
@@ -165,6 +218,10 @@
         <item row="4" column="0">
          <property name="text">
           <string>Ships</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>../models/spacecraft.png</normaloff>../models/spacecraft.png</iconset>
          </property>
         </item>
         <item row="4" column="1">
@@ -188,9 +245,16 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>241</width>
-          <height>20</height>
+          <width>301</width>
+          <height>31</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>14</pointsize>
+          <italic>false</italic>
+          <underline>true</underline>
+         </font>
         </property>
         <property name="text">
          <string>Planeteninfo</string>
@@ -202,8 +266,8 @@
        <widget class="QComboBox" name="DestionationPlanet">
         <property name="geometry">
          <rect>
-          <x>150</x>
-          <y>150</y>
+          <x>160</x>
+          <y>320</y>
           <width>131</width>
           <height>31</height>
          </rect>
@@ -218,18 +282,25 @@
           <height>27</height>
          </rect>
         </property>
-        <property name="text">
-         <string>Colonize</string>
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+         </font>
         </property>
        </widget>
        <widget class="QPushButton" name="BuildShip">
         <property name="geometry">
          <rect>
-          <x>180</x>
-          <y>120</y>
-          <width>99</width>
-          <height>27</height>
+          <x>170</x>
+          <y>260</y>
+          <width>121</width>
+          <height>41</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>14</pointsize>
+         </font>
         </property>
         <property name="text">
          <string>Build Ship</string>
@@ -238,11 +309,16 @@
        <widget class="QLabel" name="PlanetName">
         <property name="geometry">
          <rect>
-          <x>10</x>
-          <y>20</y>
+          <x>0</x>
+          <y>50</y>
           <width>261</width>
-          <height>21</height>
+          <height>31</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>14</pointsize>
+         </font>
         </property>
         <property name="text">
          <string>&lt;PlanetName&gt;</string>
@@ -254,11 +330,16 @@
        <widget class="QLabel" name="Info">
         <property name="geometry">
          <rect>
-          <x>10</x>
-          <y>40</y>
+          <x>0</x>
+          <y>90</y>
           <width>281</width>
-          <height>41</height>
+          <height>31</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>14</pointsize>
+         </font>
         </property>
         <property name="text">
          <string>&lt;Besitzer&gt;</string>
@@ -267,11 +348,16 @@
        <widget class="QLabel" name="MineNumber">
         <property name="geometry">
          <rect>
-          <x>80</x>
-          <y>90</y>
+          <x>90</x>
+          <y>200</y>
           <width>71</width>
-          <height>21</height>
+          <height>41</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>14</pointsize>
+         </font>
         </property>
         <property name="text">
          <string/>
@@ -280,11 +366,16 @@
        <widget class="QPushButton" name="BuildMine">
         <property name="geometry">
          <rect>
-          <x>180</x>
-          <y>90</y>
-          <width>101</width>
-          <height>27</height>
+          <x>170</x>
+          <y>200</y>
+          <width>121</width>
+          <height>41</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>14</pointsize>
+         </font>
         </property>
         <property name="text">
          <string>Build Mine</string>
@@ -293,11 +384,16 @@
        <widget class="QLabel" name="ShipNumber">
         <property name="geometry">
          <rect>
-          <x>80</x>
-          <y>120</y>
+          <x>90</x>
+          <y>260</y>
           <width>71</width>
-          <height>21</height>
+          <height>41</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>14</pointsize>
+         </font>
         </property>
         <property name="text">
          <string/>
@@ -312,6 +408,11 @@
           <height>31</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+         </font>
+        </property>
        </widget>
        <widget class="QPushButton" name="SendShip">
         <property name="geometry">
@@ -322,6 +423,11 @@
           <height>31</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <pointsize>14</pointsize>
+         </font>
+        </property>
         <property name="text">
          <string>Send Ship</string>
         </property>
@@ -330,36 +436,53 @@
         <property name="geometry">
          <rect>
           <x>10</x>
-          <y>90</y>
-          <width>71</width>
-          <height>21</height>
+          <y>200</y>
+          <width>41</width>
+          <height>41</height>
          </rect>
         </property>
         <property name="text">
-         <string>Mines: </string>
+         <string/>
+        </property>
+        <property name="pixmap">
+         <pixmap>../models/pickaxe.png</pixmap>
+        </property>
+        <property name="scaledContents">
+         <bool>true</bool>
         </property>
        </widget>
        <widget class="QLabel" name="ShipLabel">
         <property name="geometry">
          <rect>
           <x>10</x>
-          <y>120</y>
-          <width>67</width>
-          <height>21</height>
+          <y>260</y>
+          <width>41</width>
+          <height>41</height>
          </rect>
         </property>
         <property name="text">
-         <string>Ships: </string>
+         <string/>
+        </property>
+        <property name="pixmap">
+         <pixmap>../models/spacecraft.png</pixmap>
+        </property>
+        <property name="scaledContents">
+         <bool>true</bool>
         </property>
        </widget>
        <widget class="QLabel" name="MineOrdersLabel">
         <property name="geometry">
          <rect>
           <x>10</x>
-          <y>190</y>
-          <width>101</width>
-          <height>21</height>
+          <y>370</y>
+          <width>121</width>
+          <height>31</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>14</pointsize>
+         </font>
         </property>
         <property name="text">
          <string>Mine-Orders: </string>
@@ -369,10 +492,15 @@
         <property name="geometry">
          <rect>
           <x>10</x>
-          <y>220</y>
-          <width>101</width>
-          <height>21</height>
+          <y>410</y>
+          <width>121</width>
+          <height>31</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>14</pointsize>
+         </font>
         </property>
         <property name="text">
          <string>Ship-Orders: </string>
@@ -381,11 +509,16 @@
        <widget class="QLabel" name="MineOrdersValue">
         <property name="geometry">
          <rect>
-          <x>130</x>
-          <y>190</y>
+          <x>150</x>
+          <y>400</y>
           <width>91</width>
-          <height>21</height>
+          <height>31</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>14</pointsize>
+         </font>
         </property>
         <property name="text">
          <string/>
@@ -394,25 +527,55 @@
        <widget class="QLabel" name="ShipOrdersValue">
         <property name="geometry">
          <rect>
-          <x>130</x>
-          <y>220</y>
+          <x>150</x>
+          <y>440</y>
           <width>91</width>
-          <height>21</height>
+          <height>31</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>14</pointsize>
+         </font>
         </property>
         <property name="text">
          <string/>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="Colonize">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>130</y>
+          <width>301</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>14</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>Colonize</string>
         </property>
        </widget>
       </widget>
       <widget class="QPushButton" name="NextRound">
        <property name="geometry">
         <rect>
-         <x>50</x>
+         <x>10</x>
          <y>260</y>
-         <width>99</width>
-         <height>41</height>
+         <width>141</width>
+         <height>51</height>
         </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>14</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
        </property>
        <property name="text">
         <string>Next Round</string>
@@ -421,11 +584,16 @@
       <widget class="QLabel" name="Date">
        <property name="geometry">
         <rect>
-         <x>190</x>
+         <x>170</x>
          <y>260</y>
-         <width>91</width>
-         <height>41</height>
+         <width>121</width>
+         <height>51</height>
         </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>16</pointsize>
+        </font>
        </property>
        <property name="text">
         <string>&lt;Date&gt;</string>
@@ -439,6 +607,13 @@
          <width>281</width>
          <height>61</height>
         </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>14</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
        </property>
        <property name="text">
         <string>Exit Game</string>

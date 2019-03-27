@@ -137,7 +137,7 @@ public:
     void setStartPlanet(std::shared_ptr<Planet> startplanet);
 
 
-    void addMainWindow(QStackedWidget* window);
+    void addMainWindow(QMainWindow* window);
 
     void addWidget(int Id, QWidget* widget);
 
@@ -303,7 +303,7 @@ private:
     // Map of Windows
     std::map<int, QWidget*> m_widgets;
 
-    QStackedWidget* m_mainWindow;
+    QMainWindow* m_mainWindow;
 
     // List of upcoming battles
     std::list<std::shared_ptr<Battle>> m_battles;
