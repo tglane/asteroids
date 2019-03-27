@@ -1,7 +1,7 @@
 ###############################################################################
 # Declare the minimum cmake version required
 ###############################################################################
-cmake_minimum_required(VERSION 3.0.2)
+cmake_minimum_required(VERSION 3.10.2)
 
 ###############################################################################
 # The name of out project
@@ -32,6 +32,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 # can be used to generate debug symbols for gdb. The release option uses
 # special optimization flags
 ###############################################################################
+
 
 set( CMAKE_CXX_FLAGS         "-O3 -Wall -std=c++14" )
 set( CMAKE_CXX_FLAGS_RELEASE "-O3 -msse3 -Wno-deprecated-declarations -Wno-unused -Wcpp" )
@@ -92,14 +93,16 @@ find_package( Qt5
     Core
     Widgets
     OpenGL
-    Network
     Gamepad
+    Multimedia
+    Network
     REQUIRED
 )
 
 include_directories(${Qt5Widgets_INCLUDE_DIRS})
 include_directories(${Qt5Core_INCLUDE_DIRS})
 include_directories(${Qt5OpenGL_INCLUDE_DIRS})
+include_directories(${Qt5Multimedia_INCLUDE_DIRS})
 include_directories(${Qt5Network_INCLUDE_DIRS})
 
 ###############################################################################
@@ -168,6 +171,7 @@ set(ASTEROID_SOURCES
     view2D/MyEllipse.cpp
     view2D/EndWindow.cpp
     view2D/GameWindow.cpp
+    view2D/SwitchingWindowInfo.cpp
     view/Camera.cpp
     view/Controller.cpp
     Gamepad.cpp
@@ -179,6 +183,7 @@ set(ASTEROID_MOCS
     view2D/StartingDialog.hpp
     view2D/EndWindow.hpp
     view2D/GameWindow.hpp
+    view2D/SwitchingWindowInfo.hpp
     datamodel/DataModel.hpp
     datamodel/DataModel_Server.hpp
 )
@@ -189,6 +194,7 @@ set(ASTEROID_UIS
     view2D/StartingDialog.ui
     view2D/EndWindow.ui
     view2D/GameWindow.ui
+    view2D/SwitchingWindowInfo.ui
 )
 
 set(CMAKE_AUTOMOC ON)
@@ -211,6 +217,7 @@ set(ASTEROID_DEPENDS
     ${SDL2_LIBRARY}
     ${JPEG_LIBRARIES}
     ${Qt5Widgets_LIBRARIES}
+    ${Qt5Multimedia_LIBRARIES}
     ${Qt5Network_LIBRARIES}
     c3dsreader
 )

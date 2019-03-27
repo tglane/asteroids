@@ -16,7 +16,6 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QString>
-#include <QStackedWidget>
 
 
 #include "MoveOrder.hpp"
@@ -52,18 +51,20 @@ public:
      */
     DataModel();
 
+    DataModel(std::string filename);
+
     DataModel(std::string level, int id, std::string player_name );
     /**
      * @brief   Frees the memory
      */
     ~DataModel();
 
-    DataModel(std::string filename);
 
-
-    void addMainWindow(QStackedWidget* window);
+    void addMainWindow(QMainWindow* window);
 
     void addWidget(int Id, QWidget* widget);
+
+    void getUniverse(std::string filename);
 
 
 public slots:
@@ -76,7 +77,7 @@ private:
     // Map of Windows
     std::map<int, QWidget*> m_widgets;
 
-    QStackedWidget* m_mainWindow;
+    QMainWindow* m_mainWindow;
 };
 
 }

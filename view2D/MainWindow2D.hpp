@@ -44,13 +44,25 @@ public:
      */
     ~MainWindow2D();
 
+    /**
+     * @brief update all displayed information if a planet is choosen
+     */
     void updatePlanetInfo(int id);
     
     void initMap();
 
+signals:
+    void play();
+
+    void pause();
+
+    void stop();
+
+
 public slots:
 
     void updateAllInfo();
+
     void updatePlayerInfo();
 
     /**
@@ -99,20 +111,32 @@ public slots:
     void sendShips(bool click);
 
     /**
-     * @brief   Is calle when exit Button is pressed, 
+     * @brief   Is called when exit Button is pressed, 
      */
     void exitGame(bool click);
 
+    /**
+     * @brief   returns an ellipse to a given id
+     */
     MyEllipse* getEllipseById(int id);
 
-    void showPlayerName();
-
     void updatePlanetColor();
+
+    /**
+     * @brief   draw the map of planets and the edges between them;
+     *          should only be executed once
+     */
+    void initPlanets();
+
+    void setMapSize(int width, int height);
 
 signals:
     void endround_signal();
 
 private:
+
+    int scene_height;
+    int scene_width;
 
     /// QT UI of the window
     Ui::MainWindow2D* ui;
@@ -130,6 +154,8 @@ private:
     int currentPlanet;
 
     int currentYear;
+
+    bool map_created = false;
 };
 
 

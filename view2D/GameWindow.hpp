@@ -7,6 +7,7 @@
 #include <QPushButton>
 #include <QGraphicsEllipseItem>
 #include <QMouseEvent>
+#include <QMediaPlayer>
 
 #include "build/ui_GameWindow.h"
 #include "datamodel/DataModel.hpp"
@@ -44,12 +45,21 @@ public:
      */
     ~GameWindow();
 
+    QStackedWidget* content();
 
     /// Returns the width of the window
     //int width();
 
     /// Returns the height of the windows
     //int height();
+
+signals:
+    void play();
+
+    void stop();
+
+    void pause();
+
 public slots:
     void start_round();
     
@@ -61,6 +71,8 @@ private:
 
     // The model which manages the round based data
     DataModel::Ptr m_model;
+
+    QMediaPlayer* m_mediaplayer;
 };
 
 
