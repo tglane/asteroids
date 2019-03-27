@@ -27,7 +27,14 @@ public:
 
 private:
 
-    float length(Vector3f v);
+    static const float maxDistance;
+    static const float fieldOfView;
+    static const float speed;
+    static const float rotSpeed;
+
+    float magnitude(Vector3f v);
+
+    float signedDistanceToPlane(Vector3f x, Vector3f b, Vector3f e1, Vector3f e2);
 
     TriangleMesh::Ptr m_mesh;
 

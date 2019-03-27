@@ -255,6 +255,10 @@ void GLWidget::step(map<Qt::Key, bool>& keyStates)
             {
                 test->run(elapsed_time);
             }
+            if (keyStates[Qt::Key_Z])
+            {
+                test->move(Transformable::FORWARD, 5);
+            }
             if (keyStates[Qt::Key_T])
             {
                 test->rotate(Transformable::PITCH_UP, 0.05);
