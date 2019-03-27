@@ -152,11 +152,23 @@ void Player::putListMoveOrder(std::shared_ptr<MoveOrder> newMoveOrder)
 	m_moveOrders.push_back(newMoveOrder);
 }
 
+std::list<std::shared_ptr<ShipyardOrder>> Player::getListShipyardOrder()
+{
+	return m_shipyardOrders;
+}
+
+void Player::putListShipyardOrder(std::shared_ptr<ShipyardOrder> newShipyardOrder)
+{
+	m_shipyardOrders.push_back(newShipyardOrder);
+}
+
+
 void Player::ClearOrderListInPlayer()
 {
 	m_shipOrders.clear();
 	m_mineOrders.clear();
 	m_moveOrders.clear();
+	m_shipyardOrders.clear();
 }
 
 std::list<std::shared_ptr<Planet>> Player::getListOfPLanets()
