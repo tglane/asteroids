@@ -165,6 +165,8 @@ void tcpclient::process_strat_init(QJsonArray recv_array) {
 
 void tcpclient::process_state(QJsonArray recv_array)
 {
+    m_datamodel->clearInvaders();
+
     QJsonObject obj = recv_array[1].toObject();
     m_datamodel->updateAll(obj);
 
