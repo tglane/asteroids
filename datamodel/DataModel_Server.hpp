@@ -18,6 +18,7 @@
 #include "MoveOrder.hpp"
 #include "MineOrder.hpp"
 #include "ShipOrder.hpp"
+#include "ShipyardOrder.hpp"
 #include "Battle.hpp"
 
 using std::map;
@@ -66,6 +67,8 @@ public:
     bool buyShip(Planet::Ptr selectedPlanet, Player::Ptr m_self);
 
     bool buyMine(Planet::Ptr selectedPlanet, Player::Ptr m_self);
+
+    bool buyShipyard(Planet::Ptr selectedPlanet, Player::Ptr m_self);
 
     void TransaktionShip();
 
@@ -191,6 +194,8 @@ protected:
     int Shipcost = 500;
 
     int Minecost = 1000;
+
+    int Shipyardcost = 2000;
 
     int Minegain = 750;
     /**
