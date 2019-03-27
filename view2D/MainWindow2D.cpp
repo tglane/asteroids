@@ -268,6 +268,14 @@ void MainWindow2D::updatePlanetColor(){
             }
             ellipse->update();
         }
+        QString string = QString::fromStdString(planets.at(id)->getName());
+        QGraphicsTextItem *qgti = m_fighterPlanet[id];
+        if(planets.at(id)->getShips()>0){
+            string = string + QString::fromStdString("\n    ✈:");
+            string = string + QString::number(planets.at(id)->getShips());
+        }
+        qgti->setPlainText(string);
+        qgti->update();
     }
 }
 
@@ -292,6 +300,15 @@ void MainWindow2D::colonize(bool click)
     ui->ShipNumber->setText(QString::number(p->getShips()));
     updatePlanetInfo(currentPlanet);
     updatePlayerInfo();
+
+    QString string = QString::fromStdString(p->getName());
+    QGraphicsTextItem *qgti = m_fighterPlanet[currentPlanet];
+    if(p->getShips()>0){
+        string = string + QString::fromStdString("\n    ✈:");
+        string = string + QString::number(p->getShips());
+    }
+    qgti->setPlainText(string);
+    qgti->update();
 }
 
 void MainWindow2D::buildShip(bool click)
@@ -306,15 +323,23 @@ void MainWindow2D::buildShip(bool click)
         return;
     }
 
-    if (m_model->buyShip(p, p->getOwner()))
+    if (p->getShipyardBuilt()) 
     {
-        std::cout << "Build Ship!" << std::endl;
-        p->incShipsOrdered();
-        updatePlanetInfo(currentPlanet);
-        updatePlayerInfo();
+        if (m_model->buyShip(p, p->getOwner()))
+        {
+            std::cout << "Build Ship!" << std::endl;
+            p->incShipsOrdered();
+            updatePlanetInfo(currentPlanet);
+            updatePlayerInfo();
+        } else {
+            std::cout << "Fehler MainWindow2D: Build Ship!" << std::endl;
+        }
     } else {
-        std::cout << "Fehler MainWindow2D: Build Ship!" << std::endl;
+        p->buildShipyard();
+        ui->BuildShip->setText("Build Ship");
     }
+
+    
 }
 
 void MainWindow2D::buildMine(bool click)
@@ -358,6 +383,15 @@ void MainWindow2D::sendShips(bool click)
     updatePlayerInfo();
     if(ships >0)
     {
+        QString string = QString::fromStdString(from->getName());
+        QGraphicsTextItem *qgti = m_fighterPlanet[currentPlanet];
+        if(from->getShips()>0){
+            string = string + QString::fromStdString("\n    ✈:");
+            string = string + QString::number(from->getShips());
+        }
+        qgti->setPlainText(string);
+        qgti->update();
+
     //Flüge an Kanten hinzufügen
         int pos_1 = currentPlanet;
         int pos_2 = m_model->getIDFromPlanetName(planetname);
@@ -535,6 +569,7 @@ void MainWindow2D::initPlanets()
             io->setFont(QFont("Helvetica",5));
             io->setZValue(1);
             scene->addItem(io);
+            m_fighterPlanet[i] = io;
         }
 
         std::list<std::pair<int,int>> edges = m_model->getEdges();

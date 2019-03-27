@@ -237,7 +237,7 @@
          <x>0</x>
          <y>310</y>
          <width>301</width>
-         <height>481</height>
+         <height>451</height>
         </rect>
        </property>
        <widget class="QLabel" name="PlanetenInfoLabel">
@@ -288,7 +288,7 @@
          </font>
         </property>
         <property name="text">
-         <string>Build Ship</string>
+         <string>Build Shipyard</string>
         </property>
        </widget>
        <widget class="QLabel" name="PlanetName">
@@ -439,10 +439,10 @@
        <widget class="QLabel" name="ShipLabel">
         <property name="geometry">
          <rect>
-          <x>0</x>
-          <y>250</y>
-          <width>61</width>
-          <height>61</height>
+          <x>10</x>
+          <y>260</y>
+          <width>41</width>
+          <height>41</height>
          </rect>
         </property>
         <property name="text">
@@ -588,7 +588,7 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>800</y>
+         <y>766</y>
          <width>281</width>
          <height>61</height>
         </rect>
