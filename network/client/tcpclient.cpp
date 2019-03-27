@@ -122,7 +122,11 @@ void tcpclient::recv_json()
 void tcpclient::process_init_res(QJsonObject recv_obj)
 {
     m_player_id = recv_obj["id"].toInt();
-    //m_datamodel->getUniverse(recv_obj["map"].toString().toStdString());
+    m_datamodel->getUniverse(recv_obj["map"].toString().toStdString());
+    m_datamodel->constructPlayer(m_player_id,
+                                 m_player_name.toStdString(), true);
+
+
 
     //m_datamodel->switchWindow(asteroids::DataModel::MAIN2D);
 
@@ -152,9 +156,10 @@ void tcpclient::process_strat_init(QJsonArray recv_array) {
     for (int i = 1; i < recv_array.size(); i++) {
         //std::cout << "id: " << recv_array[i].toObject()["id"].toInt() << "m_plyer_id: " << m_player_id << std::endl;
         bool is_self = recv_array[i].toObject()["id"].toInt() == m_player_id;
-        m_datamodel->constructPlayer(recv_array[i].toObject()["id"].toInt(),
-                                     recv_array[i].toObject()["player_name"].toString().toStdString(), is_self);
-
+        if (!is_self) {
+            m_datamodel->constructPlayer(recv_array[i].toObject()["id"].toInt(),
+                                         recv_array[i].toObject()["player_name"].toString().toStdString(), is_self);
+        }
     }
 
     m_datamodel->printPlanets();
