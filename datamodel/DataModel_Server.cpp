@@ -277,6 +277,14 @@ void DataModel_Server::setStartPlanet(std::shared_ptr<Planet> startplanet)
 	m_self->addPlanet(startplanet);
 }
 
+void DataModel_Server::clearInvaders() {
+    for (auto i: m_planets) {
+        i.second->setInvaderShips(0);
+        i.second->setInvader(nullptr);
+    }
+}
+
+
 bool DataModel_Server::updateAll(QJsonObject &update) {
 
 	//if (update.isObject() && !update.isEmpty())

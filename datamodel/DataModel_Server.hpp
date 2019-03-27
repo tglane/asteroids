@@ -172,6 +172,8 @@ public:
 
     void printPlanets();
 
+    void clearInvaders();
+
 signals:
     void updateInfo();
     void initMap();

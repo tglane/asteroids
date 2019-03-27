@@ -126,6 +126,7 @@ void TcpServer::handle_state(TcpClient& client, QJsonDocument& doc) {
     ready_count++;
     if (clients.size() == ready_count) {
         m_battle_list = m_datamodel->findBattles();
+        m_datamodel->clearInvaders();
         qDebug() << "n battles: " << m_battle_list.size();
         //m_battle_list = std::vector<Battle::Ptr>{Battle::Ptr(nullptr)};
 
@@ -274,8 +275,6 @@ void TcpServer::fightEnd(int id, int health_left) {
     current_battle->m_location->setOwner(m_datamodel->getPlayerByID(id));
     m_datamodel->getPlayerByID(id)->addPlanet(current_battle->m_location);
 
-    current_battle->m_location->setInvader(nullptr);
-    current_battle->m_location->setInvaderShips(0);
     current_battle->m_location->setShips(health_left);
     m_datamodel->getPlayerByID(id)->incShips(ships_left);
 
