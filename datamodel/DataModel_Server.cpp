@@ -193,6 +193,26 @@ bool DataModel_Server::buyMine(Planet::Ptr selectedPlanet, Player::Ptr m_self)
 
 }
 
+bool DataModel_Server::buyShipyard(Planet::Ptr selectedPlanet, Player::Ptr m_self)
+{
+    if(!selectedPlanet->getShipyardBuilt())
+    {
+        int Player_Rubin_Number = m_self->getRubin();
+        if(Player_Rubin_Number >= Shipyardcost)
+        {
+            m_self->delRubin(Shipyardcost);
+            std::shared_ptr<ShipyardOrder> NewShipyard = std::shared_ptr<ShipyardOrder>(new ShipyardOrder(selectedPlanet));
+            m_self->putListShipyardOrder(NewShipyard); 
+            return true;
+        }
+
+        return false;
+
+    }
+
+    return false;
+}
+
 void DataModel_Server::TransaktionMine()
 {
     std::list<std::shared_ptr<MineOrder>> m_TransaktionMine = m_self->getListMineOrder();
