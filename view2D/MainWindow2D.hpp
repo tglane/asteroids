@@ -119,8 +119,13 @@ public slots:
      */
     void initPlanets();
 
+    void setMapSize(int width, int height);
+
 
 private:
+
+    int scene_height;
+    int scene_width;
 
     /// QT UI of the window
     Ui::MainWindow2D* ui;

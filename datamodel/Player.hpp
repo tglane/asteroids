@@ -51,12 +51,27 @@ public:
 	 */
 	int getShips();
 
-	void delShips(int ShipNumber);
-
-	int getMines();
-
+	/**
+	 * @brief sets number of Ships by given Number
+	 * Obacht, da nicht auf Planeten abgebildet!
+	 */
 	void setShips(int ships);
 
+	/**
+	 * @brief deletes a given number of ships ships
+	 * Obacht, da nicht auf Planeten abgebildet!
+	 */
+	void delShips(int ShipNumber);
+
+	/**
+	 * @brief returns number of mines in our ownership
+	 */
+	int getMines();
+
+	/**
+	 * @brief sets number of mines by given number
+	 * Obacht, nicht auf Planeten abgebildet!
+	 */
 	void setMines(int mines);
 
 	/**
