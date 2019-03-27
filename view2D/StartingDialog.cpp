@@ -17,6 +17,7 @@ StartingDialog::StartingDialog(DataModel::Ptr model, QWidget* parent) :
     ui->ChooseMapLabel->setStyleSheet("QLabel { color: white}");
 
     ui->Name->setText("Siegbert");
+    ui->ServerAddress->setText("192.168.0.60");
 
     QPixmap bkgnd("../models/box1.jpg");
     bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
@@ -52,7 +53,7 @@ void StartingDialog::startGame(bool click)
         
         m_model->startGame();
 
-        ui->ServerAddress->setText("127.0.0.1");
+        //ui->ServerAddress->setText("127.0.0.1");
 
         emit connect_to_server(name, ui->ServerAddress->text().toStdString());
         
