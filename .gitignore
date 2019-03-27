@@ -2,5 +2,9 @@ cmake-build-debug/
 .idea/
 build/
 .vscode/
+<<<<<<< Updated upstream
 .metadata/
+=======
+.metadata
+>>>>>>> Stashed changes
 cmake/
