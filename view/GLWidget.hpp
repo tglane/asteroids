@@ -16,6 +16,7 @@
 
 #include <GL/glew.h>
 #include <QOpenGLWidget>
+#include <QWidget>
 #include <QtGui/QPainter>
 #include <QtCore/QTimer>
 #include <QtCore/QTime>
@@ -25,6 +26,7 @@
 #include "rendering/Skybox.hpp"
 #include "util/AsteroidField.hpp"
 #include "physics/PhysicsEngine.hpp"
+#include "network/client/udpclient.hpp"
 #include "view/Controller.hpp"
 
 using namespace asteroids;
@@ -47,9 +49,17 @@ public:
     /// Handles keyboard input and updates the physics engine
     void step(map<Qt::Key, bool>& keyStates);
 
-    void drawHealth(QPainter& painter, int healthPlayer, int healthEnemy);
+    void drawHealth(QPainter& painter, int totalHealthPlayer, int totalHealthEnemy);
 
     void drawMinimap(QPainter& painter, Hittable::Ptr player, Hittable::Ptr enemy);
+
+    void setClient(udpclient::Ptr client);
+
+    PhysicsEngine::Ptr getPhysicsEngine() { return m_physicsEngine; }
+
+    Camera::Ptr getCamera() { return m_camera; }
+
+    SpaceCraft::Ptr getEnemy() { return m_enemy; }
 
 protected:
 
@@ -88,6 +98,9 @@ private:
     QTime                       m_startTimer;
 
     Controller                  m_controller;
+
+    /// Udpclient to send pos/mov/rot to the server
+    udpclient::Ptr               m_client;
 
     bool                        m_started;
 

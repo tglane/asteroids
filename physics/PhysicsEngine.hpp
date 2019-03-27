@@ -13,16 +13,17 @@
 #ifndef PHYSICSENGINE_HPP_
 #define PHYSICSENGINE_HPP_
 
-#include <list>
+#include <map>
 #include <memory>
 
 #include "PhysicalObject.hpp"
 #include "ParticleEngine.hpp"
 #include "rendering/Bullet.hpp"
 #include "rendering/SpaceCraft.hpp"
+#include "BasePhysicsEngine.hpp"
 
 
-using std::list;
+using std::map;
 
 
 namespace asteroids
@@ -33,59 +34,50 @@ namespace asteroids
  *          and implements collision detection. Handles particle
  *          effects like explosions.
  */
-class PhysicsEngine : public Renderable
-{
-public:
+    class PhysicsEngine : public BasePhysicsEngine, public Renderable
+    {
+    public:
 
-    using Ptr = std::shared_ptr<PhysicsEngine>;
+        using Ptr = std::shared_ptr<PhysicsEngine>;
 
-    /**
-     * @brief   Ctor.
-     */
-    PhysicsEngine() = default;
+        /**
+         * @brief   Ctor.
+         */
+        PhysicsEngine() = default;
 
-    /**
-     * @brief   Dtor.
-     */
-    virtual ~PhysicsEngine() = default;
+        /**
+         * @brief   Dtor.
+         */
+        virtual ~PhysicsEngine() = default;
 
-    /**
-     * @brief   Adds a destroyable objects, i.e. a static objects
-     *          that can be hit by a bullet (asteroids etc.). Takes ownership of 
-     *          the given pointer
-     */
-    void addDestroyable(PhysicalObject::Ptr& d);
+        /**
+         * @brief   Renders all objects and particle effects
+         */
+        void render();
 
-    void addHittable(Hittable::Ptr& h);
+        /**
+         * @brief   The engine's main loop
+         */
+        bool process(int elapsed_time);
 
-    /**
-     * @brief   Adds a bullet to the scene. Takes ownership of the given pointer
-     */
-    void addBullet(Bullet::Ptr& bullet);
+    void process_collisions(int id_one, int id_two);
+    int check_id_type(int id_to_check);
 
-    /**
-     * @brief   Renders all objects and particle effects
-     */
-    void render();
 
-    /**
-     * @brief   The engine's main loop
-     */
-    bool process(int elapsed_time);
+        /// Getter for current highest IDs
+        int get_curr_bull_id() { return ++curr_bull_id; }
+        int get_curr_dest_id() { return curr_dest_id; }
 
-private:
+    private:
 
-    /// List of destroyable objects
-    list<PhysicalObject::Ptr>    m_objects;
+        ParticleEngine               m_particles;
 
-    /// List of active bullets
-    list<Bullet::Ptr>            m_bullets;
+        /// Current highest id of asteroids and bullets
+        int curr_bull_id = 1;
+        int curr_dest_id = 1;
+        int curr_player_id = 1;
 
-    ParticleEngine               m_particles;
-
-    list<Hittable::Ptr>          m_hittables;
-
-};
+    };
 
 } /* namespace asteroids */
 #endif /* PHYSICSENGINE_HPP_ */

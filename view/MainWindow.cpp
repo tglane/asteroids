@@ -12,7 +12,6 @@
 #include "MainWindow.hpp"
 #include "io/LevelParser.hpp"
 #include "io/TextureFactory.hpp"
-#include "datamodel/DataModel.hpp"
 
 #include <iostream>
 #include <QTimer>
@@ -23,70 +22,58 @@
 namespace asteroids
 {
 
-MainWindow::MainWindow(const std::string& file, DataModel::Ptr model, QWidget* parent) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindow()),
-    m_timer(new QTimer())
+    MainWindow::MainWindow(const std::string& file, QWidget* parent) :
+            QMainWindow(parent),
+            ui(new Ui::MainWindow()),
+            m_timer(new QTimer())
 
-{
-    // Setup user interface
-    ui->setupUi(this);
-    m_widget = ui->openGLWidget;
-
-    // Set level
-    m_widget->setLevelFile(file);
-
-    // Create a timer object to trigger the main loop
-    connect(m_timer.get(), SIGNAL(timeout()), this, SLOT(handleInput()));
-    //m_timer->start(1000/60.0);    start timer when window is activated
-}
-
-void MainWindow::activate(bool active)
-{
-    if(active && !m_timer->isActive())
     {
-        m_timer->start(1000/60.0);
+        // Setup user interface
+        ui->setupUi(this);
+        m_widget = ui->openGLWidget;
+
+        // Set level
+        m_widget->setLevelFile(file);
+
+        // Create a timer object to trigger the main loop
+        connect(m_timer.get(), SIGNAL(timeout()), this, SLOT(handleInput()));
+        m_timer->start(1000 / 60.0);
     }
-    else if(!active && m_timer->isActive())
+
+    int MainWindow::width()
     {
-        m_timer->stop();
+        return m_widget->width();
     }
-}
 
-int MainWindow::width()
-{
-    return m_widget->width();
-}
-
-int MainWindow::height()
-{
-    return m_widget->height();
-}
-
-void MainWindow::handleInput()
-{
-    m_widget->step(m_keyStates);
-}
-
-void MainWindow::keyPressEvent(QKeyEvent* event)
-{
-    // Save which key was pressed
-    m_keyStates[(Qt::Key)event->key()] = true;
-    if (event->key() == Qt::Key_Escape)
+    int MainWindow::height()
     {
-        close();
+        return m_widget->height();
     }
-}
 
-void MainWindow::keyReleaseEvent(QKeyEvent* event)
-{
-    // Save which key was released
-    m_keyStates[(Qt::Key)event->key()] = false;
-}
+    void MainWindow::handleInput()
+    {
+        m_widget->step(m_keyStates);
+    }
 
-MainWindow::~MainWindow()
-{
-    delete ui;
-}
+    void MainWindow::keyPressEvent(QKeyEvent* event)
+    {
+        // Save which key was pressed
+        m_keyStates[(Qt::Key)event->key()] = true;
+        if (event->key() == Qt::Key_Escape)
+        {
+            close();
+        }
+    }
+
+    void MainWindow::keyReleaseEvent(QKeyEvent* event)
+    {
+        // Save which key was released
+        m_keyStates[(Qt::Key)event->key()] = false;
+    }
+
+    MainWindow::~MainWindow()
+    {
+        delete ui;
+    }
 
 } // namespace asteroids

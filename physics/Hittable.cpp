@@ -16,6 +16,7 @@ int Hittable::getId() const
     return m_id;
 }
 
+
 void Hittable::setHealth(int health)
 {
     m_health = health;
@@ -26,8 +27,15 @@ int Hittable::getHealth()
     return m_health;
 }
 
-bool Hittable::hitBullet(Bullet b)
+bool Hittable::hitBullet(PhysicalBullet& b)
 {
+
+
+    // std::cout << "bullet    " << b.getPosition()[0] << " " << b.getPosition()[1]<< " "<< b.getPosition()[2] << std::endl;
+    // std::cout << "hittable  " << getPosition()[0] << " " << getPosition()[1]<< " "<< getPosition()[2] << std::endl;
+    // std::cout << "rad " << b.radius() << std::endl;
+
+
     float length = 200;
     float width = 100;
     float height = 50;
@@ -56,7 +64,7 @@ bool Hittable::hitBullet(Bullet b)
     return magnitude(Vector3f(x - bx, y - by, z - bz)) < b.radius();
 }
 
-bool Hittable::hitAsteroid(PhysicalObject p)
+bool Hittable::hitAsteroid(PhysicalObject& p)
 {
     float length = 200;
     float width = 100;

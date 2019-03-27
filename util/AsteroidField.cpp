@@ -16,26 +16,32 @@
 namespace asteroids
 {
 
-AsteroidField::AsteroidField(int quantity, const std::string& filename, float rangemax, float sizemin, float sizemax)
+AsteroidField::AsteroidField(int quantity)
 {
-	TexturedMesh::Ptr mesh = std::static_pointer_cast<TexturedMesh>(TriangleMeshFactory::instance().getMesh(filename));
+	//TexturedMesh::Ptr mesh = std::static_pointer_cast<TexturedMesh>(TriangleMeshFactory::instance().getMesh(filename));
  	// Generate asteroids
+    //addAsteroid(Asteroid::Ptr(new Asteroid(mesh, Vector3f(), Vector3f(1000, 0, 0), 0, 0, 0, 0, 100, 1)));
+    // addAsteroid(Asteroid::Ptr(new Asteroid(mesh, Vector3f(), Vector3f(-1000, 0, 0), 0, 0, 0, 0, 100, 2)));
+    // addAsteroid(Asteroid::Ptr(new Asteroid(mesh, Vector3f(), Vector3f(0, 1000, 0), 0, 0, 0, 0, 100, 3)));
+    // addAsteroid(Asteroid::Ptr(new Asteroid(mesh, Vector3f(), Vector3f(0, -1000, 0), 0, 0, 0, 0, 100, 4)));
+    int next_id = 0;
 	for(int i = 0; i < quantity; i++)
 	{
-	  Asteroid::Ptr p = make_shared<Asteroid>(Asteroid(
-		  mesh,  Randomizer::instance()->getRandomVertex(1.0),           // Orientation
+	  PhysicalObject::Ptr p = make_shared<PhysicalObject>(PhysicalObject(
+                                                              Vector3f(),
                 Randomizer::instance()->getRandomVertex(1000),          // Position
-                Randomizer::instance()->getRandomNumber(0, 100),        // Mass
-                Randomizer::instance()->getRandomNumber(0, 1.57079633), // Rotation
-                Randomizer::instance()->getRandomNumber(0, 0.05),          // Speed
-                Randomizer::instance()->getRandomNumber(0, 0),          // Acceleration
-                Randomizer::instance()->getRandomNumber(20, 100)         // Radius)
-	  ));
+                0,        // Mass
+                0,
+                0,          // Speed
+                0,          // Acceleration
+                Randomizer::instance()->getRandomNumber(20, 100),         // Radius
+                next_id++
+                                                        ));
 	  m_asteroids.push_back(p);
 	}
 }
 
-void AsteroidField::getAsteroids(std::list<Asteroid::Ptr>& out)
+void AsteroidField::getAsteroids(std::list<PhysicalObject::Ptr>& out)
 {
   //  std::copy(m_asteroids.begin(), m_asteroids.end(), out.begin());
   for(auto it = m_asteroids.begin(); it != m_asteroids.end(); it++)
@@ -43,6 +49,7 @@ void AsteroidField::getAsteroids(std::list<Asteroid::Ptr>& out)
 	  out.push_back( *it);
   }
 }
+
 
 AsteroidField::~AsteroidField()
 {

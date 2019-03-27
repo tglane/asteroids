@@ -16,12 +16,12 @@ Player::Player() : m_planets()
 }
 
 
-Player::Player(int identity, int rubin, int ships) : m_planets()
+Player::Player(int identity, int rubin, int ships, std::string player_name) : m_planets()
 {
 	m_identity = identity;
 	m_rubin = rubin;
 	m_ships = ships;
-	m_name = "Thanos";
+	m_name = player_name;
 }
 
 void Player::setPlanetsList(std::list<std::shared_ptr<Planet>> planets)

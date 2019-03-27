@@ -48,6 +48,8 @@ public:
      * @brief update all displayed information if a planet is choosen
      */
     void updatePlanetInfo(int id);
+    
+    void initMap();
 
 signals:
     void play();
@@ -129,6 +131,8 @@ public slots:
 
     void setMapSize(int width, int height);
 
+signals:
+    void endround_signal();
 
 private:
 

@@ -35,7 +35,7 @@ public:
 	/**
 	 * @brief   Creates an asteroid field with n asteroids in it
 	 */
-	AsteroidField(int n, const std::string& filename, float rangemax, float sizemin, float sizemax);
+	AsteroidField(int n);
 
 	/**
 	 * @brief   Dtor.
@@ -43,12 +43,14 @@ public:
 	virtual ~AsteroidField();
 
 
-	void getAsteroids(std::list<Asteroid::Ptr>& asteroids);
+	void getAsteroids(std::list<PhysicalObject::Ptr>& asteroids);
+
+	void addAsteroid(PhysicalObject::Ptr asteroid);
 
 private:
 
    /// The asteroids in the field
-   std::list<Asteroid::Ptr> m_asteroids;
+   std::list<PhysicalObject::Ptr> m_asteroids;
 };
 
 }
