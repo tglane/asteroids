@@ -75,6 +75,8 @@ void tcpclient::endround_slot()
 
     m_socket->write(doc.toJson());
     m_socket->flush();
+
+    m_state = client_state::END_ROUND;
 }
 
 void tcpclient::recv_json()
