@@ -12,20 +12,11 @@
 
 #include "PhysicsEngine.hpp"
 #include <iostream>
-#include <QtCore/QFileInfo>
-
 using namespace std;
 
 namespace asteroids
 {
-    PhysicsEngine::PhysicsEngine()
-    {
-        m_explosionSound.setSource(QUrl::fromLocalFile(QFileInfo("../resources/explosion.wav").absoluteFilePath()));
-        m_explosionSound.setVolume(0.6f);
 
-        m_hitmarkerSound.setSource(QUrl::fromLocalFile(QFileInfo("../resources/hitmarker.wav").absoluteFilePath()));
-        m_hitmarkerSound.setVolume(0.7f);
-    }
 
     bool PhysicsEngine::process(int elapsed_time)
     {
@@ -98,10 +89,8 @@ namespace asteroids
             if(m_hittables.count(id_to_check) == 1) {
                 int health = m_hittables[id_to_check]->getHealth();
                 m_hittables[id_to_check]->setHealth(health - 1);
-                m_hitmarkerSound.play();
                 if((health -1) % 10 == 0)
                 {
-                    m_explosionSound.play();
                     m_particles.addEffect(ParticleEffect::createExplosionSphere(m_hittables[id_to_check]->getPosition()));
                     m_particles.addEffect(ParticleEffect::createExplosionRing(m_hittables[id_to_check]->getPosition()));
                 }

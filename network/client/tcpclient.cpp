@@ -182,7 +182,7 @@ void tcpclient::process_fight_init(QJsonObject recv_obj)
     std::cout << "fight init" << std::endl;
 
     /* Initialize new window for 3d part */
-    m_mainwindow = std::make_shared<asteroids::MainWindow>("../resources/level.xml");
+    m_mainwindow = std::make_shared<asteroids::MainWindow>("../models/level.xml");
     //m_mainwindow->showFullScreen();
     m_mainwindow->show();
     m_physicsEngine = m_mainwindow->ui->openGLWidget->getPhysicsEngine();
@@ -201,7 +201,7 @@ void tcpclient::process_fight_init(QJsonObject recv_obj)
         int id = asteroid_object["id"].toInt();
 
         //TODO filename for asteroid texture?
-        TexturedMesh::Ptr mesh = std::static_pointer_cast<TexturedMesh>(TriangleMeshFactory::instance().getMesh("../resources/asteroid.3ds"));
+        TexturedMesh::Ptr mesh = std::static_pointer_cast<TexturedMesh>(TriangleMeshFactory::instance().getMesh("../models/asteroid.3ds"));
         Asteroid::Ptr asteroid = std::make_shared<Asteroid>(mesh, Vector3f(), pos, 0, 0, speed, 0, radius, id);
         asteroid->setXAxis(xAxis);
         asteroid->setYAxis(yAxis);

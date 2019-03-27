@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include <QPushButton>
 
-#include "cmake-build-debug/ui_EndWindow.h"
+#include "build/ui_EndWindow.h"
 #include "datamodel/DataModel.hpp"
 
 namespace strategy

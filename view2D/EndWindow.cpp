@@ -17,10 +17,10 @@ EndWindow::EndWindow(DataModel::Ptr model, QWidget* parent) :
     {
         case 1:
             ui->ResultLabel->setText("Victory!");
-            bkgnd = QPixmap("../resources/victory.jpg");
+            bkgnd = QPixmap("../models/victory.jpg");
         case 2:
             ui->ResultLabel->setText("Defeat!");
-            bkgnd = QPixmap("../resources/defeat.jpg");
+            bkgnd = QPixmap("../models/defeat.jpg");
         default:
             ui->ResultLabel->setText("Error!");
     }

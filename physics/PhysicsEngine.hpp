@@ -21,7 +21,6 @@
 #include "rendering/Bullet.hpp"
 #include "rendering/SpaceCraft.hpp"
 #include "BasePhysicsEngine.hpp"
-#include <QSoundEffect>
 
 
 using std::map;
@@ -44,7 +43,7 @@ namespace asteroids
         /**
          * @brief   Ctor.
          */
-        PhysicsEngine();
+        PhysicsEngine() = default;
 
         /**
          * @brief   Dtor.
@@ -72,10 +71,6 @@ namespace asteroids
     private:
 
         ParticleEngine               m_particles;
-
-        QSoundEffect                 m_explosionSound;
-
-        QSoundEffect                 m_hitmarkerSound;
 
         /// Current highest id of asteroids and bullets
         int curr_bull_id = 1;

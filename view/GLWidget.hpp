@@ -20,8 +20,6 @@
 #include <QtGui/QPainter>
 #include <QtCore/QTimer>
 #include <QtCore/QTime>
-#include <QMediaPlayer>
-#include <QSoundEffect>
 
 #include "view/Camera.hpp"
 #include "rendering/SpaceCraft.hpp"
@@ -119,10 +117,6 @@ private:
     QPixmap                     m_enemyHeart;
 
     QPixmap                     m_emptyHeart;
-
-    QMediaPlayer*               m_backgroundMusic;
-
-    QSoundEffect                m_countdownSound;
 };
 
 #endif

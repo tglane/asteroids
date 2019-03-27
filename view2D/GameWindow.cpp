@@ -21,7 +21,7 @@ GameWindow::GameWindow(DataModel::Ptr model, tcpclient::Ptr tcp_client, QWidget*
     connect(strategywindow, SIGNAL(endround_signal()), tcp_client.get(), SLOT(endround_slot()));
 
     // Insert 3D Window into Stacked Widget
-    /*MainWindow* fightwindow = new MainWindow("../resources/level.xml");
+    /*MainWindow* fightwindow = new MainWindow("../models/level.xml");
     ui->centralwidget->addWidget(fightwindow);
     m_model->addWidget(DataModel::MAIN3D, fightwindow);*/
 
@@ -38,7 +38,7 @@ GameWindow::GameWindow(DataModel::Ptr model, tcpclient::Ptr tcp_client, QWidget*
 
     m_model->switchWindow(DataModel::START);
 
-    QPixmap bkgnd("../resources/box1.jpg");
+    QPixmap bkgnd("../models/box1.jpg");
     bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
     QPalette palette;
     palette.setBrush(QPalette::Background, bkgnd);
