@@ -75,6 +75,8 @@ void tcpclient::endround_slot()
 
     m_socket->write(doc.toJson());
     m_socket->flush();
+
+    m_state = client_state::END_ROUND;
 }
 
 void tcpclient::recv_json()
@@ -168,6 +170,8 @@ void tcpclient::process_state(QJsonArray recv_array)
 
     obj = recv_array[2].toObject();
     m_datamodel->updateAll(obj);
+
+    m_state = client_state::ROUND;
 }
 
 void tcpclient::process_fight_init(QJsonObject recv_obj)
