@@ -48,7 +48,7 @@ void StartingDialog::startGame(bool click)
     std::string name = ui->Name->text().toStdString();
     if(name != "" && name != "Please insert a name!")
     {
-        m_model->getSelfPlayer()->setPlayerName(name);
+        //m_model->getSelfPlayer()->setPlayerName(name);
         
         m_model->startGame();
 
