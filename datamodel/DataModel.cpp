@@ -1,6 +1,7 @@
 #include "DataModel.hpp"
 #include "view/MainWindow.hpp"
 #include "view2D/MainWindow2D.hpp"
+#include "view2D/GameWindow.hpp"
 #include <iostream>
 #include <fstream>
 #include <utility>
@@ -302,10 +303,15 @@ void DataModel::switchWindow(int Id)
     }
     if(Id == MAIN3D)
     {
+        emit ((strategy::GameWindow*)m_mainWindow)->pause();
         ((MainWindow*)m_widgets[Id])->activate(true);
     }
-    m_mainWindow->setCurrentWidget(m_widgets[Id]);
-    
+    if(Id == MAIN2D || Id == SWITCH || Id == START)
+    {
+        emit ((strategy::GameWindow*)m_mainWindow)->play();
+        std::cout << "Tried to start background theme!" << std::endl;
+    }
+    m_mainWindow->setCurrentWidget(m_widgets[Id]);  
 }
 
 bool DataModel::updateAll(QJsonDocument &update) {

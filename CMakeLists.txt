@@ -34,9 +34,9 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 ###############################################################################
 
 
-set( CMAKE_CXX_FLAGS         "-O3 -Wall -std=c++14" )
-set( CMAKE_CXX_FLAGS_RELEASE "-O3 -msse3 -Wno-deprecated-declarations -Wno-unused -Wcpp" )
-set( CMAKE_CXX_FLAGS_DEBUG   "-g -Wall" )
+set( CMAKE_CXX_FLAGS         "-O3 -Wall -std=c++14 -lstdc++fs" )
+set( CMAKE_CXX_FLAGS_RELEASE "-O3 -msse3 -Wno-deprecated-declarations -Wno-unused -Wcpp -lstdc++fs" )
+set( CMAKE_CXX_FLAGS_DEBUG   "-g -Wall -lstdc++fs" )
 
 #set( CMAKE_EXE_LINKER_FLAGS  "-L/usr/local/lib -lSDL -lSDLmain -lSDL")
 
@@ -93,13 +93,15 @@ find_package( Qt5
     Core
     Widgets
     OpenGL
-        Gamepad
+    Gamepad
+    Multimedia
     REQUIRED
 )
 
 include_directories(${Qt5Widgets_INCLUDE_DIRS})
 include_directories(${Qt5Core_INCLUDE_DIRS})
 include_directories(${Qt5OpenGL_INCLUDE_DIRS})
+include_directories(${Qt5Multimedia_INCLUDE_DIRS})
 
 
 ###############################################################################
@@ -207,6 +209,7 @@ set(ASTEROID_DEPENDS
     ${SDL2_LIBRARY}
     ${JPEG_LIBRARIES}
     ${Qt5Widgets_LIBRARIES}
+    ${Qt5Multimedia_LIBRARIES}
     c3dsreader
 )
 
@@ -229,4 +232,4 @@ add_executable(asteroids
 ###############################################################################
 
 #target_link_libraries(asteroids SOIL)
-target_link_libraries(asteroids Qt5::Gamepad ${ASTEROID_DEPENDS})
+target_link_libraries(asteroids Qt5::Gamepad ${ASTEROID_DEPENDS} /usr/lib/gcc/x86_64-linux-gnu/7/libstdc++fs.a)

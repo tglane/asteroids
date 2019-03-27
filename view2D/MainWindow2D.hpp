@@ -48,6 +48,14 @@ public:
     
     void initMap();
 
+signals:
+    void play();
+
+    void pause();
+
+    void stop();
+
+
 public slots:
 
     void updatePlayerInfo();
