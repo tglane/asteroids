@@ -22,7 +22,6 @@ DataModel::DataModel(std::string filename, int id, std::string player_name ) :
 
 void DataModel::getUniverse(std::string filename)
 {
-
     std::ifstream f;
     f.open(filename);
 
@@ -80,6 +79,7 @@ void DataModel::switchWindow(int Id)
 {
     if(Id == MAIN2D || Id == MAIN3D)
     {
+        ((strategy::MainWindow2D*)m_widgets[MAIN2D])->resizeEvent(NULL);
         m_mainWindow->showFullScreen();
         emit updateInfo();
     }
