@@ -325,6 +325,7 @@ bool DataModel_Server::updateAll(QJsonObject &update) {
         Planet::Ptr planet;
         int ships;
         int mines;
+        bool shipyard;
 
 
         for (it1 = array.constBegin(); it1 != array.constEnd(); it1++)
@@ -333,6 +334,8 @@ bool DataModel_Server::updateAll(QJsonObject &update) {
             planet = getPlanetFromId(it1->toObject(QJsonObject()).value("ID").toInt());
             mines = it1->toObject(QJsonObject()).value("Mines").toInt();
             ships = it1->toObject(QJsonObject()).value("Ships").toInt();
+            shipyard = it1->toObject(QJsonObject()).value("Shipyard").toBool();
+
 
             planet->setMines(mines);
             planet->setShips(ships);
