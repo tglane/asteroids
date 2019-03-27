@@ -163,7 +163,13 @@ void GLWidget::paintGL()
 
     if (m_enemy->getHealth() > 0)
     {
+        // If no Packet recv, move
+        if (m_client->getCount() > 0) {
+            m_enemy->move();
+        }
         m_enemy->render();
+        m_client->incCount();
+
     }
 
     glDisable(GL_DEPTH_TEST);

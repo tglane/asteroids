@@ -66,6 +66,7 @@ void StartingDialog::startGame(bool click)
         std::cout <<"Versuchen wirs"<< std::endl;
         m_tcpclient = shared_ptr<tcpclient>(new tcpclient(m_model));
         connect(this, SIGNAL(connect_to_server(string, string)), m_tcpclient.get(), SLOT(connect_to_server(string, string)));
+        connect(m_model->getWidget(DataModel::MAIN2D), SIGNAL(endround_signal()), m_tcpclient.get(), SLOT(endround_slot()));
         connect(this, SIGNAL(endround_signal()), m_tcpclient.get(), SLOT(endround_slot()));
         emit connect_to_server(name, server_addr);
 

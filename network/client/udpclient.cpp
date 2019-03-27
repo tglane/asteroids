@@ -181,6 +181,7 @@ void udpclient::setPosFromPackage(int recv_id, char *data)
         data += sizeof(float);
         m_otherFighter->setZAxis(asteroids::Vector<float>(x, y, z));
 
+        frame_count = 0;
     }
 }
 
