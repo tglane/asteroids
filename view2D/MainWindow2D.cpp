@@ -41,67 +41,16 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
     ui->SendShipNumber->setStyleSheet("background-color:#220044");
     ui->DestionationPlanet->setStyleSheet("background-color:#220044");
 
+
+    //Set sidebar look
     QGraphicsOpacityEffect * effect = new QGraphicsOpacityEffect(ui->ContextMenue);
     effect->setOpacity(0.7);
     ui->ContextMenue->setGraphicsEffect(effect);
     effect = new QGraphicsOpacityEffect(ui->Fight);
     effect->setOpacity(0.7);
     ui->Fight->setGraphicsEffect(effect);
-    QPen outlinePenHighlight(Qt::gray);
-    outlinePenHighlight.setWidth(1);
-
-
-    std::map<int, Planet::Ptr> planets = m_model->getPlanets();
-
-    int planet_size = 20;
-
-    //Erstelle die Elipsen und füge sie in die Map und in die QGraphicsScene ein 
-    for(int i = 0; i < (int)planets.size(); i++){
-        Planet::Ptr p = planets.at(i);
-        view_planets[i] = new MyEllipse(p->getPosX(), p->getPosY());
-        view_planets[i]->setZValue(1);
-        scene->addItem(view_planets[i]);
-        QVariant ellipse_ID(i);
-        view_planets[i]->setData(1, ellipse_ID);
-        connect(view_planets[i], SIGNAL(show_planetInfo(int)), this, SLOT(choose_planet(int)));
-
-        QGraphicsTextItem * io = new QGraphicsTextItem;
-        io->setPos(p->getPosX() + planet_size/2,p->getPosY() - planet_size/2);
-        io->setPlainText(QString::fromStdString(p->getName()));
-        io->setDefaultTextColor(Qt::white);
-        io->setFont(QFont("Helvetica",5));
-        io->setZValue(1);
-        scene->addItem(io);
-    }
-
-    std::list<std::pair<int,int>> edges = m_model->getEdges();
-
-    //Linien einzeichnen
-    for(std::list<std::pair<int,int>>::iterator it=edges.begin(); it != edges.end(); ++it){
-        std::pair<int,int> coordinates = *it;
-        int pos_1 = coordinates.first;
-        int pos_2 = coordinates.second;
-        Planet::Ptr p1 = planets.at(pos_1);
-        Planet::Ptr p2 = planets.at(pos_2);
-        scene->addLine(p1->getPosX()+planet_size/2, 
-                    p1->getPosY()+planet_size/2, 
-                    p2->getPosX()+planet_size/2, 
-                    p2->getPosY()+planet_size/2, 
-                    outlinePenHighlight);
-        //Für die anzahl der zurzeit gesendeten Flüge die unterwegs sind
-        QGraphicsTextItem *qgti = new QGraphicsTextItem;
-        qgti->setPos((p1->getPosX() + p2->getPosX())/2,(p1->getPosY() + p2->getPosY())/2);
-        qgti->setPlainText(QString::fromStdString(""));
-        qgti->setDefaultTextColor(Qt::white);
-        qgti->setFont(QFont("Helvetica",5));
-        qgti->setZValue(1);
-        scene->addItem(qgti);
-        if(pos_1<=pos_2){
-            m_fighterAmount[std::make_pair(pos_1,pos_2)]=qgti;
-        }else{
-            m_fighterAmount[std::make_pair(pos_2,pos_1)]=qgti;
-        }
-    }
+    
+    //initPlanets();
 
     //Öffne das Fighter-Minigame testweise in neuem Fenster
     QPushButton* m_button = ui->Fight;
@@ -115,6 +64,7 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
     palette.setBrush(QPalette::Background, bkgnd);
     this->setPalette(palette);
 
+
     // Add the matching event to the next-round-button
     QPushButton* m_nextRound = ui->NextRound;
     connect(m_nextRound, SIGNAL(clicked(bool)), this, SLOT(endOfRound(bool)));
@@ -122,7 +72,6 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
     // Start colonizing the selected Planet, how we get selected Planet?
     // Button should only be selectable if a neighbour of the selected Planet is owned
     QPushButton* m_colonize = ui->Colonize;
-    //m_colonize->setEnabled(false);
     connect(m_colonize, SIGNAL(clicked(bool)), this, SLOT(colonize(bool)));
 
     // Build a ship on selected Planet
@@ -135,11 +84,9 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
     QPushButton* m_buildMine = ui->BuildMine;
     connect(m_buildMine, SIGNAL(clicked(bool)), this, SLOT(buildMine(bool)));
 
+    // Send a ship from the planet which is currently choosen
     QPushButton* m_sendShips = ui->SendShip;
     connect(m_sendShips, SIGNAL(clicked(bool)), this, SLOT(sendShips(bool)));
-
-    // at the beginning no planet is selected so this widget is not visible
-    // ui->PlanetInfo->setVisible(false);
 
     QPushButton* m_exit = ui->ExitGame;
     connect(m_exit, SIGNAL(clicked(bool)), this, SLOT(exitGame(bool)));
@@ -152,12 +99,17 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
 
     ui->PlanetInfo->setVisible(false);
 
+    // event is triggert as soon as information about player is accessible
     connect(m_model.get(), SIGNAL(updateInfo()), this, SLOT(updatePlayerInfo()));
+
+    // event is triggert as soon as planets a available in DataModel
+    connect(m_model.get(), SIGNAL(initMap()), this, SLOT(initPlanets()));
 
 }
 
 void MainWindow2D::resizeEvent(QResizeEvent* event){
-    ui->Map->fitInView(0, 500, 500, 1, Qt::KeepAspectRatio);
+    ui->Map->fitInView(0, 0, scene_width, scene_height, Qt::KeepAspectRatio);
+    std::cout << ui->Map->viewport()->width() << " " << ui->Map->viewport()->height() << std::endl;
 }
 
 MainWindow2D::~MainWindow2D() 
@@ -166,12 +118,14 @@ MainWindow2D::~MainWindow2D()
         delete ui;
     if(FighterWindow != NULL)
         delete FighterWindow;
+    if (scene)
+        delete scene;
 }
 
 
 void MainWindow2D::fight(bool click)
 {
-    m_model->switchWindow(DataModel::MAIN3D);
+    m_model->switchWindow(DataModel::SWITCH);
 }
 
 void MainWindow2D::choose_planet(int id)
@@ -316,13 +270,14 @@ void MainWindow2D::updatePlanetColor(){
 
 void MainWindow2D::colonize(bool click)
 {
+    // now you may end your round
+    ui->NextRound->setVisible(true);
+
     Planet::Ptr p = m_model->getPlanetFromId(currentPlanet);
 
     m_model->setStartPlanet(p);
 
     ui->Colonize->setVisible(false);
-    std::cout << "Colonize!" << std::endl;
-    std::cout<<currentPlanet<<std::endl;
     MyEllipse* otherEllipse = getEllipseById(currentPlanet);
     QPixmap otherpix("../models/surface/my2.jpg");
     otherEllipse->myBrush = QBrush(otherpix);
@@ -397,7 +352,8 @@ void MainWindow2D::sendShips(bool click)
     m_model->moveShips(from, to, ships);
     updatePlanetInfo(currentPlanet);
     updatePlayerInfo();
-
+    if(ships >0)
+    {
     //Flüge an Kanten hinzufügen
         int pos_1 = currentPlanet;
         int pos_2 = m_model->getIDFromPlanetName(planetname);
@@ -422,7 +378,7 @@ void MainWindow2D::sendShips(bool click)
             qgti->setPlainText(QString::fromStdString(ships_string));
             qgti->update();
         }
-
+    }
 }
 
 void MainWindow2D::exitGame(bool click)
@@ -469,15 +425,21 @@ void MainWindow2D::updatePlanetInfo(int id)
         ui->ShipOrdersValue->setVisible(false);
     } else {
         // Enable entsprechende Felder, wenn Planet besessen wird
-        ui->SendShip->setVisible(true);
-        ui->BuildMine->setVisible(true);
-        ui->BuildShip->setVisible(true);
-        ui->SendShipNumber->setVisible(true);
-        ui->DestionationPlanet->setVisible(true);
-        ui->MineOrdersLabel->setVisible(true);
-        ui->MineOrdersValue->setVisible(true);
+        if (p->getShips() > 0)
+        {
+            ui->SendShip->setVisible(true);
+            ui->SendShipNumber->setVisible(true);
+            ui->DestionationPlanet->setVisible(true);
+        } else {
+            ui->SendShip->setVisible(false);
+            ui->SendShipNumber->setVisible(false);
+            ui->DestionationPlanet->setVisible(false);
+        }
+        
         ui->ShipOrdersLabel->setVisible(true);
         ui->ShipOrdersValue->setVisible(true);
+        ui->MineOrdersLabel->setVisible(true);
+        ui->MineOrdersValue->setVisible(true);
 
         /* Schiffe und Minen können nur mit genügend Rubinen gekauft werden */
         if (m_model->getSelfPlayer()->getRubin() < m_model->getShipCost())
@@ -540,10 +502,75 @@ void MainWindow2D::updatePlanetInfo(int id)
     ui->ShipOrdersValue->setText(QString::number(p->getShipsOrdered()));
 }
 
-void MainWindow2D::showPlayerName()
+void MainWindow2D::initPlanets()
 {
-    ui->SpielerInfoTable->setCellWidget(0, 1, 
-        new QLabel(QString::fromStdString(m_model->getSelfPlayer()->getPlayerName())));
+    if (!map_created)
+    {
+        ui->NextRound->setVisible(false);
+        QPen outlinePenHighlight(Qt::gray);
+        outlinePenHighlight.setWidth(1);
+
+        std::map<int, Planet::Ptr> planets = m_model->getPlanets();
+
+        int planet_size = 20;
+
+        //Erstelle die Elipsen und füge sie in die Map und in die QGraphicsScene ein 
+        for(int i = 0; i < (int)planets.size(); i++){
+            Planet::Ptr p = planets.at(i);
+            view_planets[i] = new MyEllipse(p->getPosX(), p->getPosY());
+            view_planets[i]->setZValue(1);
+            scene->addItem(view_planets[i]);
+            QVariant ellipse_ID(i);
+            view_planets[i]->setData(1, ellipse_ID);
+            connect(view_planets[i], SIGNAL(show_planetInfo(int)), this, SLOT(choose_planet(int)));
+
+            QGraphicsTextItem * io = new QGraphicsTextItem;
+            io->setPos(p->getPosX() + planet_size/2,p->getPosY() - planet_size/2);
+            io->setPlainText(QString::fromStdString(p->getName()));
+            io->setDefaultTextColor(Qt::white);
+            io->setFont(QFont("Helvetica",5));
+            io->setZValue(1);
+            scene->addItem(io);
+        }
+
+        std::list<std::pair<int,int>> edges = m_model->getEdges();
+
+        //Linien einzeichnen
+        for(std::list<std::pair<int,int>>::iterator it=edges.begin(); it != edges.end(); ++it){
+            std::pair<int,int> coordinates = *it;
+            int pos_1 = coordinates.first;
+            int pos_2 = coordinates.second;
+            Planet::Ptr p1 = planets.at(pos_1);
+            Planet::Ptr p2 = planets.at(pos_2);
+            scene->addLine(p1->getPosX()+planet_size/2, 
+                        p1->getPosY()+planet_size/2, 
+                        p2->getPosX()+planet_size/2, 
+                        p2->getPosY()+planet_size/2, 
+                        outlinePenHighlight);
+            //Für die anzahl der zurzeit gesendeten Flüge die unterwegs sind
+            QGraphicsTextItem *qgti = new QGraphicsTextItem;
+            qgti->setPos((p1->getPosX() + p2->getPosX())/2,(p1->getPosY() + p2->getPosY())/2);
+            qgti->setPlainText(QString::fromStdString(""));
+            qgti->setDefaultTextColor(Qt::white);
+            qgti->setFont(QFont("Helvetica",5));
+            qgti->setZValue(1);
+            scene->addItem(qgti);
+            if(pos_1<=pos_2){
+                m_fighterAmount[std::make_pair(pos_1,pos_2)]=qgti;
+            }else{
+                m_fighterAmount[std::make_pair(pos_2,pos_1)]=qgti;
+            }
+        }
+        map_created = true;
+    } else {
+        std::cout << "Error MainWindow2D initPlanets: Versucht Map ein weiteres Mal zu zeichnen!" << std::endl;
+    }
+}
+
+void MainWindow2D::setMapSize(int width, int height)
+{
+    scene_width = width;
+    scene_height = height;
 }
 
 }

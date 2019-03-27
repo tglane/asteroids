@@ -8,6 +8,7 @@ EndWindow::EndWindow(DataModel::Ptr model, QWidget* parent) :
     QMainWindow(parent), ui(new Ui::EndWindow())
 {
     m_model = model;
+    m_model->addWidget(DataModel::END,this);
     ui->setupUi(this);
 
     ui->ResultLabel->setStyleSheet("QLabel { color: white }");
@@ -22,6 +23,7 @@ EndWindow::EndWindow(DataModel::Ptr model, QWidget* parent) :
             bkgnd = QPixmap("../models/defeat.jpg");
         default:
             ui->ResultLabel->setText("Error!");
+            bkgnd = QPixmap("../models/victory.jpg");
     }
 
 
@@ -36,7 +38,11 @@ EndWindow::EndWindow(DataModel::Ptr model, QWidget* parent) :
     
 }
 
-EndWindow::~EndWindow() {}
+EndWindow::~EndWindow() {
+    if (ui) {
+        delete ui;
+    }
+}
 
 void EndWindow::exitGame(bool clicked)
 {

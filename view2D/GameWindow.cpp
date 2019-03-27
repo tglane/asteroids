@@ -1,6 +1,7 @@
 #include "view2D/GameWindow.hpp"
 #include "view2D/MainWindow2D.hpp"
 #include "view2D/StartingDialog.hpp"
+#include "view2D/SwitchingWindowInfo.hpp"
 #include "view2D/EndWindow.hpp"
 #include "view/MainWindow.hpp"
 
@@ -29,6 +30,10 @@ GameWindow::GameWindow(DataModel::Ptr model, QWidget* parent) :
     ui->centralwidget->addWidget(startingDialog);
     m_model->addWidget(DataModel::START, startingDialog);
 
+    SwitchingWindowInfo* switchdialog = new SwitchingWindowInfo(m_model);
+    ui->centralwidget->addWidget(switchdialog);
+    m_model->addWidget(DataModel::SWITCH, switchdialog);
+
     EndWindow* endwindow = new EndWindow(m_model);
     ui->centralwidget->addWidget(endwindow);
     m_model->addWidget(DataModel::END, endwindow);
@@ -46,7 +51,8 @@ GameWindow::GameWindow(DataModel::Ptr model, QWidget* parent) :
 
 GameWindow::~GameWindow()
 {
-
+    if (ui)
+        delete ui;
 }
 
 

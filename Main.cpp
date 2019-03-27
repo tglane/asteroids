@@ -19,7 +19,7 @@
 int main(int argc, char** argv)
 {
 
-    DataModel::Ptr model = DataModel::Ptr(new DataModel("../models/Level-1.map"));
+    DataModel::Ptr model = DataModel::Ptr(new DataModel("../models/Level-2.map"));
 
     QApplication a(argc, argv);
 
