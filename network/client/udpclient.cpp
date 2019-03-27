@@ -183,6 +183,7 @@ void udpclient::setPosFromPackage(int recv_id, char *data)
         data += sizeof(float);
         m_otherFighter->setZAxis(asteroids::Vector<float>(x, y, z));
 
+        frame_count = 0;
     }
 }
 
@@ -286,6 +287,8 @@ void udpclient::createNewBulletFromPackage(int recv_seq_nr, int recv_id, char* d
         asteroids::Vector3f bull_vel(x, y, z);
 
         asteroids::Bullet::Ptr bull = std::make_shared<asteroids::Bullet>(asteroids::Bullet(bull_pos, bull_vel, m_id, recv_id));
+        // 30 fps server, 60 fps simulation, move one tick forward before
+        bull->move();
         m_physicsEngine->addBullet(bull);
 
         /* Send acknowledge to server */
