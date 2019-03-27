@@ -176,11 +176,16 @@ namespace asteroids
 
 		void resetMinesHidden() { m_minesHidden = 0; }
 
+		bool getShipyardBuilt();
+
+		void buildShipyard();
 
 	private:
 		std::string m_name;
 
 		std::list<Planet::Ptr> m_neighbours;
+
+		bool m_shipyardBuilt;
 
 		int m_mines;
 		int m_minesbuild;

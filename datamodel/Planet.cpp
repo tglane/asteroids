@@ -28,6 +28,7 @@ Planet::Planet(std::string name, int posx, int posy, int mines, int rubin) : m_n
 	m_invader = nullptr;
 	m_invaderShips = 0;
 	m_ships_ordered = 0;
+	m_shipyardBuilt = false;
 }
 
 
@@ -185,5 +186,20 @@ void Planet::resetShipsOrdered()
 {
 	m_ships_ordered = 0;
 }
+
+bool Planet::getShipyardBuilt()
+{
+	return m_shipyardBuilt;
+}
+
+void Planet::buildShipyard()
+{
+	if(m_shipyardBuilt == true)
+	{
+		std::cerr << "Shipyard already has been built before" << std::endl;
+	}
+	m_shipyardBuilt = true;
+}
+
 
 }
