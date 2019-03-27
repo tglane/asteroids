@@ -123,6 +123,10 @@ void tcpclient::process_init_res(QJsonObject recv_obj)
 {
     m_player_id = recv_obj["id"].toInt();
     m_datamodel->getUniverse(recv_obj["map"].toString().toStdString());
+    m_datamodel->constructPlayer(m_player_id,
+                                 m_player_name.toStdString(), true);
+
+
 
     //m_datamodel->switchWindow(asteroids::DataModel::MAIN2D);
 
