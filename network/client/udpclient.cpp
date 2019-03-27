@@ -284,6 +284,8 @@ void udpclient::createNewBulletFromPackage(int recv_seq_nr, int recv_id, char* d
         asteroids::Vector3f bull_vel(x, y, z);
 
         asteroids::Bullet::Ptr bull = std::make_shared<asteroids::Bullet>(asteroids::Bullet(bull_pos, bull_vel, m_id, recv_id));
+        // 30 fps server, 60 fps simulation, move one tick forward before
+        bull->move();
         m_physicsEngine->addBullet(bull);
 
         /* Send acknowledge to server */
