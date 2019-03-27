@@ -83,7 +83,9 @@ public:
     int getIDFromPlanetName(std::string name);
 
     std::list<std::pair<int,int>> getEdges();
-
+    /**
+     * added: subtractEarnings for each planet
+     */
     void calculateFinance(Player::Ptr Player);
     
     void startGame();
