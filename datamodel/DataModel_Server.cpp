@@ -342,7 +342,7 @@ bool DataModel_Server::updateAll(QJsonObject &update) {
         for (it1 = array.constBegin(); it1 != array.constEnd(); it1++)
         {
             planet = getPlanetFromId(it1->toObject(QJsonObject()).value("ID").toInt());
-            ships = it1->toObject(QJsonObject()).value("Ships").toInt();
+            ships = it1->toObject(QJsonObject()).value("InvaderShips").toInt();
 
             if(planet->getOwner() == nullptr || planet->getOwner()->getIdentity() == id)
             {

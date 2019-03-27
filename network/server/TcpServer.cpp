@@ -211,6 +211,8 @@ void TcpServer::fight_init(Battle::Ptr battle)
                 y_axis = Vector3f(0, -1, 0);
             }
             int ship_count;
+
+            qDebug() << "Battle adfsadf: " << battle->m_numberShips1 << " " <<  battle->m_numberShips2;
             if (battle->m_player1->getIdentity() == i.id) {
                 ship_count = battle->m_numberShips1;
             } else {
