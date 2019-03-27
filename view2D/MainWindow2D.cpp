@@ -326,8 +326,8 @@ void MainWindow2D::buildShip(bool click)
         return;
     }
 
-    if (p->getShipyardBuilt()) 
-    {
+    //if (p->getShipyardBuilt()) 
+    //{
         if (m_model->buyShip(p, p->getOwner()))
         {
             std::cout << "Build Ship!" << std::endl;
@@ -337,10 +337,10 @@ void MainWindow2D::buildShip(bool click)
         } else {
             std::cout << "Fehler MainWindow2D: Build Ship!" << std::endl;
         }
-    } else {
-        p->buildShipyard();
-        ui->BuildShip->setText("Build Ship");
-    }
+        // } else {
+        //   p->buildShipyard();
+        //   ui->BuildShip->setText("Build Ship");
+        //}
 
     
 }

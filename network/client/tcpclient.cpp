@@ -191,12 +191,12 @@ void tcpclient::process_state(QJsonArray recv_array)
 void tcpclient::process_fight_init(QJsonObject recv_obj)
 {
     /* Initialize the udp client for the connection during 3d fight */
-    m_udpclient = std::make_shared<udpclient>(m_player_id, m_server_ip, m_socket->localPort());
-    m_udpclient->init_fight_slot(recv_obj);
     std::cout << "fight init" << std::endl;
 
     
     if (m_mainwindow == nullptr) {
+        m_udpclient = std::make_shared<udpclient>(m_player_id, m_server_ip, m_socket->localPort());
+        m_udpclient->init_fight_slot(recv_obj);
         m_mainwindow = std::make_shared<MainWindow>("../models/level.xml");
         m_mainwindow->showFullScreen();
         m_physicsEngine = m_mainwindow->ui->openGLWidget->getPhysicsEngine();
