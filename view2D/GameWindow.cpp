@@ -5,6 +5,10 @@
 #include "view2D/EndWindow.hpp"
 #include "view/MainWindow.hpp"
 
+#include <experimental/filesystem>
+
+namespace fs = std::experimental::filesystem;
+
 namespace strategy{
 
 GameWindow::GameWindow(DataModel::Ptr model, QWidget* parent) : 
@@ -38,16 +42,27 @@ GameWindow::GameWindow(DataModel::Ptr model, QWidget* parent) :
     ui->centralwidget->addWidget(endwindow);
     m_model->addWidget(DataModel::END, endwindow);
 
-
-    m_model->switchWindow(DataModel::START);
-
     QPixmap bkgnd("../models/box1.jpg");
     bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
     QPalette palette;
     palette.setBrush(QPalette::Background, bkgnd);
     this->setPalette(palette);
 
+    // Create a Mediaplayer which plays some background music
+    m_mediaplayer = new QMediaPlayer();
+    fs::path mediafile = "../models/Interstellar-Soundtrack.mp3";
+    m_mediaplayer->setMedia(QUrl::fromLocalFile(QString::fromStdString(fs::absolute(mediafile).string())));
+
+    m_mediaplayer->play();
+
+    connect(this, SIGNAL(play()), m_mediaplayer, SLOT(play()));
+    connect(this, SIGNAL(stop()), m_mediaplayer, SLOT(stop()));
+    connect(this, SIGNAL(pause()), m_mediaplayer, SLOT(pause()));
+
+    m_model->switchWindow(DataModel::START);
+
 }
+
 
 GameWindow::~GameWindow()
 {

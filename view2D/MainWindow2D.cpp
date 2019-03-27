@@ -104,7 +104,6 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
 
     // event is triggert as soon as planets a available in DataModel
     connect(m_model.get(), SIGNAL(initMap()), this, SLOT(initPlanets()));
-
 }
 
 void MainWindow2D::resizeEvent(QResizeEvent* event){

@@ -49,6 +49,14 @@ public:
      */
     void updatePlanetInfo(int id);
 
+signals:
+    void play();
+
+    void pause();
+
+    void stop();
+
+
 public slots:
 
     /**
