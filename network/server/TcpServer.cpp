@@ -13,8 +13,8 @@ TcpServer::TcpServer()
     connect(&server, SIGNAL(newConnection()), this, SLOT(onConnect()));
     //connect(&server, SIGNAL(disconnected()), this, SLOT(onDisconnect()));
 
-    m_datamodel = DataModel_Server::Ptr(new DataModel_Server());
-    m_datamodel->getUniverse("../models/Level-1.map");
+    m_datamodel = DataModel_Server::Ptr(new DataModel_Server("../../../models/Level-1.map"));
+    //m_datamodel->getUniverse("../models/Level-1.map");
 
     if(!server.listen(QHostAddress::Any, 1235))
     {
@@ -62,6 +62,7 @@ void TcpServer::send_state()
             array.push_back(m_datamodel->createJson(temp_player));
         }
         QJsonDocument doc(array);
+        qDebug() << "sending state: " << doc;
         int size = doc.toJson().size();
         client.socket->write((char*)&size, 4);
         client.socket->write(doc.toJson());
@@ -102,30 +103,35 @@ void TcpServer::handle_ready(TcpClient& client, QJsonDocument& doc)
             state = ROUND;
             ready_count = 0;
         }
-    } else if (state == ROUND) {
-        //TODO berechnungen / kämpfe
-        ready_count++;
-        handle_state(client, doc);
-        if (clients.size() == ready_count) {
-            //m_battle_list = m_datamodel->findBattles();
-            //m_battle_list = std::vector<Battle::Ptr>{Battle::Ptr(nullptr)};
-
-            state = FIGHT;
-            battle_count = 0;
-            // Relevant,
-            //udpServer.start();
-            send_battle();
-
-            qDebug() << "state changed: FIGHT";
-        }
     }
 }
 
 void TcpServer::handle_state(TcpClient& client, QJsonDocument& doc) {
+
+    qDebug() << "state received";
+    qDebug() << doc;
+    if (state != ROUND) {
+        return;
+    }
+    //TODO berechnungen / kämpfe
     QJsonArray array_state = doc.array();
     QJsonObject obj_state = array_state[1].toObject();
-    qDebug() << "received client state: \n" << obj_state; 
     m_datamodel->updateAll(obj_state);
+
+
+    ready_count++;
+    if (clients.size() == ready_count) {
+        m_battle_list = m_datamodel->findBattles();
+        //m_battle_list = std::vector<Battle::Ptr>{Battle::Ptr(nullptr)};
+
+        state = FIGHT;
+        battle_count = 0;
+        // Relevant,
+        //udpServer.start();
+        send_battle();
+
+        qDebug() << "state changed: FIGHT";
+    }
 }
 
 void TcpServer::fight_init()
@@ -231,6 +237,8 @@ void TcpServer::fight_init()
 
 void TcpServer::fightEnd(int id, int health_left) {
     // ToDo Datamodel
+
+    qDebug() << "end fight, updating data model";
     Battle::Ptr current_battle = m_battle_list[battle_count];
     if (current_battle->m_player1->getIdentity() == id) {
         current_battle->m_player1->delShips(current_battle->m_numberShips1 - health_left);
@@ -255,18 +263,15 @@ void TcpServer::fightEnd(int id, int health_left) {
 }
 
 void TcpServer::send_battle() {
-    //if (battle_count < m_battle_list.size()) {
+    if (battle_count < m_battle_list.size()) {
         // ToDo
         fight_init();
         battle_count++;
-
-        /*
     } else {
         state = ROUND;
         qDebug() << "state changed: ROUND";
         send_state();
     }
-        */
 }
 
 void TcpServer::handle_init(TcpClient& client, QJsonDocument& doc)
@@ -328,6 +333,8 @@ void TcpServer::readyRead()
                 handle_init(i, doc);
             } else if (ident == "ready") {
                 handle_ready(i, doc);
+            } else if (ident == "state") {
+                handle_state(i, doc);
             }
         }
     }

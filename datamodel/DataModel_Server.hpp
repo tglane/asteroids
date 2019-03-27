@@ -106,7 +106,7 @@ public:
      *          fills list of battles, and gives planets to invaders
      *          on planets that dont have defenders,
      */
-    void findBattles();
+    std::vector<Battle::Ptr> findBattles();
 
     /**
      * @brief Creates Json File, which includes information about a certain player and his planets, 
@@ -211,7 +211,7 @@ protected:
     Player::Ptr  m_enemy;
 
     // List of upcoming battles
-    std::list<std::shared_ptr<Battle>> m_battles;
+    std::vector<std::shared_ptr<Battle>> m_battles;
 
 };
 

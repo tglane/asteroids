@@ -64,7 +64,7 @@ private:
 
     DataModel_Server::Ptr m_datamodel;
 
-    std::vector<std::shared_ptr<Battle>> m_battle_list;
+    std::vector<Battle::Ptr> m_battle_list;
 
 public:
     TcpServer();
