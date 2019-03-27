@@ -61,6 +61,8 @@ public:
 
     SpaceCraft::Ptr getEnemy() { return m_enemy; }
 
+    void reset();
+
     ~GLWidget() { std::cout << "GLWidget deconstruct" << std::endl; }
 
 protected:

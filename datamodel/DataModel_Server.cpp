@@ -390,6 +390,7 @@ Player::Ptr DataModel_Server::getEnemyPlayer()
 
 std::vector<Battle::Ptr> DataModel_Server::findBattles()
 {
+    m_battles.clear();
     std::map<int, Planet::Ptr>::iterator it;
     for(it = m_planets.begin(); it != m_planets.end(); it++)
     {

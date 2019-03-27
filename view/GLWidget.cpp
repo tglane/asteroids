@@ -221,6 +221,15 @@ void GLWidget::paintGL()
     }
 }
 
+void GLWidget::reset() {
+    m_gameOver = false;
+    m_startTimer.restart();
+    m_started = false;
+
+    m_physicsEngine->addHittable(m_camera);
+    m_physicsEngine->addHittable(m_enemy);
+}
+
 void GLWidget::step(map<Qt::Key, bool>& keyStates)
 {
 

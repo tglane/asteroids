@@ -169,13 +169,6 @@ void tcpclient::process_strat_init(QJsonArray recv_array) {
 
 void tcpclient::process_state(QJsonArray recv_array)
 {
-    if(m_mainwindow != nullptr)
-    {
-        m_mainwindow->close();
-        m_physicsEngine.reset();
-        m_udpclient.reset();
-        m_mainwindow.reset();
-    }
     m_datamodel->clearInvaders();
 
     QJsonObject obj = recv_array[1].toObject();
@@ -197,13 +190,19 @@ void tcpclient::process_fight_init(QJsonObject recv_obj)
     m_udpclient->init_fight_slot(recv_obj);
     std::cout << "fight init" << std::endl;
 
-    m_mainwindow = std::make_shared<MainWindow>("../models/level.xml");
+    
+    if (m_mainwindow == nullptr) {
+        m_mainwindow = std::make_shared<MainWindow>("../models/level.xml");
+        m_mainwindow->showFullScreen();
+        m_physicsEngine = m_mainwindow->ui->openGLWidget->getPhysicsEngine();
+        m_mainwindow->ui->openGLWidget->setClient(m_udpclient);
+    } else {
+        m_mainwindow->ui->openGLWidget->reset();
+    }
 
     /* Initialize new window for 3d part */
     //m_datamodel->switchWindow(DataModel_Server::MAIN3D);
-    m_mainwindow->showFullScreen();
 
-    m_physicsEngine = m_mainwindow->ui->openGLWidget->getPhysicsEngine();
 
     /* Parse fight_init package */
     QJsonArray asteroids_arr = recv_obj["asteroids"].toArray();
@@ -257,5 +256,4 @@ void tcpclient::process_fight_init(QJsonObject recv_obj)
         }
     }
 
-    m_mainwindow->ui->openGLWidget->setClient(m_udpclient);
 }
