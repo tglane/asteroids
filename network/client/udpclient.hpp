@@ -45,6 +45,10 @@ public:
 
     int get_id() { return m_id; }
 
+    int getCount() {return frame_count;}
+
+    void incCount(){frame_count++;}
+
 signals:
 
 public slots:
@@ -70,6 +74,8 @@ private:
     int m_id;
 
     QString m_ip;
+
+    int frame_count = 0;
 
     unsigned int seq_number;
 
