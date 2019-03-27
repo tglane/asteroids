@@ -237,7 +237,7 @@
          <x>0</x>
          <y>310</y>
          <width>301</width>
-         <height>451</height>
+         <height>481</height>
         </rect>
        </property>
        <widget class="QLabel" name="PlanetenInfoLabel">
@@ -441,7 +441,7 @@
          <rect>
           <x>10</x>
           <y>260</y>
-          <width>41</width>
+          <width>51</width>
           <height>41</height>
          </rect>
         </property>
@@ -588,7 +588,7 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>766</y>
+         <y>800</y>
          <width>281</width>
          <height>61</height>
         </rect>
