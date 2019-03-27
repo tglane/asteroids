@@ -8,6 +8,8 @@
 #include <QtGui/QPainter>
 #include <math.h>
 
+bool GLWidget::open_gl = false;
+
 GLWidget::GLWidget(QWidget* parent) :
     QOpenGLWidget(parent),
     m_started(false),
@@ -25,6 +27,28 @@ void GLWidget::setLevelFile(const std::string& file)
 
 void GLWidget::initializeGL()
 {
+    // Load level
+    LevelParser lp(m_levelFile, m_enemy, m_skybox, m_asteroidField);
+    m_enemy->fixArrow();
+
+    // Setup physics
+    m_physicsEngine = make_shared<PhysicsEngine>();
+
+    m_camera = make_shared<Camera>();
+    m_camera->setPosition(Vector3f(2500, 0, 0));
+    m_camera->setXAxis(Vector3f(-1, 0, 0));
+    m_camera->setYAxis(Vector3f(0, -1, 0));
+
+    m_useGamepad = m_controller.gamepadAvailable();
+
+    m_fpsTimer.start();
+    m_startTimer.start();
+
+    if(open_gl) {
+        return;
+    }
+    open_gl = true;
+
 #ifndef __APPLE__
     glewExperimental = GL_TRUE;
     glewInit();
@@ -112,22 +136,7 @@ void GLWidget::initializeGL()
     // This makes our buffer swap syncronized with the monitor's vertical refresh
     SDL_GL_SetSwapInterval(1);
 
-    // Load level
-    LevelParser lp(m_levelFile, m_enemy, m_skybox, m_asteroidField);
-    m_enemy->fixArrow();
 
-    // Setup physics
-    m_physicsEngine = make_shared<PhysicsEngine>();
-
-    m_camera = make_shared<Camera>();
-    m_camera->setPosition(Vector3f(2500, 0, 0));
-    m_camera->setXAxis(Vector3f(-1, 0, 0));
-    m_camera->setYAxis(Vector3f(0, -1, 0));
-
-    m_useGamepad = m_controller.gamepadAvailable();
-
-    m_fpsTimer.start();
-    m_startTimer.start();
 }
 
 void GLWidget::setClient(udpclient::Ptr client) {

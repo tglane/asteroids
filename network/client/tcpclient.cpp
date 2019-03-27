@@ -172,6 +172,9 @@ void tcpclient::process_state(QJsonArray recv_array)
     if(m_mainwindow != nullptr)
     {
         m_mainwindow->close();
+        m_physicsEngine.reset();
+        m_udpclient.reset();
+        m_mainwindow.reset();
     }
     m_datamodel->clearInvaders();
 
