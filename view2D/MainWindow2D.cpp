@@ -106,6 +106,7 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
 }
 
 void MainWindow2D::updateAllInfo() {
+    std::cout << "update all info" << std::endl;
     updatePlayerInfo();
     updatePlanetColor();
     if (currentPlanet >= 0) {
@@ -131,7 +132,9 @@ MainWindow2D::~MainWindow2D()
 
 void MainWindow2D::fight(bool click)
 {
-    m_model->switchWindow(DataModel::SWITCH);
+    m_model->printPlanets();
+    updateAllInfo();
+    //m_model->switchWindow(DataModel::SWITCH);
 }
 
 void MainWindow2D::choose_planet(int id)

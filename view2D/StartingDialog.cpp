@@ -49,8 +49,7 @@ void StartingDialog::startGame(bool click)
     if(name != "" && name != "Please insert a name!")
     {
         //m_model->getSelfPlayer()->setPlayerName(name);
-        
-        m_model->startGame();
+        //m_model->startGame();
 
         ui->ServerAddress->setText("127.0.0.1");
 
