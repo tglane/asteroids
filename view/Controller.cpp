@@ -93,6 +93,8 @@ void Controller::keyControl(std::map<Qt::Key, bool> &keyStates, Hittable::Ptr& p
         if (m_cooldownPlayer == 0 && keyStates[Qt::Key_Space])
         {
             // Play sound
+            if (m_soundEffect.isPlaying())
+                m_soundEffect.stop();
             m_soundEffect.play();
 
             Bullet::Ptr bullet = make_shared<Bullet>(Bullet(player->getPosition() - player->getZAxis() * 42,
