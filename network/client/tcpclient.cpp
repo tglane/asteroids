@@ -161,6 +161,7 @@ void tcpclient::process_strat_init(QJsonArray recv_array) {
                                          recv_array[i].toObject()["player_name"].toString().toStdString(), is_self);
         }
     }
+    m_datamodel->startGame();
     emit start_round();
     m_state = client_state::ROUND;
 
