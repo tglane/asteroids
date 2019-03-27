@@ -5,6 +5,7 @@
 #include <SDL2/SDL.h>
 #include <QtGui/QPainter>
 #include <math.h>
+#include <QtCore/QFileInfo>
 
 GLWidget::GLWidget(QWidget* parent) :
     QOpenGLWidget(parent),
@@ -14,7 +15,10 @@ GLWidget::GLWidget(QWidget* parent) :
     m_cockpit("../models/cockpit.png"),
     m_playerHeart("../models/player_heart.png"),
     m_enemyHeart("../models/enemy_heart.png"),
-    m_emptyHeart("../models/empty_heart.png") {}
+    m_emptyHeart("../models/empty_heart.png")
+    {
+        m_mediaPlayer.setMedia(QUrl::fromLocalFile(QFileInfo("../models/shooting.wav").absoluteFilePath()));
+    }
 
 void GLWidget::setLevelFile(const std::string& file)
 {

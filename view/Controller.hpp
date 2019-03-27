@@ -47,7 +47,7 @@ private:
 
     int m_gamepadL1;
 
-    QSoundEffect m_soundEffect;
+    QSoundEffect m_bulletSound;
 
 };
 

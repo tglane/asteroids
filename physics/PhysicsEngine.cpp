@@ -13,10 +13,18 @@
 #include "PhysicsEngine.hpp"
 #include <iostream>
 #include <QSound>
+#include <QtCore/QFileInfo>
+
 using namespace std;
 
 namespace asteroids
 {
+
+PhysicsEngine::PhysicsEngine()
+{
+    m_explosionSound.setSource(QUrl::fromLocalFile(QFileInfo("../models/exploding.wav").absoluteFilePath()));
+    m_explosionSound.setVolume(0.6f);
+}
 
 void PhysicsEngine::addDestroyable(PhysicalObject::Ptr& obj)
 {
@@ -96,8 +104,7 @@ bool PhysicsEngine::process(int elapsed_time)
                     (*h_it)->setHealth((*h_it)->getHealth() - 1);
                     if ((*h_it)->getHealth() % 10 == 0)
                     {
-                        // Play sound
-                        QSound::play("../models/exploding.wav");
+                        m_explosionSound.play();
                         m_particles.addEffect(ParticleEffect::createExplosionSphere((*h_it)->getPosition()));
                     }
                 }

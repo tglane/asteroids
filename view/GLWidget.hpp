@@ -104,6 +104,8 @@ private:
     QPixmap                     m_enemyHeart;
 
     QPixmap                     m_emptyHeart;
+
+    QMediaPlayer                m_mediaPlayer;
 };
 
 #endif

@@ -2,6 +2,8 @@
 #include "physics/Transformable.hpp"
 #include <QSound>
 #include <QtMultimedia/QSoundEffect>
+#include <QtCore/QFile>
+#include <QtCore/QFileInfo>
 
 namespace asteroids
 {
@@ -29,8 +31,8 @@ Controller::Controller() : m_cooldownPlayer(0), m_gamepadR1(0), m_gamepadL1(0)
     m_gamepadAvailable = m_gamepad.init();
 
     // Init media player
-    m_soundEffect.setSource(QUrl::fromLocalFile("/home/juriv/cpp_praktikum/praktikum4/models/shooting.wav"));
-    m_soundEffect.setVolume(0.5f);
+    m_bulletSound.setSource(QUrl::fromLocalFile(QFileInfo("../models/shooting.wav").absoluteFilePath()));
+    m_bulletSound.setVolume(0.4f);
 }
 
 bool Controller::gamepadAvailable()
@@ -93,9 +95,7 @@ void Controller::keyControl(std::map<Qt::Key, bool> &keyStates, Hittable::Ptr& p
         if (m_cooldownPlayer == 0 && keyStates[Qt::Key_Space])
         {
             // Play sound
-            if (m_soundEffect.isPlaying())
-                m_soundEffect.stop();
-            m_soundEffect.play();
+            m_bulletSound.play();
 
             Bullet::Ptr bullet = make_shared<Bullet>(Bullet(player->getPosition() - player->getZAxis() * 42,
                                                             player->getXAxis(), player->getId()));

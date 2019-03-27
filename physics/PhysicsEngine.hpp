@@ -15,6 +15,7 @@
 
 #include <list>
 #include <memory>
+#include <QtMultimedia/QSoundEffect>
 
 #include "PhysicalObject.hpp"
 #include "ParticleEngine.hpp"
@@ -42,7 +43,7 @@ public:
     /**
      * @brief   Ctor.
      */
-    PhysicsEngine() = default;
+    PhysicsEngine();
 
     /**
      * @brief   Dtor.
@@ -84,6 +85,8 @@ private:
     ParticleEngine               m_particles;
 
     list<Hittable::Ptr>          m_hittables;
+
+    QSoundEffect                 m_explosionSound;
 
 };
 
