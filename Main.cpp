@@ -26,8 +26,6 @@ int main(int argc, char** argv)
 
     //TODO add input for player name and server io
     tcpclient::Ptr tcp_client(std::make_shared<tcpclient>(model));
-    QAbstractSocket::connect(model.get(), SIGNAL(endround_signal()), tcp_client.get(), SLOT(send_ready()));
-
 
     strategy::GameWindow gamewindow(model, tcp_client);
 

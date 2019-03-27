@@ -42,7 +42,7 @@ void tcpclient::send_ready()
 
 void tcpclient::send_init()
 {
-    std::cout << "afsdfgn" << std::endl;
+    std::cout << "send_init" << std::endl;
     QJsonObject init_object;
     init_object.insert("player_name", QJsonValue::fromVariant(m_player_name));
 
@@ -59,6 +59,22 @@ void tcpclient::send_init()
     m_socket->flush();
 
     m_state = client_state::CONNECTING;
+}
+
+void tcpclient::endround_slot()
+{
+    std::cout << "endround_slot" << std::endl;
+    QJsonArray init_array;
+    init_array.push_back("state");
+    init_array.push_back(m_datamodel->createJson(m_datamodel->getSelfPlayer()));
+
+    QJsonDocument doc(init_array);
+
+    int size = doc.toJson().size();
+    m_socket->write((char*) &size, sizeof(size));
+
+    m_socket->write(doc.toJson());
+    m_socket->flush();
 }
 
 void tcpclient::recv_json()
@@ -147,13 +163,11 @@ void tcpclient::process_strat_init(QJsonArray recv_array) {
 
 void tcpclient::process_state(QJsonArray recv_array)
 {
-    QJsonDocument doc;
-    doc.setObject(recv_array[1].toObject());
-    //m_datamodel->updateAll(doc);
+    QJsonObject obj = recv_array[1].toObject();
+    m_datamodel->updateAll(obj);
 
-    //TODO maybe not correct ---
-    doc.setObject(recv_array[2].toObject());
-    //m_datamodel->updateAll(doc);
+    obj = recv_array[2].toObject();
+    m_datamodel->updateAll(obj);
 }
 
 void tcpclient::process_fight_init(QJsonObject recv_obj)

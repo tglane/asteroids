@@ -108,6 +108,8 @@ public slots:
 
     void updatePlanetColor();
 
+signals:
+    void endround_signal();
 
 private:
 

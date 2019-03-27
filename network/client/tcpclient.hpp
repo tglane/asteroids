@@ -37,15 +37,31 @@ public:
 
 public slots:
     /**
-     * Sends ready package after a round in the 2d game part
+     * @brief Sends ready package after a round in the 2d game part
      */
     void send_ready();
 
+    /**
+     * Connects to the tcp server when the start button is pressed
+     * @param name
+     * @param server_ip
+     */
     void connect_to_server(string name, string server_ip);
 
+    /**
+     * @brief Sends the init package to the server to receive an player id from the server
+     */
     void send_init();
 
+    /**
+     * @brief Sends current game state to the server when button "next round" is pressed
+     */
+    void endround_slot();
+
 private slots:
+    /**
+     * @brief Receives data package from server and parses the header to call certain functions
+     */
     void recv_json();
 
     void error_out(QAbstractSocket::SocketError) { std::cout << "error" << std::endl; }

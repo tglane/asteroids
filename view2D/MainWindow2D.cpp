@@ -107,7 +107,6 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
     //Öffne das Fighter-Minigame testweise in neuem Fenster
     QPushButton* m_button = ui->Fight;
     connect(m_button, SIGNAL(clicked(bool)), this, SLOT(fight(bool)));
-    
     //Löschen für nicht transparent
     ui->Map->setStyleSheet("background: transparent");
     QPixmap bkgnd("../models/box1.jpg");
@@ -242,10 +241,7 @@ void MainWindow2D::choose_planet(int id)
 
 void MainWindow2D::endOfRound(bool click)
 {
-    bool succes = m_model->endOfRound();
-
-    // fuck this "unused" warnings! :D
-    if(succes);
+    m_model->endOfRound();
 
     currentYear++;
     QString qyear = QString::fromUtf8("Year: ");
