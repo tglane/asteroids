@@ -477,7 +477,7 @@ QJsonObject DataModel_Server::createJson(Player::Ptr player)
 
         // Add necessary information to representation
         qPlanet.insert("ID", getIDFromPlanet(planet));
-        qPlanet.insert("Mines", planet->getMines());
+        qPlanet.insert("Mines", planet->getMinesBuild());
         qPlanet.insert("Ships", planet->getShips());
 
         //Add to the json array
