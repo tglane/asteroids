@@ -263,6 +263,7 @@ void MainWindow2D::endOfRound(bool click)
     }
 
     // TODO wait for response of server, block the window until all players are ready
+    emit endround_signal();
 }
 
 void MainWindow2D::updatePlanetColor(){
