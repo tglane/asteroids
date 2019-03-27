@@ -52,6 +52,7 @@ private slots:
 
 signals:
     void fight_init_signal(QJsonObject);
+    void start_round();
 
 private:
 
@@ -72,6 +73,8 @@ private:
     client_state m_state; /// Represents tcp client state
 
     QString m_player_name;
+
+    int m_player_id;
 
     QString m_server_ip;
 

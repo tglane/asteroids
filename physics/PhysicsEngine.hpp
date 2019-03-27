@@ -34,49 +34,50 @@ namespace asteroids
  *          and implements collision detection. Handles particle
  *          effects like explosions.
  */
-class PhysicsEngine : public BasePhysicsEngine, public Renderable
-{
-public:
+    class PhysicsEngine : public BasePhysicsEngine, public Renderable
+    {
+    public:
 
-    using Ptr = std::shared_ptr<PhysicsEngine>;
+        using Ptr = std::shared_ptr<PhysicsEngine>;
 
-    /**
-     * @brief   Ctor.
-     */
-    PhysicsEngine() = default;
+        /**
+         * @brief   Ctor.
+         */
+        PhysicsEngine() = default;
 
-    /**
-     * @brief   Dtor.
-     */
-    virtual ~PhysicsEngine() = default;
+        /**
+         * @brief   Dtor.
+         */
+        virtual ~PhysicsEngine() = default;
 
-    /**
-     * @brief   Renders all objects and particle effects
-     */
-    void render();
+        /**
+         * @brief   Renders all objects and particle effects
+         */
+        void render();
 
-    /**
-     * @brief   The engine's main loop
-     */
-    bool process(int elapsed_time);
+        /**
+         * @brief   The engine's main loop
+         */
+        bool process(int elapsed_time);
 
     void process_collisions(int id_one, int id_two);
     int check_id_type(int id_to_check);
 
-    /// Getter for current highest IDs
-    int get_curr_bull_id() { return ++curr_bull_id; }
-    int get_curr_dest_id() { return curr_dest_id; }
 
-private:
+        /// Getter for current highest IDs
+        int get_curr_bull_id() { return ++curr_bull_id; }
+        int get_curr_dest_id() { return curr_dest_id; }
 
-    ParticleEngine               m_particles;
+    private:
 
-    /// Current highest id of asteroids and bullets
-    int curr_bull_id = 1;
-    int curr_dest_id = 1;
-    int curr_player_id = 1;
+        ParticleEngine               m_particles;
 
-};
+        /// Current highest id of asteroids and bullets
+        int curr_bull_id = 1;
+        int curr_dest_id = 1;
+        int curr_player_id = 1;
+
+    };
 
 } /* namespace asteroids */
 #endif /* PHYSICSENGINE_HPP_ */

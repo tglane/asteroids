@@ -1,5 +1,5 @@
-#ifndef __STARTINGDIALOG_HPP__
-#define __STARTINGDIALOG_HPP__
+#ifndef __GAMEWINDOW_HPP__
+#define __GAMEWINDOW_HPP__
 
 #include <QMainWindow>
 #include <QGraphicsScene>
@@ -7,14 +7,12 @@
 #include <QPushButton>
 #include <QGraphicsEllipseItem>
 #include <QMouseEvent>
-#include <string>
 
-#include "build/ui_StartingDialog.h"
+#include "build/ui_GameWindow.h"
 #include "datamodel/DataModel.hpp"
 
 
 using asteroids::DataModel;
-using std::string;
 
 namespace strategy
 {
@@ -27,7 +25,7 @@ namespace strategy
  *              ... 
  *
  */
-class StartingDialog : public QMainWindow
+class GameWindow : public QMainWindow
 {
     Q_OBJECT
 
@@ -37,13 +35,13 @@ public:
      * @brief Construct a new Main Window object
      *
      */
-    StartingDialog(DataModel::Ptr model, QWidget* parent = NULL);
+    GameWindow(DataModel::Ptr model, QWidget* parent = NULL);
 
     /**
      * @brief Destroys the Main Window object
      *
      */
-    ~StartingDialog();
+    ~GameWindow();
 
 
     /// Returns the width of the window
@@ -52,23 +50,13 @@ public:
     /// Returns the height of the windows
     //int height();
 public slots:
-
-    /**
-     * @brief   Is calle when exit Button is pressed, 
-     */
-    void exitGame(bool click);
-
-    void startGame(bool click);
-
-
-
-signals:
-    void connect_to_server(string, string);
+    void start_round();
+    
 
 private:
 
     /// QT UI of the window
-    Ui::StartingDialog* ui;
+    Ui::GameWindow* ui;
 
     // The model which manages the round based data
     DataModel::Ptr m_model;

@@ -44,11 +44,13 @@ public:
      */
     ~MainWindow2D();
 
-    void updatePlayerInfo();
-
     void updatePlanetInfo(int id);
+    
+    void initMap();
 
 public slots:
+
+    void updatePlayerInfo();
 
     /**
      * @brief   Switches to the starting window
@@ -104,6 +106,9 @@ public slots:
 
     void showPlayerName();
 
+    void updatePlanetColor();
+
+
 private:
 
     /// QT UI of the window
@@ -117,7 +122,11 @@ private:
 
     std::map<int, MyEllipse*> view_planets;
 
+    std::map<std::pair<int,int>, QGraphicsTextItem*> m_fighterAmount;
+
     int currentPlanet;
+
+    int currentYear;
 };
 
 
