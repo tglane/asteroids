@@ -18,6 +18,7 @@
 #include "MoveOrder.hpp"
 #include "MineOrder.hpp"
 #include "ShipOrder.hpp"
+#include "ShipyardOrder.hpp"
 
 namespace asteroids
 {
@@ -175,6 +176,18 @@ public:
 	std::list<std::shared_ptr<MoveOrder>> getListMoveOrder();
 
 	/**
+	 * @brief add a Shipyard order to the list
+	 * @param std::shared_ptr<ShipyardOrder> new Shipyard order
+	 */
+	void putListShipyardOrder(std::shared_ptr<ShipyardOrder> newShipyardOrder);
+
+	/**
+	 * @brief returns the Shipyard order list
+	 * @return std::list<std::shared_ptr<ShipyardOrder>> Shipyard order list
+	 */
+	std::list<std::shared_ptr<ShipyardOrder>> getListShipyardOrder();
+
+	/**
 	 * @brief add a move order to the list
 	 * @param std::shared_ptr<MoveOrder> new move order
 	 */
@@ -208,6 +221,7 @@ private:
 	std::list<std::shared_ptr<MoveOrder>> m_moveOrders;
 	std::list<std::shared_ptr<MineOrder>> m_mineOrders;
 	std::list<std::shared_ptr<ShipOrder>> m_shipOrders;
+	std::list<std::shared_ptr<ShipyardOrder>> m_shipyardOrders;
 
 };
 }
