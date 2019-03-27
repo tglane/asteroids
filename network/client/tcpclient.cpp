@@ -165,7 +165,7 @@ void tcpclient::process_strat_init(QJsonArray recv_array) {
 
     m_datamodel->printPlanets();
     m_datamodel->startGame();
-    emit start_round();
+    m_datamodel->switchWindow(DataModel::MAIN2D);
     m_state = client_state::ROUND;
 
     //send_ready();
