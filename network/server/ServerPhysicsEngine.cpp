@@ -39,7 +39,7 @@ std::list<std::pair<int, int>> ServerPhysicsEngine::detect_collisions()
         while (p_it != m_objects.end())
         {
 
-            std::cout << "bullet" << b->get_id() << "ast " << p_it->second->get_id() << std::endl;
+            //std::cout << "bullet" << b->get_id() << "ast " << p_it->second->get_id() << std::endl;
             if (p_it->second->collision(b->getPosition(), b->radius()))
             {
                 // Mark bulled as killed
@@ -52,7 +52,7 @@ std::list<std::pair<int, int>> ServerPhysicsEngine::detect_collisions()
                     }
                 }
 
-                std::cout << "collison " << b->get_id() << " " << p_it->second->get_id() << std::endl;
+                //std::cout << "collison " << b->get_id() << " " << p_it->second->get_id() << std::endl;
 
                 collisions.push_back(std::pair<int, int>(b->get_id(), p_it->second->get_id()));
 
