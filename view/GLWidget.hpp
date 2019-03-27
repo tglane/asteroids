@@ -83,8 +83,6 @@ private:
     /// Physics 
     PhysicsEngine::Ptr          m_physicsEngine;
 
-    Missile::Ptr test;
-
     /// timer for correct speed with low fps
     QTime                       m_fpsTimer;
 

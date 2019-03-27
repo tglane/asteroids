@@ -58,13 +58,13 @@ void Missile::run(int elapsed_time)
         float y = signedDistanceToPlane(relPos, m_yAxis, m_xAxis, m_zAxis);
         float z = signedDistanceToPlane(relPos, m_zAxis, m_xAxis, m_yAxis);
         Vector3f rotAxis = m_zAxis * (y / x) - m_yAxis * (z / x);
-        if (!(rotAxis[0] == 0 && rotAxis[1] == 0 && rotAxis[2] == 0))
+        // get rotation angle
+        float angle = acos((relPos * m_xAxis) / (magnitude(relPos) * magnitude(m_xAxis)));
+        // rotate
+        if (angle > 0)
         {
-            // get rotation angle
-            // TODO
-            // rotate
             Quaternion q;
-            q.fromAxis(rotAxis, rotSpeed);
+            q.fromAxis(rotAxis, (angle < rotSpeed) ? angle : rotSpeed);
             m_xAxis = q * m_xAxis;
             m_yAxis = q * m_yAxis;
             m_zAxis = q * m_zAxis;

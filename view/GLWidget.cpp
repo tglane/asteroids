@@ -136,9 +136,6 @@ void GLWidget::initializeGL()
     Hittable::Ptr enemy_ptr = std::static_pointer_cast<Hittable>(m_enemy);
     m_physicsEngine->addHittable(enemy_ptr);
 
-    test = std::make_shared<Missile>(enemy_ptr);
-    test->fixMissile();
-
     // Add asteroids to physics engine
     std::list<Asteroid::Ptr> asteroids;
     m_asteroidField->getAsteroids(asteroids);
@@ -172,8 +169,6 @@ void GLWidget::paintGL()
     {
         m_enemy->render();
     }
-
-    test->render();
 
     glDisable(GL_DEPTH_TEST);
 
@@ -228,7 +223,6 @@ void GLWidget::step(map<Qt::Key, bool>& keyStates)
 
     // Get keyboard states and handle model movement
     m_gameOver = m_physicsEngine->process(elapsed_time) || m_gameOver;
-    m_started = true; // TODO: raus
     if (!m_started)
     {
         if (m_startTimer.elapsed() >= 4000)
@@ -249,31 +243,6 @@ void GLWidget::step(map<Qt::Key, bool>& keyStates)
             else
             {
                 m_controller.keyControl(keyStates, player_ptr, m_physicsEngine, elapsed_time);
-            }
-
-            if (keyStates[Qt::Key_R])
-            {
-                test->run(elapsed_time);
-            }
-            if (keyStates[Qt::Key_Z])
-            {
-                test->move(Transformable::FORWARD, 5);
-            }
-            if (keyStates[Qt::Key_T])
-            {
-                test->rotate(Transformable::PITCH_UP, 0.05);
-            }
-            if (keyStates[Qt::Key_F])
-            {
-                test->rotate(Transformable::YAW_COUNTERCLOCKWISE, 0.05);
-            }
-            if (keyStates[Qt::Key_G])
-            {
-                test->rotate(Transformable::PITCH_DOWN, 0.05);
-            }
-            if (keyStates[Qt::Key_H])
-            {
-                test->rotate(Transformable::YAW_CLOCKWISE, 0.05);
             }
 
             Vector3f player_pos = m_camera->getPosition();
