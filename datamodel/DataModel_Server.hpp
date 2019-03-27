@@ -170,6 +170,8 @@ public:
 
     void getUniverse(std::string filename);
 
+    void printPlanets();
+
 signals:
     void updateInfo();
     void initMap();

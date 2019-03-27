@@ -136,7 +136,7 @@ bool DataModel_Server::buyShip(Planet::Ptr selectedPlanet, Player::Ptr m_self)
 
         return true;
     }
-    
+
     return false;
 
 }
@@ -428,10 +428,9 @@ int DataModel_Server::getIDFromPlanet(Planet::Ptr planet)
     return 0;
 }
 
-QJsonObject DataModel_Server::createJson(Player::Ptr player)
+void DataModel_Server::printPlanets()
 {
-
-    for (auto i: m_planets) {
+     for (auto i: m_planets) {
         std::cout << "planet: "
                  << i.first
                  << " " << i.second->getName();
@@ -443,6 +442,12 @@ QJsonObject DataModel_Server::createJson(Player::Ptr player)
         }
         std::cout << std::endl;
     }
+}
+
+QJsonObject DataModel_Server::createJson(Player::Ptr player)
+{
+
+   
     // main QJson object in the document
     QJsonObject main;
 
