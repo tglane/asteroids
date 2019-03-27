@@ -5,9 +5,7 @@
 #include "view2D/EndWindow.hpp"
 #include "view/MainWindow.hpp"
 
-#include <experimental/filesystem>
-
-namespace fs = std::experimental::filesystem;
+#include <QFileInfo>
 
 namespace strategy{
 
@@ -52,9 +50,7 @@ GameWindow::GameWindow(DataModel::Ptr model, tcpclient::Ptr tcp_client, QWidget*
 
     // Create a Mediaplayer which plays some background music
     m_mediaplayer = new QMediaPlayer();
-    fs::path mediafile = "../models/Interstellar-Soundtrack.mp3";
-    m_mediaplayer->setMedia(QUrl::fromLocalFile(QString::fromStdString(fs::absolute(mediafile).string())));
-
+    m_mediaplayer->setMedia(QUrl::fromLocalFile(QFileInfo("../models/Interstellar-Soundtrack.mp3").absoluteFilePath()));
     //m_mediaplayer->play();
 
     connect(this, SIGNAL(play()), m_mediaplayer, SLOT(play()));
