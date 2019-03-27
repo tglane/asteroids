@@ -306,15 +306,23 @@ void MainWindow2D::buildShip(bool click)
         return;
     }
 
-    if (m_model->buyShip(p, p->getOwner()))
+    if (p->getShipyardBuilt()) 
     {
-        std::cout << "Build Ship!" << std::endl;
-        p->incShipsOrdered();
-        updatePlanetInfo(currentPlanet);
-        updatePlayerInfo();
+        if (m_model->buyShip(p, p->getOwner()))
+        {
+            std::cout << "Build Ship!" << std::endl;
+            p->incShipsOrdered();
+            updatePlanetInfo(currentPlanet);
+            updatePlayerInfo();
+        } else {
+            std::cout << "Fehler MainWindow2D: Build Ship!" << std::endl;
+        }
     } else {
-        std::cout << "Fehler MainWindow2D: Build Ship!" << std::endl;
+        p->buildShipyard();
+        ui->BuildShip->setText("Build Ship");
     }
+
+    
 }
 
 void MainWindow2D::buildMine(bool click)

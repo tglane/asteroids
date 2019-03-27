@@ -176,6 +176,29 @@ namespace asteroids
 
 		void resetMinesHidden() { m_minesHidden = 0; }
 
+		/**
+		 * @brief reduce rubin left on this planet
+		 * @param how many each mine earns
+		 * @return how many rubin this planet gave this round
+		 */
+		int subtractEarnings(int mineRubin){}
+
+		/**
+		 * @brief returns how many rubin is left on this planet
+		 * @return int m_rubinLeft
+		 */
+		int getRubinLeft(){}
+		/**
+		 * @brief calculates current number of rubin this planet produce by each round
+		 * @param mineRubin how many rubin each mine should give
+		 */
+		int calculateEarnings(int mineRubin){}
+
+
+		bool getShipyardBuilt(){}
+
+		void buildShipyard(){}
+
 
 	private:
 		std::string m_name;
