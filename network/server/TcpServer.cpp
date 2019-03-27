@@ -118,24 +118,33 @@ void TcpServer::handle_state(TcpClient& client, QJsonDocument& doc) {
     QJsonObject obj_state = array_state[1].toObject();
     m_datamodel->updateAll(obj_state);
 
+    qDebug() << "ADSFSADFSADFS " << m_datamodel->createJson(m_datamodel->getPlayerByID(client.id));
+
+
+    m_datamodel->printPlanets();
 
     ready_count++;
     if (clients.size() == ready_count) {
         m_battle_list = m_datamodel->findBattles();
+        qDebug() << "n battles: " << m_battle_list.size();
         //m_battle_list = std::vector<Battle::Ptr>{Battle::Ptr(nullptr)};
 
         state = FIGHT;
         battle_count = 0;
         // Relevant,
         //udpServer.start();
-        send_battle();
 
         qDebug() << "state changed: FIGHT";
+        send_battle();
+
     }
 }
 
-void TcpServer::fight_init()
+void TcpServer::fight_init(Battle::Ptr battle)
 {
+
+    m_datamodel->printPlanets();
+
     AsteroidField asteroids(20);
     std::list<PhysicalObject::Ptr> asteroid_list;
     asteroids.getAsteroids(asteroid_list);
@@ -201,6 +210,13 @@ void TcpServer::fight_init()
                 x_axis = Vector3f(-1, 0, 0);
                 y_axis = Vector3f(0, -1, 0);
             }
+            int ship_count;
+            if (battle->m_player1->getIdentity() == i.id) {
+                ship_count = battle->m_numberShips1;
+            } else {
+                ship_count = battle->m_numberShips2;
+            }
+
             QJsonObject player_obj;
             Vector3f z_axis = Vector3f(0, 0, 1);
             player_obj.insert("position_x", QJsonValue::fromVariant(position[0]));
@@ -215,6 +231,7 @@ void TcpServer::fight_init()
             player_obj.insert("z_axis_x", QJsonValue::fromVariant(z_axis[0]));
             player_obj.insert("z_axis_y", QJsonValue::fromVariant(z_axis[1]));
             player_obj.insert("z_axis_z", QJsonValue::fromVariant(z_axis[2]));
+            player_obj.insert("ship_count", QJsonValue::fromVariant(ship_count));
             player_obj.insert("id", QJsonValue::fromVariant(i.id));
             player_array.push_back(player_obj);
         }
@@ -238,38 +255,49 @@ void TcpServer::fight_init()
 void TcpServer::fightEnd(int id, int health_left) {
     // ToDo Datamodel
 
+    int ships_left = health_left / 10;
     qDebug() << "end fight, updating data model";
     Battle::Ptr current_battle = m_battle_list[battle_count];
-    if (current_battle->m_player1->getIdentity() == id) {
-        current_battle->m_player1->delShips(current_battle->m_numberShips1 - health_left);
-    } else {
-        current_battle->m_player1->delShips(current_battle->m_numberShips1);
-    }
-    if (current_battle->m_player2->getIdentity() == id) {
-        current_battle->m_player2->delShips(current_battle->m_numberShips2 - health_left);
-    } else {
-        current_battle->m_player2->delShips(current_battle->m_numberShips2);
-    }
 
-    m_datamodel->getPlayerByID(clients[id].id)->addPlanet(m_battle_list[battle_count]->m_location);
+    current_battle->m_player1->RemovePlaneteFromList(current_battle->m_location);
+    current_battle->m_player2->RemovePlaneteFromList(current_battle->m_location);
 
-    current_battle->m_location->setOwner(m_datamodel->getPlayerByID(clients[id].id));
+    qDebug() << "Planets fight end 1: winner id: " << id;
+    m_datamodel->printPlanets();
+    qDebug() << "Planets player 1";
+    current_battle->m_player1->PrintPlanetsList();
+    qDebug() << "Planets player 2";
+    current_battle->m_player2->PrintPlanetsList();
+
+    current_battle->m_location->setOwner(m_datamodel->getPlayerByID(id));
+    m_datamodel->getPlayerByID(id)->addPlanet(current_battle->m_location);
+
     current_battle->m_location->setInvader(nullptr);
     current_battle->m_location->setInvaderShips(0);
     current_battle->m_location->setShips(health_left);
+    m_datamodel->getPlayerByID(id)->incShips(ships_left);
 
-    udpServer.reset();
+    qDebug() << "Planets fight end 2";
+    m_datamodel->printPlanets();
+    qDebug() << "Planets player 1";
+    current_battle->m_player1->PrintPlanetsList();
+    qDebug() << "Planets player 2";
+    current_battle->m_player2->PrintPlanetsList();
+    //udpServer.reset();
+
+    battle_count++;
     send_battle();
 }
 
 void TcpServer::send_battle() {
     if (battle_count < m_battle_list.size()) {
         // ToDo
-        fight_init();
-        battle_count++;
+        fight_init(m_battle_list[battle_count]);
     } else {
-        state = ROUND;
+
         qDebug() << "state changed: ROUND";
+        state = ROUND;
+        ready_count = 0;
         send_state();
     }
 }

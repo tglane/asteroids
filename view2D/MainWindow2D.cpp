@@ -98,11 +98,18 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
 
     ui->PlanetInfo->setVisible(false);
 
-    // event is triggert as soon as information about player is accessible
-    connect(m_model.get(), SIGNAL(updateInfo()), this, SLOT(updatePlayerInfo()));
+    connect(m_model.get(), SIGNAL(updateInfo()), this, SLOT(updateAllInfo()));
 
     // event is triggert as soon as planets a available in DataModel
     connect(m_model.get(), SIGNAL(initMap()), this, SLOT(initPlanets()));
+}
+
+void MainWindow2D::updateAllInfo() {
+    updatePlayerInfo();
+    updatePlanetColor();
+    if (currentPlanet >= 0) {
+        updatePlanetInfo(currentPlanet);
+    }
 }
 
 void MainWindow2D::resizeEvent(QResizeEvent* event){
@@ -142,7 +149,7 @@ void MainWindow2D::choose_planet(int id)
         } 
         // TODO Players are now saved in a map with their id
         //      iterate over all players if getOwner() != NULL
-        else if (planets.at(id)->getOwner()==m_model->getEnemyPlayer(1)){
+        else if (planets.at(id)->getOwner()==m_model->getEnemyPlayer()){
             QPixmap pix("../models/surface/other1.jpg");
             ellipse->myBrush = QBrush(pix);
         } else{
@@ -161,7 +168,7 @@ void MainWindow2D::choose_planet(int id)
                 otherEllipse->myBrush = QBrush(otherpix);
             // TODO Players are now saved in a map with their id
             //      iterate over all players if getOwner() != NULL
-            } else if (planets.at(currentPlanet)->getOwner()==m_model->getEnemyPlayer(1)){
+            } else if (planets.at(currentPlanet)->getOwner()==m_model->getEnemyPlayer()){
                 QPixmap otherpix("../models/surface/other1.jpg");
                 otherEllipse->myBrush = QBrush(otherpix);
             } else{
@@ -177,7 +184,7 @@ void MainWindow2D::choose_planet(int id)
             ellipse->myBrush = QBrush(pix);
         // TODO Players are now saved in a map with their id
         //      iterate over all players if getOwner() != NULL
-        } else if (planets.at(id)->getOwner()==m_model->getEnemyPlayer(1)){
+        } else if (planets.at(id)->getOwner()==m_model->getEnemyPlayer()){
             QPixmap pix("../models/surface/other2.jpg");
             ellipse->myBrush = QBrush(pix);
         } else{
@@ -250,7 +257,7 @@ void MainWindow2D::updatePlanetColor(){
             if(planets.at(id)->getOwner()==m_model->getSelfPlayer()){
                 QPixmap pix("../models/surface/my1.jpg");
                 ellipse->myBrush = QBrush(pix);
-            }else if (planets.at(id)->getOwner()==m_model->getEnemyPlayer(1)){
+            }else if (planets.at(id)->getOwner()==m_model->getEnemyPlayer()){
                 QPixmap pix("../models/surface/other1.jpg");
                 ellipse->myBrush = QBrush(pix);
             } else{

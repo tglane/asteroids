@@ -61,10 +61,7 @@ signals:
 
 public slots:
 
-    /**
-     * @brief update all displayed information about the player
-     */
-    void updatePlayerInfo();
+    void updateAllInfo();
 
     /**
      * @brief   Switches to the starting window

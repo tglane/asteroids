@@ -170,6 +170,11 @@ void tcpclient::process_state(QJsonArray recv_array)
 
     obj = recv_array[2].toObject();
     m_datamodel->updateAll(obj);
+
+    m_state = client_state::ROUND;
+
+    qDebug() << m_datamodel->createJson(m_datamodel->getSelfPlayer());
+    qDebug() << m_datamodel->createJson(m_datamodel->getEnemyPlayer());
 }
 
 void tcpclient::process_fight_init(QJsonObject recv_obj)
@@ -215,6 +220,7 @@ void tcpclient::process_fight_init(QJsonObject recv_obj)
         asteroids::Vector3f xAxis(player_object["x_axis_x"].toDouble(), player_object["x_axis_y"].toDouble(), player_object["x_axis_z"].toDouble());
         asteroids::Vector3f yAxis(player_object["y_axis_x"].toDouble(), player_object["y_axis_y"].toDouble(), player_object["y_axis_z"].toDouble());
         asteroids::Vector3f zAxis(player_object["z_axis_x"].toDouble(), player_object["z_axis_y"].toDouble(), player_object["z_axis_z"].toDouble());
+        int ship_count = player_object["ship_count"].toInt();
 
         if(player_object["id"].toInt() == m_player_id)
         {
@@ -222,6 +228,8 @@ void tcpclient::process_fight_init(QJsonObject recv_obj)
             m_mainwindow->ui->openGLWidget->getCamera()->setXAxis(xAxis);
             m_mainwindow->ui->openGLWidget->getCamera()->setYAxis(yAxis);
             m_mainwindow->ui->openGLWidget->getCamera()->setZAxis(zAxis);
+
+            m_mainwindow->ui->openGLWidget->getCamera()->setHealth(ship_count * 10);
         }
         else
         {
@@ -229,6 +237,8 @@ void tcpclient::process_fight_init(QJsonObject recv_obj)
             m_mainwindow->ui->openGLWidget->getEnemy()->setXAxis(xAxis);
             m_mainwindow->ui->openGLWidget->getEnemy()->setYAxis(yAxis);
             m_mainwindow->ui->openGLWidget->getEnemy()->setZAxis(zAxis);
+
+            m_mainwindow->ui->openGLWidget->getEnemy()->setHealth(ship_count * 10);
         }
     }
 

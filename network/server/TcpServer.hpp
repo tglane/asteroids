@@ -48,7 +48,7 @@ private:
     void send_strat_init();
     void send_state();
 
-    void fight_init();
+    void fight_init(Battle::Ptr battle);
 
     void handle_init(TcpClient& client, QJsonDocument& doc);
     void handle_ready(TcpClient& client, QJsonDocument& doc);

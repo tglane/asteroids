@@ -95,7 +95,7 @@ public:
 
     Player::Ptr getSelfPlayer();
 
-    Player::Ptr getEnemyPlayer(int id);
+    Player::Ptr getEnemyPlayer();
 
     bool updateAll(QJsonObject &update); // @suppress("Type cannot be resolved")
 
@@ -169,6 +169,8 @@ public:
     Player::Ptr getPlayerByID(int i);
 
     void getUniverse(std::string filename);
+
+    void printPlanets();
 
 signals:
     void updateInfo();
