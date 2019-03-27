@@ -88,6 +88,7 @@ private:
 
     QSoundEffect                 m_explosionSound;
 
+    QSoundEffect                 m_hitmarkerSound;
 };
 
 } /* namespace asteroids */

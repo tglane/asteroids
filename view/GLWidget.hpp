@@ -105,7 +105,9 @@ private:
 
     QPixmap                     m_emptyHeart;
 
-    QMediaPlayer                m_mediaPlayer;
+    QSoundEffect                m_countdownSound;
+
+    QMediaPlayer*               m_backgroundMusic;
 };
 
 #endif

@@ -22,8 +22,11 @@ namespace asteroids
 
 PhysicsEngine::PhysicsEngine()
 {
-    m_explosionSound.setSource(QUrl::fromLocalFile(QFileInfo("../models/exploding.wav").absoluteFilePath()));
+    m_explosionSound.setSource(QUrl::fromLocalFile(QFileInfo("../resources/explosion.wav").absoluteFilePath()));
     m_explosionSound.setVolume(0.6f);
+
+    m_hitmarkerSound.setSource(QUrl::fromLocalFile(QFileInfo("../resources/hitmarker.wav").absoluteFilePath()));
+    m_hitmarkerSound.setVolume(0.7f);
 }
 
 void PhysicsEngine::addDestroyable(PhysicalObject::Ptr& obj)
@@ -102,6 +105,7 @@ bool PhysicsEngine::process(int elapsed_time)
                 if (m_hittables.size() > 1)
                 {
                     (*h_it)->setHealth((*h_it)->getHealth() - 1);
+                    m_hitmarkerSound.play();
                     if ((*h_it)->getHealth() % 10 == 0)
                     {
                         m_explosionSound.play();

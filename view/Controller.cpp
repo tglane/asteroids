@@ -31,7 +31,7 @@ Controller::Controller() : m_cooldownPlayer(0), m_gamepadR1(0), m_gamepadL1(0)
     m_gamepadAvailable = m_gamepad.init();
 
     // Init media player
-    m_bulletSound.setSource(QUrl::fromLocalFile(QFileInfo("../models/shooting.wav").absoluteFilePath()));
+    m_bulletSound.setSource(QUrl::fromLocalFile(QFileInfo("../resources/shooting.wav").absoluteFilePath()));
     m_bulletSound.setVolume(0.4f);
 }
 
