@@ -31,6 +31,10 @@ class TcpServer: public QObject
     Q_OBJECT
 
     enum ServerState {WAITING, WAIT_READY, ROUND, FIGHT};
+public:
+    using Ptr = std::shared_ptr<TcpServer>;
+
+    TcpServer(std::string filename, QObject* parent = 0);
 
 private slots:
     void onConnect();
@@ -59,6 +63,7 @@ private:
     int ready_count = 0;
     int battle_count = 0;
 
+    std::string level;
 
     std::shared_ptr<UdpServer> udpServer;
 

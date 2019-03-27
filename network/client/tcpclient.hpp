@@ -5,7 +5,7 @@
 #ifndef CPP18_ASTEROIDS_TCPCLIENT_HPP
 #define CPP18_ASTEROIDS_TCPCLIENT_HPP
 
-#include <GL/glew.h>
+#include "util/gl_includes.h"
 
 #include <QtCore/QObject>
 #include <QTcpSocket>

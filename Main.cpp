@@ -18,7 +18,6 @@
 #include "network/client/udpclient.hpp"
 
 
-
 int main(int argc, char** argv)
 {
     QApplication a(argc, argv);
@@ -28,9 +27,9 @@ int main(int argc, char** argv)
     //TODO add input for player name and server io
     tcpclient::Ptr tcp_client(std::make_shared<tcpclient>(model));
 
-    strategy::GameWindow gamewindow(model, tcp_client);
+    strategy::GameWindow gamewindow(model);
 
-    QObject::connect(tcp_client.get(), SIGNAL(start_round()), &gamewindow, SLOT(start_round()));
+    //QObject::connect(tcp_client.get(), SIGNAL(start_round()), &gamewindow, SLOT(start_round()));
 
     gamewindow.show();
 

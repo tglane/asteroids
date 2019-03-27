@@ -18,6 +18,7 @@ tcpclient::tcpclient(asteroids::DataModel::Ptr datamodel, QObject* parent)
 
 void tcpclient::connect_to_server(string name, string server_ip)
 {
+    std::cout <<"Connect to SVR"<< std::endl;
     m_player_name = QString::fromStdString(name);
     m_server_ip = QString::fromStdString(server_ip);
 

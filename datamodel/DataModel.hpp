@@ -64,6 +64,8 @@ public:
 
     void addWidget(int Id, QWidget* widget);
 
+    QWidget* getWidget(int Id) { return m_widgets[Id];};
+
     void getUniverse(std::string filename);
 
 

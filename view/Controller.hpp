@@ -1,7 +1,7 @@
 #ifndef CPP18_ASTEROIDS_CONTROLLER_HPP
 #define CPP18_ASTEROIDS_CONTROLLER_HPP
 
-#include <GL/glew.h>
+#include "util/gl_includes.h"
 #include <QtCore/Qt>
 #include "Gamepad.hpp"
 #include "physics/Hittable.hpp"
