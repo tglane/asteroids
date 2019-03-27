@@ -44,6 +44,7 @@ public:
      */
     ~GameWindow();
 
+    QStackedWidget* content();
 
     /// Returns the width of the window
     //int width();

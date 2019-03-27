@@ -18,7 +18,7 @@ GameWindow::GameWindow(DataModel::Ptr model, QWidget* parent) :
     
     ui->setupUi(this);
 
-    m_model->addMainWindow(ui->centralwidget);
+    m_model->addMainWindow(this);
 
     MainWindow2D* strategywindow = new MainWindow2D(m_model);
     ui->centralwidget->addWidget(strategywindow);
@@ -53,14 +53,21 @@ GameWindow::GameWindow(DataModel::Ptr model, QWidget* parent) :
     fs::path mediafile = "../models/Interstellar-Soundtrack.mp3";
     m_mediaplayer->setMedia(QUrl::fromLocalFile(QString::fromStdString(fs::absolute(mediafile).string())));
 
-    m_mediaplayer->play();
+    //m_mediaplayer->play();
 
     connect(this, SIGNAL(play()), m_mediaplayer, SLOT(play()));
     connect(this, SIGNAL(stop()), m_mediaplayer, SLOT(stop()));
     connect(this, SIGNAL(pause()), m_mediaplayer, SLOT(pause()));
 
+    std::cout << "Connected to slots" << std::endl;
+
     m_model->switchWindow(DataModel::START);
 
+}
+
+QStackedWidget* GameWindow::content()
+{
+    return ui->centralwidget;
 }
 
 

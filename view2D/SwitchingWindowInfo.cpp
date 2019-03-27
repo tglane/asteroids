@@ -1,6 +1,7 @@
 #include "view2D/SwitchingWindowInfo.hpp"
 
 #include <QSignalMapper>
+#include <QDesktopWidget>
 
 namespace strategy{
 
@@ -20,6 +21,15 @@ SwitchingWindowInfo::SwitchingWindowInfo(DataModel::Ptr model, QWidget* parent) 
 
     connect(signalMapper, SIGNAL(mapped(int)), m_model.get(), SLOT(switchWindow(int)));
 }
+
+void SwitchingWindowInfo::resizeEvent(QResizeEvent* event)
+{
+    QRect rec = QApplication::desktop()->screenGeometry();
+    this->resize(rec.width(), rec.height());
+    ui->widget->resize(rec.width(), rec.height());
+}
+
+
 
 SwitchingWindowInfo::~SwitchingWindowInfo() {
     if (ui)
