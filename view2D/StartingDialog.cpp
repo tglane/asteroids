@@ -81,10 +81,14 @@ void StartingDialog::selectMap(int state)
         ui->ChooseMapLabel->setVisible(true);
         ui->SelectMap->addItem("Level 1");
         ui->SelectMap->addItem("Level 2");
+        ui->ServerAddress->setEnabled(false);
+        ui->Name->setEnabled(false);
     } else {
         ui->SelectMap->setVisible(false);
         ui->ChooseMapLabel->setVisible(false);
         ui->SelectMap->clear();
+        ui->ServerAddress->setEnabled(true);
+        ui->Name->setEnabled(true);
     }
 }
 
