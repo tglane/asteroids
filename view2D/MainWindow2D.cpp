@@ -153,8 +153,16 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
 
     ui->PlanetInfo->setVisible(false);
 
-    connect(m_model.get(), SIGNAL(updateInfo()), this, SLOT(updatePlayerInfo()));
+    connect(m_model.get(), SIGNAL(updateInfo()), this, SLOT(updateAllInfo()));
 
+}
+
+void MainWindow2D::updateAllInfo() {
+    updatePlayerInfo();
+    updatePlanetColor();
+    if (currentPlanet >= 0) {
+        updatePlanetInfo(currentPlanet);
+    }
 }
 
 void MainWindow2D::resizeEvent(QResizeEvent* event){

@@ -362,6 +362,8 @@ bool DataModel_Server::updateAll(QJsonObject &update) {
 		//}//End Iterator File
 
     player->setPlanetsList(planets);
+
+    emit updateInfo();
 	return true;
 }
 

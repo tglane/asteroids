@@ -124,15 +124,17 @@ void TcpServer::handle_state(TcpClient& client, QJsonDocument& doc) {
     ready_count++;
     if (clients.size() == ready_count) {
         m_battle_list = m_datamodel->findBattles();
+        qDebug() << "n battles: " << m_battle_list.size();
         //m_battle_list = std::vector<Battle::Ptr>{Battle::Ptr(nullptr)};
 
         state = FIGHT;
         battle_count = 0;
         // Relevant,
         //udpServer.start();
-        send_battle();
 
         qDebug() << "state changed: FIGHT";
+        send_battle();
+
     }
 }
 
@@ -270,8 +272,10 @@ void TcpServer::send_battle() {
         fight_init();
         battle_count++;
     } else {
-        state = ROUND;
+
         qDebug() << "state changed: ROUND";
+        state = ROUND;
+        ready_count = 0;
         send_state();
     }
 }

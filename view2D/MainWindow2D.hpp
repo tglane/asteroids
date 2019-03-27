@@ -50,6 +50,7 @@ public:
 
 public slots:
 
+    void updateAllInfo();
     void updatePlayerInfo();
 
     /**
