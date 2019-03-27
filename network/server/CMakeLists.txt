@@ -27,7 +27,8 @@ set(SERVER_SRC
     ../../datamodel/Battle.cpp
     ../../datamodel/MineOrder.cpp
     ../../util/AsteroidField.cpp
-    ../../math/Randomizer.cpp)
+    ../../math/Randomizer.cpp
+    ../../PhysicalMissile.cpp)
 
 set(SERVER_HDR
     UdpServer.hpp
@@ -39,7 +40,7 @@ include_directories(../../)
 include_directories(${Qt5Network_INCLUDE_DIRS})
 include_directories(${Qt5Widgets_INCLUDE_DIRS})
 
-qt5_wrap_cpp(SERVER_HDR_MOC ${SERVER_HDR})
+#qt5_wrap_cpp(SERVER_HDR_MOC ${SERVER_HDR})
 
 add_executable(server ${SERVER_SRC} ${SERVER_HDR_MOC})
 

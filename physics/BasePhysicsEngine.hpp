@@ -19,6 +19,7 @@
 #include "PhysicalObject.hpp"
 #include "PhysicalBullet.hpp"
 #include "Hittable.hpp"
+#include "Missile.hpp"
 
 
 using std::map;
@@ -62,6 +63,8 @@ public:
      */
     void addBullet(PhysicalBullet::Ptr bullet);
 
+    void addMissile(PhysicalMissile::Ptr missile);
+
     /**
      * @brief   The engine's main loop
      */
@@ -73,7 +76,9 @@ protected:
     map<int, PhysicalObject::Ptr>    m_objects;
 
     /// List of active bullets
-    map<int, PhysicalBullet::Ptr>            m_bullets;
+    map<int, PhysicalBullet::Ptr>    m_bullets;
+
+    map<int, PhysicalMissile::Ptr>   m_missiles;
 
     map<int, Hittable::Ptr>          m_hittables;
 };

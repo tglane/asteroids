@@ -32,7 +32,7 @@ namespace asteroids
         // Render all objects
         map<int, PhysicalObject::Ptr>::iterator p_it;
         map<int, PhysicalBullet::Ptr>::iterator b_it;
-
+        map<int, Missile::Ptr>::iterator m_it;
 
         for(p_it = m_objects.begin(); p_it != m_objects.end(); p_it++)
         {
@@ -48,6 +48,15 @@ namespace asteroids
             b->render();
             b_it++;
         }
+
+        m_it = m_missiles.begin();
+        while(m_it != m_missiles.end())
+        {
+            Missile::Ptr m = (*m_it).second;
+            m->render();
+            m_it++;
+        }
+
     }
 
     void PhysicsEngine::process_collisions(int id_one, int id_two)
@@ -59,13 +68,22 @@ namespace asteroids
         /* Add life to player when he hits an asteroid */
         if(first == 1 && second == 0)
         {
-            int shooter_id = id_two & 0xFF000000;
+            int shooter_id = id_one & 0xFF000000;
             if(m_hittables.count(shooter_id) == 1)
             {
                 int health = m_hittables[shooter_id]->getHealth();
                 if (m_hittables[shooter_id]->getHealth() < 10) {
                     m_hittables[shooter_id]->setHealth(health + 1);
                 }
+            }
+        }
+        if (first == 3 && second == 2)
+        {
+            int shooter_id = id_one & 0xFF000000;
+            if(m_hittables.count(shooter_id) == 1)
+            {
+                int health = m_hittables[shooter_id]->getHealth();
+                m_hittables[shooter_id]->setHealth(health - min(3, health % 10));
             }
         }
     }
@@ -75,13 +93,24 @@ namespace asteroids
     {
         if((id_to_check >> 24) == 0)
         {
-            /* Bullet collision */
-            if(m_bullets.count(id_to_check) == 1) {
+            if (((id_to_check >> 16) & 0x000000FF) == 0)
+            {
+                /* Bullet collision */
+                if(m_bullets.count(id_to_check) == 1) {
 
-                m_bullets[id_to_check]->destroy();
-                m_bullets.erase(id_to_check);
+                    m_bullets[id_to_check]->destroy();
+                    m_bullets.erase(id_to_check);
+                }
+                return 1; // Means Bullet
             }
-            return 1; // Means Bullet
+            else if (((id_to_check >> 16) & 255) == 1)
+            {
+                /* Bullet collision */
+                if (m_missiles.count(id_to_check) == 1) {
+                    m_missiles.erase(id_to_check);
+                }
+                return 3; // Means Missile
+            }
         }
         else
         {

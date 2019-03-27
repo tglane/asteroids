@@ -144,6 +144,8 @@ void GLWidget::setClient(udpclient::Ptr client) {
     m_camera->setHealth(10);
 
     m_client->setOtherFighter(m_enemy); //added
+    asteroids::Hittable::Ptr player_ptr = std::static_pointer_cast<asteroids::Hittable>(m_camera);
+    m_client->setOwnFighter(player_ptr);
     m_client->setPhysicsPtr(m_physicsEngine); //added
 
     m_physicsEngine->addHittable(m_camera);

@@ -163,4 +163,13 @@ void TriangleMesh::fixArrow()
 	}
 }
 
+void TriangleMesh::fixMissile()
+{
+	for (int i = 0; i < m_numVertices; i++)
+	{
+		m_vertexBuffer[3 * i + 1] = -m_vertexBuffer[3 * i + 1];
+		m_normalBuffer[3 * i + 1] = -m_normalBuffer[3 * i + 1];
+	}
+}
+
 }

@@ -171,6 +171,8 @@ set(ASTEROID_SOURCES
     view/Camera.cpp
     view/Controller.cpp
     Gamepad.cpp
+    Missile.cpp
+    PhysicalMissile.cpp
 )
 
 set(ASTEROID_MOCS

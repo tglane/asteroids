@@ -14,6 +14,8 @@
 #include <light_object.hpp>
 #include <light_ship.hpp>
 
+#include "PhysicalMissile.hpp"
+
 #include "ServerPhysicsEngine.hpp"
 #include "../UdpPeer.hpp"
 
@@ -43,6 +45,7 @@ class UdpServer: public QObject
 
 private slots:
     void handle_bullet(int id, Vector3f& position, Vector3f& velocity);
+    void handle_missile(int id, Vector3f& position, Vector3f& x, Vector3f& y, Vector3f& z);
     void handle_position(int id, Vector3f& position, Vector3f& x_axis, Vector3f& y_axis, Vector3f& z_axis);
     //void handle_collision(int id, int obj_id1, int obj_id2);
     void handle_ack(int id, int seq_nr);

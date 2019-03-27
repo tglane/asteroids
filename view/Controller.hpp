@@ -37,7 +37,9 @@ private:
 
     std::vector<int> m_keys;
 
-    int m_cooldownPlayer;
+    int m_bulletCooldown;
+
+    int m_missileCooldown;
 
     bool m_gamepadAvailable;
 
