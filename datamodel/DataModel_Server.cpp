@@ -294,6 +294,7 @@ void DataModel_Server::calculateFinance(Player::Ptr Player)
     m_self->addRubin(MineGainWithNumbers);
     TransaktionMine();
     TransaktionShip();
+    TransaktionShipyard();
     clearOrderList();
 
 }
