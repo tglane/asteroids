@@ -90,12 +90,15 @@ find_package( Qt5
     Core
     Widgets
     OpenGL
-        Gamepad
+    Gamepad
+    Multimedia
     REQUIRED
 )
 
 include_directories(${Qt5Widgets_INCLUDE_DIRS})
 include_directories(${Qt5Core_INCLUDE_DIRS})
+include_directories(${Qt5Gamepad_INCLUDE_DIRS})
+include_directories(${Qt5Multimedia_INCLUDE_DIRS})
 include_directories(${Qt5OpenGL_INCLUDE_DIRS})
 
 
@@ -179,6 +182,9 @@ set(ASTEROID_DEPENDS
     ${SDL2_LIBRARY}
     ${JPEG_LIBRARIES}
     ${Qt5Widgets_LIBRARIES}
+    ${Qt5Core_LIBRARIES}
+    ${Qt5Gamepad_LIBRARIES}
+    ${Qt5Multimedia_LIBRARIES}
     c3dsreader
 )
 
@@ -196,5 +202,4 @@ add_executable(asteroids
 # External library dependencys
 ###############################################################################
 
-#target_link_libraries(asteroids SOIL)
-target_link_libraries(asteroids Qt5::Gamepad ${ASTEROID_DEPENDS})
+target_link_libraries(asteroids ${ASTEROID_DEPENDS})

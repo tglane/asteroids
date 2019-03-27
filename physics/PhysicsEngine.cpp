@@ -12,6 +12,7 @@
 
 #include "PhysicsEngine.hpp"
 #include <iostream>
+#include <QSound>
 using namespace std;
 
 namespace asteroids
@@ -95,6 +96,8 @@ bool PhysicsEngine::process(int elapsed_time)
                     (*h_it)->setHealth((*h_it)->getHealth() - 1);
                     if ((*h_it)->getHealth() % 10 == 0)
                     {
+                        // Play sound
+                        QSound::play("../models/exploding.wav");
                         m_particles.addEffect(ParticleEffect::createExplosionSphere((*h_it)->getPosition()));
                     }
                 }

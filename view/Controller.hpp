@@ -5,6 +5,8 @@
 #include "Gamepad.hpp"
 #include "physics/Hittable.hpp"
 #include "physics/PhysicsEngine.hpp"
+#include <QMediaPlayer>
+#include <QtMultimedia/QSoundEffect>
 
 namespace asteroids
 {
@@ -44,6 +46,8 @@ private:
     int m_gamepadR1;
 
     int m_gamepadL1;
+
+    QSoundEffect m_soundEffect;
 
 };
 
