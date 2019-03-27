@@ -124,6 +124,7 @@ void TcpServer::handle_ready(TcpClient& client, QJsonDocument& doc)
 void TcpServer::handle_state(TcpClient& client, QJsonDocument& doc) {
     QJsonArray array_state = doc.array();
     QJsonObject obj_state = array_state[1].toObject();
+    qDebug() << "received client state: \n" << obj_state; 
     m_datamodel->updateAll(obj_state);
 }
 

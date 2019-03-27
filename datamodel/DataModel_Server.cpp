@@ -22,7 +22,7 @@ DataModel_Server::DataModel_Server(std::string filename, int id, std::string pla
     getUniverse(filename);
 }
 
-    void DataModel_Server::constructPlayer(int id, std::string player_name, bool is_self)
+void DataModel_Server::constructPlayer(int id, std::string player_name, bool is_self)
 {
     // kein Name könnte Problem sein
     Player::Ptr p(new Player(id, 3000, 0, player_name));
@@ -71,6 +71,10 @@ void DataModel_Server::getUniverse(std::string filename)
         }
 
         f.close();
+    }
+    else
+    {
+        std::cout << "failed to open map file" << std::endl;
     }
 }
 
