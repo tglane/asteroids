@@ -8,7 +8,7 @@
 
 #include "UdpServer.hpp"
 
-#include "datamodel/DataModel.hpp"
+#include "datamodel/DataModel_Server.hpp"
 
 #include <vector>
 #include <memory>
@@ -62,7 +62,7 @@ private:
 
     std::shared_ptr<UdpServer> udpServer;
 
-    DataModel::Ptr m_datamodel;
+    DataModel_Server::Ptr m_datamodel;
 
     std::vector<std::shared_ptr<Battle>> m_battle_list;
 

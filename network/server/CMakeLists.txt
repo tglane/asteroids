@@ -19,7 +19,7 @@ set(SERVER_SRC
     ../../physics/PhysicalBullet.cpp
     ../../physics/BasePhysicsEngine.cpp
     ../../physics/Hittable.cpp
-    ../../datamodel/DataModel.cpp
+    ../../datamodel/DataModel_Server.cpp
     ../../datamodel/Planet.cpp
     ../../datamodel/Player.cpp
     ../../datamodel/ShipOrder.cpp

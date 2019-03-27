@@ -13,7 +13,7 @@ TcpServer::TcpServer()
     connect(&server, SIGNAL(newConnection()), this, SLOT(onConnect()));
     //connect(&server, SIGNAL(disconnected()), this, SLOT(onDisconnect()));
 
-    m_datamodel = DataModel::Ptr(new DataModel());
+    m_datamodel = DataModel_Server::Ptr(new DataModel_Server());
     m_datamodel->getUniverse("../models/Level-1.map");
 
     if(!server.listen(QHostAddress::Any, 1235))
@@ -40,6 +40,7 @@ void TcpServer::onConnect()
     }
     qDebug() << "Client connected 2";
 
+    std::cout << "client id: " << last_id << std::endl;
     TcpClient client(last_id++, server.nextPendingConnection());
     client.socket->setSocketOption(QAbstractSocket::KeepAliveOption, 1);
     clients.push_back(client);
@@ -57,8 +58,8 @@ void TcpServer::send_state()
         QJsonArray array;
         array.push_back("state");
         for (auto j: clients) {
-            Player::Ptr temp_player = m_datamodel->getPlayer(j.id);
-            array.push_back(m_datamodel->createJsonPlayerStatus(temp_player));
+            Player::Ptr temp_player = m_datamodel->getPlayerByID(j.id);
+            array.push_back(m_datamodel->createJson(temp_player));
         }
         QJsonDocument doc(array);
         int size = doc.toJson().size();
@@ -83,8 +84,8 @@ void TcpServer::handle_ready(TcpClient& client, QJsonDocument& doc)
                 for (auto i: clients)
                 {
                     QJsonObject player_obj;
-                    player_obj.insert("id", QJsonValue::fromVariant(client.id));
-                    Player::Ptr player = m_datamodel->getPlayer(client.id);
+                    player_obj.insert("id", QJsonValue::fromVariant(i.id));
+                    Player::Ptr player = m_datamodel->getPlayerByID(i.id);
                     player_obj.insert("player_name", QJsonValue::fromVariant(QString::fromStdString(player->getPlayerName())));
 
                     array.push_back(player_obj);
@@ -92,6 +93,7 @@ void TcpServer::handle_ready(TcpClient& client, QJsonDocument& doc)
 
                 QJsonDocument res(array);
                 int size = res.toJson().size();
+                qDebug() << "sending: " << res;
                 j.socket->write((char*)&size, 4);
                 j.socket->write(res.toJson());
             }
@@ -122,6 +124,7 @@ void TcpServer::handle_ready(TcpClient& client, QJsonDocument& doc)
 void TcpServer::handle_state(TcpClient& client, QJsonDocument& doc) {
     QJsonArray array_state = doc.array();
     QJsonObject obj_state = array_state[1].toObject();
+    qDebug() << "received client state: \n" << obj_state; 
     m_datamodel->updateAll(obj_state);
 }
 
@@ -240,9 +243,9 @@ void TcpServer::fightEnd(int id, int health_left) {
         current_battle->m_player2->delShips(current_battle->m_numberShips2);
     }
 
-    m_datamodel->getPlayer(clients[id].id)->addPlanet(m_battle_list[battle_count]->m_location);
+    m_datamodel->getPlayerByID(clients[id].id)->addPlanet(m_battle_list[battle_count]->m_location);
 
-    current_battle->m_location->setOwner(m_datamodel->getPlayer(clients[id].id));
+    current_battle->m_location->setOwner(m_datamodel->getPlayerByID(clients[id].id));
     current_battle->m_location->setInvader(nullptr);
     current_battle->m_location->setInvaderShips(0);
     current_battle->m_location->setShips(health_left);
@@ -278,7 +281,8 @@ void TcpServer::handle_init(TcpClient& client, QJsonDocument& doc)
 
     QString name(temp_name["playername"].toString().toUtf8());
 
-    m_datamodel->getPlayer(client.id)->setPlayerName(name.toUtf8().constData());
+    m_datamodel->constructPlayer(client.id, name.toStdString(), false);
+    m_datamodel->getPlayerByID(client.id)->setPlayerName(name.toUtf8().constData());
 
 
     qDebug() << "Sending init_res";

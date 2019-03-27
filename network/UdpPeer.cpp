@@ -121,7 +121,9 @@ namespace asteroids
             return;
         }
         char* data = datagram.data().data();
-        uint32_t seq_nr = *(data + 1);
+        uint32_t seq_nr = *((uint32_t*)(data + 1));
+
+        std::cout << "sending ack " << seq_nr << std::endl;
         QByteArray reply_data;
         reply_data.append('A');
         reply_data.append((char *)(&seq_nr), 4);

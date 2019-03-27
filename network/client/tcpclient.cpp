@@ -14,8 +14,6 @@ tcpclient::tcpclient(asteroids::DataModel::Ptr datamodel, QObject* parent)
 
     connect(m_socket.get(), SIGNAL(connected()), this, SLOT(send_init()));
     connect(m_socket.get(), SIGNAL(readyRead()), this, SLOT(recv_json()));
-
-    connect_to_server("ASDF", "127.0.0.1");
 }
 
 void tcpclient::connect_to_server(string name, string server_ip)
@@ -105,8 +103,8 @@ void tcpclient::recv_json()
 
 void tcpclient::process_init_res(QJsonObject recv_obj)
 {
-    m_datamodel->setOwnID(recv_obj["id"].toInt());
-    m_datamodel->getUniverse(recv_obj["map"].toString().toStdString());
+    m_player_id = recv_obj["id"].toInt();
+    //m_datamodel->getUniverse(recv_obj["map"].toString().toStdString());
 
     //m_datamodel->switchWindow(asteroids::DataModel::MAIN2D);
 
@@ -128,25 +126,23 @@ void tcpclient::process_init_res(QJsonObject recv_obj)
     send_ready();
 }
 
-void tcpclient::process_strat_init(QJsonArray recv_array)
-{
-    m_datamodel->getSelfPlayer()->setPlayerName(m_player_name.toStdString());
+void tcpclient::process_strat_init(QJsonArray recv_array) {
+    //m_datamodel->getSelfPlayer()->setPlayerName(m_player_name.toStdString());
 
     std::cout << "strat_init" << std::endl;
 
-    for(int i = 1; i < recv_array.size(); i++)
-    {
-        if(recv_array[i].toObject()["id"] != m_datamodel->getOwnID())
-        {
-            /* Sets enemy player name to the name sent from server */
-            m_datamodel->getEnemyPlayer(recv_array[i].toObject()["id"].toInt())->setPlayerName(recv_array[i].toObject()["player_name"].toString().toStdString());
-        }
-    }
+    for (int i = 1; i < recv_array.size(); i++) {
+        //std::cout << "id: " << recv_array[i].toObject()["id"].toInt() << "m_plyer_id: " << m_player_id << std::endl;
+        bool is_self = recv_array[i].toObject()["id"].toInt() == m_player_id;
+        m_datamodel->constructPlayer(recv_array[i].toObject()["id"].toInt(),
+                                     recv_array[i].toObject()["player_name"].toString().toStdString(), is_self);
 
+    }
+    emit start_round();
     m_state = client_state::ROUND;
 
-    send_ready();
-    m_state = client_state::END_ROUND;
+    //send_ready();
+    //m_state = client_state::END_ROUND;
 }
 
 void tcpclient::process_state(QJsonArray recv_array)
@@ -163,7 +159,7 @@ void tcpclient::process_state(QJsonArray recv_array)
 void tcpclient::process_fight_init(QJsonObject recv_obj)
 {
     /* Initialize the udp client for the connection during 3d fight */
-    m_udpclient = std::make_shared<udpclient>(m_datamodel->getOwnID(), m_server_ip, m_socket->localPort());
+    m_udpclient = std::make_shared<udpclient>(m_player_id, m_server_ip, m_socket->localPort());
     m_udpclient->init_fight_slot(recv_obj);
     std::cout << "fight init" << std::endl;
 
@@ -204,7 +200,7 @@ void tcpclient::process_fight_init(QJsonObject recv_obj)
         asteroids::Vector3f yAxis(player_object["y_axis_x"].toDouble(), player_object["y_axis_y"].toDouble(), player_object["y_axis_z"].toDouble());
         asteroids::Vector3f zAxis(player_object["z_axis_x"].toDouble(), player_object["z_axis_y"].toDouble(), player_object["z_axis_z"].toDouble());
 
-        if(player_object["id"].toInt() == m_datamodel->getOwnID())
+        if(player_object["id"].toInt() == m_player_id)
         {
             m_mainwindow->ui->openGLWidget->getCamera()->setPosition(pos);
             m_mainwindow->ui->openGLWidget->getCamera()->setXAxis(xAxis);
