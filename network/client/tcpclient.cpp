@@ -169,6 +169,10 @@ void tcpclient::process_strat_init(QJsonArray recv_array) {
 
 void tcpclient::process_state(QJsonArray recv_array)
 {
+    if(m_mainwindow != nullptr)
+    {
+        m_mainwindow->close();
+    }
     m_datamodel->clearInvaders();
 
     QJsonObject obj = recv_array[1].toObject();
@@ -190,8 +194,11 @@ void tcpclient::process_fight_init(QJsonObject recv_obj)
     m_udpclient->init_fight_slot(recv_obj);
     std::cout << "fight init" << std::endl;
 
+    m_mainwindow = std::make_shared<MainWindow>("../models/level.xml");
+
     /* Initialize new window for 3d part */
-    m_datamodel->switchWindow(DataModel_Server::MAIN3D);
+    //m_datamodel->switchWindow(DataModel_Server::MAIN3D);
+    m_mainwindow->showFullScreen();
 
     m_physicsEngine = m_mainwindow->ui->openGLWidget->getPhysicsEngine();
 
@@ -248,6 +255,4 @@ void tcpclient::process_fight_init(QJsonObject recv_obj)
     }
 
     m_mainwindow->ui->openGLWidget->setClient(m_udpclient);
-    m_mainwindow->start_timer();
-    m_mainwindow->ui->openGLWidget->start_timer();
 }

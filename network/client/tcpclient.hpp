@@ -33,7 +33,7 @@ public:
 
     tcpclient(asteroids::DataModel::Ptr datamodel, QObject* parent = 0);
 
-    void set3DWindow(MainWindow* mainWindow) { m_mainwindow = mainWindow; }
+    //void set3DWindow(MainWindow* mainWindow) { m_mainwindow = mainWindow; }
 
 public slots:
     /**
@@ -102,7 +102,7 @@ private:
 
     std::shared_ptr<QTcpSocket> m_socket;
 
-    MainWindow* m_mainwindow;
+    std::shared_ptr<MainWindow> m_mainwindow;
 
 };
 
