@@ -248,6 +248,20 @@ void DataModel_Server::TransaktionShip()
 
 }
 
+void DataModel_Server::TransaktionShipyard()
+{
+    std::list<std::shared_ptr<ShipyardOrder>> m_TransaktionShipyard = m_self->getListShipyardOrder();
+
+    for(std::list<std::shared_ptr<ShipyardOrder>>::iterator it = m_TransaktionShipyard.begin(); it != m_TransaktionShipyard.end(); ++it)
+    {
+        std::shared_ptr<ShipyardOrder> NewOrder = *it;
+
+        Planet::Ptr NewShipyardOnPlanet = NewOrder->getPlanet();
+
+        NewShipyardOnPlanet->buildShipyard();
+    }
+}
+
 void DataModel_Server::clearOrderList()
 {
     m_self->ClearOrderListInPlayer();
