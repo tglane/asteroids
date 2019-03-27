@@ -33,7 +33,8 @@ StartingDialog::StartingDialog(DataModel::Ptr model, QWidget* parent) :
 
 StartingDialog::~StartingDialog()
 {
-    
+    if (ui)
+        delete ui;
 }
 
 void StartingDialog::exitGame(bool clicked)

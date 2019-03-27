@@ -71,7 +71,6 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
     // Start colonizing the selected Planet, how we get selected Planet?
     // Button should only be selectable if a neighbour of the selected Planet is owned
     QPushButton* m_colonize = ui->Colonize;
-    //m_colonize->setEnabled(false);
     connect(m_colonize, SIGNAL(clicked(bool)), this, SLOT(colonize(bool)));
 
     // Build a ship on selected Planet
@@ -84,11 +83,9 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
     QPushButton* m_buildMine = ui->BuildMine;
     connect(m_buildMine, SIGNAL(clicked(bool)), this, SLOT(buildMine(bool)));
 
+    // Send a ship from the planet which is currently choosen
     QPushButton* m_sendShips = ui->SendShip;
     connect(m_sendShips, SIGNAL(clicked(bool)), this, SLOT(sendShips(bool)));
-
-    // at the beginning no planet is selected so this widget is not visible
-    // ui->PlanetInfo->setVisible(false);
 
     QPushButton* m_exit = ui->ExitGame;
     connect(m_exit, SIGNAL(clicked(bool)), this, SLOT(exitGame(bool)));
@@ -101,8 +98,10 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
 
     ui->PlanetInfo->setVisible(false);
 
+    // event is triggert as soon as information about player is accessible
     connect(m_model.get(), SIGNAL(updateInfo()), this, SLOT(updatePlayerInfo()));
 
+    // event is triggert as soon as planets a available in DataModel
     connect(m_model.get(), SIGNAL(initMap()), this, SLOT(initPlanets()));
 }
 
@@ -117,6 +116,8 @@ MainWindow2D::~MainWindow2D()
         delete ui;
     if(FighterWindow != NULL)
         delete FighterWindow;
+    if (scene)
+        delete scene;
 }
 
 
@@ -241,13 +242,14 @@ void MainWindow2D::updatePlanetColor(){
 
 void MainWindow2D::colonize(bool click)
 {
+    // now you may end your round
+    ui->NextRound->setVisible(true);
+
     Planet::Ptr p = m_model->getPlanetFromId(currentPlanet);
 
     m_model->setStartPlanet(p);
 
     ui->Colonize->setVisible(false);
-    std::cout << "Colonize!" << std::endl;
-    std::cout<<currentPlanet<<std::endl;
     MyEllipse* otherEllipse = getEllipseById(currentPlanet);
     QPixmap otherpix("../models/surface/my2.jpg");
     otherEllipse->myBrush = QBrush(otherpix);
@@ -395,15 +397,21 @@ void MainWindow2D::updatePlanetInfo(int id)
         ui->ShipOrdersValue->setVisible(false);
     } else {
         // Enable entsprechende Felder, wenn Planet besessen wird
-        ui->SendShip->setVisible(true);
-        ui->BuildMine->setVisible(true);
-        ui->BuildShip->setVisible(true);
-        ui->SendShipNumber->setVisible(true);
-        ui->DestionationPlanet->setVisible(true);
-        ui->MineOrdersLabel->setVisible(true);
-        ui->MineOrdersValue->setVisible(true);
+        if (p->getShips() > 0)
+        {
+            ui->SendShip->setVisible(true);
+            ui->SendShipNumber->setVisible(true);
+            ui->DestionationPlanet->setVisible(true);
+        } else {
+            ui->SendShip->setVisible(false);
+            ui->SendShipNumber->setVisible(false);
+            ui->DestionationPlanet->setVisible(false);
+        }
+        
         ui->ShipOrdersLabel->setVisible(true);
         ui->ShipOrdersValue->setVisible(true);
+        ui->MineOrdersLabel->setVisible(true);
+        ui->MineOrdersValue->setVisible(true);
 
         /* Schiffe und Minen können nur mit genügend Rubinen gekauft werden */
         if (m_model->getSelfPlayer()->getRubin() < m_model->getShipCost())
@@ -470,6 +478,7 @@ void MainWindow2D::initPlanets()
 {
     if (!map_created)
     {
+        ui->NextRound->setVisible(false);
         QPen outlinePenHighlight(Qt::gray);
         outlinePenHighlight.setWidth(1);
 

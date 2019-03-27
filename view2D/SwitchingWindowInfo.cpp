@@ -21,7 +21,10 @@ SwitchingWindowInfo::SwitchingWindowInfo(DataModel::Ptr model, QWidget* parent) 
     connect(signalMapper, SIGNAL(mapped(int)), m_model.get(), SLOT(switchWindow(int)));
 }
 
-SwitchingWindowInfo::~SwitchingWindowInfo() {}
+SwitchingWindowInfo::~SwitchingWindowInfo() {
+    if (ui)
+        delete ui;
+}
 
 
 
