@@ -251,10 +251,9 @@ void GLWidget::step(map<Qt::Key, bool>& keyStates)
                 m_controller.keyControl(keyStates, player_ptr, m_physicsEngine, elapsed_time);
             }
 
-            test->run();
             if (keyStates[Qt::Key_R])
             {
-                test->move(Transformable::FORWARD, 10);
+                test->run(elapsed_time);
             }
             if (keyStates[Qt::Key_T])
             {

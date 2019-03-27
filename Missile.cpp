@@ -29,7 +29,7 @@ void Missile::fixMissile()
     m_mesh->fixMissile();
 }
 
-void Missile::run()
+void Missile::run(int elapsed_time)
 {
     // decide, whether or not the target is detected by the missile
     bool targetDetected;
@@ -48,9 +48,13 @@ void Missile::run()
         float deviation = length(relPos - m_xAxis * projectedDistance);
         targetDetected = deviation < radius;
     }
-    std::cout << (targetDetected ? "!" : " ") << std::endl;
 
-    // TODO: fliegen
+    // fly
+    if (targetDetected)
+    {
+
+    }
+    move(Transformable::FORWARD, 1000 * elapsed_time / 1000.0f);
 }
 
 float Missile::length(Vector3f v)

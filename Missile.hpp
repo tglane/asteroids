@@ -23,7 +23,7 @@ public:
 
     void fixMissile();
 
-    void run();
+    void run(int elapsed_time);
 
 private:
 
