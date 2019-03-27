@@ -287,10 +287,12 @@ void DataModel_Server::calculateFinance(Player::Ptr Player)
         Planet::Ptr PlanetFromPlayer = *it;
 
         MineNumbers += PlanetFromPlayer->getMinesBuild();
+        PlanetFromPlayer->subtractEarnings(MineNumbers);
         std::cout <<"Test MineNumbers"<< std::endl;
         std::cout << MineNumbers << std::endl;
     }
     MineGainWithNumbers = MineNumbers * Minegain;
+
     m_self->addRubin(MineGainWithNumbers);
     TransaktionMine();
     TransaktionShip();
