@@ -61,6 +61,12 @@ public:
 
     SpaceCraft::Ptr getEnemy() { return m_enemy; }
 
+    void start_timer()
+    {
+        m_fpsTimer.start();
+        m_startTimer.start();
+    }
+
 protected:
 
     /// Init OpenGL

@@ -191,9 +191,8 @@ void tcpclient::process_fight_init(QJsonObject recv_obj)
     std::cout << "fight init" << std::endl;
 
     /* Initialize new window for 3d part */
-    m_mainwindow = std::make_shared<asteroids::MainWindow>("../models/level.xml");
-    //m_mainwindow->showFullScreen();
-    m_mainwindow->show();
+    m_datamodel->switchWindow(DataModel_Server::MAIN3D);
+
     m_physicsEngine = m_mainwindow->ui->openGLWidget->getPhysicsEngine();
 
     /* Parse fight_init package */
@@ -249,4 +248,6 @@ void tcpclient::process_fight_init(QJsonObject recv_obj)
     }
 
     m_mainwindow->ui->openGLWidget->setClient(m_udpclient);
+    m_mainwindow->start_timer();
+    m_mainwindow->ui->openGLWidget->start_timer();
 }

@@ -24,9 +24,10 @@ GameWindow::GameWindow(DataModel::Ptr model, tcpclient::Ptr tcp_client, QWidget*
     connect(strategywindow, SIGNAL(endround_signal()), tcp_client.get(), SLOT(endround_slot()));
 
     // Insert 3D Window into Stacked Widget
-    /*MainWindow* fightwindow = new MainWindow("../models/level.xml");
+    MainWindow* fightwindow = new MainWindow("../models/level.xml");
     ui->centralwidget->addWidget(fightwindow);
-    m_model->addWidget(DataModel::MAIN3D, fightwindow);*/
+    m_model->addWidget(DataModel::MAIN3D, fightwindow);
+    tcp_client->set3DWindow(fightwindow);
 
     StartingDialog* startingDialog = new StartingDialog(m_model);
     connect(startingDialog, SIGNAL(connect_to_server(string, string)), tcp_client.get(), SLOT(connect_to_server(string, string)));

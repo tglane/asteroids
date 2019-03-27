@@ -16,7 +16,22 @@ GLWidget::GLWidget(QWidget* parent) :
     m_cockpit("../models/cockpit.png"),
     m_playerHeart("../models/player_heart.png"),
     m_enemyHeart("../models/enemy_heart.png"),
-    m_emptyHeart("../models/empty_heart.png") {}
+    m_emptyHeart("../models/empty_heart.png")
+{
+    // Load level
+    LevelParser lp("../models/level.xml", m_enemy, m_skybox, m_asteroidField);
+    m_enemy->fixArrow();
+
+    // Setup physics
+    m_physicsEngine = make_shared<PhysicsEngine>();
+
+    m_camera = make_shared<Camera>();
+    m_camera->setPosition(Vector3f(2500, 0, 0));
+    m_camera->setXAxis(Vector3f(-1, 0, 0));
+    m_camera->setYAxis(Vector3f(0, -1, 0));
+
+    m_useGamepad = m_controller.gamepadAvailable();
+}
 
 void GLWidget::setLevelFile(const std::string& file)
 {
@@ -111,23 +126,6 @@ void GLWidget::initializeGL()
 
     // This makes our buffer swap syncronized with the monitor's vertical refresh
     SDL_GL_SetSwapInterval(1);
-
-    // Load level
-    LevelParser lp(m_levelFile, m_enemy, m_skybox, m_asteroidField);
-    m_enemy->fixArrow();
-
-    // Setup physics
-    m_physicsEngine = make_shared<PhysicsEngine>();
-
-    m_camera = make_shared<Camera>();
-    m_camera->setPosition(Vector3f(2500, 0, 0));
-    m_camera->setXAxis(Vector3f(-1, 0, 0));
-    m_camera->setYAxis(Vector3f(0, -1, 0));
-
-    m_useGamepad = m_controller.gamepadAvailable();
-
-    m_fpsTimer.start();
-    m_startTimer.start();
 }
 
 void GLWidget::setClient(udpclient::Ptr client) {

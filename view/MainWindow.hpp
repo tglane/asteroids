@@ -57,6 +57,8 @@ namespace asteroids
         /// Returns the height of the windows
         int height();
 
+        void start_timer() { m_timer->start(1000 / 60.0); }
+
         Ui::MainWindow* ui;
 
     public Q_SLOTS:
