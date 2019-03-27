@@ -63,6 +63,8 @@ public slots:
 
     void updateAllInfo();
 
+    void updatePlayerInfo();
+
     /**
      * @brief   Switches to the starting window
      */
