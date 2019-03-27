@@ -13,6 +13,7 @@
 #include <iostream>
 #include <QLine>
 #include <QObject>
+#include <QDialog>
 
 namespace strategy {
 
@@ -103,7 +104,6 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
 
     // event is triggert as soon as planets a available in DataModel
     connect(m_model.get(), SIGNAL(initMap()), this, SLOT(initPlanets()));
-
 }
 
 void MainWindow2D::resizeEvent(QResizeEvent* event){
@@ -197,6 +197,32 @@ void MainWindow2D::endOfRound(bool click)
 
     // fuck this "unused" warnings! :D
     if(succes);
+
+    QGraphicsBlurEffect *a=new QGraphicsBlurEffect;
+    a->setBlurHints(QGraphicsBlurEffect::QualityHint);
+    ui->centralwidget->setGraphicsEffect(a);
+    ui->centralwidget->setEnabled(false);
+
+    //Wenn lang genug warten könnet das hier funktionieren
+    // QDialog *pop_up = new QDialog(this);
+    // pop_up->setWindowFlags(Qt::Window);
+    // pop_up->showFullScreen();
+    // pop_up->setAttribute(Qt::WA_TranslucentBackground); 
+    // pop_up->setWindowOpacity(0.5);
+    // pop_up->setStyleSheet("QDialog{background-color: transparent;}");
+    // pop_up->setWindowFlags(Qt::FramelessWindowHint | Qt::Dialog);
+    // pop_up->setLayout(new QVBoxLayout);
+    // QLabel *transparentLabel = new QLabel("Bitte Warten...");
+    // transparentLabel->setAlignment(Qt::AlignCenter);
+    // transparentLabel->setStyleSheet("QLabel{color: white; font: 30pt bold; background-color: transparent;}");
+    // pop_up->layout()->addWidget(transparentLabel);
+    // pop_up->show();
+
+    //Hier abwarten ob anderer auch fertig ist
+
+    //pop_up->close();
+    ui->centralwidget->setEnabled(true);
+    a->setEnabled(false);
 
     currentYear++;
     QString qyear = QString::fromUtf8("Year: ");

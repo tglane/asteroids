@@ -13,18 +13,18 @@ Byss 352 140 1
 Corellia 352 220 1
 Jakku 408 48 1
 Hosnian-Prime 388 220 1
-Kamino 528 484 1
+Kamino 500 450 1
 Scarif 536 496 1
 Tatooine 588 460 1
 Ryloth 624 468 1
 Naboo 604 292 1
 Crait 616 260 1
-Hoth 620 120 1
+Hoth 600 140 1
 Bespin 640 128 1
 Endor 552 28 1
 Mustafar 712 168 1
 Dagobah 700 224 1
-Utapau 712 244 1
+Utapau 740 270 1
 Ord-Mantell 166 160 1
 1 8
 2 27
@@ -35,10 +35,14 @@ Ord-Mantell 166 160 1
 3 7
 5 7
 5 6
+5 10
+7 10
 8 9
+8 11
 8 12
 9 10
 9 12
+11 13
 12 14
 13 14
 1 13
@@ -52,7 +56,7 @@ Ord-Mantell 166 160 1
 20 25
 25 26
 24 25
-21 24
+22 24
 21 22
 20 22
 22 23
