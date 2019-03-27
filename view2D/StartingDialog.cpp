@@ -15,6 +15,8 @@ StartingDialog::StartingDialog(DataModel::Ptr model, QWidget* parent) :
     ui->NameLabel->setStyleSheet("QLabel { color: white }");
     ui->ServerAddressLabel->setStyleSheet("QLabel { color: white }");
     ui->ChooseMapLabel->setStyleSheet("QLabel { color: white}");
+    ui->ChooseMapLabel->setVisible(false);
+    ui->SelectMap->setVisible(false);
 
     ui->Name->setText("Siegbert");
 
@@ -29,6 +31,9 @@ StartingDialog::StartingDialog(DataModel::Ptr model, QWidget* parent) :
 
     QPushButton* exitButton = ui->ExitGame;
     connect(exitButton, SIGNAL(clicked(bool)), this, SLOT(exitGame(bool)));
+
+    QCheckBox* hostSelect = ui->checkHost;
+    connect(hostSelect, SIGNAL(stateChanged(int)), this, SLOT(selectMap(int)));
 
 }
 
@@ -65,6 +70,21 @@ void StartingDialog::startGame(bool click)
         ui->Name->setStyleSheet("QLineEdit { color: red }");
     }
     
+}
+
+void StartingDialog::selectMap(int state)
+{
+    if(state == 2)
+    {
+        ui->SelectMap->setVisible(true);
+        ui->ChooseMapLabel->setVisible(true);
+        ui->SelectMap->addItem("Level 1");
+        ui->SelectMap->addItem("Level 2");
+    } else {
+        ui->SelectMap->setVisible(false);
+        ui->ChooseMapLabel->setVisible(false);
+        ui->SelectMap->clear();
+    }
 }
 
 

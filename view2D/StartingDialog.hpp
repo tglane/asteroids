@@ -60,6 +60,8 @@ public slots:
 
     void startGame(bool click);
 
+    void selectMap(int state);
+
 
 
 signals:
