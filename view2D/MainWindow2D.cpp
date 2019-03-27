@@ -31,15 +31,16 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
 
     //StyleStuff
     ui->ContextMenue->setStyleSheet("background-color:#331155; border-radius:10px; color:#FFFFFF");
-    ui->Fight->setStyleSheet("background-color:#331155; color:#FFFFFF; border-radius:10px;");
-    ui->ExitGame->setStyleSheet("background-color:#220044");
-    ui->NextRound->setStyleSheet("background-color:#220044");
-    ui->BuildMine->setStyleSheet("background-color:#220044");
-    ui->BuildShip->setStyleSheet("background-color:#220044");
-    ui->SendShip->setStyleSheet("background-color:#220044");
-    ui->Colonize->setStyleSheet("background-color:#220044");
-    ui->SendShipNumber->setStyleSheet("background-color:#220044");
-    ui->DestionationPlanet->setStyleSheet("background-color:#220044");
+    ui->Fight->setStyleSheet("background-color:#442266; color:#FFFFFF; border-radius:10px;");
+    ui->ExitGame->setStyleSheet("background-color:#110033");
+    ui->NextRound->setStyleSheet("background-color:#110033");
+    ui->BuildMine->setStyleSheet("background-color:#110033");
+    ui->BuildShip->setStyleSheet("background-color:#110033");
+    ui->SendShip->setStyleSheet("background-color:#110033");
+    ui->Colonize->setStyleSheet("background-color:#110033");
+    ui->SendShipNumber->setStyleSheet("background-color:#110033");
+    ui->DestionationPlanet->setStyleSheet("background-color:#110033");
+    ui->SpielerInfoTable->setStyleSheet("border-width:0px;");
 
 
     //Set sidebar look
