@@ -51,7 +51,6 @@ void StartingDialog::startGame(bool click)
 
         emit connect_to_server(name, ui->ServerAddress->text().toStdString());
         //m_model->switchWindow(DataModel::MAIN2D);
-
     }
     else
     {

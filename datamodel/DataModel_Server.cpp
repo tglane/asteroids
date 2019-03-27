@@ -22,10 +22,16 @@ DataModel_Server::DataModel_Server(std::string filename, int id, std::string pla
     getUniverse(filename);
 }
 
-void DataModel_Server::constructPlayer(int id, std::string player_name)
+    void DataModel_Server::constructPlayer(int id, std::string player_name, bool is_self)
 {
     // kein Name könnte Problem sein
-    addPlayer(Player::Ptr(new Player(id, 3000, 0, player_name)));
+    Player::Ptr p(new Player(id, 3000, 0, player_name));
+    if (is_self) {
+        m_self = p;
+    } else {
+        m_enemy = p;
+    }
+    addPlayer(p);
 }
 
 void DataModel_Server::getUniverse(std::string filename)

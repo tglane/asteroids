@@ -133,7 +133,7 @@ public:
 
     void performMovements(Player::Ptr player);
 
-    void constructPlayer(int id, std::string player_name);
+    void constructPlayer(int id, std::string player_name, bool is_self);
 
     void BattleReport();
 

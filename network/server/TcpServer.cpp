@@ -40,6 +40,7 @@ void TcpServer::onConnect()
     }
     qDebug() << "Client connected 2";
 
+    std::cout << "client id: " << last_id << std::endl;
     TcpClient client(last_id++, server.nextPendingConnection());
     client.socket->setSocketOption(QAbstractSocket::KeepAliveOption, 1);
     clients.push_back(client);
@@ -83,8 +84,8 @@ void TcpServer::handle_ready(TcpClient& client, QJsonDocument& doc)
                 for (auto i: clients)
                 {
                     QJsonObject player_obj;
-                    player_obj.insert("id", QJsonValue::fromVariant(client.id));
-                    Player::Ptr player = m_datamodel->getPlayerByID(client.id);
+                    player_obj.insert("id", QJsonValue::fromVariant(i.id));
+                    Player::Ptr player = m_datamodel->getPlayerByID(i.id);
                     player_obj.insert("player_name", QJsonValue::fromVariant(QString::fromStdString(player->getPlayerName())));
 
                     array.push_back(player_obj);
@@ -92,6 +93,7 @@ void TcpServer::handle_ready(TcpClient& client, QJsonDocument& doc)
 
                 QJsonDocument res(array);
                 int size = res.toJson().size();
+                qDebug() << "sending: " << res;
                 j.socket->write((char*)&size, 4);
                 j.socket->write(res.toJson());
             }
@@ -278,6 +280,7 @@ void TcpServer::handle_init(TcpClient& client, QJsonDocument& doc)
 
     QString name(temp_name["playername"].toString().toUtf8());
 
+    m_datamodel->constructPlayer(client.id, name.toStdString(), false);
     m_datamodel->getPlayerByID(client.id)->setPlayerName(name.toUtf8().constData());
 
 

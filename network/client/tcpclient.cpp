@@ -132,8 +132,10 @@ void tcpclient::process_strat_init(QJsonArray recv_array) {
     std::cout << "strat_init" << std::endl;
 
     for (int i = 1; i < recv_array.size(); i++) {
+        //std::cout << "id: " << recv_array[i].toObject()["id"].toInt() << "m_plyer_id: " << m_player_id << std::endl;
+        bool is_self = recv_array[i].toObject()["id"].toInt() == m_player_id;
         m_datamodel->constructPlayer(recv_array[i].toObject()["id"].toInt(),
-                                      recv_array[i].toObject()["player_name"].toString().toStdString());
+                                     recv_array[i].toObject()["player_name"].toString().toStdString(), is_self);
 
     }
     emit start_round();
