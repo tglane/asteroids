@@ -34,9 +34,9 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 ###############################################################################
 
 
-set( CMAKE_CXX_FLAGS         "-O3 -Wall -std=c++14 -lstdc++fs" )
-set( CMAKE_CXX_FLAGS_RELEASE "-O3 -msse3 -Wno-deprecated-declarations -Wno-unused -Wcpp -lstdc++fs" )
-set( CMAKE_CXX_FLAGS_DEBUG   "-g -Wall -lstdc++fs" )
+set( CMAKE_CXX_FLAGS         "-O3 -Wall -std=c++14 " )
+set( CMAKE_CXX_FLAGS_RELEASE "-O3 -msse3 -Wno-deprecated-declarations -Wno-unused -Wcpp " )
+set( CMAKE_CXX_FLAGS_DEBUG   "-g -Wall " )
 
 #set( CMAKE_EXE_LINKER_FLAGS  "-L/usr/local/lib -lSDL -lSDLmain -lSDL")
 
@@ -242,4 +242,4 @@ add_executable(asteroids
 ###############################################################################
 
 #target_link_libraries(asteroids SOIL)
-target_link_libraries(asteroids Qt5::Gamepad ${ASTEROID_DEPENDS} /usr/lib/gcc/x86_64-linux-gnu/7/libstdc++fs.a)
+target_link_libraries(asteroids Qt5::Gamepad ${ASTEROID_DEPENDS})

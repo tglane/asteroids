@@ -14,12 +14,12 @@
 namespace asteroids
 {
 
-Planet::Planet(std::string name, int posx, int posy, int mines, int rubin) : m_neighbours() 
+Planet::Planet(std::string name, int posx, int posy, int mines,/* int rubin*/ int rubinLeft) : m_neighbours()
 {
 	m_posx = posx;
 	m_posy = posy;
 	m_name = name;
-	m_rubin = rubin;
+	//m_rubin = rubin;
 	m_mines = mines;
 	m_minesbuild = 0;
 	m_minesHidden = 0;
@@ -28,22 +28,26 @@ Planet::Planet(std::string name, int posx, int posy, int mines, int rubin) : m_n
 	m_invader = nullptr;
 	m_invaderShips = 0;
 	m_ships_ordered = 0;
+
+	m_rubinLeft = rubinLeft;
+
 	m_shipyardBuilt = false;
+
 }
 
 
-int Planet::getShips() 
+int Planet::getShips()
 {
 	return m_ships;
 }
 
-void Planet::addShips(int ships) 
+void Planet::addShips(int ships)
 {
 	m_ships += ships;
 	m_owner->incShips(ships);
 }
 
-bool Planet::delShips(int ships) 
+bool Planet::delShips(int ships)
 {
 	if (ships > m_ships)
 	{
@@ -51,9 +55,9 @@ bool Planet::delShips(int ships)
 	}
 	else if(m_ships > 0)
 	{
-		m_ships -= ships; 
+		m_ships -= ships;
 		return true;
-	} 
+	}
 
 	else
 	{
@@ -67,7 +71,7 @@ void Planet::addNeighbour(Planet::Ptr neighbour)
 	m_neighbours.push_back(neighbour);
 }
 
-void Planet::setOwner(std::shared_ptr<Player> owner) 
+void Planet::setOwner(std::shared_ptr<Player> owner)
 {
 	m_owner = owner;
 }
@@ -112,17 +116,17 @@ void Planet::setShips(int ships)
 	m_ships = ships;
 }
 
-int Planet::getRubin() 
+/*int Planet::getRubin()
 {
 	return m_rubin;
-}
+}*/
 
-int Planet::getMines() 
+int Planet::getMines()
 {
 	return m_mines;
 }
 
-void Planet::addMines(int mines) 
+void Planet::addMines(int mines)
 {
 	m_mines += mines;
 }
@@ -185,6 +189,23 @@ void Planet::incShipsOrdered()
 void Planet::resetShipsOrdered()
 {
 	m_ships_ordered = 0;
+}
+
+int Planet::subtractEarnings(int mineRubin)
+{
+	 int earnings = this->calculateEarnings(mineRubin);
+	 m_rubinLeft -= earnings;
+	 return earnings;
+}
+
+int Planet::getRubinLeft()
+{
+	return m_rubinLeft;
+}
+
+int Planet::calculateEarnings(int mineRubin)
+{
+	return mineRubin * m_mines;
 }
 
 bool Planet::getShipyardBuilt()
