@@ -28,6 +28,12 @@ public:
 
     void resizeEvent(QResizeEvent* event);
 
+    void updateWindow(std::string planetname, std::string player1, std::string player2, 
+                int ship1, int ship2);
+
+    void updateWindow(std::string planetname, std::string player1, std::string player2, 
+                int ship1, int ship2, int ship_after1, int ship_after2);
+
 
 private:
 
