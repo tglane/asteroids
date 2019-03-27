@@ -352,10 +352,14 @@ bool DataModel_Server::updateAll(QJsonObject &update) {
             planet = getPlanetFromId(it1->toObject(QJsonObject()).value("ID").toInt());
             ships = it1->toObject(QJsonObject()).value("InvaderShips").toInt();
 
-            if(planet->getOwner() == nullptr || planet->getOwner()->getIdentity() == id)
+            if(planet->getOwner()->getIdentity() == id)
             {
                 planet->setOwner(player);
                 planet->setShips(ships);
+            } else if (planet->getOwner() == nullptr) {
+                planet->setOwner(player);
+                planet->setShips(ships);
+                planets.push_back(planet);
             }
             else
             {
