@@ -75,6 +75,7 @@ void DataModel::addWidget(int Id, QWidget* widget)
     m_widgets.insert(std::pair<int, QWidget*>(Id, widget));
 }
 
+
 void DataModel::switchWindow(int Id)
 {
     ((strategy::GameWindow*)m_mainWindow)->content()->setCurrentWidget(m_widgets[Id]);

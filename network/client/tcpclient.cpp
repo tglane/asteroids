@@ -184,6 +184,8 @@ void tcpclient::process_state(QJsonArray recv_array)
 
     m_state = client_state::ROUND;
 
+    m_datamodel->switchWindow(DataModel_Server::MAIN2D);
+
     qDebug() << m_datamodel->createJson(m_datamodel->getSelfPlayer());
     qDebug() << m_datamodel->createJson(m_datamodel->getEnemyPlayer());
 }

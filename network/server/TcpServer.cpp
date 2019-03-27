@@ -265,6 +265,7 @@ void TcpServer::fight_init(Battle::Ptr battle)
 void TcpServer::fightEnd(int id, int health_left) {
     // ToDo Datamodel
 
+    udpServer.reset();
     int ships_left = health_left / 10;
     qDebug() << "end fight, updating data model";
     Battle::Ptr current_battle = m_battle_list[battle_count];
