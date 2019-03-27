@@ -138,10 +138,8 @@ void GLWidget::setClient(udpclient::Ptr client) {
     } else {
         m_enemy->setId(42 << 24);
     }
-    m_enemy->setHealth(10);
 
     m_camera->setId(m_client->get_id() << 24);
-    m_camera->setHealth(10);
 
     m_client->setOtherFighter(m_enemy); //added
     m_client->setPhysicsPtr(m_physicsEngine); //added
