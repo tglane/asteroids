@@ -10,7 +10,7 @@ MyEllipse::MyEllipse(int x, int y)
 {
     this->x = x;
     this->y = y;
-    QPixmap pix("../models/surface/neutral1.jpg");
+    QPixmap pix("../resources/surface/neutral1.jpg");
     myBrush = QBrush(pix);
     myPen = QPen(Qt::black,1);
 }

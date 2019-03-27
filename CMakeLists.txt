@@ -94,6 +94,7 @@ find_package( Qt5
     OpenGL
     Network
     Gamepad
+    Multimedia
     REQUIRED
 )
 
@@ -101,6 +102,7 @@ include_directories(${Qt5Widgets_INCLUDE_DIRS})
 include_directories(${Qt5Core_INCLUDE_DIRS})
 include_directories(${Qt5OpenGL_INCLUDE_DIRS})
 include_directories(${Qt5Network_INCLUDE_DIRS})
+include_directories(${Qt5Multimedia_INCLUDE_DIRS})
 
 ###############################################################################
 # Compile external libraries
@@ -212,6 +214,8 @@ set(ASTEROID_DEPENDS
     ${JPEG_LIBRARIES}
     ${Qt5Widgets_LIBRARIES}
     ${Qt5Network_LIBRARIES}
+    ${Qt5Multimedia_LIBRARIES}
+    ${Qt5Gamepad_LIBRARIES}
     c3dsreader
 )
 
@@ -234,4 +238,4 @@ add_executable(asteroids
 ###############################################################################
 
 #target_link_libraries(asteroids SOIL)
-target_link_libraries(asteroids Qt5::Gamepad ${ASTEROID_DEPENDS})
+target_link_libraries(asteroids ${ASTEROID_DEPENDS})

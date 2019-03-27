@@ -17,12 +17,10 @@
 #include "network/client/tcpclient.hpp"
 #include "network/client/udpclient.hpp"
 
-
-
 int main(int argc, char** argv)
 {
     QApplication a(argc, argv);
-    DataModel::Ptr model = std::make_shared<DataModel>("../models/Level-1.map");
+    DataModel::Ptr model = std::make_shared<DataModel>("../resources/Level-1.map");
 
     //TODO add input for player name and server io
     tcpclient::Ptr tcp_client(std::make_shared<tcpclient>(model));

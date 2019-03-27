@@ -8,7 +8,7 @@
 #include <QGraphicsEllipseItem>
 #include <QMouseEvent>
 
-#include "build/ui_GameWindow.h"
+#include "cmake-build-debug/ui_GameWindow.h"
 #include "datamodel/DataModel.hpp"
 #include "network/client/tcpclient.hpp"
 

@@ -7,16 +7,29 @@
 #include <SDL2/SDL.h>
 #include <QtGui/QPainter>
 #include <math.h>
+#include <QMediaPlaylist>
+#include <QtCore/QFileInfo>
 
 GLWidget::GLWidget(QWidget* parent) :
     QOpenGLWidget(parent),
     m_started(false),
     m_gameOver(false),
     m_outOfBound(false),
-    m_cockpit("../models/cockpit.png"),
-    m_playerHeart("../models/player_heart.png"),
-    m_enemyHeart("../models/enemy_heart.png"),
-    m_emptyHeart("../models/empty_heart.png") {}
+    m_cockpit("../resources/cockpit.png"),
+    m_playerHeart("../resources/player_heart.png"),
+    m_enemyHeart("../resources/enemy_heart.png"),
+    m_emptyHeart("../resources/empty_heart.png")
+{
+    QMediaPlaylist* playlist = new QMediaPlaylist;
+    playlist->addMedia(QUrl::fromLocalFile(QFileInfo("../resources/megalovania.wav").absoluteFilePath()));
+    playlist->setPlaybackMode(QMediaPlaylist::Loop);
+    m_backgroundMusic = new QMediaPlayer;
+    m_backgroundMusic->setPlaylist(playlist);
+    m_backgroundMusic->setVolume(30);
+
+    m_countdownSound.setSource(QUrl::fromLocalFile(QFileInfo("../resources/countdown.wav").absoluteFilePath()));
+    m_countdownSound.setVolume(0.4);
+}
 
 void GLWidget::setLevelFile(const std::string& file)
 {
@@ -181,35 +194,35 @@ void GLWidget::paintGL()
     int time = m_startTimer.elapsed();
     if (time >= 1000 && time < 2000)
     {
-        QPixmap cd3("../models/three.png");
+        QPixmap cd3("../resources/three.png");
         painter.drawPixmap(0, 0, this->width(), this->height(), cd3);
     }
     else if (time >= 2000 && time < 3000)
     {
-        QPixmap cd2("../models/two.png");
+        QPixmap cd2("../resources/two.png");
         painter.drawPixmap(0, 0, this->width(), this->height(), cd2);
     }
     else if (time >= 3000 && time < 4000)
     {
-        QPixmap cd1("../models/one.png");
+        QPixmap cd1("../resources/one.png");
         painter.drawPixmap(0, 0, this->width(), this->height(), cd1);
     }
     else if (time >= 4000 && time < 4500)
     {
-        QPixmap cd0("../models/start.png");
+        QPixmap cd0("../resources/start.png");
         painter.drawPixmap(0, 0, this->width(), this->height(), cd0);
     }
 
     if (m_gameOver)
     {
-        QPixmap won("../models/won.png");
-        QPixmap lost("../models/lost.png");
+        QPixmap won("../resources/won.png");
+        QPixmap lost("../resources/lost.png");
         painter.drawPixmap(0, 0, this->width(), this->height(), (m_camera->getHealth() > 0) ? won : lost);
     }
 
     if (m_outOfBound && !m_gameOver)
     {
-        QPixmap turnWarning("../models/turn_warning.png");
+        QPixmap turnWarning("../resources/turn_warning.png");
         painter.drawPixmap(0, 0, this->width(), this->height(), turnWarning);
     }
 }
@@ -225,8 +238,13 @@ void GLWidget::step(map<Qt::Key, bool>& keyStates)
 
     if (!m_started)
     {
+        if (m_startTimer.elapsed() >= 1000 && !m_countdownSound.isPlaying())
+        {
+            m_countdownSound.play();
+        }
         if (m_startTimer.elapsed() >= 4000)
         {
+            m_backgroundMusic->play();
             m_started = true;
         }
     }
@@ -312,9 +330,9 @@ void GLWidget::drawHealth(QPainter& painter, int totalHealthPlayer, int totalHea
     painter.drawText(QRect((int) (this->width() - size - (size * 12 + size * gap)), (int) (size * gap), width, height), Qt::AlignCenter, QString::number(spaceshipsEnemy));
 
     // Draw hearts
-    QPixmap playerHeart("../models/player_heart.png");
-    QPixmap enemyHeart("../models/enemy_heart.png");
-    QPixmap emptyHeart("../models/empty_heart.png");
+    QPixmap playerHeart("../resources/player_heart.png");
+    QPixmap enemyHeart("../resources/enemy_heart.png");
+    QPixmap emptyHeart("../resources/empty_heart.png");
 
     int healthPlayer = totalHealthPlayer % 10 + (totalHealthPlayer % 10 == 0  && totalHealthPlayer != 0 ? 10 : 0);
     int healthEnemy = totalHealthEnemy % 10 + (totalHealthEnemy % 10 == 0 && totalHealthEnemy != 0 ? 10 : 0);
@@ -328,10 +346,10 @@ void GLWidget::drawHealth(QPainter& painter, int totalHealthPlayer, int totalHea
 
 void GLWidget::drawMinimap(QPainter& painter, Hittable::Ptr player, Hittable::Ptr enemy)
 {
-    QPixmap minimap("../models/minimap");
-    QPixmap heightMinimap("../models/height_minimap");
-    QPixmap playerMinimap("../models/player_minimap");
-    QPixmap enemyMinimap("../models/enemy_minimap");
+    QPixmap minimap("../resources/minimap");
+    QPixmap heightMinimap("../resources/height_minimap");
+    QPixmap playerMinimap("../resources/player_minimap");
+    QPixmap enemyMinimap("../resources/enemy_minimap");
 
     float size = this->width() * 0.2F;
     float originX = this->height() - size * 1.1F + size / 2;

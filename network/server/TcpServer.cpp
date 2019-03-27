@@ -13,8 +13,8 @@ TcpServer::TcpServer()
     connect(&server, SIGNAL(newConnection()), this, SLOT(onConnect()));
     //connect(&server, SIGNAL(disconnected()), this, SLOT(onDisconnect()));
 
-    m_datamodel = DataModel_Server::Ptr(new DataModel_Server("../../../models/Level-1.map"));
-    //m_datamodel->getUniverse("../models/Level-1.map");
+    m_datamodel = DataModel_Server::Ptr(new DataModel_Server("../../../resources/Level-1.map"));
+    //m_datamodel->getUniverse("../resources/Level-1.map");
 
     if(!server.listen(QHostAddress::Any, 1235))
     {
@@ -299,7 +299,7 @@ void TcpServer::handle_init(TcpClient& client, QJsonDocument& doc)
     qDebug() << "Sending init_res";
     QJsonObject init_res;
     init_res.insert("id", QJsonValue::fromVariant(client.id));
-    init_res.insert("map", QJsonValue::fromVariant("../models/Level-1.map"));
+    init_res.insert("map", QJsonValue::fromVariant("../resources/Level-1.map"));
 
     QJsonArray array_response;
     array_response.push_back("init_res");

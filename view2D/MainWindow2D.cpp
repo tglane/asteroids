@@ -109,7 +109,7 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
     connect(m_button, SIGNAL(clicked(bool)), this, SLOT(fight(bool)));
     //Löschen für nicht transparent
     ui->Map->setStyleSheet("background: transparent");
-    QPixmap bkgnd("../models/box1.jpg");
+    QPixmap bkgnd("../resources/box1.jpg");
     bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
     QPalette palette;
     palette.setBrush(QPalette::Background, bkgnd);
@@ -195,16 +195,16 @@ void MainWindow2D::choose_planet(int id)
     if(id == currentPlanet){
         ui->PlanetInfo->setVisible(false);
         if(planets.at(id)->getOwner()==m_model->getSelfPlayer()){
-            QPixmap pix("../models/surface/my1.jpg");
+            QPixmap pix("../resources/surface/my1.jpg");
             ellipse->myBrush = QBrush(pix);
         } 
         // TODO Players are now saved in a map with their id
         //      iterate over all players if getOwner() != NULL
         else if (planets.at(id)->getOwner()==m_model->getEnemyPlayer()){
-            QPixmap pix("../models/surface/other1.jpg");
+            QPixmap pix("../resources/surface/other1.jpg");
             ellipse->myBrush = QBrush(pix);
         } else{
-            QPixmap pix("../models/surface/neutral1.jpg");
+            QPixmap pix("../resources/surface/neutral1.jpg");
             ellipse->myBrush = QBrush(pix);  
         }
         currentPlanet = -1;
@@ -215,15 +215,15 @@ void MainWindow2D::choose_planet(int id)
         if(currentPlanet!=-1){
             MyEllipse* otherEllipse = getEllipseById(currentPlanet);
             if(planets.at(currentPlanet)->getOwner()==m_model->getSelfPlayer()){
-                QPixmap otherpix("../models/surface/my1.jpg");
+                QPixmap otherpix("../resources/surface/my1.jpg");
                 otherEllipse->myBrush = QBrush(otherpix);
             // TODO Players are now saved in a map with their id
             //      iterate over all players if getOwner() != NULL
             } else if (planets.at(currentPlanet)->getOwner()==m_model->getEnemyPlayer()){
-                QPixmap otherpix("../models/surface/other1.jpg");
+                QPixmap otherpix("../resources/surface/other1.jpg");
                 otherEllipse->myBrush = QBrush(otherpix);
             } else{
-                QPixmap otherpix("../models/surface/neutral1.jpg");
+                QPixmap otherpix("../resources/surface/neutral1.jpg");
                 otherEllipse->myBrush = QBrush(otherpix);  
             }
             otherEllipse->myPen = QPen(Qt::black,1);
@@ -231,15 +231,15 @@ void MainWindow2D::choose_planet(int id)
         }
         //Anklicken und highlighten
         if(planets.at(id)->getOwner()==m_model->getSelfPlayer()){
-            QPixmap pix("../models/surface/my2.jpg");
+            QPixmap pix("../resources/surface/my2.jpg");
             ellipse->myBrush = QBrush(pix);
         // TODO Players are now saved in a map with their id
         //      iterate over all players if getOwner() != NULL
         } else if (planets.at(id)->getOwner()==m_model->getEnemyPlayer()){
-            QPixmap pix("../models/surface/other2.jpg");
+            QPixmap pix("../resources/surface/other2.jpg");
             ellipse->myBrush = QBrush(pix);
         } else{
-            QPixmap pix("../models/surface/neutral2.jpg");
+            QPixmap pix("../resources/surface/neutral2.jpg");
             ellipse->myBrush = QBrush(pix);  
         }
         currentPlanet = id;
@@ -280,13 +280,13 @@ void MainWindow2D::updatePlanetColor(){
         if(id!=currentPlanet){
             MyEllipse* ellipse = getEllipseById(id);
             if(planets.at(id)->getOwner()==m_model->getSelfPlayer()){
-                QPixmap pix("../models/surface/my1.jpg");
+                QPixmap pix("../resources/surface/my1.jpg");
                 ellipse->myBrush = QBrush(pix);
             }else if (planets.at(id)->getOwner()==m_model->getEnemyPlayer()){
-                QPixmap pix("../models/surface/other1.jpg");
+                QPixmap pix("../resources/surface/other1.jpg");
                 ellipse->myBrush = QBrush(pix);
             } else{
-                QPixmap pix("../models/surface/neutral1.jpg");
+                QPixmap pix("../resources/surface/neutral1.jpg");
                 ellipse->myBrush = QBrush(pix);  
             }
             ellipse->update();
@@ -305,7 +305,7 @@ void MainWindow2D::colonize(bool click)
     std::cout << "Colonize!" << std::endl;
     std::cout<<currentPlanet<<std::endl;
     MyEllipse* otherEllipse = getEllipseById(currentPlanet);
-    QPixmap otherpix("../models/surface/my2.jpg");
+    QPixmap otherpix("../resources/surface/my2.jpg");
     otherEllipse->myBrush = QBrush(otherpix);
     otherEllipse->update();
 
