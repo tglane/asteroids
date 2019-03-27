@@ -118,6 +118,8 @@ void TcpServer::handle_state(TcpClient& client, QJsonDocument& doc) {
     QJsonObject obj_state = array_state[1].toObject();
     m_datamodel->updateAll(obj_state);
 
+    qDebug() << "ADSFSADFSADFS " << m_datamodel->createJson(m_datamodel->getPlayerByID(client.id));
+
 
     ready_count++;
     if (clients.size() == ready_count) {

@@ -282,110 +282,87 @@ bool DataModel_Server::updateAll(QJsonObject &update) {
 
 	//if (update.isObject() && !update.isEmpty())
 	//{
+    int id = 0;
 
-    for (auto i: m_planets) {
-        std::cout << "planet: " << i.first << " " << i.second->getName() << std::endl;
+    //int rubin = 0;
+    std::string name;
+    std::list<Planet::Ptr> planets;
+    Player::Ptr player;
+
+    QJsonObject all = update;
+
+    if(all.empty()) return false; //QJsonDocument contains not an Object
+
+
+    id = update["ID"].toInt();
+    player = this->getPlayerByID(id);
+    name = update["Name"].toString().toStdString();
+    if(update["PlanetArray"].isArray())
+    {
+        QJsonArray array = update["PlanetArray"].toArray();
+        QJsonArray::const_iterator it1;
+        Planet::Ptr planet;
+        int ships;
+        int mines;
+
+
+        for (it1 = array.constBegin(); it1 != array.constEnd(); it1++)
+        {
+            std::cout << it1->toObject(QJsonObject()).value("ID").toInt() << std::endl;
+            planet = getPlanetFromId(it1->toObject(QJsonObject()).value("ID").toInt());
+            mines = it1->toObject(QJsonObject()).value("Mines").toInt();
+            ships = it1->toObject(QJsonObject()).value("Ships").toInt();
+
+            planet->setMines(mines);
+            planet->setShips(ships);
+            planet->setOwner(player);
+
+            planets.push_back(planet);
+
+        }//End Iterator Array
+
     }
-		int id = 0;
+    /**
+     * when the planet is not already colonialized, the player of this file will become the owner
+     * else the player of this file becomes the invader
+     *
+     * also updates invaderShips/Ships on the planet
+     *
+     */
+    if(update["InvadePlanets"].isArray())
+    {
 
-		//int rubin = 0;
-		std::string name;
-		std::list<Planet::Ptr> planets;
-		Player::Ptr player;
+        QJsonArray::const_iterator it1;
 
-		QJsonObject all = update;
+        QJsonArray array = update["InvadePlanets"].toArray();
 
-		if(all.empty()) return false; //QJsonDocument contains not an Object
+        Planet::Ptr planet;
 
-		QJsonObject::const_iterator it;
+        int ships;
 
-		for (it = all.constBegin(); it != all.constEnd(); it++)
-		{
-			if(it.key() == "ID")
-			{
-				id = it.value().toInt();
+        for (it1 = array.constBegin(); it1 != array.constEnd(); it1++)
+        {
+            planet = getPlanetFromId(it1->toObject(QJsonObject()).value("ID").toInt());
+            ships = it1->toObject(QJsonObject()).value("Ships").toInt();
 
-				player = this->getEnemyPlayer(it.value().toInt());
-			}
+            if(planet->getOwner() == nullptr || planet->getOwner()->getIdentity() == id)
+            {
+                planet->setOwner(player);
+                planet->setShips(ships);
+            }
+            else
+            {
+                planet->setInvader(player);
+                planet->setInvaderShips(ships);
+            }
+        }
 
-			if(it.key() == "Name")
-			{
-				name = it.value().toString().toStdString();
-			}
-
-			if(it.key() == "PlanetArray")
-			{
-				if(it.value().isArray())
-				{
-					QJsonArray array = it.value().toArray();
-					QJsonArray::const_iterator it1;
-					Planet::Ptr planet;
-					int ships;
-					int mines;
-
-					for (it1 = array.constBegin(); it1 != array.constEnd(); it1++)
-					{
-                        std::cout << it1->toObject(QJsonObject()).value("ID").toInt() << std::endl;
-						planet = getPlanetFromId(it1->toObject(QJsonObject()).value("ID").toInt());
-						mines = it1->toObject(QJsonObject()).value("Mines").toInt();
-						ships = it1->toObject(QJsonObject()).value("Ships").toInt();
-
-						planet->setMines(mines);
-						planet->setShips(ships);
-						planet->setOwner(player);
-
-						planets.push_back(planet);
-
-					}//End Iterator Array
-
-				}
-				else return false; //PlanetArray is not an Array
-			}
-			/**
-			 * when the planet is not already colonialized, the player of this file will become the owner
-			 * else the player of this file becomes the invader
-			 *
-			 * also updates invaderShips/Ships on the planet
-			 *
-			 */
-			if(it.key() == "InvadePlanets")
-			{
-				if(it.value().isArray())
-				{
-					QJsonArray array = it.value().toArray();
-					QJsonArray::const_iterator it1;
-
-					Planet::Ptr planet;
-
-					int ships;
-
-					for (it1 = array.constBegin(); it1 != array.constEnd(); it1++)
-					{
-						planet = getPlanetFromId(it1->toObject(QJsonObject()).value("ID").toInt());
-						ships = it1->toObject(QJsonObject()).value("Ships").toInt();
-
-						if(planet->getOwner() == nullptr || planet->getOwner()->getIdentity() == id)
-						{
-							planet->setOwner(player);
-							planet->setShips(ships);
-						}
-						else
-						{
-							planet->setInvader(player);
-							planet->setInvaderShips(ships);
-						}
-					}
-
-				}
-				else return false; //InvadePlanets is not an Array
-			}
+    }
 
 		//}//End Iterator File
 
-		player->setPlanetsList(planets);
-	}
+    player->setPlanetsList(planets);
 	return true;
-
 }
 
 Player::Ptr DataModel_Server::getSelfPlayer()
@@ -393,7 +370,7 @@ Player::Ptr DataModel_Server::getSelfPlayer()
     return m_self;
 }
 
-Player::Ptr DataModel_Server::getEnemyPlayer(int id)
+Player::Ptr DataModel_Server::getEnemyPlayer()
 {
     return m_enemy;
 }
