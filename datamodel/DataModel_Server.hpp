@@ -74,6 +74,8 @@ public:
 
     void TransaktionMine();
 
+    void TransaktionShipyard();
+
     void clearOrderList();
 
     /*Kauf Methoden ende*/
