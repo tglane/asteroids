@@ -166,7 +166,14 @@ void TcpServer::fight_init(Battle::Ptr battle)
             position = Vector3f(2500, 0, 0);
         }
 
-        udpServer->add_client(j.id, j.socket->peerAddress(), j.socket->peerPort(), position, 10);
+        int ship_count;
+        if (battle->m_player1->getIdentity() == j.id) {
+            ship_count = battle->m_numberShips1;
+        } else {
+            ship_count = battle->m_numberShips2;
+        }
+
+        udpServer->add_client(j.id, j.socket->peerAddress(), j.socket->peerPort(), position, ship_count * 10);
         QJsonArray array;
         array.push_back("fight_init");
 
