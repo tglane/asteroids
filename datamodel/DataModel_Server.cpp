@@ -27,6 +27,7 @@ void DataModel_Server::constructPlayer(int id, std::string player_name, bool is_
     // kein Name könnte Problem sein
     Player::Ptr p(new Player(id, 3000, 0, player_name));
     if (is_self) {
+        m_playerid = id;
         m_self = p;
     } else {
         m_enemy = p;
@@ -53,6 +54,7 @@ void DataModel_Server::getUniverse(std::string filename)
             f >> name >> posx >> posy >> mines;
             Planet::Ptr p = Planet::Ptr(new Planet(name, posx, posy, mines));
 
+            std::cout << "adding planet: " << name << " " << i << std::endl;
             m_planets[i] = p;
             m_nameToPlanets[name] = p;
             m_planetNameToId[name] = i;
@@ -281,6 +283,9 @@ bool DataModel_Server::updateAll(QJsonObject &update) {
 	//if (update.isObject() && !update.isEmpty())
 	//{
 
+    for (auto i: m_planets) {
+        std::cout << "planet: " << i.first << " " << i.second->getName() << std::endl;
+    }
 		int id = 0;
 
 		//int rubin = 0;
@@ -320,6 +325,7 @@ bool DataModel_Server::updateAll(QJsonObject &update) {
 
 					for (it1 = array.constBegin(); it1 != array.constEnd(); it1++)
 					{
+                        std::cout << it1->toObject(QJsonObject()).value("ID").toInt() << std::endl;
 						planet = getPlanetFromId(it1->toObject(QJsonObject()).value("ID").toInt());
 						mines = it1->toObject(QJsonObject()).value("Mines").toInt();
 						ships = it1->toObject(QJsonObject()).value("Ships").toInt();
@@ -392,7 +398,7 @@ Player::Ptr DataModel_Server::getEnemyPlayer(int id)
     return m_enemy;
 }
 
-void DataModel_Server::findBattles()
+std::vector<Battle::Ptr> DataModel_Server::findBattles()
 {
     std::map<int, Planet::Ptr>::iterator it;
     for(it = m_planets.begin(); it != m_planets.end(); it++)
@@ -408,7 +414,6 @@ void DataModel_Server::findBattles()
                 Planets->setOwner(Planets->getInvader());
                 Planets->getOwner()->addPlanet(Planets);
                 Planets->addShips(Planets->getInvaderShips());
-                
 
             }
             else
@@ -422,6 +427,7 @@ void DataModel_Server::findBattles()
             Planets->setInvader(NULL);
         }
     }
+    return m_battles;
 }
 
 int DataModel_Server::getIDFromPlanet(Planet::Ptr planet)
@@ -617,8 +623,8 @@ void DataModel_Server::performMovements(Player::Ptr player)
 
 void DataModel_Server::BattleReport()
 {
-    std::list<std::shared_ptr<Battle>> BattleResult = m_battles;
-    for (std::list<std::shared_ptr<Battle>>::iterator it = BattleResult.begin(); it != BattleResult.end(); ++it)
+    std::vector<std::shared_ptr<Battle>> BattleResult = m_battles;
+    for (std::vector<std::shared_ptr<Battle>>::iterator it = BattleResult.begin(); it != BattleResult.end(); ++it)
     {
         std::shared_ptr<Battle> BattleDetailResult = *it;
         if(BattleDetailResult->FightResultInvader == false)
@@ -672,8 +678,8 @@ void DataModel_Server::WinCondition()
 
 void DataModel_Server::BattlePhase()
 {
-    std::list<std::shared_ptr<Battle>> BattlePhase = m_battles;
-    for (std::list<std::shared_ptr<Battle>>::iterator it = BattlePhase.begin(); it != BattlePhase.end(); ++it)  
+    std::vector<std::shared_ptr<Battle>> BattlePhase = m_battles;
+    for (std::vector<std::shared_ptr<Battle>>::iterator it = BattlePhase.begin(); it != BattlePhase.end(); ++it)  
     {
         std::shared_ptr<Battle> BattleDetail = *it;
         std::cout << "Kampfphase" << std::endl;
