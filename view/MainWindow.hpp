@@ -16,8 +16,7 @@
 
 #include <QMainWindow>
 
-#define GL3_PROTOTYPES 1
-#include <GL/glew.h>
+#include "util/gl_includes.h"
 
 #include "GLWidget.hpp"
 

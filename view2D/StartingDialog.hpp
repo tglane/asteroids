@@ -11,7 +11,8 @@
 
 #include "build/ui_StartingDialog.h"
 #include "datamodel/DataModel.hpp"
-
+#include "network/client/tcpclient.hpp"
+#include "network/server/TcpServer.hpp"
 
 using asteroids::DataModel;
 using std::string;
@@ -37,7 +38,7 @@ public:
      * @brief Construct a new Main Window object
      *
      */
-    StartingDialog(DataModel::Ptr model, QWidget* parent = NULL);
+    StartingDialog(DataModel::Ptr model, tcpclient::Ptr tcp_client, TcpServer::Ptr tcp_server, QWidget* parent = NULL);
 
     /**
      * @brief Destroys the Main Window object
@@ -62,10 +63,13 @@ public slots:
 
     void selectMap(int state);
 
+    void start_round();
+
 
 
 signals:
     void connect_to_server(string, string);
+    void endround_signal();
 
 private:
 
@@ -74,6 +78,10 @@ private:
 
     // The model which manages the round based data
     DataModel::Ptr m_model;
+
+    tcpclient::Ptr m_tcpclient;
+
+    TcpServer::Ptr m_tcpserver;
 };
 
 

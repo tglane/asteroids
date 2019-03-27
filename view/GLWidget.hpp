@@ -14,7 +14,7 @@
 
 #include <string>
 
-#include <GL/glew.h>
+#include "util/gl_includes.h"
 #include <QOpenGLWidget>
 #include <QWidget>
 #include <QtGui/QPainter>

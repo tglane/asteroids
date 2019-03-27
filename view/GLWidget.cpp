@@ -1,7 +1,6 @@
 #include "GLWidget.hpp"
 #include "io/LevelParser.hpp"
 
-
 #include "io/TextureFactory.hpp"
 #include <QMouseEvent>
 #include <SDL2/SDL.h>

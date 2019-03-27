@@ -158,6 +158,10 @@ set(ASTEROID_SOURCES
     view/MainWindow.cpp
     network/client/udpclient.cpp
     network/client/tcpclient.cpp
+        network/server/TcpServer.cpp
+        network/server/UdpServer.cpp
+        network/server/ServerPhysicsEngine.cpp
+        network/UdpPeer.cpp
     datamodel/DataModel.cpp
     datamodel/DataModel_Server.cpp
     datamodel/Planet.cpp
@@ -178,6 +182,7 @@ set(ASTEROID_SOURCES
 )
 
 set(ASTEROID_MOCS
+        util/gl_includes.h
     view/MainWindow.hpp
     view2D/MainWindow2D.hpp
     view2D/StartingDialog.hpp

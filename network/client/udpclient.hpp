@@ -2,7 +2,7 @@
 #ifndef CPP18_ASTEROIDS_UDPCLIENT_HPP
 #define CPP18_ASTEROIDS_UDPCLIENT_HPP
 
-#include <GL/glew.h>
+#include "util/gl_includes.h"
 
 #include <QObject>
 #include <QUdpSocket>

@@ -12,6 +12,7 @@
 #include "build/ui_GameWindow.h"
 #include "datamodel/DataModel.hpp"
 #include "network/client/tcpclient.hpp"
+#include "network/server/TcpServer.hpp"
 
 
 using asteroids::DataModel;
@@ -37,7 +38,7 @@ public:
      * @brief Construct a new Main Window object
      *
      */
-    GameWindow(DataModel::Ptr model, tcpclient::Ptr tcp_client, QWidget* parent = NULL);
+    GameWindow(DataModel::Ptr model, QWidget* parent = NULL);
 
     /**
      * @brief Destroys the Main Window object
@@ -73,6 +74,10 @@ private:
     DataModel::Ptr m_model;
 
     QMediaPlayer* m_mediaplayer;
+
+    tcpclient::Ptr m_tcpclient;
+
+    TcpServer::Ptr m_tcpserver;
 };
 
 

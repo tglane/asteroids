@@ -6,14 +6,14 @@
 #include <QApplication>
 
 #include <util/AsteroidField.hpp>
-TcpServer::TcpServer()
-    : server(this)
+TcpServer::TcpServer(std::string filename, QObject* parent)
 {
+    level = filename;
     state = WAITING;
     connect(&server, SIGNAL(newConnection()), this, SLOT(onConnect()));
     //connect(&server, SIGNAL(disconnected()), this, SLOT(onDisconnect()));
-
-    m_datamodel = DataModel_Server::Ptr(new DataModel_Server("../../../models/Level-2.map"));
+    std::cout << "../models/" << filename<<std::endl;
+    m_datamodel = DataModel_Server::Ptr(new DataModel_Server("../models/"+filename+".map"));
     //m_datamodel->getUniverse("../../../models/Level-1.map");
 
     if(!server.listen(QHostAddress::Any, 1235))
@@ -330,7 +330,7 @@ void TcpServer::handle_init(TcpClient& client, QJsonDocument& doc)
     qDebug() << "Sending init_res";
     QJsonObject init_res;
     init_res.insert("id", QJsonValue::fromVariant(client.id));
-    init_res.insert("map", QJsonValue::fromVariant("../models/Level-2.map"));
+    init_res.insert("map", QJsonValue::fromVariant("../models/"+QString::fromStdString(level)+".map"));
 
     QJsonArray array_response;
     array_response.push_back("init_res");
@@ -377,9 +377,10 @@ void TcpServer::readyRead()
     }
 }
 
-int main(int argc, char** argv)
+/*int main(int argc, char** argv)
 {
     QApplication app(argc, argv);
     TcpServer server;
     return app.exec();
 }
+*/

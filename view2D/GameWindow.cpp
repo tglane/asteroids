@@ -9,7 +9,7 @@
 
 namespace strategy{
 
-GameWindow::GameWindow(DataModel::Ptr model, tcpclient::Ptr tcp_client, QWidget* parent) :
+GameWindow::GameWindow(DataModel::Ptr model, QWidget* parent) :
     QMainWindow(parent), ui(new Ui::GameWindow())
 {
     m_model = model;
@@ -21,7 +21,8 @@ GameWindow::GameWindow(DataModel::Ptr model, tcpclient::Ptr tcp_client, QWidget*
     MainWindow2D* strategywindow = new MainWindow2D(m_model);
     ui->centralwidget->addWidget(strategywindow);
     m_model->addWidget(DataModel::MAIN2D, strategywindow);
-    connect(strategywindow, SIGNAL(endround_signal()), tcp_client.get(), SLOT(endround_slot()));
+    //connect(strategywindow, SIGNAL(endround_signal()), m_tcpclient.get(), SLOT(endround_slot()));
+
 
     // Insert 3D Window into Stacked Widget
     /**MainWindow* fightwindow = new MainWindow("../models/level.xml");
@@ -29,8 +30,8 @@ GameWindow::GameWindow(DataModel::Ptr model, tcpclient::Ptr tcp_client, QWidget*
     m_model->addWidget(DataModel::MAIN3D, fightwindow);
     tcp_client->set3DWindow(fightwindow);*/
 
-    StartingDialog* startingDialog = new StartingDialog(m_model);
-    connect(startingDialog, SIGNAL(connect_to_server(string, string)), tcp_client.get(), SLOT(connect_to_server(string, string)));
+    StartingDialog* startingDialog = new StartingDialog(m_model, m_tcpclient, m_tcpserver);
+    //connect(startingDialog, SIGNAL(connect_to_server(string, string)), m_tcpclient.get(), SLOT(connect_to_server(string, string)));
 
     ui->centralwidget->addWidget(startingDialog);
     m_model->addWidget(DataModel::START, startingDialog);
@@ -53,6 +54,7 @@ GameWindow::GameWindow(DataModel::Ptr model, tcpclient::Ptr tcp_client, QWidget*
     m_mediaplayer = new QMediaPlayer();
     m_mediaplayer->setMedia(QUrl::fromLocalFile(QFileInfo("../models/Interstellar-Soundtrack.mp3").absoluteFilePath()));
     //m_mediaplayer->play();
+
 
     connect(this, SIGNAL(play()), m_mediaplayer, SLOT(play()));
     connect(this, SIGNAL(stop()), m_mediaplayer, SLOT(stop()));

@@ -12,12 +12,7 @@
 
 
 #include "Bullet.hpp"
-
-#ifdef __APPLE__
-#include <OpenGL/gl.h>
-#else
-#include <GL/gl.h>
-#endif
+#include "util/gl_includes.h"
 
 
 namespace asteroids {

@@ -5,7 +5,7 @@
 #include <thread>
 #include <memory>
 #include <chrono>
-#include <light_bullet.hpp>
+#include "../light_classes/light_bullet.hpp"
 
 using namespace asteroids;
 
