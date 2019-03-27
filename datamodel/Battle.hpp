@@ -72,10 +72,11 @@ namespace asteroids
         int m_numberShipsLost1;
 
         /**
-         * @brief Number of Ships player 2 has lost
+         * @brief Number of Ships player 2 has
          */
         int m_numberShipsLost2;
 
+        //bool invaderWon;
 
         bool FightResultInvader;
 

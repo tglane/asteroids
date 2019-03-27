@@ -33,9 +33,10 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 # special optimization flags
 ###############################################################################
 
-set( CMAKE_CXX_FLAGS         "-O3 -Wall -std=c++14" )
-set( CMAKE_CXX_FLAGS_RELEASE "-O3 -msse3 -Wno-deprecated-declarations -Wno-unused -Wcpp" )
-set( CMAKE_CXX_FLAGS_DEBUG   "-g -Wall" )
+
+set( CMAKE_CXX_FLAGS         "-O3 -Wall -std=c++14 -lstdc++fs" )
+set( CMAKE_CXX_FLAGS_RELEASE "-O3 -msse3 -Wno-deprecated-declarations -Wno-unused -Wcpp -lstdc++fs" )
+set( CMAKE_CXX_FLAGS_DEBUG   "-g -Wall -lstdc++fs" )
 
 #set( CMAKE_EXE_LINKER_FLAGS  "-L/usr/local/lib -lSDL -lSDLmain -lSDL")
 
@@ -92,14 +93,16 @@ find_package( Qt5
     Core
     Widgets
     OpenGL
-    Network
     Gamepad
+    Multimedia
+    Network
     REQUIRED
 )
 
 include_directories(${Qt5Widgets_INCLUDE_DIRS})
 include_directories(${Qt5Core_INCLUDE_DIRS})
 include_directories(${Qt5OpenGL_INCLUDE_DIRS})
+include_directories(${Qt5Multimedia_INCLUDE_DIRS})
 include_directories(${Qt5Network_INCLUDE_DIRS})
 
 ###############################################################################
@@ -168,6 +171,7 @@ set(ASTEROID_SOURCES
     view2D/MyEllipse.cpp
     view2D/EndWindow.cpp
     view2D/GameWindow.cpp
+    view2D/SwitchingWindowInfo.cpp
     view/Camera.cpp
     view/Controller.cpp
     Gamepad.cpp
@@ -179,6 +183,7 @@ set(ASTEROID_MOCS
     view2D/StartingDialog.hpp
     view2D/EndWindow.hpp
     view2D/GameWindow.hpp
+    view2D/SwitchingWindowInfo.hpp
     datamodel/DataModel.hpp
     datamodel/DataModel_Server.hpp
 )
@@ -189,6 +194,7 @@ set(ASTEROID_UIS
     view2D/StartingDialog.ui
     view2D/EndWindow.ui
     view2D/GameWindow.ui
+    view2D/SwitchingWindowInfo.ui
 )
 
 set(CMAKE_AUTOMOC ON)
@@ -211,6 +217,7 @@ set(ASTEROID_DEPENDS
     ${SDL2_LIBRARY}
     ${JPEG_LIBRARIES}
     ${Qt5Widgets_LIBRARIES}
+    ${Qt5Multimedia_LIBRARIES}
     ${Qt5Network_LIBRARIES}
     c3dsreader
 )
@@ -234,4 +241,4 @@ add_executable(asteroids
 ###############################################################################
 
 #target_link_libraries(asteroids SOIL)
-target_link_libraries(asteroids Qt5::Gamepad ${ASTEROID_DEPENDS})
+target_link_libraries(asteroids Qt5::Gamepad ${ASTEROID_DEPENDS} /usr/lib/gcc/x86_64-linux-gnu/7/libstdc++fs.a)

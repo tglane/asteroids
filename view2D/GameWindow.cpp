@@ -1,8 +1,13 @@
 #include "view2D/GameWindow.hpp"
 #include "view2D/MainWindow2D.hpp"
 #include "view2D/StartingDialog.hpp"
+#include "view2D/SwitchingWindowInfo.hpp"
 #include "view2D/EndWindow.hpp"
 #include "view/MainWindow.hpp"
+
+#include <experimental/filesystem>
+
+namespace fs = std::experimental::filesystem;
 
 namespace strategy{
 
@@ -13,7 +18,7 @@ GameWindow::GameWindow(DataModel::Ptr model, tcpclient::Ptr tcp_client, QWidget*
     
     ui->setupUi(this);
 
-    m_model->addMainWindow(ui->centralwidget);
+    m_model->addMainWindow(this);
 
     MainWindow2D* strategywindow = new MainWindow2D(m_model);
     ui->centralwidget->addWidget(strategywindow);
@@ -31,12 +36,13 @@ GameWindow::GameWindow(DataModel::Ptr model, tcpclient::Ptr tcp_client, QWidget*
     ui->centralwidget->addWidget(startingDialog);
     m_model->addWidget(DataModel::START, startingDialog);
 
+    SwitchingWindowInfo* switchdialog = new SwitchingWindowInfo(m_model);
+    ui->centralwidget->addWidget(switchdialog);
+    m_model->addWidget(DataModel::SWITCH, switchdialog);
+
     EndWindow* endwindow = new EndWindow(m_model);
     ui->centralwidget->addWidget(endwindow);
     m_model->addWidget(DataModel::END, endwindow);
-
-
-    m_model->switchWindow(DataModel::START);
 
     QPixmap bkgnd("../models/box1.jpg");
     bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
@@ -44,15 +50,37 @@ GameWindow::GameWindow(DataModel::Ptr model, tcpclient::Ptr tcp_client, QWidget*
     palette.setBrush(QPalette::Background, bkgnd);
     this->setPalette(palette);
 
+    // Create a Mediaplayer which plays some background music
+    m_mediaplayer = new QMediaPlayer();
+    fs::path mediafile = "../models/Interstellar-Soundtrack.mp3";
+    m_mediaplayer->setMedia(QUrl::fromLocalFile(QString::fromStdString(fs::absolute(mediafile).string())));
+
+    //m_mediaplayer->play();
+
+    connect(this, SIGNAL(play()), m_mediaplayer, SLOT(play()));
+    connect(this, SIGNAL(stop()), m_mediaplayer, SLOT(stop()));
+    connect(this, SIGNAL(pause()), m_mediaplayer, SLOT(pause()));
+
+    std::cout << "Connected to slots" << std::endl;
+
+    m_model->switchWindow(DataModel::START);
+
 }
 
 void GameWindow::start_round() {
     m_model->switchWindow(DataModel::MAIN2D);
 }
 
+QStackedWidget* GameWindow::content()
+{
+    return ui->centralwidget;
+}
+
+
 GameWindow::~GameWindow()
 {
-
+    if (ui)
+        delete ui;
 }
 
 

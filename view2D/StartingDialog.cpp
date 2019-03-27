@@ -34,7 +34,8 @@ StartingDialog::StartingDialog(DataModel::Ptr model, QWidget* parent) :
 
 StartingDialog::~StartingDialog()
 {
-    
+    if (ui)
+        delete ui;
 }
 
 void StartingDialog::exitGame(bool clicked)
@@ -47,9 +48,15 @@ void StartingDialog::startGame(bool click)
     std::string name = ui->Name->text().toStdString();
     if(name != "" && name != "Please insert a name!")
     {
+        //m_model->getSelfPlayer()->setPlayerName(name);
+        
+        m_model->startGame();
+
         ui->ServerAddress->setText("127.0.0.1");
 
         emit connect_to_server(name, ui->ServerAddress->text().toStdString());
+        
+        // Call switching mechanism of datamodel
         //m_model->switchWindow(DataModel::MAIN2D);
     }
     else
