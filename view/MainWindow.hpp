@@ -57,6 +57,8 @@ public:
     /// Returns the height of the windows
     int height();
 
+    Ui::MainWindow* ui;
+
 public Q_SLOTS:
     /// Handle input
     void handleInput();
@@ -72,7 +74,7 @@ protected:
 private:
 
     /// QT UI of the window
-    Ui::MainWindow* ui;
+
 
     /// gl widget
     GLWidget*       m_widget;

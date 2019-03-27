@@ -1,5 +1,7 @@
 #include "GLWidget.hpp"
 #include "io/LevelParser.hpp"
+
+
 #include "io/TextureFactory.hpp"
 #include <QMouseEvent>
 #include <SDL2/SDL.h>
@@ -127,32 +129,14 @@ void GLWidget::initializeGL()
     // Load level
     LevelParser lp(m_levelFile, m_enemy, m_skybox, m_asteroidField);
     m_enemy->fixArrow();
-    m_enemy->setId(1);
-    m_enemy->setHealth(20);
 
     // Setup physics
     m_physicsEngine = make_shared<PhysicsEngine>();
 
     m_camera = make_shared<Camera>();
-    m_camera->setId(0);
-    m_camera->setHealth(20);
     m_camera->setPosition(Vector3f(2500, 0, 0));
     m_camera->setXAxis(Vector3f(-1, 0, 0));
     m_camera->setYAxis(Vector3f(0, -1, 0));
-
-    Hittable::Ptr player_ptr = std::static_pointer_cast<Hittable>(m_camera);
-    m_physicsEngine->addHittable(player_ptr);
-    Hittable::Ptr enemy_ptr = std::static_pointer_cast<Hittable>(m_enemy);
-    m_physicsEngine->addHittable(enemy_ptr);
-
-    // Add asteroids to physics engine
-    std::list<Asteroid::Ptr> asteroids;
-    m_asteroidField->getAsteroids(asteroids);
-    for (auto it = asteroids.begin(); it != asteroids.end(); it++)
-    {
-        PhysicalObject::Ptr p = std::static_pointer_cast<PhysicalObject>(*it);
-        m_physicsEngine->addDestroyable(p);
-    }
 
     m_useGamepad = m_controller.gamepadAvailable();
 
@@ -160,12 +144,30 @@ void GLWidget::initializeGL()
     m_startTimer.start();
 }
 
+void GLWidget::setClient(udpclient::Ptr client) {
+    m_client = client;
+
+    if (m_client->get_id() == 42) {
+        m_enemy->setId(43 << 24);
+    } else {
+        m_enemy->setId(42 << 24);
+    }
+    m_enemy->setHealth(10);
+
+    m_camera->setId(m_client->get_id() << 24);
+    m_camera->setHealth(10);
+
+    m_client->setOtherFighter(m_enemy); //added
+    m_client->setPhysicsPtr(m_physicsEngine); //added
+
+    m_physicsEngine->addHittable(m_camera);
+    m_physicsEngine->addHittable(m_enemy);
+}
+
 void GLWidget::paintGL()
 {
-    // Clear bg color and enable depth test (z-Buffer)
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_DEPTH_TEST);
-
+    
     m_camera->apply();
 
     // Render stuff
@@ -254,11 +256,11 @@ void GLWidget::step(map<Qt::Key, bool>& keyStates)
 
             if (m_useGamepad)
             {
-                m_controller.gamepadControl(player_ptr, m_physicsEngine, elapsed_time);
+                m_controller.gamepadControl(player_ptr, m_physicsEngine, *m_client, elapsed_time);
             }
             else
             {
-                m_controller.keyControl(keyStates, player_ptr, m_physicsEngine, elapsed_time);
+                m_controller.keyControl(keyStates, player_ptr, m_physicsEngine, *m_client, elapsed_time);
             }
 
             Vector3f player_pos = m_camera->getPosition();
@@ -303,6 +305,9 @@ void GLWidget::step(map<Qt::Key, bool>& keyStates)
             }
         }
     }
+
+    m_client->send_position(m_camera->getPosition(), Vector3f(), m_camera->getXAxis(), m_camera->getYAxis(), m_camera->getZAxis());
+
     // Trigger update, i.e., redraw via paintGL()
     this->update();
 }

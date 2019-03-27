@@ -42,7 +42,7 @@ bool Controller::gamepadAvailable()
 }
 
 void Controller::keyControl(std::map<Qt::Key, bool> &keyStates, Hittable::Ptr& player,
-                            PhysicsEngine::Ptr& physicsEngine, int elapsed_time)
+                            PhysicsEngine::Ptr& physicsEngine, udpclient& client, int elapsed_time)
 {
     if (player->getHealth() > 0)
     {
@@ -100,12 +100,13 @@ void Controller::keyControl(std::map<Qt::Key, bool> &keyStates, Hittable::Ptr& p
             Bullet::Ptr bullet = make_shared<Bullet>(Bullet(player->getPosition() - player->getZAxis() * 42,
                                                             player->getXAxis(), player->getId()));
             physicsEngine->addBullet(bullet);
+            client.send_bullet(player->getPosition(), player->getXAxis(), player->getZAxis());
             m_cooldownPlayer = 200;
         }
     }
 }
 
-void Controller::gamepadControl(Hittable::Ptr& player, PhysicsEngine::Ptr& physicsEngine, int elapsed_time)
+void Controller::gamepadControl(Hittable::Ptr& player, PhysicsEngine::Ptr& physicsEngine, udpclient& client, int elapsed_time)
 {
     if (m_gamepadAvailable)
     {

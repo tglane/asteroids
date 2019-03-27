@@ -1,12 +1,14 @@
 #ifndef CPP18_ASTEROIDS_CONTROLLER_HPP
 #define CPP18_ASTEROIDS_CONTROLLER_HPP
 
+#include <GL/glew.h>
 #include <QtCore/Qt>
 #include "Gamepad.hpp"
 #include "physics/Hittable.hpp"
 #include "physics/PhysicsEngine.hpp"
 #include <QMediaPlayer>
 #include <QtMultimedia/QSoundEffect>
+#include "network/client/udpclient.hpp"
 
 namespace asteroids
 {
@@ -21,9 +23,9 @@ public:
     bool gamepadAvailable();
 
     void keyControl(std::map<Qt::Key, bool> &keyStates, Hittable::Ptr& player,
-                    PhysicsEngine::Ptr& physicsEngine, int elapsed_time);
+                    PhysicsEngine::Ptr& physicsEngine, udpclient& client, int elapsed_time);
 
-    void gamepadControl(Hittable::Ptr& player, PhysicsEngine::Ptr& physicsEngine, int elapsed_time);
+    void gamepadControl(Hittable::Ptr& player, PhysicsEngine::Ptr& physicsEngine, udpclient& client, int elapsed_time);
 
 private:
 
