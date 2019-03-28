@@ -177,6 +177,13 @@ void UdpServer::start()
     time.start();
 }
 
+void UdpServer::stop()
+{
+    timer.stop();
+    //time.stop();
+    clients.clear();
+}
+
 void UdpServer::add_client(int id, QHostAddress addr, int port, Vector3f& pos, int health)
 {
 
