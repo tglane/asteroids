@@ -136,14 +136,12 @@ bool DataModel_Server::buyShip(Planet::Ptr selectedPlanet, Player::Ptr m_self)
         if(getIDFromPlanet(selectedPlanet) == getIDFromPlanet(planet))
         {
             //ship is already being built on this planet
-            std::cout << "DataModel_server buyShip: if 1" << std::endl;
             return false;
         }
     }
 
     if(!selectedPlanet->getShipyardBuilt())
     {
-        std::cout << "DataModel_server buyShip: if 2" << std::endl;
         return false;
     }
 
@@ -161,7 +159,6 @@ bool DataModel_Server::buyShip(Planet::Ptr selectedPlanet, Player::Ptr m_self)
         return true;
     }
 
-    std::cout << "DataModel_server buyShip: if 3" << std::endl;
     return false;
 
 }
@@ -322,20 +319,25 @@ Planet::Ptr DataModel_Server::getPlanetFromName(std::string name)
 void DataModel_Server::calculateFinance(Player::Ptr Player)
 {
     std::list<std::shared_ptr<Planet>> m_planetsForGain = m_self->getListOfPLanets();
-    int MineNumbers = 0;
-    int MineGainWithNumbers = 0;
+    //int MineNumbers = 0;
+    //int MineGainWithNumbers = 0;
+    int earnings = 0;
     for(std::list<std::shared_ptr<Planet>>::iterator it = m_planetsForGain.begin(); it != m_planetsForGain.end(); ++it)
     {
         Planet::Ptr PlanetFromPlayer = *it;
 
+        earnings += PlanetFromPlayer->subtractEarnings(Minegain);
+        /*
         MineNumbers += PlanetFromPlayer->getMinesBuild();
         PlanetFromPlayer->subtractEarnings(MineNumbers);
         std::cout <<"Test MineNumbers"<< std::endl;
         std::cout << MineNumbers << std::endl;
+        */
     }
-    MineGainWithNumbers = MineNumbers * Minegain;
+    //MineGainWithNumbers = MineNumbers * Minegain;
 
-    m_self->addRubin(MineGainWithNumbers);
+    //m_self->addRubin(MineGainWithNumbers);
+    m_self->addRubin(Minegain);
     TransaktionMine();
     TransaktionShip();
     TransaktionShipyard();
