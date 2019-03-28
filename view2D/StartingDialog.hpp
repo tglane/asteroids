@@ -65,6 +65,8 @@ public slots:
 
     void start_round();
 
+    void stop_server();
+
 
 
 signals:

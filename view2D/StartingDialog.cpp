@@ -71,24 +71,28 @@ void StartingDialog::startGame(bool click)
         emit connect_to_server(name, server_addr);
 
     }
-    else if (ui->checkHost->isChecked())
-    {
-        ui->StartGame->setText("Restart");
-        m_tcpserver = shared_ptr<TcpServer>(new TcpServer(ui->SelectMap->currentText().toStdString()));
-        ui->Name->setText("Server running..");
-        ui->Name->setStyleSheet("QLineEdit { color: red }");
+    else if (ui->checkHost->isChecked()) {
+        if (m_tcpserver == nullptr) {
+            ui->StartGame->setText("Restart");
+            m_tcpserver = shared_ptr<TcpServer>(new TcpServer(ui->SelectMap->currentText().toStdString()));
+            ui->Name->setText("Server running..");
+            ui->NameLabel->setText("Server-Status");
+            ui->Name->setStyleSheet("QLineEdit { color: red }");
 
-        QList<QHostAddress> list = QNetworkInterface::allAddresses();
-        QString ipv4;
-        for(int nIter=0; nIter<list.count(); nIter++)
-        {
-            if(!list[nIter].isLoopback())
-                if (list[nIter].protocol() == QAbstractSocket::IPv4Protocol )
-                    ipv4 = list[nIter].toString();
+            QList<QHostAddress> list = QNetworkInterface::allAddresses();
+            QString ipv4;
+            for (int nIter = 0; nIter < list.count(); nIter++) {
+                if (!list[nIter].isLoopback())
+                    if (list[nIter].protocol() == QAbstractSocket::IPv4Protocol)
+                        ipv4 = list[nIter].toString();
+            }
+
+            ui->ServerAddress->setText(ipv4);
+            ui->ServerAddress->setStyleSheet("QLineEdit { color: yellow }");
+        } else {
+            m_tcpserver->server.close();
+            m_tcpserver = shared_ptr<TcpServer>(new TcpServer(ui->SelectMap->currentText().toStdString()));
         }
-
-        ui->ServerAddress->setText(ipv4);
-        ui->ServerAddress->setStyleSheet("QLineEdit { color: yellow }");
     }
     else
     {
@@ -96,6 +100,12 @@ void StartingDialog::startGame(bool click)
         ui->Name->setStyleSheet("QLineEdit { color: red }");
     }
     
+}
+
+void StartingDialog::stop_server() {
+    ui->Name->setText("Client disconnected");
+    m_tcpserver->server.close();
+    m_tcpserver = shared_ptr<TcpServer>(new TcpServer(ui->SelectMap->currentText().toStdString()));
 }
 
 void StartingDialog::selectMap(int state)
