@@ -16,6 +16,7 @@ GLWidget::GLWidget(QWidget* parent) :
     m_started(false),
     m_gameOver(false),
     m_outOfBound(false),
+    m_endSoundPlayed(false),
     m_cockpit("../models/cockpit.png"),
     m_playerHeart("../models/player_heart.png"),
     m_enemyHeart("../models/enemy_heart.png"),
