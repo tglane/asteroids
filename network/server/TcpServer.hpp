@@ -38,6 +38,8 @@ public:
 
     TcpServer(std::string filename, QObject* parent = 0);
 
+    QTcpServer server;
+
 private slots:
     void onConnect();
     void readyRead();
@@ -48,7 +50,7 @@ private:
     char last_id = 42;
 
     ServerState state;
-    QTcpServer server;
+
     std::vector<TcpClient> clients;
 
     void send_strat_init();
