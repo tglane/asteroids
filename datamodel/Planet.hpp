@@ -191,6 +191,11 @@ namespace asteroids
 		int subtractEarnings(int mineRubin);
 
 		/**
+		 * @sets m_rubinLeft to the given value
+		 */
+		void setRubinLeft(int rubinLeft);
+
+		/**
 		 * @brief returns how many rubin is left on this planet
 		 * @return int m_rubinLeft
 		 */

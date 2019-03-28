@@ -343,6 +343,7 @@ bool DataModel_Server::updateAll(QJsonObject &update) {
         int ships;
         int mines;
         bool shipyard;
+        int rubinLeft;
 
 
         for (it1 = array.constBegin(); it1 != array.constEnd(); it1++)
@@ -352,8 +353,10 @@ bool DataModel_Server::updateAll(QJsonObject &update) {
             mines = it1->toObject(QJsonObject()).value("Mines").toInt();
             ships = it1->toObject(QJsonObject()).value("Ships").toInt();
             shipyard = it1->toObject(QJsonObject()).value("Shipyard").toBool();
+            rubinLeft = it1->toObject(QJsonObject()).value("RubinLeft").toInt();
 
 
+            planet->setRubinLeft(rubinLeft);
             planet->setMines(mines);
             planet->setShips(ships);
             planet->setOwner(player);
