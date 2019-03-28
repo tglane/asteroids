@@ -23,8 +23,10 @@ TcpServer::TcpServer(std::string filename, QObject* parent)
     else
     {
         qDebug() << "Server started ";
-
     }
+
+    udpServer = std::shared_ptr<UdpServer>(new UdpServer());
+    connect(udpServer.get(),SIGNAL(fightEnd(int,int)), this, SLOT(fightEnd(int,int)));
 }
 
 void TcpServer::onDisconnect()
@@ -151,8 +153,6 @@ void TcpServer::fight_init(Battle::Ptr battle)
     asteroids.getAsteroids(asteroid_list);
 
     qDebug() << "sending fight_init";
-    udpServer = std::shared_ptr<UdpServer>(new UdpServer());
-    connect(udpServer.get(),SIGNAL(fightEnd(int,int)), this, SLOT(fightEnd(int,int)));
 
     for (auto i: asteroid_list) {
         udpServer->get_physics_engine().addDestroyable(i);
@@ -265,7 +265,8 @@ void TcpServer::fight_init(Battle::Ptr battle)
 void TcpServer::fightEnd(int id, int health_left) {
     // ToDo Datamodel
 
-    udpServer.reset();
+    udpServer->stop();
+    //udpServer.reset();
     int ships_left = health_left / 10;
     qDebug() << "end fight, updating data model";
     Battle::Ptr current_battle = m_battle_list[battle_count];
@@ -283,7 +284,7 @@ void TcpServer::fightEnd(int id, int health_left) {
     current_battle->m_location->setOwner(m_datamodel->getPlayerByID(id));
     m_datamodel->getPlayerByID(id)->addPlanet(current_battle->m_location);
 
-    current_battle->m_location->setShips(health_left);
+    current_battle->m_location->setShips(ships_left);
     m_datamodel->getPlayerByID(id)->incShips(ships_left);
 
     qDebug() << "Planets fight end 2";

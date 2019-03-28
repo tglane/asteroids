@@ -184,6 +184,10 @@ void tcpclient::process_state(QJsonArray recv_array)
     m_datamodel->updateAll(obj);
 
     m_state = client_state::ROUND;
+    if (m_mainwindow != nullptr) {
+        m_mainwindow->hide();
+        m_mainwindow->stop_timer();
+    }
 
     m_datamodel->switchWindow(DataModel_Server::MAIN2D);
 
@@ -196,10 +200,9 @@ void tcpclient::process_fight_init(QJsonObject recv_obj)
     /* Initialize the udp client for the connection during 3d fight */
     std::cout << "fight init" << std::endl;
 
-    
+    /* Initialize new window for 3d part */
     if (m_mainwindow == nullptr) {
         m_udpclient = std::make_shared<udpclient>(m_player_id, m_server_ip, m_socket->localPort());
-        m_udpclient->init_fight_slot(recv_obj);
         m_mainwindow = std::make_shared<MainWindow>("../models/level.xml");
         m_mainwindow->showFullScreen();
         m_physicsEngine = m_mainwindow->ui->openGLWidget->getPhysicsEngine();
@@ -209,9 +212,9 @@ void tcpclient::process_fight_init(QJsonObject recv_obj)
     }
 
     m_mainwindow->start_timer();
-    /* Initialize new window for 3d part */
-    //m_datamodel->switchWindow(DataModel_Server::MAIN3D);
 
+    m_udpclient->init_fight_slot(recv_obj);
+    m_mainwindow->showFullScreen();
 
     /* Parse fight_init package */
     QJsonArray asteroids_arr = recv_obj["asteroids"].toArray();
