@@ -215,7 +215,7 @@ void Planet::setRubinLeft(int rubinLeft)
 
 int Planet::calculateEarnings(int mineRubin)
 {
-	return mineRubin * m_mines;
+	return mineRubin * m_minesbuild;
 }
 
 bool Planet::getShipyardBuilt()
