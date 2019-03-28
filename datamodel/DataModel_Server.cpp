@@ -714,9 +714,10 @@ void DataModel_Server::WinCondition()
     if(NumberOfPlanets == CountOfPlanets)
     {
         std::cout << "Gewonnen" <<std::endl;
-
-
     }
+
+    //TODO  emit SIGNAL endOfGame(), connect it with SLOT EndWindow::activate()
+
 }
 
 void DataModel_Server::BattlePhase()

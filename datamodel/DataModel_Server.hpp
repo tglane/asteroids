@@ -183,6 +183,8 @@ signals:
     void updateInfo();
     void initMap();
 
+    void endOfGame();
+
 
 protected:
 

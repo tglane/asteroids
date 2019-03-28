@@ -114,7 +114,6 @@ void MainWindow2D::updateAllInfo() {
 }
 
 void MainWindow2D::resizeEvent(QResizeEvent* event){
-    std::cout << "Resizing" << std::endl;
     ui->Map->fitInView(0, 0, scene_width, scene_height, Qt::KeepAspectRatio);
 }
 
