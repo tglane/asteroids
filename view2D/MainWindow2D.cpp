@@ -42,9 +42,15 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
     ui->DestionationPlanet->setStyleSheet("QPushButton{background-color:#110033}""QPushButton:hover{background-color:#663388}");
     ui->SpielerInfoTable->setStyleSheet("border-width:0px;");
     // //MineBuild costs
-    ui->BuildMine->setToolTip("Costs: ");
+    int minecost = m_model->getMineCost();
+    std::string s = "Costs: " + std::to_string(minecost) + " Rubies";
+    QString string = QString::fromStdString(s);
+    ui->BuildMine->setToolTip(string);
     // //WerftBuild costs
-    ui->BuildShip->setToolTip("Costs: ");
+    int shipyardcost = m_model->getShipyardCost();
+    s = "Costs: " + std::to_string(shipyardcost) + " Rubies";
+    string = QString::fromStdString(s);
+    ui->BuildShip->setToolTip(string);
 
     //Set sidebar look
     QGraphicsOpacityEffect * effect = new QGraphicsOpacityEffect(ui->ContextMenue);
@@ -341,8 +347,13 @@ void MainWindow2D::buildShip(bool click)
     } else {
         p->buildShipyard();
         ui->BuildShip->setText("Build Ship");
+        updatePlanetInfo(currentPlanet);
+        updatePlayerInfo();
         // //Schifskosten
-        ui->BuildShip->setToolTip("Costs: ");
+        int shipcost = m_model->getShipCost();
+        std::string s = "Costs: " + std::to_string(shipcost) + " Rubies";
+        QString string = QString::fromStdString(s);
+        ui->BuildShip->setToolTip(string);
         std::cout << "Build Shipyard!" << std::endl;
     }
 
@@ -525,6 +536,8 @@ void MainWindow2D::updatePlanetInfo(int id)
     // Planeteninfo ausfüllen
     ui->PlanetName->setText(QString::fromStdString(p->getName()));
 
+    ui->RubinNumber->setText("# " + QString::number(p->getRubinLeft()));
+
     QString mineText = QString::number(p->getMinesBuild()) + " / " + QString::number(p->getMines());
     ui->MineNumber->setText(mineText);
     // Verstecke den Button, wenn die max. Minenanzahl erreicht ist
@@ -533,7 +546,8 @@ void MainWindow2D::updatePlanetInfo(int id)
         ui->BuildMine->setVisible(false);
     }
 
-    ui->ShipNumber->setText(QString::number(p->getShips()));
+    ui->ShipNumber->setText("# " + QString::number(p->getShips()));
+
     if (p->getOwner() == NULL)
     {
         ui->Info->setText("Niemand besitzt diesen Planeten!");
@@ -543,8 +557,8 @@ void MainWindow2D::updatePlanetInfo(int id)
         ui->Info->setText(QString::fromStdString(p->getOwner()->getPlayerName()));
     }
 
-    ui->MineOrdersValue->setText(QString::number(p->getMinesHidden()));
-    ui->ShipOrdersValue->setText(QString::number(p->getShipsOrdered()));
+    ui->MineOrdersValue->setText("# " + QString::number(p->getMinesHidden()));
+    ui->ShipOrdersValue->setText("# " + QString::number(p->getShipsOrdered()));
 }
 
 void MainWindow2D::initPlanets()
