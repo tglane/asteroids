@@ -125,8 +125,29 @@ bool DataModel_Server::buyShip(Planet::Ptr selectedPlanet, Player::Ptr m_self)
     std::cout << m_self->getRubin() << std::endl;
     /*test druck ende*/
 
+    //watch out so only 1 ship can be built 
+    std::list<std::shared_ptr<ShipOrder>> shiporders = m_self->getListShipOrder();
+
+    for(std::list<std::shared_ptr<ShipOrder>>::iterator it = shiporders.begin(); it != shiporders.end(); ++it)
+    {
+        std::shared_ptr<ShipOrder> shiporder = *it;
+
+        Planet::Ptr planet = shiporder->getPlanet();
+
+        if(getIDFromPlanet(selectedPlanet) == getIDFromPlanet(planet))
+        {
+            //ship is already being built on this planet
+            return false;
+        }
+    }
+
+    if(!selectedPlanet->getShipyardBuilt())
+    {
+        return false;
+    }
+
     int Player_Rubin_Number = m_self->getRubin();
-    if(Player_Rubin_Number >= Shipcost && selectedPlanet->getShipyardBuilt())
+    if(Player_Rubin_Number >= Shipcost)
     {
         m_self->delRubin(Shipcost);
         /*test druck*/
@@ -172,6 +193,23 @@ bool DataModel_Server::buyMine(Planet::Ptr selectedPlanet, Player::Ptr m_self)
     std::cout << selectedPlanet->getMinesBuild() << std::endl;
     std::cout << selectedPlanet->getMines() << std::endl;
     /*test druck ende*/
+
+    //watch out so only 1 Mine can be built 
+    std::list<std::shared_ptr<MineOrder>> mineorders = m_self->getListMineOrder();
+
+    for(std::list<std::shared_ptr<MineOrder>>::iterator it = mineorders.begin(); it != mineorders.end(); ++it)
+    {
+        std::shared_ptr<MineOrder> mineorder = *it;
+
+        Planet::Ptr planet = mineorder->getPlanet();
+
+        if(getIDFromPlanet(selectedPlanet) == getIDFromPlanet(planet))
+        {
+            //Mine is already being built on this planet
+            return false;
+        }
+    }
+
     if(selectedPlanet->getMinesHidden() + selectedPlanet->getMinesBuild() < selectedPlanet->getMines())
     {
         int Player_Rubin_Number = m_self->getRubin();
@@ -365,7 +403,7 @@ bool DataModel_Server::updateAll(QJsonObject &update) {
 
 
             planet->setRubinLeft(rubinLeft);
-            planet->setMines(mines);
+            planet->setMinesBuilt(mines);
             planet->setShips(ships);
             planet->setOwner(player);
 

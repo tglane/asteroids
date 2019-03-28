@@ -360,6 +360,7 @@ void MainWindow2D::buildShip(bool click)
             std::cout << "Fehler MainWindow2D: Build Ship!" << std::endl;
         }
     } else {
+        //p->buildShipyard();
         m_model->buyShipyard(p, p->getOwner());
         ui->BuildShip->setText("Build Ship");
         updateAllInfo();
@@ -519,7 +520,7 @@ void MainWindow2D::updatePlanetInfo(int id)
         } else {
             ui->BuildShip->setVisible(true);
         }
-        if (m_model->getSelfPlayer()->getRubin() < m_model->getMineCost())
+        if (m_model->getSelfPlayer()->getRubin() < m_model->getMineCost()|| p->getMinesHidden()>0)
         {
             ui->BuildMine->setVisible(false);
         } else {

@@ -100,10 +100,18 @@ public:
      */
     void setStartPlanet(std::shared_ptr<Planet> startplanet);
 
+    /**
+     * @brief returns
+     */
     Player::Ptr getSelfPlayer();
 
     Player::Ptr getEnemyPlayer();
 
+    /**
+     * @brief process all updates made by the enemy in the past round
+     * @param QJsonobject update -> structure in wiki
+     * @return true, when QJsonfile could be processed
+     */
     bool updateAll(QJsonObject &update); // @suppress("Type cannot be resolved")
 
 
