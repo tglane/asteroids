@@ -76,7 +76,6 @@ void EndWindow::activate()
     }
 }
 
-
 void EndWindow::exitGame(bool clicked)
 {
     QCoreApplication::quit();

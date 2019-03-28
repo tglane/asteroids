@@ -6,6 +6,8 @@
 #include <SDL2/SDL.h>
 #include <QtGui/QPainter>
 #include <math.h>
+#include <QtCore/QFileInfo>
+#include <QMediaPlaylist>
 
 bool GLWidget::open_gl = false;
 
@@ -14,10 +16,28 @@ GLWidget::GLWidget(QWidget* parent) :
     m_started(false),
     m_gameOver(false),
     m_outOfBound(false),
+    m_endSoundPlayed(false),
     m_cockpit("../models/cockpit.png"),
     m_playerHeart("../models/player_heart.png"),
     m_enemyHeart("../models/enemy_heart.png"),
-    m_emptyHeart("../models/empty_heart.png") {}
+    m_emptyHeart("../models/empty_heart.png")
+{
+    QMediaPlaylist* playlist = new QMediaPlaylist;
+    playlist->addMedia(QUrl::fromLocalFile(QFileInfo("../models/megalovania.wav").absoluteFilePath()));
+    playlist->setPlaybackMode(QMediaPlaylist::Loop);
+    m_backgroundMusic = new QMediaPlayer;
+    m_backgroundMusic->setPlaylist(playlist);
+    m_backgroundMusic->setVolume(30);
+
+    m_countdownSound.setSource(QUrl::fromLocalFile(QFileInfo("../models/countdown.wav").absoluteFilePath()));
+    m_countdownSound.setVolume(0.4);
+
+    m_victorySound.setSource(QUrl::fromLocalFile(QFileInfo("../models/victory.wav").absoluteFilePath()));
+    m_victorySound.setVolume(0.7);
+
+    m_defeatSound.setSource(QUrl::fromLocalFile(QFileInfo("../models/defeat.wav").absoluteFilePath()));
+    m_defeatSound.setVolume(0.7);
+}
 
 void GLWidget::setLevelFile(const std::string& file)
 {
@@ -150,6 +170,8 @@ void GLWidget::setClient(udpclient::Ptr client) {
     m_camera->setId(m_client->get_id() << 24);
 
     m_client->setOtherFighter(m_enemy); //added
+    asteroids::Hittable::Ptr player_ptr = std::static_pointer_cast<asteroids::Hittable>(m_camera);
+    m_client->setOwnFighter(player_ptr);
     m_client->setPhysicsPtr(m_physicsEngine); //added
 
     m_physicsEngine->addHittable(m_camera);
@@ -229,6 +251,8 @@ void GLWidget::reset() {
 
     m_physicsEngine->addHittable(m_camera);
     m_physicsEngine->addHittable(m_enemy);
+
+    m_backgroundMusic->setPosition(0);
 }
 
 void GLWidget::step(map<Qt::Key, bool>& keyStates)
@@ -242,8 +266,13 @@ void GLWidget::step(map<Qt::Key, bool>& keyStates)
 
     if (!m_started)
     {
+        if (m_startTimer.elapsed() >= 1000 && !m_countdownSound.isPlaying())
+        {
+            m_countdownSound.play();
+        }
         if (m_startTimer.elapsed() >= 4000)
         {
+            m_backgroundMusic->play();
             m_started = true;
         }
     }
@@ -303,13 +332,15 @@ void GLWidget::step(map<Qt::Key, bool>& keyStates)
                 m_enemy->inBound();
             }
         }
+        else if (!m_endSoundPlayed)
+        {
+            m_endSoundPlayed = true;
+            m_backgroundMusic->stop();
+            m_camera->getHealth() > 0 ? m_victorySound.play() : m_defeatSound.play();
+        }
+
     }
 
-    // If no Packet recv, move
-    if (m_client->getCount() > 0) {
-        m_enemy->move();
-    }
-    m_client->incCount();
     m_client->send_position(m_camera->getPosition(), Vector3f(), m_camera->getXAxis(), m_camera->getYAxis(), m_camera->getZAxis());
 
     // Trigger update, i.e., redraw via paintGL()

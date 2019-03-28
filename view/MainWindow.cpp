@@ -59,10 +59,6 @@ namespace asteroids
     {
         // Save which key was pressed
         m_keyStates[(Qt::Key)event->key()] = true;
-        if (event->key() == Qt::Key_Escape)
-        {
-            close();
-        }
     }
 
     void MainWindow::keyReleaseEvent(QKeyEvent* event)

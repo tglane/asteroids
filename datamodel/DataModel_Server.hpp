@@ -163,8 +163,6 @@ public:
      */
     int getIDFromPlanet(Planet::Ptr planet);
 
-    void WinCondition();
-
     void BattlePhase();
 
     int getShipCost() { return Shipcost; }

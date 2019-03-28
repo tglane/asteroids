@@ -27,7 +27,44 @@ std::list<std::pair<int, int>> ServerPhysicsEngine::detect_collisions()
     map<int, PhysicalBullet::Ptr>::iterator b_it;
     map<int, Hittable::Ptr>::iterator h_it;
 
-
+    map<int, PhysicalMissile::Ptr>::iterator m_it;
+    m_it = m_missiles.begin();
+    while (m_it != m_missiles.end())
+    {
+        PhysicalMissile::Ptr m = m_it->second;
+        h_it = m_hittables.begin();
+        while (h_it != m_hittables.end())
+        {
+            if (m->getShooterId() != h_it->second->getId() && h_it->second->hit(m->getPosition(), 50))
+            {
+                if (m_hittables.size() > 1)
+                {
+                    m->destroy();
+                    int health = h_it->second->getHealth();
+                    h_it->second->setHealth(health - min(3, health % 10));
+                    collisions.push_back(std::pair<int, int>(m->getId(), h_it->second->getId()));
+                }
+            }
+            if (h_it->second->getHealth() == 0 && m_hittables.size() > 1)
+            {
+                h_it = m_hittables.erase(h_it);
+            }
+            else
+            {
+                h_it++;
+            }
+        }
+        // Check if bullet is dead. If it is, remove from
+        // bullet list. Otherwise continue with next bullet.
+        if (!m->alive())
+        {
+            m_it = m_missiles.erase(m_it);
+        }
+        else
+        {
+            m_it++;
+        }
+    }
 
     //Move bullets and test for hits
     b_it = m_bullets.begin();

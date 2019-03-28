@@ -64,10 +64,10 @@ private:
     void send_battle(Battle::Ptr battle, bool first);
 
     bool all_ready();
+    void clear_all_ready();
 
 
     int init_count = 0;
-    int ready_count = 0;
     int battle_count = 0;
 
     std::string level;
@@ -78,6 +78,8 @@ private:
 
     std::vector<Battle::Ptr> m_battle_list;
 
+signals:
+    void stop_server();
 public:
     TcpServer();
 

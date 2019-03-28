@@ -116,6 +116,8 @@ public:
 
 	void fixArrow();
 
+	void fixMissile();
+
 protected:
 
     /// Number of vertices

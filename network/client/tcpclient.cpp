@@ -116,6 +116,11 @@ void tcpclient::recv_json()
         }
         else if(recv_array[0] == "state" && (m_state == client_state::FIGHT_READY || m_state == client_state::END_ROUND))
         {
+            emit end_pause();
+            if(m_state == client_state::FIGHT_READY)
+            {
+                emit resume_music();
+            }
             process_state(recv_array);
         }
         else if(recv_array[0] == "battle" && (m_state == client_state::END_ROUND || m_state == client_state::FIGHT))
@@ -124,6 +129,7 @@ void tcpclient::recv_json()
         }
         else if (recv_array[0] == "fight_init" && m_state == client_state::FIGHT_READY )
         {
+            emit pause_music();
             process_fight_init(recv_array[1].toObject());
         }
         else
@@ -145,18 +151,6 @@ void tcpclient::process_init_res(QJsonObject recv_obj)
 
     m_state = client_state::WAIT;
 
-    //QJsonArray init_array;
-    //init_array.push_back("ready");
-//
-    //QJsonDocument doc(init_array);
-//
-    //int size = doc.toJson().size();
-    //m_socket->write((char*) &size, sizeof(size));
-//
-    //m_socket->write(doc.toJson());
-    //m_socket->flush();
-
-    // TODO add ready button before game to emit ready
     send_ready();
 }
 
@@ -188,15 +182,23 @@ void tcpclient::process_state(QJsonArray recv_array)
     obj = recv_array[2].toObject();
     m_datamodel->updateAll(obj);
 
-    m_state = client_state::ROUND;
-
-    if (m_mainwindow != nullptr) {
-        m_mainwindow->hide();
-        m_mainwindow->stop_timer();
-        m_mainwindow->reset_key_states();
+    
+    if (m_datamodel->WinCondition())
+    {
+        m_socket->disconnect();
     }
+    else
+    {
+        m_state = client_state::ROUND;
 
-    m_datamodel->switchWindow(DataModel_Server::MAIN2D);
+        if (m_mainwindow != nullptr) {
+            m_mainwindow->hide();
+            m_mainwindow->stop_timer();
+            m_mainwindow->reset_key_states();
+        }
+
+        m_datamodel->switchWindow(DataModel_Server::MAIN2D);
+    }
 }
 
 void tcpclient::process_battle(QJsonObject recv_obj)
@@ -217,7 +219,7 @@ void tcpclient::process_battle(QJsonObject recv_obj)
         m_state = client_state::END_FIGHT;
         m_switch_mode_dialoge->updateWindow(recv_obj["planet_name"].toString().toStdString(), recv_obj["player_name1"].toString().toStdString(),
                                      recv_obj["player_name2"].toString().toStdString(), recv_obj["ships1"].toInt(), recv_obj["ships2"].toInt(),
-                                     recv_obj["ships_after2"].toInt(), recv_obj["ships_after1"].toInt());
+                                     recv_obj["ships_after1"].toInt(), recv_obj["ships_after2"].toInt());
         m_mainwindow->hide();
         m_datamodel->switchWindow(DataModel::SWITCH);
     }
