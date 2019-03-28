@@ -101,7 +101,6 @@ bool DataModel_Server::endOfRound()
     m_self->PrintPlanetsList();
     m_enemy->PrintPlanetsList();
     //BattleReport();
-    WinCondition();
     m_self->PrintPlanetsList();
     m_enemy->PrintPlanetsList();
 
@@ -719,49 +718,6 @@ int DataModel_Server::getIDFromPlanetName(std::string name){
     return m_planetNameToId[name];
 }
 
-void DataModel_Server::WinCondition()
-{
-    std::map<int, Planet::Ptr>::iterator it;
-    int NumberOfPlanets = m_planets.size();
-    int selfOwnedPlanets = 0;
-    int enemyOwnedPlanets = 0;
-    std::cout << "Anzahl der Planeten" << std::endl;
-    std::cout << NumberOfPlanets << std::endl;
-    for(it = m_planets.begin(); it != m_planets.end(); it++)  
-    {
-        Planet::Ptr Planets = it->second;
-        if(Planets->getOwner() == m_self)
-        {
-            selfOwnedPlanets++;
-        }
-        else if(Planets->getOwner() == m_enemy)
-        {
-            enemyOwnedPlanets++;
-        }
-    }
-
-    if(NumberOfPlanets == selfOwnedPlanets)
-    {
-        emit endOfGame();
-        std::cout << "Gewonnen" <<std::endl;
-    }
-    if(selfOwnedPlanets == 0)
-    {
-        emit endOfGame();
-        std::cout << "Verloren" << std::endl;
-    }
-    if(NumberOfPlanets == enemyOwnedPlanets)
-    {
-        emit endOfGame();
-        std::cout << "Verloren" <<std::endl;
-    }
-    if(enemyOwnedPlanets == 0)
-    {
-        emit endOfGame();
-        std::cout << "Gewonnen" << std::endl;
-    }
-}
-
 void DataModel_Server::BattlePhase()
 {
     std::vector<std::shared_ptr<Battle>> BattlePhase = m_battles;
@@ -778,7 +734,6 @@ void DataModel_Server::BattlePhase()
 
 
     }
-
 }
 
 void DataModel_Server::addPlayer(Player::Ptr player)
