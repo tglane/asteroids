@@ -217,7 +217,6 @@ void tcpclient::process_battle(QJsonObject recv_obj)
         m_switch_mode_dialoge->updateWindow(recv_obj["planet_name"].toString().toStdString(), recv_obj["player_name1"].toString().toStdString(),
                                      recv_obj["player_name2"].toString().toStdString(), recv_obj["ships1"].toInt(), recv_obj["ships2"].toInt(),
                                      recv_obj["ships_after2"].toInt(), recv_obj["ships_after1"].toInt());
-        std::cout << recv_obj["ships_after1"].toInt() << recv_obj["ships_after2"].toInt() << std::endl;
         m_mainwindow->hide();
         m_datamodel->switchWindow(DataModel::SWITCH);
     }
