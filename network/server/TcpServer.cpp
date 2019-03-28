@@ -124,6 +124,7 @@ void TcpServer::handle_state(TcpClient& client, QJsonDocument& doc) {
 
 
     m_datamodel->printPlanets();
+    m_datamodel->printPlayer();
 
     ready_count++;
     if (clients.size() == ready_count) {
