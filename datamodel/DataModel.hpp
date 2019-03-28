@@ -68,6 +68,9 @@ public:
 
     void getUniverse(std::string filename);
 
+    void WinCondition();
+
+    bool endOfRound();
 
 public slots:
 

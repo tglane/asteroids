@@ -25,8 +25,8 @@ GameWindow::GameWindow(DataModel::Ptr model, QWidget* parent) :
     MainWindow2D* strategywindow = new MainWindow2D(m_model);
     ui->centralwidget->addWidget(strategywindow);
     m_model->addWidget(DataModel::MAIN2D, strategywindow);
+    connect(m_tcpclient.get(), SIGNAL(end_pause()), strategywindow, SLOT(end_blur()));
     //connect(strategywindow, SIGNAL(endround_signal()), m_tcpclient.get(), SLOT(endround_slot()));
-
 
     // Insert 3D Window into Stacked Widget
     /**MainWindow* fightwindow = new MainWindow("../models/level.xml");
@@ -49,6 +49,7 @@ GameWindow::GameWindow(DataModel::Ptr model, QWidget* parent) :
     EndWindow* endwindow = new EndWindow(m_model);
     ui->centralwidget->addWidget(endwindow);
     m_model->addWidget(DataModel::END, endwindow);
+    connect(m_model.get(), SIGNAL(endOfGame()), endwindow, SLOT(activate()));
 
     QPixmap bkgnd("../models/box1.jpg");
     bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
@@ -64,6 +65,8 @@ GameWindow::GameWindow(DataModel::Ptr model, QWidget* parent) :
     m_mediaplayer->setPlaylist(playlist);
     m_mediaplayer->setVolume(30);
 
+    connect(m_tcpclient.get(), SIGNAL(pause_music()), m_mediaplayer, SLOT(pause()));
+    connect(m_tcpclient.get(), SIGNAL(resume_music()), m_mediaplayer, SLOT(play()));
     connect(this, SIGNAL(play()), m_mediaplayer, SLOT(play()));
     connect(this, SIGNAL(stop()), m_mediaplayer, SLOT(stop()));
     connect(this, SIGNAL(pause()), m_mediaplayer, SLOT(pause()));
