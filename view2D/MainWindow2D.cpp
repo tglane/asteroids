@@ -139,6 +139,7 @@ void MainWindow2D::fight(bool click)
 
 void MainWindow2D::choose_planet(int id)
 {
+    updateAllInfo();
     updatePlanetInfo(id);
 
     std::map<int, Planet::Ptr> planets = m_model->getPlanets();
@@ -323,6 +324,7 @@ void MainWindow2D::colonize(bool click)
     }
     qgti->setPlainText(string);
     qgti->update();
+    endOfRound(true);
 }
 
 void MainWindow2D::buildShip(bool click)
