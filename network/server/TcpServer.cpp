@@ -321,10 +321,10 @@ void TcpServer::handle_init(TcpClient& client, QJsonDocument& doc)
     // Ziehe Daten aus Document
     QJsonArray array = doc.array();
     QJsonObject temp_name = array[1].toObject();
-
-
-    QString name(temp_name["playername"].toString().toUtf8());
-
+    //qDebug() << "array"<< array;
+    //qDebug() << "temp_name" << temp_name;
+    QString name(temp_name["player_name"].toString().toUtf8());
+    //qDebug() << name;
     m_datamodel->constructPlayer(client.id, name.toStdString(), false);
     m_datamodel->getPlayerByID(client.id)->setPlayerName(name.toUtf8().constData());
 
