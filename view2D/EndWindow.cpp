@@ -47,7 +47,7 @@ void EndWindow::activate()
             }
             else
             {
-               pixmap->load("../models/victory.jpg");
+                pixmap->load("../models/victory.jpg");
             }
             ui->ResultLabel->setText("Victory!");
             scene->addPixmap(*pixmap);
