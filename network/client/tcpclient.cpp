@@ -10,7 +10,7 @@ tcpclient::tcpclient(asteroids::DataModel::Ptr datamodel, QObject* parent)
     : m_datamodel(std::move(datamodel))
 {
     m_socket = std::make_shared<QTcpSocket>(this);
-    m_socket->setSocketOption(QAbstractSocket::KeepAliveOption, 1);
+    //m_socket->setSocketOption(QAbstractSocket::KeepAliveOption, 1);
 
     connect(m_socket.get(), SIGNAL(connected()), this, SLOT(send_init()));
     connect(m_socket.get(), SIGNAL(readyRead()), this, SLOT(recv_json()));
@@ -145,16 +145,16 @@ void tcpclient::process_init_res(QJsonObject recv_obj)
 
     m_state = client_state::WAIT;
 
-    QJsonArray init_array;
-    init_array.push_back("ready");
-
-    QJsonDocument doc(init_array);
-
-    int size = doc.toJson().size();
-    m_socket->write((char*) &size, sizeof(size));
-
-    m_socket->write(doc.toJson());
-    m_socket->flush();
+    //QJsonArray init_array;
+    //init_array.push_back("ready");
+//
+    //QJsonDocument doc(init_array);
+//
+    //int size = doc.toJson().size();
+    //m_socket->write((char*) &size, sizeof(size));
+//
+    //m_socket->write(doc.toJson());
+    //m_socket->flush();
 
     // TODO add ready button before game to emit ready
     send_ready();
