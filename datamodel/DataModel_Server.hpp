@@ -176,7 +176,10 @@ public:
     Player::Ptr getPlayerByID(int i);
 
     void getUniverse(std::string filename);
-
+    
+    /**
+     * @brief   Loads all the planets from the given file
+     */
     void printPlanets();
 
 signals:
@@ -200,9 +203,7 @@ protected:
     int Shipyardcost = 2000;
 
     int Minegain = 750;
-    /**
-     * @brief   Loads all the planets from the given file
-     */
+    
 
     std::map<int, Player::Ptr> m_players;
 

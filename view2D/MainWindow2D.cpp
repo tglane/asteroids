@@ -337,6 +337,8 @@ void MainWindow2D::buildShip(bool click)
     } else {
         p->buildShipyard();
         ui->BuildShip->setText("Build Ship");
+        updatePlanetInfo(currentPlanet);
+        updatePlayerInfo();
         std::cout << "Build Shipyard!" << std::endl;
     }
 
@@ -519,6 +521,8 @@ void MainWindow2D::updatePlanetInfo(int id)
     // Planeteninfo ausfüllen
     ui->PlanetName->setText(QString::fromStdString(p->getName()));
 
+    ui->RubinNumber->setText("# " + QString::number(p->getRubinLeft()));
+
     QString mineText = QString::number(p->getMinesBuild()) + " / " + QString::number(p->getMines());
     ui->MineNumber->setText(mineText);
     // Verstecke den Button, wenn die max. Minenanzahl erreicht ist
@@ -527,7 +531,8 @@ void MainWindow2D::updatePlanetInfo(int id)
         ui->BuildMine->setVisible(false);
     }
 
-    ui->ShipNumber->setText(QString::number(p->getShips()));
+    ui->ShipNumber->setText("# " + QString::number(p->getShips()));
+
     if (p->getOwner() == NULL)
     {
         ui->Info->setText("Niemand besitzt diesen Planeten!");
@@ -537,8 +542,8 @@ void MainWindow2D::updatePlanetInfo(int id)
         ui->Info->setText(QString::fromStdString(p->getOwner()->getPlayerName()));
     }
 
-    ui->MineOrdersValue->setText(QString::number(p->getMinesHidden()));
-    ui->ShipOrdersValue->setText(QString::number(p->getShipsOrdered()));
+    ui->MineOrdersValue->setText("# " + QString::number(p->getMinesHidden()));
+    ui->ShipOrdersValue->setText("# " + QString::number(p->getShipsOrdered()));
 }
 
 void MainWindow2D::initPlanets()
