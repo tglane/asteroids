@@ -27,7 +27,7 @@ void SwitchingWindowInfo::resizeEvent(QResizeEvent* event)
 void SwitchingWindowInfo::updateWindow(std::string planetname, std::string player1, std::string player2, 
                 int ship1, int ship2)
 {
-    ui->Info->setText(QString::fromStdString("Fight for planet " + planetname));
+    ui->Info->setText(QString::fromStdString("Fight for planet " + planetname + "."));
     ui->PlayerOne->setText(QString::fromStdString(player1));
     ui->PlayerTwo->setText(QString::fromStdString(player2));
     ui->ShipBeforeOne->setText(QString::number(ship1));
@@ -39,13 +39,15 @@ void SwitchingWindowInfo::updateWindow(std::string planetname, std::string playe
 void SwitchingWindowInfo::updateWindow(std::string planetname, std::string player1, std::string player2, 
                 int ship1, int ship2, int ship_after1, int ship_after2)
 {
-    ui->Info->setText(QString::fromStdString("Fight for planet ended" + planetname));
+    ui->Info->setText(QString::fromStdString("Fight for planet " + planetname + " ended."));
     ui->PlayerOne->setText(QString::fromStdString(player1));
     ui->PlayerTwo->setText(QString::fromStdString(player2));
     ui->ShipBeforeOne->setText(QString::number(ship1));
     ui->ShipBeforeTwo->setText(QString::number(ship2));
     ui->ShipAfterOne->setText(QString::number(ship_after1));
     ui->ShipAfterTwo->setText(QString::number(ship_after2));
+    ui->ShipAfterOne->setVisible(true);
+    ui->ShipAfterTwo->setVisible(true);
 }
 
 

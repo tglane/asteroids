@@ -230,7 +230,7 @@ void udpclient::send_bullet(asteroids::Vector3f position, asteroids::Vector3f xA
     socket->writeDatagram(data, QHostAddress(m_ip), 1235);
 
     /* Add new bullet to not acknowledged */
-    m_not_acknowledged.insert(std::pair<int, QByteArray>(seq_number, data));
+    m_not_acknowledged[seq_number] = data;
     seq_number++;
 }
 

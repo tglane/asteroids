@@ -197,9 +197,6 @@ void tcpclient::process_state(QJsonArray recv_array)
     }
 
     m_datamodel->switchWindow(DataModel_Server::MAIN2D);
-
-    qDebug() << m_datamodel->createJson(m_datamodel->getSelfPlayer());
-    qDebug() << m_datamodel->createJson(m_datamodel->getEnemyPlayer());
 }
 
 void tcpclient::process_battle(QJsonObject recv_obj)
@@ -220,7 +217,7 @@ void tcpclient::process_battle(QJsonObject recv_obj)
         m_state = client_state::END_FIGHT;
         m_switch_mode_dialoge->updateWindow(recv_obj["planet_name"].toString().toStdString(), recv_obj["player_name1"].toString().toStdString(),
                                      recv_obj["player_name2"].toString().toStdString(), recv_obj["ships1"].toInt(), recv_obj["ships2"].toInt(),
-                                     recv_obj["ships_after1"].toInt(), recv_obj["ships_after2"].toInt());
+                                     recv_obj["ships_after2"].toInt(), recv_obj["ships_after1"].toInt());
         m_mainwindow->hide();
         m_datamodel->switchWindow(DataModel::SWITCH);
     }
