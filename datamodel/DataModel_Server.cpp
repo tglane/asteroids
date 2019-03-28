@@ -47,6 +47,8 @@ void DataModel_Server::getUniverse(std::string filename)
 
         f >> numvertex >> posx >> posy;
 
+        f >> Shipcost >> Minecost >> Shipyardcost >> Minegain;
+
         // initialize all planets and add them to the map
         for(int i = 0; i < numvertex; i++)
         {
@@ -124,7 +126,7 @@ bool DataModel_Server::buyShip(Planet::Ptr selectedPlanet, Player::Ptr m_self)
     /*test druck ende*/
 
     int Player_Rubin_Number = m_self->getRubin();
-    if(Player_Rubin_Number >= Shipcost)
+    if(Player_Rubin_Number >= Shipcost && selectedPlanet->getShipyardBuilt())
     {
         m_self->delRubin(Shipcost);
         /*test druck*/
@@ -193,6 +195,26 @@ bool DataModel_Server::buyMine(Planet::Ptr selectedPlanet, Player::Ptr m_self)
 
 }
 
+bool DataModel_Server::buyShipyard(Planet::Ptr selectedPlanet, Player::Ptr m_self)
+{
+    if(!selectedPlanet->getShipyardBuilt())
+    {
+        int Player_Rubin_Number = m_self->getRubin();
+        if(Player_Rubin_Number >= Shipyardcost)
+        {
+            m_self->delRubin(Shipyardcost);
+            std::shared_ptr<ShipyardOrder> NewShipyard = std::shared_ptr<ShipyardOrder>(new ShipyardOrder(selectedPlanet));
+            m_self->putListShipyardOrder(NewShipyard); 
+            return true;
+        }
+
+        return false;
+
+    }
+
+    return false;
+}
+
 void DataModel_Server::TransaktionMine()
 {
     std::list<std::shared_ptr<MineOrder>> m_TransaktionMine = m_self->getListMineOrder();
@@ -228,6 +250,20 @@ void DataModel_Server::TransaktionShip()
 
 }
 
+void DataModel_Server::TransaktionShipyard()
+{
+    std::list<std::shared_ptr<ShipyardOrder>> m_TransaktionShipyard = m_self->getListShipyardOrder();
+
+    for(std::list<std::shared_ptr<ShipyardOrder>>::iterator it = m_TransaktionShipyard.begin(); it != m_TransaktionShipyard.end(); ++it)
+    {
+        std::shared_ptr<ShipyardOrder> NewOrder = *it;
+
+        Planet::Ptr NewShipyardOnPlanet = NewOrder->getPlanet();
+
+        NewShipyardOnPlanet->buildShipyard();
+    }
+}
+
 void DataModel_Server::clearOrderList()
 {
     m_self->ClearOrderListInPlayer();
@@ -253,13 +289,16 @@ void DataModel_Server::calculateFinance(Player::Ptr Player)
         Planet::Ptr PlanetFromPlayer = *it;
 
         MineNumbers += PlanetFromPlayer->getMinesBuild();
+        PlanetFromPlayer->subtractEarnings(MineNumbers);
         std::cout <<"Test MineNumbers"<< std::endl;
         std::cout << MineNumbers << std::endl;
     }
     MineGainWithNumbers = MineNumbers * Minegain;
+
     m_self->addRubin(MineGainWithNumbers);
     TransaktionMine();
     TransaktionShip();
+    TransaktionShipyard();
     clearOrderList();
 
 }
@@ -311,6 +350,8 @@ bool DataModel_Server::updateAll(QJsonObject &update) {
         Planet::Ptr planet;
         int ships;
         int mines;
+        bool shipyard;
+        int rubinLeft;
 
 
         for (it1 = array.constBegin(); it1 != array.constEnd(); it1++)
@@ -319,10 +360,19 @@ bool DataModel_Server::updateAll(QJsonObject &update) {
             planet = getPlanetFromId(it1->toObject(QJsonObject()).value("ID").toInt());
             mines = it1->toObject(QJsonObject()).value("Mines").toInt();
             ships = it1->toObject(QJsonObject()).value("Ships").toInt();
+            shipyard = it1->toObject(QJsonObject()).value("Shipyard").toBool();
+            rubinLeft = it1->toObject(QJsonObject()).value("RubinLeft").toInt();
 
+
+            planet->setRubinLeft(rubinLeft);
             planet->setMines(mines);
             planet->setShips(ships);
             planet->setOwner(player);
+
+            if(planet->getShipyardBuilt() != shipyard && !(planet->getShipyardBuilt()))
+            {
+            	planet->buildShipyard();
+            }
 
             planets.push_back(planet);
 
@@ -500,8 +550,10 @@ QJsonObject DataModel_Server::createJson(Player::Ptr player)
 
         // Add necessary information to representation
         qPlanet.insert("ID", getIDFromPlanet(planet));
-        qPlanet.insert("Mines", planet->getMines());
+        qPlanet.insert("Mines", planet->getMinesBuild());
         qPlanet.insert("Ships", planet->getShips());
+        qPlanet.insert("Shipyard", planet->getShipyardBuilt());
+        qPlanet.insert("RubinLeft", planet->getRubinLeft());
 
         //Add to the json array
         planeets.push_back(qPlanet);
@@ -558,55 +610,6 @@ QJsonObject DataModel_Server::createBattleJson(Battle::Ptr battle)
     main.insert("invaderWon", battle->FightResultInvader);
 
     return main;
-}
-*/
-
-/*
-QJsonDocument createJsonOrders(Player::Ptr player)
-{
-    // main QJson object in the document
-    QJsonObject main;
-
-    //insert id of the player
-    main.insert("ID", player->getIdentity());
-    // Playername
-    main.insert("Name",  QString::fromStdString(player->getPlayerName()));
-    // amount of rubin
-    main.insert("Rubin", player->getIdentity());
-
-    //Json array
-    QJsonArray qMineOrders;
-
-    //Mineorders of the player
-    std::list<MineOrder::Ptr> mineOrders = player->getListMineOrder();
-
-    //Iterate over all planets and add the to the json file
-    for(std::list<MineOrder::Ptr>::iterator it = mineOrders.begin(); it != mineOrders.end(); ++it)
-    {
-        // Get mineorder and representation
-        MineOrder::Ptr mineOrder = *it;
-        QJsonObject qMineOrder;
-
-        //Add Id
-        //qMineOrder.insert("PlanetID", getIDFromPlanet(mineOrder->getPlanet()));
-
-        qMineOrders.push_back(qMineOrder);
-       
-        //The Planet and the qjson representations
-        Planet::Ptr planet = *it;
-        QJsonObject qPlanet;
-
-        // Add necessary information to representation
-        qPlanet.insert("ID", getIDFromPlanet(planet));
-        qPlanet.insert("Mines", planet->getMines());
-        qPlanet.insert("Ships", planet->getShips());
-
-        //Add to the json array
-        planeets.push_back(qPlanet);
-        
-    }
-
-    return QJsonDocument();
 }
 */
 
@@ -698,9 +701,10 @@ void DataModel_Server::WinCondition()
     if(NumberOfPlanets == CountOfPlanets)
     {
         std::cout << "Gewonnen" <<std::endl;
-
-
     }
+
+    //TODO  emit SIGNAL endOfGame(), connect it with SLOT EndWindow::activate()
+
 }
 
 void DataModel_Server::BattlePhase()

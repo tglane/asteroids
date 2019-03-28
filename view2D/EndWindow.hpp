@@ -26,6 +26,11 @@ public:
 public slots:
 
     /**
+     * Sets the windows content depending on the result
+     */
+    void activate();
+
+    /**
      * @brief   Is calle when exit Button is pressed, 
      */
     void exitGame(bool click);
@@ -36,6 +41,8 @@ private:
     Ui::EndWindow* ui;
 
     asteroids::DataModel::Ptr m_model;
+
+    QGraphicsScene* scene;
 
 };
 
