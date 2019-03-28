@@ -170,13 +170,7 @@ void GLWidget::paintGL()
 
     if (m_enemy->getHealth() > 0)
     {
-        // If no Packet recv, move
-        if (m_client->getCount() > 0) {
-            m_enemy->move();
-        }
         m_enemy->render();
-        m_client->incCount();
-
     }
 
     glDisable(GL_DEPTH_TEST);
@@ -310,6 +304,12 @@ void GLWidget::step(map<Qt::Key, bool>& keyStates)
             }
         }
     }
+
+    // If no Packet recv, move
+    if (m_client->getCount() > 0) {
+        m_enemy->move();
+    }
+    m_client->incCount();
     m_client->send_position(m_camera->getPosition(), Vector3f(), m_camera->getXAxis(), m_camera->getYAxis(), m_camera->getZAxis());
 
     // Trigger update, i.e., redraw via paintGL()
