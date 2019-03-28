@@ -59,7 +59,6 @@ GameWindow::GameWindow(DataModel::Ptr model, QWidget* parent) :
     m_mediaplayer->setMedia(QUrl::fromLocalFile(QFileInfo("../models/Interstellar-Soundtrack.mp3").absoluteFilePath()));
     //m_mediaplayer->play();
 
-
     connect(this, SIGNAL(play()), m_mediaplayer, SLOT(play()));
     connect(this, SIGNAL(stop()), m_mediaplayer, SLOT(stop()));
     connect(this, SIGNAL(pause()), m_mediaplayer, SLOT(pause()));

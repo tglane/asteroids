@@ -18,12 +18,13 @@ StartingDialog::StartingDialog(DataModel::Ptr model,tcpclient::Ptr tcp_client, T
     ui->Title->setStyleSheet("QLabel { color: white }");
     ui->NameLabel->setStyleSheet("QLabel { color: white }");
     ui->ServerAddressLabel->setStyleSheet("QLabel { color: white }");
+    ui->checkHostLabel->setStyleSheet("QLabel { color: white }");
     ui->ChooseMapLabel->setStyleSheet("QLabel { color: white}");
     ui->ChooseMapLabel->setVisible(false);
     ui->SelectMap->setVisible(false);
 
     ui->Name->setText("Siegbert");
-    ui->ServerAddress->setText("192.168.0.42");
+    ui->ServerAddress->setText("127.0.0.1");
 
     QPixmap bkgnd("../models/box1.jpg");
     bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
@@ -70,7 +71,7 @@ void StartingDialog::startGame(bool click)
         emit connect_to_server(name, server_addr);
 
     }
-    /**else if (ui->checkHost->isChecked())
+    else if (ui->checkHost->isChecked())
     {
         m_tcpserver = shared_ptr<TcpServer>(new TcpServer(ui->SelectMap->currentText().toStdString()));
         ui->Name->setText("Server Starting..");
@@ -90,7 +91,7 @@ void StartingDialog::startGame(bool click)
 
         ui->ServerAddress->setText(ipv4);
         ui->ServerAddress->setStyleSheet("QLineEdit { color: yellow }");
-    }*/
+    }
     else
     {
         ui->Name->setText("Please insert a name!");

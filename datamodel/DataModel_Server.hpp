@@ -18,6 +18,7 @@
 #include "MoveOrder.hpp"
 #include "MineOrder.hpp"
 #include "ShipOrder.hpp"
+#include "ShipyardOrder.hpp"
 #include "Battle.hpp"
 
 using std::map;
@@ -67,9 +68,13 @@ public:
 
     bool buyMine(Planet::Ptr selectedPlanet, Player::Ptr m_self);
 
+    bool buyShipyard(Planet::Ptr selectedPlanet, Player::Ptr m_self);
+
     void TransaktionShip();
 
     void TransaktionMine();
+
+    void TransaktionShipyard();
 
     void clearOrderList();
 
@@ -83,7 +88,9 @@ public:
     int getIDFromPlanetName(std::string name);
 
     std::list<std::pair<int,int>> getEdges();
-
+    /**
+     * added: subtractEarnings for each planet
+     */
     void calculateFinance(Player::Ptr Player);
     
     void startGame();
@@ -93,10 +100,18 @@ public:
      */
     void setStartPlanet(std::shared_ptr<Planet> startplanet);
 
+    /**
+     * @brief returns
+     */
     Player::Ptr getSelfPlayer();
 
     Player::Ptr getEnemyPlayer();
 
+    /**
+     * @brief process all updates made by the enemy in the past round
+     * @param QJsonobject update -> structure in wiki
+     * @return true, when QJsonfile could be processed
+     */
     bool updateAll(QJsonObject &update); // @suppress("Type cannot be resolved")
 
 
@@ -152,6 +167,8 @@ public:
 
     int getMineCost() { return Minecost; }
 
+    int getShipyardCost() {return Shipyardcost; }
+
     int getResult() { return result; }
 
     /**
@@ -169,7 +186,10 @@ public:
     Player::Ptr getPlayerByID(int i);
 
     void getUniverse(std::string filename);
-
+    
+    /**
+     * @brief   Loads all the planets from the given file
+     */
     void printPlanets();
 
     void clearInvaders();
@@ -179,6 +199,8 @@ public:
 signals:
     void updateInfo();
     void initMap();
+
+    void endOfGame();
 
 
 protected:
@@ -194,10 +216,10 @@ protected:
 
     int Minecost = 1000;
 
+    int Shipyardcost = 2000;
+
     int Minegain = 750;
-    /**
-     * @brief   Loads all the planets from the given file
-     */
+    
 
     std::map<int, Player::Ptr> m_players;
 

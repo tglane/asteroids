@@ -12,7 +12,7 @@ namespace asteroids {
 
 Player::Player() : m_planets()
 {
-	
+
 }
 
 
@@ -35,7 +35,7 @@ void Player::addPlanet(std::shared_ptr<Planet> planet)
 	m_planets.push_back(planet);
 }
 
-int Player::getShips() 
+int Player::getShips()
 {
 	return m_ships;
 }
@@ -43,7 +43,7 @@ int Player::getShips()
 void Player::delShips(int ShipNumber)
 {
 	if(m_ships > 0)
-	{	
+	{
 		if(m_ships >= ShipNumber)
 		{
 			m_ships -= ShipNumber;
@@ -70,17 +70,17 @@ void Player::setIdentity(int id){
 	m_identity = id;
 }
 
-int Player::getIdentity() 
+int Player::getIdentity()
 {
 	return m_identity;
 }
 
-int Player::getRubin() 
+int Player::getRubin()
 {
 	return m_rubin;
 }
 
-void Player::addRubin(int add) 
+void Player::addRubin(int add)
 {
 	m_rubin += add;
 }
@@ -101,14 +101,14 @@ int Player::getMines()
 	return m_mines;
 }
 
-bool Player::delRubin(int del) 
+bool Player::delRubin(int del)
 {
 	if (del > m_rubin) {
 		return false;
 	}
 	else
 	{
-		m_rubin -= del; 
+		m_rubin -= del;
 		return true;
 	}
 }
@@ -153,11 +153,24 @@ void Player::putListMoveOrder(std::shared_ptr<MoveOrder> newMoveOrder)
 	m_moveOrders.push_back(newMoveOrder);
 }
 
+std::list<std::shared_ptr<ShipyardOrder>> Player::getListShipyardOrder()
+{
+	return m_shipyardOrders;
+}
+
+void Player::putListShipyardOrder(std::shared_ptr<ShipyardOrder> newShipyardOrder)
+{
+	m_shipyardOrders.push_back(newShipyardOrder);
+}
+
+
 void Player::ClearOrderListInPlayer()
 {
 	m_shipOrders.clear();
 	m_mineOrders.clear();
 	m_moveOrders.clear();
+	m_shipyardOrders.clear();
+
 }
 
 std::list<std::shared_ptr<Planet>> Player::getListOfPLanets()
@@ -171,7 +184,7 @@ void Player::RemovePlaneteFromList(Planet::Ptr Planet)
 	std::list<Planet::Ptr>::iterator it;
 	int Postion = 0;
 	std::list<Planet::Ptr>::iterator PostionRemove = m_planets.begin();
-    for(it = m_planets.begin(); it != m_planets.end(); ) 
+    for(it = m_planets.begin(); it != m_planets.end(); )
 	{
 		Planet::Ptr PlanetsFromList = *it;
 		std::cout << Postion <<std::endl;
@@ -184,13 +197,13 @@ void Player::RemovePlaneteFromList(Planet::Ptr Planet)
 		}
 		else
 		{
-		it++;	
+		it++;
 		Postion++;
 		}
-		
 
-		
-	
+
+
+
 	}
 
 }
@@ -199,7 +212,7 @@ void Player::PrintPlanetsList()
 {
 	std::cout << m_name << std::endl;
 	std::list<Planet::Ptr>::iterator it;
-    for(it = m_planets.begin(); it != m_planets.end(); it++) 
+    for(it = m_planets.begin(); it != m_planets.end(); it++)
 	{
 		Planet::Ptr PlanetsFromList = *it;
 		std::cout << PlanetsFromList->getName() <<std::endl;
@@ -208,7 +221,7 @@ void Player::PrintPlanetsList()
 }
 
 
-void Player::updateResources() {
+/*void Player::updateResources() {
 
 	std::list<std::shared_ptr<Planet>>::iterator i;
 	m_rubin = 0;
@@ -220,6 +233,6 @@ void Player::updateResources() {
 		m_ships += planet->getInvaderShips();
 
 	}
-}
+}*/
 
 }

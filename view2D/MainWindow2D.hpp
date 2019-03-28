@@ -1,4 +1,4 @@
-/*
+/**
  * MainWindow2D.hpp
  */
 

@@ -13,7 +13,7 @@ TcpServer::TcpServer(std::string filename, QObject* parent)
     connect(&server, SIGNAL(newConnection()), this, SLOT(onConnect()));
     //connect(&server, SIGNAL(disconnected()), this, SLOT(onDisconnect()));
     std::cout << "../models/" << filename<<std::endl;
-    m_datamodel = DataModel_Server::Ptr(new DataModel_Server("../../../models/"+filename+".map"));
+    m_datamodel = DataModel_Server::Ptr(new DataModel_Server("../models/"+filename+".map"));
     //m_datamodel->getUniverse("../../../models/Level-1.map");
 
     if(!server.listen(QHostAddress::Any, 1235))
