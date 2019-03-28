@@ -50,6 +50,8 @@ void SwitchingWindowInfo::updateWindow(std::string planetname, std::string playe
     ui->PlayerTwo->setText(QString::fromStdString(player2));
     ui->ShipBeforeOne->setText(QString::number(ship1));
     ui->ShipBeforeTwo->setText(QString::number(ship2));
+    ui->ShipAfterOne->setVisible(true);
+    ui->ShipAfterTwo->setVisible(true);
     ui->ShipAfterOne->setText(QString::number(ship_after1));
     ui->ShipAfterTwo->setText(QString::number(ship_after2));
 }
