@@ -8,7 +8,6 @@
 #include "view/MainWindow.hpp"
 #include "view2D/StartingDialog.hpp"
 #include <QDesktopWidget>
-#include <QGraphicsOpacityEffect>
 #include <QGraphicsView>
 #include <iostream>
 #include <QLine>
@@ -113,6 +112,11 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
 
     // event is triggert as soon as planets a available in DataModel
     connect(m_model.get(), SIGNAL(initMap()), this, SLOT(initPlanets()));
+
+    m_blur = new QGraphicsBlurEffect;
+    m_blur->setBlurHints(QGraphicsBlurEffect::QualityHint);
+    ui->centralwidget->setGraphicsEffect(m_blur);
+    m_blur->setEnabled(false);
 }
 
 void MainWindow2D::updateAllInfo() {
@@ -216,9 +220,7 @@ void MainWindow2D::endOfRound(bool click)
 {
     m_model->endOfRound();
 
-    QGraphicsBlurEffect *a=new QGraphicsBlurEffect;
-    a->setBlurHints(QGraphicsBlurEffect::QualityHint);
-    ui->centralwidget->setGraphicsEffect(a);
+    m_blur->setEnabled(true);
     ui->centralwidget->setEnabled(false);
 
     //Wenn lang genug warten könnet das hier funktionieren
@@ -239,18 +241,12 @@ void MainWindow2D::endOfRound(bool click)
     //Hier abwarten ob anderer auch fertig ist
 
     //pop_up->close();
-    ui->centralwidget->setEnabled(true);
-    a->setEnabled(false);
-
-    currentYear++;
-    QString qyear = QString::fromUtf8("Year: ");
-    ui->Date->setText(qyear + QString::number(currentYear));
 
     updatePlayerInfo();
     updatePlanetInfo(currentPlanet);
     updatePlanetColor();
 
-    //Anzeige der aktuellen Flüge löschen
+    //Anzeigem der aktuellen Flüge löschen
     std::list<std::pair<int,int>> edges = m_model->getEdges();
     for(std::list<std::pair<int,int>>::iterator it=edges.begin(); it != edges.end(); ++it){
         std::pair<int,int> coordinates = *it;
@@ -263,6 +259,16 @@ void MainWindow2D::endOfRound(bool click)
 
     // TODO wait for response of server, block the window until all players are ready
     emit endround_signal();
+}
+
+void MainWindow2D::end_blur()
+{
+    ui->centralwidget->setEnabled(true);
+    m_blur->setEnabled(false);
+
+    currentYear++;
+    QString qyear = QString::fromUtf8("Year: ");
+    ui->Date->setText(qyear + QString::number(currentYear));
 }
 
 void MainWindow2D::updatePlanetColor(){
