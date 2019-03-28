@@ -12,7 +12,7 @@
 #include <QGraphicsEllipseItem>
 #include <QMouseEvent>
 
-#include "../cmake-build-debug/ui_MainWindow2D.h"
+#include "../build/ui_MainWindow2D.h"
 #include "view/MainWindow.hpp"
 #include "view2D/MyEllipse.hpp"
 

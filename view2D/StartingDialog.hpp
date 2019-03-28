@@ -9,7 +9,7 @@
 #include <QMouseEvent>
 #include <string>
 
-#include "cmake-build-debug/ui_StartingDialog.h"
+#include "build/ui_StartingDialog.h"
 #include "datamodel/DataModel.hpp"
 
 
