@@ -4,4 +4,5 @@ cmake-build-debug/
 /.vscode
 /.metadata/
 /cmake
-/network/server/build/
+/network/server/build
+

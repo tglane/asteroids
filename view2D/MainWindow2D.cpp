@@ -337,6 +337,7 @@ void MainWindow2D::buildShip(bool click)
     } else {
         p->buildShipyard();
         ui->BuildShip->setText("Build Ship");
+        std::cout << "Build Shipyard!" << std::endl;
     }
 
     

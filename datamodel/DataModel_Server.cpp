@@ -124,7 +124,7 @@ bool DataModel_Server::buyShip(Planet::Ptr selectedPlanet, Player::Ptr m_self)
     /*test druck ende*/
 
     int Player_Rubin_Number = m_self->getRubin();
-    if(Player_Rubin_Number >= Shipcost)
+    if(Player_Rubin_Number >= Shipcost && selectedPlanet->getShipyardBuilt())
     {
         m_self->delRubin(Shipcost);
         /*test druck*/
@@ -193,6 +193,26 @@ bool DataModel_Server::buyMine(Planet::Ptr selectedPlanet, Player::Ptr m_self)
 
 }
 
+bool DataModel_Server::buyShipyard(Planet::Ptr selectedPlanet, Player::Ptr m_self)
+{
+    if(!selectedPlanet->getShipyardBuilt())
+    {
+        int Player_Rubin_Number = m_self->getRubin();
+        if(Player_Rubin_Number >= Shipyardcost)
+        {
+            m_self->delRubin(Shipyardcost);
+            std::shared_ptr<ShipyardOrder> NewShipyard = std::shared_ptr<ShipyardOrder>(new ShipyardOrder(selectedPlanet));
+            m_self->putListShipyardOrder(NewShipyard); 
+            return true;
+        }
+
+        return false;
+
+    }
+
+    return false;
+}
+
 void DataModel_Server::TransaktionMine()
 {
     std::list<std::shared_ptr<MineOrder>> m_TransaktionMine = m_self->getListMineOrder();
@@ -228,6 +248,20 @@ void DataModel_Server::TransaktionShip()
 
 }
 
+void DataModel_Server::TransaktionShipyard()
+{
+    std::list<std::shared_ptr<ShipyardOrder>> m_TransaktionShipyard = m_self->getListShipyardOrder();
+
+    for(std::list<std::shared_ptr<ShipyardOrder>>::iterator it = m_TransaktionShipyard.begin(); it != m_TransaktionShipyard.end(); ++it)
+    {
+        std::shared_ptr<ShipyardOrder> NewOrder = *it;
+
+        Planet::Ptr NewShipyardOnPlanet = NewOrder->getPlanet();
+
+        NewShipyardOnPlanet->buildShipyard();
+    }
+}
+
 void DataModel_Server::clearOrderList()
 {
     m_self->ClearOrderListInPlayer();
@@ -253,13 +287,16 @@ void DataModel_Server::calculateFinance(Player::Ptr Player)
         Planet::Ptr PlanetFromPlayer = *it;
 
         MineNumbers += PlanetFromPlayer->getMinesBuild();
+        PlanetFromPlayer->subtractEarnings(MineNumbers);
         std::cout <<"Test MineNumbers"<< std::endl;
         std::cout << MineNumbers << std::endl;
     }
     MineGainWithNumbers = MineNumbers * Minegain;
+
     m_self->addRubin(MineGainWithNumbers);
     TransaktionMine();
     TransaktionShip();
+    TransaktionShipyard();
     clearOrderList();
 
 }
@@ -303,6 +340,7 @@ bool DataModel_Server::updateAll(QJsonObject &update) {
         Planet::Ptr planet;
         int ships;
         int mines;
+        bool shipyard;
 
 
         for (it1 = array.constBegin(); it1 != array.constEnd(); it1++)
@@ -311,10 +349,17 @@ bool DataModel_Server::updateAll(QJsonObject &update) {
             planet = getPlanetFromId(it1->toObject(QJsonObject()).value("ID").toInt());
             mines = it1->toObject(QJsonObject()).value("Mines").toInt();
             ships = it1->toObject(QJsonObject()).value("Ships").toInt();
+            shipyard = it1->toObject(QJsonObject()).value("Shipyard").toBool();
+
 
             planet->setMines(mines);
             planet->setShips(ships);
             planet->setOwner(player);
+
+            if(planet->getShipyardBuilt() != shipyard && !(planet->getShipyardBuilt()))
+            {
+            	planet->buildShipyard();
+            }
 
             planets.push_back(planet);
 
@@ -473,7 +518,7 @@ QJsonObject DataModel_Server::createJson(Player::Ptr player)
 
         // Add necessary information to representation
         qPlanet.insert("ID", getIDFromPlanet(planet));
-        qPlanet.insert("Mines", planet->getMines());
+        qPlanet.insert("Mines", planet->getMinesBuild());
         qPlanet.insert("Ships", planet->getShips());
 
         //Add to the json array
