@@ -44,7 +44,7 @@ public:
 	 * @param int rubin = 0
 	 * @paran int ships = 0
 	 */
-	Player(int identity, int rubin = 3000, int ships = 0, std::string player_name = "Mr. Example");
+	Player(int identity, int rubin = 3000, int ships = 1, std::string player_name = "Mr. Example");
 
 	/**
 	 * @brief returns the number of ships
