@@ -47,6 +47,8 @@ void DataModel_Server::getUniverse(std::string filename)
 
         f >> numvertex >> posx >> posy;
 
+        f >> Shipcost >> Minecost >> Shipyardcost >> Minegain;
+
         // initialize all planets and add them to the map
         for(int i = 0; i < numvertex; i++)
         {
