@@ -255,7 +255,6 @@ void GLWidget::reset() {
     m_physicsEngine->addHittable(m_camera);
     m_physicsEngine->addHittable(m_enemy);
 
-    m_backgroundMusic->stop();
     m_backgroundMusic->setPosition(0);
 }
 
@@ -338,6 +337,7 @@ void GLWidget::step(map<Qt::Key, bool>& keyStates)
         }
         else if (!m_endSoundPlayed)
         {
+            m_backgroundMusic->stop();
             m_camera->getHealth() > 0 ? m_victorySound.play() : m_defeatSound.play();
         }
 
