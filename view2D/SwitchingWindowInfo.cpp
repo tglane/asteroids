@@ -50,6 +50,7 @@ void SwitchingWindowInfo::updateWindow(std::string planetname, std::string playe
     ui->ShipAfterTwo->setText(QString::number(ship_after2));
     ui->ShipAfterOne->setVisible(true);
     ui->ShipAfterTwo->setVisible(true);
+    ui->StartFightButton->setText(QString::fromStdString("Go on"));
 }
 
 
