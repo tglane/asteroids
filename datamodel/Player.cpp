@@ -22,6 +22,7 @@ Player::Player(int identity, int rubin, int ships, std::string player_name) : m_
 	m_rubin = rubin;
 	m_ships = ships;
 	m_name = player_name;
+	m_mines = 0;
 }
 
 void Player::setPlanetsList(std::list<std::shared_ptr<Planet>> planets)

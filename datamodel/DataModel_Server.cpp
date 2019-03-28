@@ -459,6 +459,17 @@ void DataModel_Server::printPlanets()
     }
 }
 
+void DataModel_Server::printPlayer()
+{
+     for (auto i: m_players) {
+        std::cout << "Player: "
+                 << i.first
+                 << " " << i.second->getPlayerName();
+        std::cout << std::endl;
+    }
+
+}
+
 QJsonObject DataModel_Server::createJson(Player::Ptr player)
 {
 
