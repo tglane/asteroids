@@ -579,7 +579,9 @@ void MainWindow2D::updatePlanetInfo(int id)
     // Planeteninfo ausfüllen
     ui->PlanetName->setText(QString::fromStdString(p->getName()));
 
-    ui->RubinNumber->setText("# " + QString::number(p->getRubinLeft()));
+    //ui->RubinNumber->setText("# " + QString::number(p->getRubinLeft()));
+    ui->RubinNumber->setText("# " + QString::number(p->getRubinLeft()) + " (-" + QString::number(p->calculateEarnings(m_model->getMineGain())) + ")");
+
 
     QString mineText = QString::number(p->getMinesBuild()) + " / " + QString::number(p->getMines());
     ui->MineNumber->setText(mineText);
