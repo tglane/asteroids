@@ -78,6 +78,8 @@ private:
 
     std::vector<Battle::Ptr> m_battle_list;
 
+signals:
+    void stop_server();
 public:
     TcpServer();
 

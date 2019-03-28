@@ -50,6 +50,17 @@ bool TcpServer::all_ready()
 void TcpServer::onDisconnect()
 {
     qDebug() << "Client disconnected";
+    std::vector<TcpClient>::iterator it;
+    for (it = clients.begin(); it != clients.end(); ) {
+        if (it->socket->state() != QTcpSocket::ConnectedState) {
+            it = clients.erase(it);
+        } else {
+            it++;
+        }
+    }
+    if (clients.size() == 0) {
+        emit stop_server();
+    }
 }
 
 void TcpServer::onConnect()

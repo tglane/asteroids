@@ -182,15 +182,22 @@ void tcpclient::process_state(QJsonArray recv_array)
     obj = recv_array[2].toObject();
     m_datamodel->updateAll(obj);
 
-    m_state = client_state::ROUND;
-
-    if (m_mainwindow != nullptr) {
-        m_mainwindow->hide();
-        m_mainwindow->stop_timer();
-        m_mainwindow->reset_key_states();
+    if(m_datamodel->WinCondition())
+    {
+        m_socket->disconnect();
     }
+    else
+    {
+        m_state = client_state::ROUND;
 
-    m_datamodel->switchWindow(DataModel_Server::MAIN2D);
+        if (m_mainwindow != nullptr) {
+            m_mainwindow->hide();
+            m_mainwindow->stop_timer();
+            m_mainwindow->reset_key_states();
+        }
+
+        m_datamodel->switchWindow(DataModel_Server::MAIN2D);
+    }
 }
 
 void tcpclient::process_battle(QJsonObject recv_obj)

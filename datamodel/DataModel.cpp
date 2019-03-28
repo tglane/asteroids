@@ -107,59 +107,67 @@ void DataModel::switchWindow(int Id)
     }
 }
 
-void DataModel::WinCondition()
+bool DataModel::WinCondition()
 {
-    std::map<int, Planet::Ptr>::iterator it;
-    int NumberOfPlanets = m_planets.size();
-    int selfOwnedPlanets = 0;
-    int enemyOwnedPlanets = 0;
-    std::cout << "Anzahl der Planeten" << std::endl;
-    std::cout << NumberOfPlanets << std::endl;
-    for(it = m_planets.begin(); it != m_planets.end(); it++)
+    if(first_round)
     {
-        Planet::Ptr Planets = it->second;
-        if(Planets->getOwner() == m_self)
+        first_round = false;
+    }
+    else
+    {
+        std::map<int, Planet::Ptr>::iterator it;
+        int NumberOfPlanets = m_planets.size();
+        int selfOwnedPlanets = 0;
+        int enemyOwnedPlanets = 0;
+        std::cout << "Anzahl der Planeten" << std::endl;
+        std::cout << NumberOfPlanets << std::endl;
+        for(it = m_planets.begin(); it != m_planets.end(); it++)
         {
-            selfOwnedPlanets++;
+            Planet::Ptr Planets = it->second;
+            if(Planets->getOwner() == m_self)
+            {
+                selfOwnedPlanets++;
+            }
+            else if(Planets->getOwner() == m_enemy)
+            {
+                enemyOwnedPlanets++;
+            }
         }
-        else if(Planets->getOwner() == m_enemy)
+
+        if(NumberOfPlanets == selfOwnedPlanets)
         {
-            enemyOwnedPlanets++;
+            result = 1;
+            emit endOfGame();
+            switchWindow(END);
+            std::cout << "Gewonnen" <<std::endl;
+            return true;
         }
+        if(selfOwnedPlanets == 0)
+        {
+            result = 2;
+            emit endOfGame();
+            switchWindow(END);
+            std::cout << "Verloren" << std::endl;
+            return true;
+        }
+        if(NumberOfPlanets == enemyOwnedPlanets)
+        {
+            result = 2;
+            emit endOfGame();
+            switchWindow(END);
+            std::cout << "Verloren" <<std::endl;
+            return true;
+        }
+        if(enemyOwnedPlanets == 0)
+        {
+            result = 1;
+            emit endOfGame();
+            switchWindow(END);
+            std::cout << "Gewonnen" << std::endl;
+            return true;
+        }
+        return false;
     }
-
-    if(NumberOfPlanets == selfOwnedPlanets)
-    {
-        emit endOfGame();
-        switchWindow(END);
-        std::cout << "Gewonnen" <<std::endl;
-    }
-    if(selfOwnedPlanets == 0)
-    {
-        emit endOfGame();
-        switchWindow(END);
-        std::cout << "Verloren" << std::endl;
-    }
-    if(NumberOfPlanets == enemyOwnedPlanets)
-    {
-        emit endOfGame();
-        switchWindow(END);
-        std::cout << "Verloren" <<std::endl;
-    }
-    if(enemyOwnedPlanets == 0)
-    {
-        emit endOfGame();
-        switchWindow(END);
-        std::cout << "Gewonnen" << std::endl;
-    }
-}
-
-bool DataModel::endOfRound()
-{
-    DataModel_Server::endOfRound();
-    WinCondition();
-
-    return true;
 }
 
 DataModel::~DataModel(){}

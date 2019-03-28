@@ -68,9 +68,7 @@ public:
 
     void getUniverse(std::string filename);
 
-    void WinCondition();
-
-    bool endOfRound();
+    bool WinCondition();
 
 public slots:
 
@@ -83,6 +81,8 @@ private:
     std::map<int, QWidget*> m_widgets;
 
     QMainWindow* m_mainWindow;
+
+    bool first_round = true;
 };
 
 }
