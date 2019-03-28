@@ -83,7 +83,13 @@ void DataModel::switchWindow(int Id)
     {
         //((strategy::MainWindow2D*)m_widgets[MAIN2D])->resizeEvent(NULL);
         emit updateInfo();
+        //flags: Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
+
+        //code for showing window
         m_mainWindow->showFullScreen();
+        m_mainWindow->raise();
+        //m_mainWindow->requestActivate();
+       // m_mainWindow->showFullScreen();
     }
     if(Id == MAIN3D)
     {

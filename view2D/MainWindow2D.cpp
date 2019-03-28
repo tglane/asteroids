@@ -139,6 +139,7 @@ void MainWindow2D::fight(bool click)
 
 void MainWindow2D::choose_planet(int id)
 {
+    updateAllInfo();
     updatePlanetInfo(id);
 
     std::map<int, Planet::Ptr> planets = m_model->getPlanets();
@@ -257,8 +258,8 @@ void MainWindow2D::endOfRound(bool click)
 void MainWindow2D::updatePlanetColor(){
     std::map<int, Planet::Ptr> planets = m_model->getPlanets();
     for(int id = 0; id < (int)planets.size(); id++){
+        MyEllipse* ellipse = getEllipseById(id);
         if(id!=currentPlanet){
-            MyEllipse* ellipse = getEllipseById(id);
             if(planets.at(id)->getOwner()==m_model->getSelfPlayer()){
                 QPixmap pix("../models/surface/my1.jpg");
                 ellipse->myBrush = QBrush(pix);
@@ -269,8 +270,19 @@ void MainWindow2D::updatePlanetColor(){
                 QPixmap pix("../models/surface/neutral1.jpg");
                 ellipse->myBrush = QBrush(pix);  
             }
-            ellipse->update();
+        }else{
+            if(planets.at(id)->getOwner()==m_model->getSelfPlayer()){
+                QPixmap pix("../models/surface/my2.jpg");
+                ellipse->myBrush = QBrush(pix);
+            }else if (planets.at(id)->getOwner()==m_model->getEnemyPlayer()){
+                QPixmap pix("../models/surface/other2.jpg");
+                ellipse->myBrush = QBrush(pix);
+            } else{
+                QPixmap pix("../models/surface/neutral2.jpg");
+                ellipse->myBrush = QBrush(pix);  
+            }
         }
+        ellipse->update();
         QString string = QString::fromStdString(planets.at(id)->getName());
         QGraphicsTextItem *qgti = m_fighterPlanet[id];
         if(planets.at(id)->getShips()>0){
@@ -312,6 +324,7 @@ void MainWindow2D::colonize(bool click)
     }
     qgti->setPlainText(string);
     qgti->update();
+    endOfRound(true);
 }
 
 void MainWindow2D::buildShip(bool click)

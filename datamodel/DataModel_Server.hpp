@@ -174,6 +174,8 @@ public:
 
     void clearInvaders();
 
+    void printPlayer();
+
 signals:
     void updateInfo();
     void initMap();
