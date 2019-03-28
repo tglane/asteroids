@@ -344,6 +344,9 @@
           <pointsize>12</pointsize>
          </font>
         </property>
+        <property name="toolTip">
+         <string>Build/Max.</string>
+        </property>
         <property name="text">
          <string/>
         </property>
@@ -385,6 +388,9 @@
          <font>
           <pointsize>12</pointsize>
          </font>
+        </property>
+        <property name="toolTip">
+         <string>Shipyards --- Ships</string>
         </property>
         <property name="text">
          <string/>
