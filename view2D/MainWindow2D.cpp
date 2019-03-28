@@ -32,16 +32,19 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
     //StyleStuff
     ui->ContextMenue->setStyleSheet("background-color:#331155; border-radius:10px; color:#FFFFFF");
     ui->Fight->setStyleSheet("background-color:#442266; color:#FFFFFF; border-radius:10px;");
-    ui->ExitGame->setStyleSheet("background-color:#110033");
-    ui->NextRound->setStyleSheet("background-color:#110033");
-    ui->BuildMine->setStyleSheet("background-color:#110033");
-    ui->BuildShip->setStyleSheet("background-color:#110033");
-    ui->SendShip->setStyleSheet("background-color:#110033");
-    ui->Colonize->setStyleSheet("background-color:#110033");
-    ui->SendShipNumber->setStyleSheet("background-color:#110033");
-    ui->DestionationPlanet->setStyleSheet("background-color:#110033");
+    ui->ExitGame->setStyleSheet("QPushButton{background-color:#110033}""QPushButton:hover{background-color:#663388}");
+    ui->NextRound->setStyleSheet("QPushButton{background-color:#110033}""QPushButton:hover{background-color:#663388}");
+    ui->BuildMine->setStyleSheet("QPushButton{background-color:#110033}""QPushButton:hover{background-color:#663388}");
+    ui->BuildShip->setStyleSheet("QPushButton{background-color:#110033}""QPushButton:hover{background-color:#663388}");
+    ui->SendShip->setStyleSheet("QPushButton{background-color:#110033}""QPushButton:hover{background-color:#663388}");
+    ui->Colonize->setStyleSheet("QPushButton{background-color:#110033}""QPushButton:hover{background-color:#663388}");
+    ui->SendShipNumber->setStyleSheet("QPushButton{background-color:#110033}""QPushButton:hover{background-color:#663388}");
+    ui->DestionationPlanet->setStyleSheet("QPushButton{background-color:#110033}""QPushButton:hover{background-color:#663388}");
     ui->SpielerInfoTable->setStyleSheet("border-width:0px;");
-
+    // //MineBuild costs
+    ui->BuildMine->setToolTip("Costs: ");
+    // //WerftBuild costs
+    ui->BuildShip->setToolTip("Costs: ");
 
     //Set sidebar look
     QGraphicsOpacityEffect * effect = new QGraphicsOpacityEffect(ui->ContextMenue);
@@ -338,6 +341,8 @@ void MainWindow2D::buildShip(bool click)
     } else {
         p->buildShipyard();
         ui->BuildShip->setText("Build Ship");
+        // //Schifskosten
+        ui->BuildShip->setToolTip("Costs: ");
         std::cout << "Build Shipyard!" << std::endl;
     }
 
