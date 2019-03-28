@@ -18,8 +18,6 @@ udpclient::udpclient(int id, QString ip, int port, QObject *parent)
 
 void udpclient::send_position(asteroids::Vector<float> position, asteroids::Vector<float> velocity, asteroids::Vector<float> xAxis, asteroids::Vector<float> yAxis, asteroids::Vector<float> zAxis)
 {
-
-    std::cout << "send_pos" << std::endl;
     QByteArray data;
     /* Append type of packet */
     data.append('P');
@@ -189,7 +187,6 @@ void udpclient::setPosFromPackage(int recv_id, char *data)
 
 void udpclient::send_bullet(asteroids::Vector3f position, asteroids::Vector3f xAxis, asteroids::Vector3f zAxis)
 {
-    std::cout << "send_bullet" << std::endl;
     QByteArray data;
     /* Append type of packet */
     data.append('B');

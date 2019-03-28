@@ -78,9 +78,9 @@ void DataModel::addWidget(int Id, QWidget* widget)
 
 void DataModel::switchWindow(int Id)
 {
-    ((strategy::GameWindow*)m_mainWindow)->content()->setCurrentWidget(m_widgets[Id]);
-    if(Id == MAIN2D || Id == MAIN3D)
+    if(Id == MAIN2D)
     {
+        ((strategy::GameWindow*)m_mainWindow)->content()->setCurrentWidget(m_widgets[Id]);
         //((strategy::MainWindow2D*)m_widgets[MAIN2D])->resizeEvent(NULL);
         emit updateInfo();
         //flags: Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
@@ -94,10 +94,12 @@ void DataModel::switchWindow(int Id)
     if(Id == MAIN3D)
     {
         emit ((strategy::GameWindow*)m_mainWindow)->pause();
+        m_mainWindow->hide();
         //((MainWindow*)m_widgets[Id])->activate(true);
     }
     if(Id == MAIN2D || Id == SWITCH || Id == START)
     {
+        ((strategy::GameWindow*)m_mainWindow)->content()->setCurrentWidget(m_widgets[Id]);
         emit ((strategy::GameWindow*)m_mainWindow)->play();
     }
 }
