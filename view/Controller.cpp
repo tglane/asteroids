@@ -1,3 +1,4 @@
+#include <QtCore/QFileInfo>
 #include "Controller.hpp"
 #include "physics/Transformable.hpp"
 
@@ -17,7 +18,7 @@ const float Controller::maxSpeed = 1000;
 const int Controller::framesToMaxRot = 30;
 const float Controller::maxRot = 0.05;
 
-Controller::Controller() : m_cooldownPlayer(0), m_gamepadR1(0), m_gamepadL1(0)
+Controller::Controller() : m_bulletCooldown(0), m_missileCooldown(0), m_gamepadR1(0), m_gamepadL1(0)
 {
     m_keys = std::vector<int>(7);
     for (int i = 0; i < 7; i++)
@@ -25,6 +26,9 @@ Controller::Controller() : m_cooldownPlayer(0), m_gamepadR1(0), m_gamepadL1(0)
         m_keys[i] = 0;
     }
     m_gamepadAvailable = m_gamepad.init();
+
+    m_bulletSound.setSource(QUrl::fromLocalFile(QFileInfo("../models/shooting.wav").absoluteFilePath()));
+    m_bulletSound.setVolume(0.4f);
 }
 
 bool Controller::gamepadAvailable()
@@ -78,16 +82,29 @@ void Controller::keyControl(std::map<Qt::Key, bool> &keyStates, Hittable::Ptr& p
         }
 
         // Shoot
-        if (m_cooldownPlayer > 0)
+        if (m_bulletCooldown > 0)
         {
-            m_cooldownPlayer -= elapsed_time;
-            if (m_cooldownPlayer < 0)
-                m_cooldownPlayer = 0;
+            m_bulletCooldown -= elapsed_time;
+            if (m_bulletCooldown < 0)
+                m_bulletCooldown = 0;
         }
-        if (m_cooldownPlayer == 0 && keyStates[Qt::Key_Space])
+        if (m_bulletCooldown == 0 && keyStates[Qt::Key_Space])
         {
+            m_bulletSound.play();
             client.send_bullet(player->getPosition(), player->getXAxis(), player->getZAxis());
-            m_cooldownPlayer = 200;
+            m_bulletCooldown = 200;
+        }
+
+        if (m_missileCooldown > 0)
+        {
+            m_missileCooldown -= elapsed_time;
+            if (m_missileCooldown < 0)
+                m_missileCooldown = 0;
+        }
+        if (m_missileCooldown == 0 && keyStates[Qt::Key_R])
+        {
+            client.send_missile(player->getPosition(), player->getXAxis(), player->getYAxis(), player->getZAxis());
+            m_missileCooldown = 1000;
         }
     }
 }
@@ -141,18 +158,31 @@ void Controller::gamepadControl(Hittable::Ptr& player, PhysicsEngine::Ptr& physi
             player->rotate(Transformable::ROLL_COUNTERCLOCKWISE, rot);
 
             // Shoot
-            if (m_cooldownPlayer > 0)
+            if (m_bulletCooldown > 0)
             {
-                m_cooldownPlayer -= elapsed_time;
-                if (m_cooldownPlayer < 0)
-                    m_cooldownPlayer = 0;
+                m_bulletCooldown -= elapsed_time;
+                if (m_bulletCooldown < 0)
+                    m_bulletCooldown = 0;
             }
-            if (m_cooldownPlayer == 0 && m_gamepad.isAPressed())
+            if (m_bulletCooldown == 0 && m_gamepad.isAPressed())
             {
                 Bullet::Ptr bullet = make_shared<Bullet>(Bullet(player->getPosition() - player->getZAxis() * 42,
                                                                 player->getXAxis(), player->getId()));
                 physicsEngine->addBullet(bullet);
-                m_cooldownPlayer = 200;
+                m_bulletCooldown = 200;
+            }
+
+            if (m_missileCooldown > 0)
+            {
+                m_missileCooldown -= elapsed_time;
+                if (m_missileCooldown < 0)
+                    m_missileCooldown = 0;
+            }
+            // TODO: Missiles mit Gamepad abschießen
+            if (m_missileCooldown == 0 && false)
+            {
+                client.send_missile(player->getPosition(), player->getXAxis(), player->getYAxis(), player->getZAxis());
+                m_missileCooldown = 1000;
             }
         }
     }

@@ -3,6 +3,7 @@
 
 #include "util/gl_includes.h"
 #include <QtCore/Qt>
+#include <QtMultimedia/QSoundEffect>
 #include "Gamepad.hpp"
 #include "physics/Hittable.hpp"
 #include "physics/PhysicsEngine.hpp"
@@ -37,7 +38,9 @@ private:
 
     std::vector<int> m_keys;
 
-    int m_cooldownPlayer;
+    int m_bulletCooldown;
+
+    int m_missileCooldown;
 
     bool m_gamepadAvailable;
 
@@ -46,6 +49,8 @@ private:
     int m_gamepadR1;
 
     int m_gamepadL1;
+
+    QSoundEffect m_bulletSound;
 
 };
 

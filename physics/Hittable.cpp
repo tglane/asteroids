@@ -29,42 +29,15 @@ int Hittable::getHealth()
 
 bool Hittable::hitBullet(PhysicalBullet& b)
 {
-
-
-    // std::cout << "bullet    " << b.getPosition()[0] << " " << b.getPosition()[1]<< " "<< b.getPosition()[2] << std::endl;
-    // std::cout << "hittable  " << getPosition()[0] << " " << getPosition()[1]<< " "<< getPosition()[2] << std::endl;
-    // std::cout << "rad " << b.radius() << std::endl;
-
-
-    float length = 200;
-    float width = 100;
-    float height = 50;
-
-    Vector3f xp = this->getPosition() + this->getXAxis() * length;
-    Vector3f xn = this->getPosition() - this->getXAxis() * length;
-    Vector3f yp = this->getPosition() + this->getYAxis() * width;
-    Vector3f yn = this->getPosition() - this->getYAxis() * width;
-    Vector3f zp = this->getPosition() + this->getZAxis() * height;
-    Vector3f zn = this->getPosition() - this->getZAxis() * height;
-
-    float boxMaxX = signedDistanceToPlane(xp, this->getXAxis(), this->getYAxis(), this->getZAxis());
-    float boxMinX = signedDistanceToPlane(xn, this->getXAxis(), this->getYAxis(), this->getZAxis());
-    float boxMaxY = signedDistanceToPlane(yp, this->getYAxis(), this->getXAxis(), this->getZAxis());
-    float boxMinY = signedDistanceToPlane(yn, this->getYAxis(), this->getXAxis(), this->getZAxis());
-    float boxMaxZ = signedDistanceToPlane(zp, this->getZAxis(), this->getXAxis(), this->getYAxis());
-    float boxMinZ = signedDistanceToPlane(zn, this->getZAxis(), this->getXAxis(), this->getYAxis());
-
-    float bx = signedDistanceToPlane(b.getPosition(), this->getXAxis(), this->getYAxis(), this->getZAxis());
-    float by = signedDistanceToPlane(b.getPosition(), this->getYAxis(), this->getXAxis(), this->getZAxis());
-    float bz = signedDistanceToPlane(b.getPosition(), this->getZAxis(), this->getXAxis(), this->getYAxis());
-
-    float x = std::max(boxMinX, std::min(bx, boxMaxX));
-    float y = std::max(boxMinY, std::min(by, boxMaxY));
-    float z = std::max(boxMinZ, std::min(bz, boxMaxZ));
-    return magnitude(Vector3f(x - bx, y - by, z - bz)) < b.radius();
+    return hit(b.getPosition(), b.radius());
 }
 
 bool Hittable::hitAsteroid(PhysicalObject& p)
+{
+    return hit(p.getPosition(), p.radius());
+}
+
+bool Hittable::hit(Vector3f position, float radius)
 {
     float length = 200;
     float width = 100;
@@ -84,14 +57,14 @@ bool Hittable::hitAsteroid(PhysicalObject& p)
     float boxMaxZ = signedDistanceToPlane(zp, this->getZAxis(), this->getXAxis(), this->getYAxis());
     float boxMinZ = signedDistanceToPlane(zn, this->getZAxis(), this->getXAxis(), this->getYAxis());
 
-    float bx = signedDistanceToPlane(p.getPosition(), this->getXAxis(), this->getYAxis(), this->getZAxis());
-    float by = signedDistanceToPlane(p.getPosition(), this->getYAxis(), this->getXAxis(), this->getZAxis());
-    float bz = signedDistanceToPlane(p.getPosition(), this->getZAxis(), this->getXAxis(), this->getYAxis());
+    float bx = signedDistanceToPlane(position, this->getXAxis(), this->getYAxis(), this->getZAxis());
+    float by = signedDistanceToPlane(position, this->getYAxis(), this->getXAxis(), this->getZAxis());
+    float bz = signedDistanceToPlane(position, this->getZAxis(), this->getXAxis(), this->getYAxis());
 
     float x = std::max(boxMinX, std::min(bx, boxMaxX));
     float y = std::max(boxMinY, std::min(by, boxMaxY));
     float z = std::max(boxMinZ, std::min(bz, boxMaxZ));
-    return magnitude(Vector3f(x - bx, y - by, z - bz)) < p.radius();
+    return magnitude(Vector3f(x - bx, y - by, z - bz)) < radius;
 }
 
 float Hittable::signedDistanceToPlane(Vector3f x, Vector3f b, Vector3f e1, Vector3f e2)

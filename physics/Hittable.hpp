@@ -30,6 +30,8 @@ public:
 
     bool hitAsteroid(PhysicalObject& p);
 
+    bool hit(Vector3f position, float radius);
+
     void outOfBound();
 
     int getTime();

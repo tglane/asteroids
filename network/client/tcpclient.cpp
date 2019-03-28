@@ -194,6 +194,7 @@ void tcpclient::process_state(QJsonArray recv_array)
         m_mainwindow->hide();
         m_mainwindow->stop_timer();
         m_mainwindow->reset_key_states();
+        m_mainwindow->ui->openGLWidget->reset();
     }
 
     m_datamodel->switchWindow(DataModel_Server::MAIN2D);
