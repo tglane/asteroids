@@ -112,6 +112,7 @@ bool DataModel::WinCondition()
     if(first_round)
     {
         first_round = false;
+        return false;
     }
     else
     {

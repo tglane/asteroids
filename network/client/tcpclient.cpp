@@ -182,7 +182,8 @@ void tcpclient::process_state(QJsonArray recv_array)
     obj = recv_array[2].toObject();
     m_datamodel->updateAll(obj);
 
-    if(m_datamodel->WinCondition())
+    
+    if (m_datamodel->WinCondition())
     {
         m_socket->disconnect();
     }
