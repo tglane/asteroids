@@ -91,7 +91,7 @@ void DataModel::switchWindow(int Id)
         m_mainWindow->showFullScreen();
         m_mainWindow->raise();
         //m_mainWindow->requestActivate();
-       // m_mainWindow->showFullScreen();
+        // m_mainWindow->showFullScreen();
     }
     if(Id == MAIN3D)
     {
@@ -99,7 +99,7 @@ void DataModel::switchWindow(int Id)
         m_mainWindow->hide();
         //((MainWindow*)m_widgets[Id])->activate(true);
     }
-    if(Id == MAIN2D || Id == SWITCH || Id == START)
+    if(Id == MAIN2D || Id == SWITCH || Id == START || Id == END)
     {
         ((strategy::GameWindow*)m_mainWindow)->content()->setCurrentWidget(m_widgets[Id]);
         emit ((strategy::GameWindow*)m_mainWindow)->play();
