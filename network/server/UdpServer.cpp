@@ -13,6 +13,7 @@ UdpServer::UdpServer() : peer(QHostAddress::Any, 1235)
 {
     connect(&timer, &QTimer::timeout, this, &UdpServer::tick);
     connect(&peer, &UdpPeer::received_bullet, this, &UdpServer::handle_bullet);
+    connect(&peer, &UdpPeer::received_missile, this, &UdpServer::handle_missile);
     connect(&peer, &UdpPeer::received_position, this, &UdpServer::handle_position);
     //connect(&peer, &UdpPeer::received_collision, this, &UdpServer::handle_collision);
     connect(&peer, &UdpPeer::received_ack, this, &UdpServer::handle_ack);
@@ -83,6 +84,32 @@ void UdpServer::handle_bullet(int id, Vector3f& position, Vector3f& velocity)
     }
 }
 
+void UdpServer::handle_missile(int id, Vector3f &position, Vector3f &x, Vector3f &y, Vector3f &z)
+{
+    std::cout << "handling missile" << std::endl;
+    if (!check_client_id(id)) {
+        return;
+    }
+    uint32_t client_id = id >> 24;
+
+    int target_id = (1 - (client_id - 42)) + 42;
+    Hittable::Ptr target = clients[target_id].ship;
+    PhysicalMissile::Ptr missile = std::make_shared<PhysicalMissile>(id, target);
+    missile->setPosition(position);
+    missile->setXAxis(x);
+    missile->setYAxis(y);
+    missile->setZAxis(z);
+    missile->setShooterId(client_id << 24);
+
+    physics_engine.addMissile(missile);
+
+    for (auto& i: clients) {
+        UdpClient& dest = i.second;
+        if (dest.id != client_id) {
+            peer.send_missile(dest.address, dest.port, dest.next_seq_nr(), *missile);
+        }
+    }
+}
 
 void UdpServer::handle_ack(int id, int seq_nr)
 {

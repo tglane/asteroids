@@ -38,7 +38,8 @@ set(SERVER_SRC
     ../../datamodel/Battle.cpp
     ../../datamodel/MineOrder.cpp
     ../../util/AsteroidField.cpp
-    ../../math/Randomizer.cpp)
+    ../../math/Randomizer.cpp
+    ../../PhysicalMissile.cpp)
 
 set(SERVER_HDR
     UdpServer.hpp

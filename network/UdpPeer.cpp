@@ -43,6 +43,10 @@ namespace asteroids
                 send_ack(datagram);
                 handle_collision_packet(datagram);
                 break;
+            case 'M':
+                send_ack(datagram);
+                handle_missile_packet(datagram);
+                break;
             default:
                 std::cout << "received unknown packet: " << data[0] << std::endl;
             }
@@ -82,7 +86,23 @@ namespace asteroids
         emit received_bullet(obj_id, position, velocity);
     }
 
-    void UdpPeer::handle_ack(QNetworkDatagram &datagram)
+void UdpPeer::handle_missile_packet(QNetworkDatagram& datagram)
+{
+    QByteArray data = datagram.data();
+    if (data.length() < 9 + 12 * 4) {
+        std::cout << "packet to short" << std::endl;
+        return;
+    }
+    uint32_t obj_id = *((int32_t*)(data.data() + 5));
+
+    asteroids::Vector3f position = bytes_to_vector(data.data() + 9);
+    asteroids::Vector3f x = bytes_to_vector(data.data() + 9 + 3 * 4);
+    asteroids::Vector3f y = bytes_to_vector(data.data() + 9 + 6 * 4);
+    asteroids::Vector3f z = bytes_to_vector(data.data() + 9 + 9 * 4);
+    emit received_missile(obj_id, position, x, y, z);
+}
+
+void UdpPeer::handle_ack(QNetworkDatagram &datagram)
     {
         std::cout << "handle_ack" << std::endl;
         QByteArray data = datagram.data();
@@ -236,4 +256,46 @@ namespace asteroids
 
         return data;
     }
+
+QByteArray UdpPeer::send_missile(QHostAddress& addr, int port, int seq_nr, PhysicalMissile& missile)
+{
+    //std::cout << "sending  " << 'B' << " to " << client.id << " seq_nr " << seq_nr << std::endl;
+    QByteArray data;
+
+    int missile_id = missile.getId();
+
+    data.append('M');
+    data.append((char *)(&seq_nr), 4);
+    data.append((char *)(&missile_id), 4);
+
+    asteroids::Vector3f position = missile.getPosition();
+    asteroids::Vector3f x = missile.getXAxis();
+    asteroids::Vector3f y = missile.getYAxis();
+    asteroids::Vector3f z = missile.getZAxis();
+
+    data.append((char *)(&position[0]), 4);
+    data.append((char *)(&position[1]), 4);
+    data.append((char *)(&position[2]), 4);
+
+    data.append((char *)(&x[0]), 4);
+    data.append((char *)(&x[1]), 4);
+    data.append((char *)(&x[2]), 4);
+
+    data.append((char *)(&y[0]), 4);
+    data.append((char *)(&y[1]), 4);
+    data.append((char *)(&y[2]), 4);
+
+    data.append((char *)(&z[0]), 4);
+    data.append((char *)(&z[1]), 4);
+    data.append((char *)(&z[2]), 4);
+
+    // std::cout << " senging position: " << std::endl
+    //           << " p: " << position[0] << ", " <<  position[1] << ", " <<  position[2] << std::endl
+    //           << " x: " << velocity[0] << ", " <<  velocity[1] << ", " <<  velocity[2] << std::endl;
+
+    socket.writeDatagram(data, addr, port);
+
+    return data;
+}
+
 }

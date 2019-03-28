@@ -33,11 +33,17 @@ void BasePhysicsEngine::addBullet(PhysicalBullet::Ptr bullet)
     m_bullets[bullet->get_id()] = bullet;
 }
 
+void BasePhysicsEngine::addMissile(PhysicalMissile::Ptr missile)
+{
+    m_missiles.insert(std::pair<int, PhysicalMissile::Ptr>(missile->getId(), missile));
+}
+
 bool BasePhysicsEngine::process(int elapsed_time)
 {
     map<int, Hittable::Ptr>::iterator h_it;
     map<int, PhysicalObject::Ptr>::iterator p_it;
     map<int, PhysicalBullet::Ptr>::iterator b_it;
+    map<int, Missile::Ptr>::iterator m_it;
 
     bool gameOver = m_hittables.size() == 1;
 
@@ -66,6 +72,24 @@ bool BasePhysicsEngine::process(int elapsed_time)
         else
         {
             b_it++;
+        }
+    }
+
+    m_it = m_missiles.begin();
+    while (m_it != m_missiles.end())
+    {
+        Missile::Ptr m = (*m_it).second;
+        m->run(elapsed_time);
+
+        // Check if missile is dead. If it is, remove from
+        // missile list. Otherwise continue with next missile.
+        if (!m->alive())
+        {
+            m_it = m_missiles.erase(m_it);
+        }
+        else
+        {
+            m_it++;
         }
     }
 
