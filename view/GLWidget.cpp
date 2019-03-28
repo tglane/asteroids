@@ -338,6 +338,7 @@ void GLWidget::step(map<Qt::Key, bool>& keyStates)
         }
         else if (!m_endSoundPlayed)
         {
+            m_endSoundPlayed = true;
             m_backgroundMusic->stop();
             m_camera->getHealth() > 0 ? m_victorySound.play() : m_defeatSound.play();
         }

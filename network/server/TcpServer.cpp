@@ -339,6 +339,9 @@ void TcpServer::fightEnd(int id, int health_left) {
     battle_count++;
     if (battle_count > 0 && battle_count <= m_battle_list.size()) {
         Battle::Ptr prev_battle = m_battle_list[battle_count - 1];
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(5000));
+
         send_battle(prev_battle, false);
 
         qDebug() << "state changed: END_FIGHT";
