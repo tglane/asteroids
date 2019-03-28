@@ -33,6 +33,7 @@ set(SERVER_SRC
     ../../datamodel/Player.cpp
     ../../datamodel/ShipOrder.cpp
     ../../datamodel/MoveOrder.cpp
+    ../../datamodel/ShipyardOrder.cpp
     ../../datamodel/Battle.cpp
     ../../datamodel/MineOrder.cpp
     ../../util/AsteroidField.cpp

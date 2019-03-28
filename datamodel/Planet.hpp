@@ -32,11 +32,12 @@ namespace asteroids
 		 * @param posx position on x axis
 		 * @param posy position on y axis
 		 *
-		 * @param rubin optional param =0 if not given, how many rubin the planet gives to the owner
-		 * @param mines optional param =0 if not given, how many mines are build on the planet
+		 * @param rubin optional param =0 how many rubin the planet gives to the owner by each round
+		 * @param mines optional param =0 how many mines are built on the planet
+		 * @param rubinLeft optional param = 20 how many rubin is left on this planet
 		 *
 		 */
-		Planet(std::string name, int posx, int posy, int rubin = 0, int mines = 0);
+		Planet(std::string name, int posx, int posy/*, int rubin = 0*/, int mines = 0, int rubinLeft = 20);
 
 		/**
 		 * @brief gives the number of ships on this planet
@@ -109,7 +110,7 @@ namespace asteroids
 		/**
 		 * @brief add Ships to the amount of InvaderShips
 		 * @param int invaderShips ships to add
-		 */	
+		 */
 		void addInvaderShips(int invaderShips);
 
 		/**
@@ -121,8 +122,8 @@ namespace asteroids
 		/**
 		 * @brief returns the number of rubin the owner earn from this planet
 		 * @return int number of rubin
-		 */
-		int getRubin();
+		 *
+		int getRubin();*/
 
 		/**
 		 * @brief return the number of mines on this planet
@@ -143,28 +144,34 @@ namespace asteroids
 		std::list<Planet::Ptr> getNeighbours();
 
 		/**
-		 * @brief returns position on x-axis
+		 * @brief return position on x-axis
 		 * @return int position
 		 */
 		int getPosX();
 
 		/**
-		 * @brief returns position on y-axis
+		 * @brief return position on y-axis
 		 * @return int position
 		 */
 		int getPosY();
 
 		/**
-		 * @brief returns the name of this planet
+		 * @brief return the name of this planet
 		 * @return std::string name of this planet
 		 */
 		std::string getName();
 
 		int getMinesHidden();
-
+		/**
+		 * @brief increment m_minesHidden (ordered Mines)
+		 */
 		void setMinesHidden();
 
+		/**
+		 * @return m_minesBuild (mines which are already built (not only ordered))
+		 */
 		int getMinesBuild();
+
 
 		void setMinesBuild();
 
@@ -181,23 +188,23 @@ namespace asteroids
 		 * @param how many each mine earns
 		 * @return how many rubin this planet gave this round
 		 */
-		int subtractEarnings(int mineRubin){}
+		int subtractEarnings(int mineRubin);
 
 		/**
 		 * @brief returns how many rubin is left on this planet
 		 * @return int m_rubinLeft
 		 */
-		int getRubinLeft(){}
+		int getRubinLeft();
 		/**
 		 * @brief calculates current number of rubin this planet produce by each round
 		 * @param mineRubin how many rubin each mine should give
 		 */
-		int calculateEarnings(int mineRubin){}
+		int calculateEarnings(int mineRubin);
 
 
-		bool getShipyardBuilt(){}
+		bool getShipyardBuilt();
 
-		void buildShipyard(){}
+		void buildShipyard();
 
 
 	private:
@@ -205,10 +212,20 @@ namespace asteroids
 
 		std::list<Planet::Ptr> m_neighbours;
 
+		bool m_shipyardBuilt;
+
 		int m_mines;
+		/**
+		 * @brief mines already built
+		 */
 		int m_minesbuild;
+		/**
+		 * @brief ordered mines
+		 */
 		int m_minesHidden;
-		int m_rubin;
+
+		//int m_rubin;
+		int m_rubinLeft;
 		int m_ships;
 		int m_invaderShips;
 		int m_ships_ordered;
@@ -217,9 +234,11 @@ namespace asteroids
 		std::shared_ptr<Player> m_invader;
 
 		int m_posx;
-		int m_posy;	
+		int m_posy;
 
 	};
 }
 
 #endif
+
+
