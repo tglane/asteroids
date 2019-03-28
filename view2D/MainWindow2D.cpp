@@ -1,4 +1,4 @@
-/*
+/**
  * MainWindow2D.cpp
  */
 
@@ -344,10 +344,10 @@ void MainWindow2D::buildShip(bool click)
             std::cout << "Fehler MainWindow2D: Build Ship!" << std::endl;
         }
     } else {
-        p->buildShipyard();
+        m_model->buyShipyard(p, p->getOwner());
         ui->BuildShip->setText("Build Ship");
-        updatePlanetInfo(currentPlanet);
-        updatePlayerInfo();
+        updateAllInfo();
+        ui->BuildShip->setVisible(false);
         // //Schifskosten
         int shipcost = m_model->getShipCost();
         std::string s = "Costs: " + std::to_string(shipcost) + " Rubies";
