@@ -18,6 +18,7 @@ StartingDialog::StartingDialog(DataModel::Ptr model,tcpclient::Ptr tcp_client, T
     ui->Title->setStyleSheet("QLabel { color: white }");
     ui->NameLabel->setStyleSheet("QLabel { color: white }");
     ui->ServerAddressLabel->setStyleSheet("QLabel { color: white }");
+    ui->checkHostLabel->setStyleSheet("QLabel { color: white }");
     ui->ChooseMapLabel->setStyleSheet("QLabel { color: white}");
     ui->ChooseMapLabel->setVisible(false);
     ui->SelectMap->setVisible(false);
