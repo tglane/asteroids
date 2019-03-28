@@ -24,7 +24,7 @@ StartingDialog::StartingDialog(DataModel::Ptr model,tcpclient::Ptr tcp_client, T
     ui->SelectMap->setVisible(false);
 
     ui->Name->setText("Siegbert");
-    ui->ServerAddress->setText("192.168.0.42");
+    ui->ServerAddress->setText("127.0.0.1");
 
     QPixmap bkgnd("../models/box1.jpg");
     bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
