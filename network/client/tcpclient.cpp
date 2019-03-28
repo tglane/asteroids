@@ -18,7 +18,6 @@ tcpclient::tcpclient(asteroids::DataModel::Ptr datamodel, QObject* parent)
 
 void tcpclient::connect_to_server(string name, string server_ip)
 {
-    std::cout <<"Connect to SVR"<< std::endl;
     m_player_name = QString::fromStdString(name);
     m_server_ip = QString::fromStdString(server_ip);
 
@@ -27,7 +26,6 @@ void tcpclient::connect_to_server(string name, string server_ip)
 
 void tcpclient::send_ready()
 {
-    std::cout << "send_ready" << std::endl;
     QJsonArray init_array;
     init_array.push_back("ready");
 
@@ -55,7 +53,6 @@ void tcpclient::send_ready()
 
 void tcpclient::send_init()
 {
-    std::cout << "send_init" << std::endl;
     QJsonObject init_object;
     init_object.insert("player_name", QJsonValue::fromVariant(m_player_name));
 
@@ -76,7 +73,6 @@ void tcpclient::send_init()
 
 void tcpclient::endround_slot()
 {
-    std::cout << "endround_slot" << std::endl;
     QJsonArray init_array;
     init_array.push_back("state");
     init_array.push_back(m_datamodel->createJson(m_datamodel->getSelfPlayer()));
@@ -134,7 +130,8 @@ void tcpclient::recv_json()
         }
         else
         {
-            std::cout << m_state << " | " << recv_array[0].toString().toStdString() << std::endl;
+            /* Not expected package */
+            std::cout << "Not expected package" << m_state << " | " << recv_array[0].toString().toStdString() << std::endl;
         }
 
         last_size = 0;
@@ -154,11 +151,10 @@ void tcpclient::process_init_res(QJsonObject recv_obj)
     send_ready();
 }
 
-void tcpclient::process_strat_init(QJsonArray recv_array) {
-    std::cout << "strat_init" << std::endl;
+void tcpclient::process_strat_init(QJsonArray recv_array)
+{
 
     for (int i = 1; i < recv_array.size(); i++) {
-        //std::cout << "id: " << recv_array[i].toObject()["id"].toInt() << "m_plyer_id: " << m_player_id << std::endl;
         bool is_self = recv_array[i].toObject()["id"].toInt() == m_player_id;
         if (!is_self) {
             m_datamodel->constructPlayer(recv_array[i].toObject()["id"].toInt(),
@@ -205,7 +201,6 @@ void tcpclient::process_battle(QJsonObject recv_obj)
 {
     if(m_state == client_state::END_ROUND)
     {
-        std::cout << "battle pre fight" << std::endl;
         m_state = client_state::PRE_FIGHT;
         /* Show pre-fight window and wait for ready button clicked */
         m_switch_mode_dialoge->updateWindow(recv_obj["planet_name"].toString().toStdString(), recv_obj["player_name1"].toString().toStdString(),
@@ -214,7 +209,6 @@ void tcpclient::process_battle(QJsonObject recv_obj)
     }
     else if(m_state == client_state::FIGHT)
     {
-        std::cout << "battle post fight" << std::endl;
         /* Show end-fight window and wait for ready button clicked to go to END_ROUND */
         m_state = client_state::END_FIGHT;
         m_switch_mode_dialoge->updateWindow(recv_obj["planet_name"].toString().toStdString(), recv_obj["player_name1"].toString().toStdString(),
@@ -228,7 +222,6 @@ void tcpclient::process_battle(QJsonObject recv_obj)
 void tcpclient::process_fight_init(QJsonObject recv_obj)
 {
     /* Initialize the udp client for the connection during 3d fight */
-    std::cout << "fight init" << std::endl;
 
     /* Initialize new window for 3d part */
     if (m_mainwindow == nullptr) {
