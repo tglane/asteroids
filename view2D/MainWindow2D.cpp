@@ -514,7 +514,6 @@ void MainWindow2D::updatePlanetInfo(int id)
         ui->MineOrdersLabel->setVisible(true);
         ui->MineOrdersValue->setVisible(true);
 
-        /// Zeige den Button zum Shiffe/Werften bauen und seinen ToolTip passend zum jetzigen Planeten an
         if (p->getShipyardBuilt())
         {
             ui->BuildShip->setText("Build Ship");
@@ -526,6 +525,7 @@ void MainWindow2D::updatePlanetInfo(int id)
             {
                 ui->BuildShip->setVisible(true);
             }
+            //Schifskosten
             int shipcost = m_model->getShipCost();
             std::string s = "Costs: " + std::to_string(shipcost) + " Rubies";
             QString string = QString::fromStdString(s);
@@ -542,13 +542,16 @@ void MainWindow2D::updatePlanetInfo(int id)
             {
                 ui->BuildShip->setVisible(true);
             }
-            int shipyardcost = m_model->getShipyardCost();
-            std::string s = "Costs: " + std::to_string(shipyardcost) + " Rubies";
-            QString string = QString::fromStdString(s);
-            ui->BuildShip->setToolTip(string);
         }
         
         /* Minen können nur mit genügend Rubinen gekauft werden */
+        if (m_model->getSelfPlayer()->getRubin() < m_model->getShipCost())
+        {
+            ui->BuildShip->setVisible(false);
+        } else {
+            ui->BuildShip->setVisible(true);
+        }
+
         if (m_model->getSelfPlayer()->getRubin() < m_model->getMineCost()|| p->getMinesHidden()>0)
         {
             ui->BuildMine->setVisible(false);
@@ -582,9 +585,7 @@ void MainWindow2D::updatePlanetInfo(int id)
     // Planeteninfo ausfüllen
     ui->PlanetName->setText(QString::fromStdString(p->getName()));
 
-    //ui->RubinNumber->setText("# " + QString::number(p->getRubinLeft()));
-    ui->RubinNumber->setText("# " + QString::number(p->getRubinLeft()) + " (-" + QString::number(p->calculateEarnings(m_model->getMineGain())) + ")");
-
+    ui->RubinNumber->setText("# " + QString::number(p->getRubinLeft()));
 
     QString mineText = QString::number(p->getMinesBuild()) + " / " + QString::number(p->getMines());
     ui->MineNumber->setText(mineText);
