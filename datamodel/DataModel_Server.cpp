@@ -316,6 +316,14 @@ void DataModel_Server::setStartPlanet(std::shared_ptr<Planet> startplanet)
 	m_self->addPlanet(startplanet);
 }
 
+void DataModel_Server::clearInvaders() {
+    for (auto i: m_planets) {
+        i.second->setInvaderShips(0);
+        i.second->setInvader(nullptr);
+    }
+}
+
+
 bool DataModel_Server::updateAll(QJsonObject &update) {
 
 	//if (update.isObject() && !update.isEmpty())
@@ -392,9 +400,15 @@ bool DataModel_Server::updateAll(QJsonObject &update) {
         for (it1 = array.constBegin(); it1 != array.constEnd(); it1++)
         {
             planet = getPlanetFromId(it1->toObject(QJsonObject()).value("ID").toInt());
-            ships = it1->toObject(QJsonObject()).value("Ships").toInt();
+            ships = it1->toObject(QJsonObject()).value("InvaderShips").toInt();
 
-            if(planet->getOwner() == nullptr || planet->getOwner()->getIdentity() == id)
+            
+            if (planet->getOwner() == nullptr) {
+                planet->setOwner(player);
+                planet->setShips(ships);
+                planets.push_back(planet);
+            }
+            else if(planet->getOwner()->getIdentity() == id)
             {
                 planet->setOwner(player);
                 planet->setShips(ships);
@@ -428,6 +442,7 @@ Player::Ptr DataModel_Server::getEnemyPlayer()
 
 std::vector<Battle::Ptr> DataModel_Server::findBattles()
 {
+    m_battles.clear();
     std::map<int, Planet::Ptr>::iterator it;
     for(it = m_planets.begin(); it != m_planets.end(); it++)
     {
@@ -492,6 +507,17 @@ void DataModel_Server::printPlanets()
         }
         std::cout << std::endl;
     }
+}
+
+void DataModel_Server::printPlayer()
+{
+     for (auto i: m_players) {
+        std::cout << "Player: "
+                 << i.first
+                 << " " << i.second->getPlayerName();
+        std::cout << std::endl;
+    }
+
 }
 
 QJsonObject DataModel_Server::createJson(Player::Ptr player)

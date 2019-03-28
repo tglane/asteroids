@@ -64,6 +64,7 @@ public:
     void add_client(int id, QHostAddress addr, int port, Vector3f& pos, int health);
     ServerPhysicsEngine& get_physics_engine() { return physics_engine; }
     void start();
+    void stop();
 };
 
 #endif

@@ -30,7 +30,6 @@ void tcpclient::send_ready()
     std::cout << "send_ready" << std::endl;
     QJsonArray init_array;
     init_array.push_back("ready");
-    //init_array.push_back(m_datamodel->createJson(m_datamodel->getSelfPlayer()));
 
     QJsonDocument doc(init_array);
 
@@ -39,6 +38,19 @@ void tcpclient::send_ready()
 
     m_socket->write(doc.toJson());
     m_socket->flush();
+
+    if(m_state == client_state::WAIT)
+    {
+        m_state = client_state::READY;
+    }
+    else if(m_state == client_state::PRE_FIGHT)
+    {
+        m_state = client_state::FIGHT_READY;
+    }
+    else if(m_state == client_state::END_FIGHT)
+    {
+        m_state = client_state::END_ROUND;
+    }
 }
 
 void tcpclient::send_init()
@@ -102,11 +114,15 @@ void tcpclient::recv_json()
         {
             process_strat_init(recv_array);
         }
-        else if(recv_array[0] == "state" && (m_state == client_state::END_ROUND || m_state == client_state::FIGHT))
+        else if(recv_array[0] == "state" && (m_state == client_state::FIGHT_READY || m_state == client_state::END_ROUND))
         {
             process_state(recv_array);
         }
-        else if (recv_array[0] == "fight_init" && (m_state == client_state::END_ROUND || m_state == client_state::FIGHT) )
+        else if(recv_array[0] == "battle" && (m_state == client_state::END_ROUND || m_state == client_state::FIGHT))
+        {
+            process_battle(recv_array[1].toObject());
+        }
+        else if (recv_array[0] == "fight_init" && m_state == client_state::FIGHT_READY )
         {
             process_fight_init(recv_array[1].toObject());
         }
@@ -127,10 +143,6 @@ void tcpclient::process_init_res(QJsonObject recv_obj)
     m_datamodel->constructPlayer(m_player_id,
                                  m_player_name.toStdString(), true);
 
-
-
-    //m_datamodel->switchWindow(asteroids::DataModel::MAIN2D);
-
     m_state = client_state::WAIT;
 
     QJsonArray init_array;
@@ -144,14 +156,11 @@ void tcpclient::process_init_res(QJsonObject recv_obj)
     m_socket->write(doc.toJson());
     m_socket->flush();
 
-    m_state = client_state::READY;
-
+    // TODO add ready button before game to emit ready
     send_ready();
 }
 
 void tcpclient::process_strat_init(QJsonArray recv_array) {
-    //m_datamodel->getSelfPlayer()->setPlayerName(m_player_name.toStdString());
-
     std::cout << "strat_init" << std::endl;
 
     for (int i = 1; i < recv_array.size(); i++) {
@@ -162,17 +171,17 @@ void tcpclient::process_strat_init(QJsonArray recv_array) {
                                          recv_array[i].toObject()["player_name"].toString().toStdString(), is_self);
         }
     }
+
+    m_datamodel->printPlanets();
     m_datamodel->startGame();
     m_datamodel->switchWindow(DataModel::MAIN2D);
-    emit start_round();
     m_state = client_state::ROUND;
-
-    //send_ready();
-    //m_state = client_state::END_ROUND;
 }
 
 void tcpclient::process_state(QJsonArray recv_array)
 {
+    m_datamodel->clearInvaders();
+
     QJsonObject obj = recv_array[1].toObject();
     m_datamodel->updateAll(obj);
 
@@ -181,22 +190,63 @@ void tcpclient::process_state(QJsonArray recv_array)
 
     m_state = client_state::ROUND;
 
+    if (m_mainwindow != nullptr) {
+        m_mainwindow->hide();
+        m_mainwindow->stop_timer();
+    }
+
+    m_datamodel->switchWindow(DataModel_Server::MAIN2D);
+
     qDebug() << m_datamodel->createJson(m_datamodel->getSelfPlayer());
     qDebug() << m_datamodel->createJson(m_datamodel->getEnemyPlayer());
+}
+
+void tcpclient::process_battle(QJsonObject recv_obj)
+{
+    if(m_state == client_state::END_ROUND)
+    {
+        std::cout << "battle pre fight" << std::endl;
+        m_state = client_state::PRE_FIGHT;
+        /* Show pre-fight window and wait for ready button clicked */
+        m_switch_mode_dialoge->updateWindow(recv_obj["planet_name"].toString().toStdString(), recv_obj["player_name1"].toString().toStdString(),
+                                     recv_obj["player_name2"].toString().toStdString(), recv_obj["ships1"].toInt(), recv_obj["ships2"].toInt());
+        m_datamodel->switchWindow(DataModel::SWITCH);
+    }
+    else if(m_state == client_state::FIGHT)
+    {
+        std::cout << "battle post fight" << std::endl;
+        /* Show end-fight window and wait for ready button clicked to go to END_ROUND */
+        m_state = client_state::END_FIGHT;
+        m_switch_mode_dialoge->updateWindow(recv_obj["planet_name"].toString().toStdString(), recv_obj["player_name1"].toString().toStdString(),
+                                     recv_obj["player_name2"].toString().toStdString(), recv_obj["ships1"].toInt(), recv_obj["ships2"].toInt(),
+                                     recv_obj["ships_after1"].toInt(), recv_obj["ships_after2"].toInt());
+        m_mainwindow->hide();
+        m_datamodel->switchWindow(DataModel::SWITCH);
+    }
 }
 
 void tcpclient::process_fight_init(QJsonObject recv_obj)
 {
     /* Initialize the udp client for the connection during 3d fight */
-    m_udpclient = std::make_shared<udpclient>(m_player_id, m_server_ip, m_socket->localPort());
-    m_udpclient->init_fight_slot(recv_obj);
     std::cout << "fight init" << std::endl;
 
     /* Initialize new window for 3d part */
-    m_mainwindow = std::make_shared<asteroids::MainWindow>("../models/level.xml");
-    //m_mainwindow->showFullScreen();
-    m_mainwindow->show();
-    m_physicsEngine = m_mainwindow->ui->openGLWidget->getPhysicsEngine();
+    if (m_mainwindow == nullptr) {
+        m_udpclient = std::make_shared<udpclient>(m_player_id, m_server_ip, m_socket->localPort());
+        m_mainwindow = std::make_shared<MainWindow>("../models/level.xml");
+        m_mainwindow->showFullScreen();
+        m_physicsEngine = m_mainwindow->ui->openGLWidget->getPhysicsEngine();
+        m_mainwindow->ui->openGLWidget->setClient(m_udpclient);
+    } else {
+        m_mainwindow->ui->openGLWidget->reset();
+    }
+
+    m_state = client_state::FIGHT;
+
+    m_mainwindow->start_timer();
+
+    m_udpclient->init_fight_slot(recv_obj);
+    m_mainwindow->showFullScreen();
 
     /* Parse fight_init package */
     QJsonArray asteroids_arr = recv_obj["asteroids"].toArray();
@@ -250,5 +300,4 @@ void tcpclient::process_fight_init(QJsonObject recv_obj)
         }
     }
 
-    m_mainwindow->ui->openGLWidget->setClient(m_udpclient);
 }

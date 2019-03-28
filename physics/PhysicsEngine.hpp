@@ -60,9 +60,10 @@ namespace asteroids
          */
         bool process(int elapsed_time);
 
-    void process_collisions(int id_one, int id_two);
-    int check_id_type(int id_to_check);
+        void process_collisions(int id_one, int id_two);
+        int check_id_type(int id_to_check);
 
+        void reset_lists();
 
         /// Getter for current highest IDs
         int get_curr_bull_id() { return ++curr_bull_id; }

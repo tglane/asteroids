@@ -12,7 +12,7 @@ TcpServer::TcpServer(std::string filename, QObject* parent)
     state = WAITING;
     connect(&server, SIGNAL(newConnection()), this, SLOT(onConnect()));
     //connect(&server, SIGNAL(disconnected()), this, SLOT(onDisconnect()));
-std::cout << "../models/" << filename<<std::endl;
+    std::cout << "../models/" << filename<<std::endl;
     m_datamodel = DataModel_Server::Ptr(new DataModel_Server("../models/"+filename+".map"));
     //m_datamodel->getUniverse("../../../models/Level-1.map");
 
@@ -23,8 +23,10 @@ std::cout << "../models/" << filename<<std::endl;
     else
     {
         qDebug() << "Server started ";
-
     }
+
+    udpServer = std::shared_ptr<UdpServer>(new UdpServer());
+    connect(udpServer.get(),SIGNAL(fightEnd(int,int)), this, SLOT(fightEnd(int,int)));
 }
 
 void TcpServer::onDisconnect()
@@ -122,10 +124,12 @@ void TcpServer::handle_state(TcpClient& client, QJsonDocument& doc) {
 
 
     m_datamodel->printPlanets();
+    m_datamodel->printPlayer();
 
     ready_count++;
     if (clients.size() == ready_count) {
         m_battle_list = m_datamodel->findBattles();
+        m_datamodel->clearInvaders();
         qDebug() << "n battles: " << m_battle_list.size();
         //m_battle_list = std::vector<Battle::Ptr>{Battle::Ptr(nullptr)};
 
@@ -150,8 +154,6 @@ void TcpServer::fight_init(Battle::Ptr battle)
     asteroids.getAsteroids(asteroid_list);
 
     qDebug() << "sending fight_init";
-    udpServer = std::shared_ptr<UdpServer>(new UdpServer());
-    connect(udpServer.get(),SIGNAL(fightEnd(int,int)), this, SLOT(fightEnd(int,int)));
 
     for (auto i: asteroid_list) {
         udpServer->get_physics_engine().addDestroyable(i);
@@ -165,7 +167,14 @@ void TcpServer::fight_init(Battle::Ptr battle)
             position = Vector3f(2500, 0, 0);
         }
 
-        udpServer->add_client(j.id, j.socket->peerAddress(), j.socket->peerPort(), position, 10);
+        int ship_count;
+        if (battle->m_player1->getIdentity() == j.id) {
+            ship_count = battle->m_numberShips1;
+        } else {
+            ship_count = battle->m_numberShips2;
+        }
+
+        udpServer->add_client(j.id, j.socket->peerAddress(), j.socket->peerPort(), position, ship_count * 10);
         QJsonArray array;
         array.push_back("fight_init");
 
@@ -211,6 +220,8 @@ void TcpServer::fight_init(Battle::Ptr battle)
                 y_axis = Vector3f(0, -1, 0);
             }
             int ship_count;
+
+            qDebug() << "Battle adfsadf: " << battle->m_numberShips1 << " " <<  battle->m_numberShips2;
             if (battle->m_player1->getIdentity() == i.id) {
                 ship_count = battle->m_numberShips1;
             } else {
@@ -255,6 +266,8 @@ void TcpServer::fight_init(Battle::Ptr battle)
 void TcpServer::fightEnd(int id, int health_left) {
     // ToDo Datamodel
 
+    udpServer->stop();
+    //udpServer.reset();
     int ships_left = health_left / 10;
     qDebug() << "end fight, updating data model";
     Battle::Ptr current_battle = m_battle_list[battle_count];
@@ -272,9 +285,7 @@ void TcpServer::fightEnd(int id, int health_left) {
     current_battle->m_location->setOwner(m_datamodel->getPlayerByID(id));
     m_datamodel->getPlayerByID(id)->addPlanet(current_battle->m_location);
 
-    current_battle->m_location->setInvader(nullptr);
-    current_battle->m_location->setInvaderShips(0);
-    current_battle->m_location->setShips(health_left);
+    current_battle->m_location->setShips(ships_left);
     m_datamodel->getPlayerByID(id)->incShips(ships_left);
 
     qDebug() << "Planets fight end 2";
@@ -310,10 +321,10 @@ void TcpServer::handle_init(TcpClient& client, QJsonDocument& doc)
     // Ziehe Daten aus Document
     QJsonArray array = doc.array();
     QJsonObject temp_name = array[1].toObject();
-
-
-    QString name(temp_name["playername"].toString().toUtf8());
-
+    //qDebug() << "array"<< array;
+    //qDebug() << "temp_name" << temp_name;
+    QString name(temp_name["player_name"].toString().toUtf8());
+    //qDebug() << name;
     m_datamodel->constructPlayer(client.id, name.toStdString(), false);
     m_datamodel->getPlayerByID(client.id)->setPlayerName(name.toUtf8().constData());
 

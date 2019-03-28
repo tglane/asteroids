@@ -24,7 +24,7 @@ StartingDialog::StartingDialog(DataModel::Ptr model,tcpclient::Ptr tcp_client, T
     ui->SelectMap->setVisible(false);
 
     ui->Name->setText("Siegbert");
-    ui->ServerAddress->setText("127.0.0.1");
+    ui->ServerAddress->setText("192.168.0.42");
 
     QPixmap bkgnd("../models/box1.jpg");
     bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
@@ -65,14 +65,13 @@ void StartingDialog::startGame(bool click)
     if(!(ui->checkHost->isChecked()) && name != "" && name != "Please insert a name!")
     {
         std::cout <<"Versuchen wirs"<< std::endl;
-        m_tcpclient = shared_ptr<tcpclient>(new tcpclient(m_model));
         connect(this, SIGNAL(connect_to_server(string, string)), m_tcpclient.get(), SLOT(connect_to_server(string, string)));
         connect(m_model->getWidget(DataModel::MAIN2D), SIGNAL(endround_signal()), m_tcpclient.get(), SLOT(endround_slot()));
         connect(this, SIGNAL(endround_signal()), m_tcpclient.get(), SLOT(endround_slot()));
         emit connect_to_server(name, server_addr);
 
     }
-    else if (ui->checkHost->isChecked())
+    /**else if (ui->checkHost->isChecked())
     {
         m_tcpserver = shared_ptr<TcpServer>(new TcpServer(ui->SelectMap->currentText().toStdString()));
         ui->Name->setText("Server Starting..");
@@ -92,7 +91,7 @@ void StartingDialog::startGame(bool click)
 
         ui->ServerAddress->setText(ipv4);
         ui->ServerAddress->setStyleSheet("QLineEdit { color: yellow }");
-    }
+    }*/
     else
     {
         ui->Name->setText("Please insert a name!");

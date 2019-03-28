@@ -18,6 +18,8 @@ GameWindow::GameWindow(DataModel::Ptr model, QWidget* parent) :
 
     m_model->addMainWindow(this);
 
+    m_tcpclient = std::make_shared<tcpclient>(m_model);
+
     MainWindow2D* strategywindow = new MainWindow2D(m_model);
     ui->centralwidget->addWidget(strategywindow);
     m_model->addWidget(DataModel::MAIN2D, strategywindow);
@@ -25,9 +27,10 @@ GameWindow::GameWindow(DataModel::Ptr model, QWidget* parent) :
 
 
     // Insert 3D Window into Stacked Widget
-    /*MainWindow* fightwindow = new MainWindow("../models/level.xml");
+    /**MainWindow* fightwindow = new MainWindow("../models/level.xml");
     ui->centralwidget->addWidget(fightwindow);
-    m_model->addWidget(DataModel::MAIN3D, fightwindow);*/
+    m_model->addWidget(DataModel::MAIN3D, fightwindow);
+    tcp_client->set3DWindow(fightwindow);*/
 
     StartingDialog* startingDialog = new StartingDialog(m_model, m_tcpclient, m_tcpserver);
     //connect(startingDialog, SIGNAL(connect_to_server(string, string)), m_tcpclient.get(), SLOT(connect_to_server(string, string)));
@@ -38,6 +41,8 @@ GameWindow::GameWindow(DataModel::Ptr model, QWidget* parent) :
     SwitchingWindowInfo* switchdialog = new SwitchingWindowInfo(m_model);
     ui->centralwidget->addWidget(switchdialog);
     m_model->addWidget(DataModel::SWITCH, switchdialog);
+    m_tcpclient->set_switch_pointer(switchdialog);
+    connect(switchdialog->getButton(), SIGNAL(clicked()), m_tcpclient.get(), SLOT(send_ready()));
 
     EndWindow* endwindow = new EndWindow(m_model);
     ui->centralwidget->addWidget(endwindow);
