@@ -175,6 +175,11 @@ namespace asteroids
 
 		void setMinesBuild();
 
+		/**
+		 * @brief set built mines to the given number
+		 */
+		void setMinesBuilt(int minesBuilt);
+
 		int getShipsOrdered();
 
 		void incShipsOrdered();

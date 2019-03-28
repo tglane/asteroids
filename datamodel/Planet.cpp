@@ -176,6 +176,11 @@ void Planet::setMinesBuild()
 	m_owner->incMines();
 }
 
+void Planet::setMinesBuilt(int minesBuilt)
+{
+	m_minesbuild = minesBuilt;
+}
+
 int Planet::getShipsOrdered()
 {
 	return m_ships_ordered;
