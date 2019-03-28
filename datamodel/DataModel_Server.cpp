@@ -125,6 +125,22 @@ bool DataModel_Server::buyShip(Planet::Ptr selectedPlanet, Player::Ptr m_self)
     std::cout << m_self->getRubin() << std::endl;
     /*test druck ende*/
 
+    //watch out so only 1 ship can be built 
+    std::list<std::shared_ptr<ShipOrder>> shiporders = m_self->getListShipOrder();
+
+    for(std::list<std::shared_ptr<ShipOrder>>::iterator it = shiporders.begin(); it != shiporders.end(); ++it)
+    {
+        std::shared_ptr<ShipOrder> shiporder = *it;
+
+        Planet::Ptr planet = shiporder->getPlanet();
+
+        if(getIDFromPlanet(selectedPlanet) == getIDFromPlanet(planet))
+        {
+            //ship is already being built on this planet
+            return false;
+        }
+    }
+
     int Player_Rubin_Number = m_self->getRubin();
     if(Player_Rubin_Number >= Shipcost && selectedPlanet->getShipyardBuilt())
     {
