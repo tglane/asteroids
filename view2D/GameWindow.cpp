@@ -23,8 +23,8 @@ GameWindow::GameWindow(DataModel::Ptr model, QWidget* parent) :
     MainWindow2D* strategywindow = new MainWindow2D(m_model);
     ui->centralwidget->addWidget(strategywindow);
     m_model->addWidget(DataModel::MAIN2D, strategywindow);
+    connect(m_tcpclient.get(), SIGNAL(end_pause()), strategywindow, SLOT(end_blur()));
     //connect(strategywindow, SIGNAL(endround_signal()), m_tcpclient.get(), SLOT(endround_slot()));
-
 
     // Insert 3D Window into Stacked Widget
     /**MainWindow* fightwindow = new MainWindow("../models/level.xml");

@@ -72,6 +72,8 @@ signals:
     
     void start_round();
 
+    void end_pause();
+
 private:
 
     /// receive id (and map/level name)

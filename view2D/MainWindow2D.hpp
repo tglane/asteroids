@@ -11,6 +11,7 @@
 #include <QPushButton>
 #include <QGraphicsEllipseItem>
 #include <QMouseEvent>
+#include <QGraphicsOpacityEffect>
 
 #include "../build/ui_MainWindow2D.h"
 #include "view/MainWindow.hpp"
@@ -130,6 +131,11 @@ public slots:
 
     void setMapSize(int width, int height);
 
+    /**
+     * @brief ends the pause screen when both players sent state
+     */
+    void end_blur();
+
 signals:
     void endround_signal();
 
@@ -142,6 +148,8 @@ private:
     Ui::MainWindow2D* ui;
 
     QGraphicsScene* scene;
+
+    QGraphicsBlurEffect* m_blur;
 
     asteroids::MainWindow* FighterWindow;
 

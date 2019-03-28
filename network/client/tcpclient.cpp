@@ -116,10 +116,14 @@ void tcpclient::recv_json()
         }
         else if(recv_array[0] == "state" && (m_state == client_state::FIGHT_READY || m_state == client_state::END_ROUND))
         {
+            //TODO End pause screen
+            emit end_pause();
             process_state(recv_array);
         }
         else if(recv_array[0] == "battle" && (m_state == client_state::END_ROUND || m_state == client_state::FIGHT))
         {
+            //TODO End pause screen
+            emit end_pause();
             process_battle(recv_array[1].toObject());
         }
         else if (recv_array[0] == "fight_init" && m_state == client_state::FIGHT_READY )

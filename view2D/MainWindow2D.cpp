@@ -8,7 +8,6 @@
 #include "view/MainWindow.hpp"
 #include "view2D/StartingDialog.hpp"
 #include <QDesktopWidget>
-#include <QGraphicsOpacityEffect>
 #include <QGraphicsView>
 #include <iostream>
 #include <QLine>
@@ -215,9 +214,9 @@ void MainWindow2D::endOfRound(bool click)
 {
     m_model->endOfRound();
 
-    QGraphicsBlurEffect *a=new QGraphicsBlurEffect;
-    a->setBlurHints(QGraphicsBlurEffect::QualityHint);
-    ui->centralwidget->setGraphicsEffect(a);
+    m_blur = new QGraphicsBlurEffect;
+    m_blur->setBlurHints(QGraphicsBlurEffect::QualityHint);
+    ui->centralwidget->setGraphicsEffect(m_blur);
     ui->centralwidget->setEnabled(false);
 
     //Wenn lang genug warten könnet das hier funktionieren
@@ -238,12 +237,6 @@ void MainWindow2D::endOfRound(bool click)
     //Hier abwarten ob anderer auch fertig ist
 
     //pop_up->close();
-    ui->centralwidget->setEnabled(true);
-    a->setEnabled(false);
-
-    currentYear++;
-    QString qyear = QString::fromUtf8("Year: ");
-    ui->Date->setText(qyear + QString::number(currentYear));
 
     updatePlayerInfo();
     updatePlanetInfo(currentPlanet);
@@ -262,6 +255,18 @@ void MainWindow2D::endOfRound(bool click)
 
     // TODO wait for response of server, block the window until all players are ready
     emit endround_signal();
+}
+
+void MainWindow2D::end_blur()
+{
+    ui->centralwidget->setEnabled(true);
+    m_blur->setEnabled(false);
+
+    currentYear++;
+    QString qyear = QString::fromUtf8("Year: ");
+    ui->Date->setText(qyear + QString::number(currentYear));
+
+    delete m_blur;
 }
 
 void MainWindow2D::updatePlanetColor(){
