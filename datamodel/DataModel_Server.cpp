@@ -723,7 +723,8 @@ void DataModel_Server::WinCondition()
 {
     std::map<int, Planet::Ptr>::iterator it;
     int NumberOfPlanets = m_planets.size();
-    int CountOfPlanets = 0;
+    int selfOwnedPlanets = 0;
+    int enemyOwnedPlanets = 0;
     std::cout << "Anzahl der Planeten" << std::endl;
     std::cout << NumberOfPlanets << std::endl;
     for(it = m_planets.begin(); it != m_planets.end(); it++)  
@@ -731,18 +732,34 @@ void DataModel_Server::WinCondition()
         Planet::Ptr Planets = it->second;
         if(Planets->getOwner() == m_self)
         {
-            CountOfPlanets++;
+            selfOwnedPlanets++;
         }
-
-    }  
-    std::cout << CountOfPlanets << std::endl;
-    if(NumberOfPlanets == CountOfPlanets)
-    {
-        std::cout << "Gewonnen" <<std::endl;
+        else if(Planets->getOwner() == m_enemy)
+        {
+            enemyOwnedPlanets++;
+        }
     }
 
-    //TODO  emit SIGNAL endOfGame(), connect it with SLOT EndWindow::activate()
-
+    if(NumberOfPlanets == selfOwnedPlanets)
+    {
+        emit endOfGame();
+        std::cout << "Gewonnen" <<std::endl;
+    }
+    if(selfOwnedPlanets == 0)
+    {
+        emit endOfGame();
+        std::cout << "Verloren" << std::endl;
+    }
+    if(NumberOfPlanets == enemyOwnedPlanets)
+    {
+        emit endOfGame();
+        std::cout << "Verloren" <<std::endl;
+    }
+    if(enemyOwnedPlanets == 0)
+    {
+        emit endOfGame();
+        std::cout << "Gewonnen" << std::endl;
+    }
 }
 
 void DataModel_Server::BattlePhase()

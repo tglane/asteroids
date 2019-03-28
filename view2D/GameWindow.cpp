@@ -47,6 +47,7 @@ GameWindow::GameWindow(DataModel::Ptr model, QWidget* parent) :
     EndWindow* endwindow = new EndWindow(m_model);
     ui->centralwidget->addWidget(endwindow);
     m_model->addWidget(DataModel::END, endwindow);
+    connect(m_model.get(), SIGNAL(endOfGame()), endwindow, SLOT(activate()));
 
     QPixmap bkgnd("../models/box1.jpg");
     bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
@@ -59,6 +60,8 @@ GameWindow::GameWindow(DataModel::Ptr model, QWidget* parent) :
     m_mediaplayer->setMedia(QUrl::fromLocalFile(QFileInfo("../models/Interstellar-Soundtrack.mp3").absoluteFilePath()));
     //m_mediaplayer->play();
 
+    connect(m_tcpclient.get(), SIGNAL(pause_music()), m_mediaplayer, SLOT(pause()));
+    connect(m_tcpclient.get(), SIGNAL(resume_music()), m_mediaplayer, SLOT(play()));
     connect(this, SIGNAL(play()), m_mediaplayer, SLOT(play()));
     connect(this, SIGNAL(stop()), m_mediaplayer, SLOT(stop()));
     connect(this, SIGNAL(pause()), m_mediaplayer, SLOT(pause()));
