@@ -15,6 +15,7 @@
 
 #include <map>
 #include <memory>
+#include <QtMultimedia/QSoundEffect>
 
 #include "PhysicalObject.hpp"
 #include "ParticleEngine.hpp"
@@ -43,7 +44,7 @@ namespace asteroids
         /**
          * @brief   Ctor.
          */
-        PhysicsEngine() = default;
+        PhysicsEngine();
 
         /**
          * @brief   Dtor.
@@ -77,6 +78,10 @@ namespace asteroids
         int curr_bull_id = 1;
         int curr_dest_id = 1;
         int curr_player_id = 1;
+
+        QSoundEffect                 m_explosionSound;
+
+        QSoundEffect                 m_hitmarkerSound;
 
     };
 

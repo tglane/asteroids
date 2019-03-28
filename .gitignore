@@ -1,7 +1,3 @@
-cmake-build-debug/
 .idea/
-/build
-/.vscode
-/.metadata/
-/cmake
-/network/server/build/
+build/
+.vscode/

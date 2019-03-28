@@ -6,6 +6,8 @@
 #include <SDL2/SDL.h>
 #include <QtGui/QPainter>
 #include <math.h>
+#include <QtCore/QFileInfo>
+#include <QMediaPlaylist>
 
 bool GLWidget::open_gl = false;
 
@@ -17,7 +19,24 @@ GLWidget::GLWidget(QWidget* parent) :
     m_cockpit("../models/cockpit.png"),
     m_playerHeart("../models/player_heart.png"),
     m_enemyHeart("../models/enemy_heart.png"),
-    m_emptyHeart("../models/empty_heart.png") {}
+    m_emptyHeart("../models/empty_heart.png")
+{
+    QMediaPlaylist* playlist = new QMediaPlaylist;
+    playlist->addMedia(QUrl::fromLocalFile(QFileInfo("../models/megalovania.wav").absoluteFilePath()));
+    playlist->setPlaybackMode(QMediaPlaylist::Loop);
+    m_backgroundMusic = new QMediaPlayer;
+    m_backgroundMusic->setPlaylist(playlist);
+    m_backgroundMusic->setVolume(30);
+
+    m_countdownSound.setSource(QUrl::fromLocalFile(QFileInfo("../models/countdown.wav").absoluteFilePath()));
+    m_countdownSound.setVolume(0.4);
+
+    m_victorySound.setSource(QUrl::fromLocalFile(QFileInfo("../models/victory.wav").absoluteFilePath()));
+    m_victorySound.setVolume(0.7);
+
+    m_defeatSound.setSource(QUrl::fromLocalFile(QFileInfo("../models/defeat.wav").absoluteFilePath()));
+    m_defeatSound.setVolume(0.7);
+}
 
 void GLWidget::setLevelFile(const std::string& file)
 {
@@ -235,6 +254,9 @@ void GLWidget::reset() {
 
     m_physicsEngine->addHittable(m_camera);
     m_physicsEngine->addHittable(m_enemy);
+
+    m_backgroundMusic->stop();
+    m_backgroundMusic->setPosition(0);
 }
 
 void GLWidget::step(map<Qt::Key, bool>& keyStates)
@@ -248,8 +270,13 @@ void GLWidget::step(map<Qt::Key, bool>& keyStates)
 
     if (!m_started)
     {
+        if (m_startTimer.elapsed() >= 1000 && !m_countdownSound.isPlaying())
+        {
+            m_countdownSound.play();
+        }
         if (m_startTimer.elapsed() >= 4000)
         {
+            m_backgroundMusic->play();
             m_started = true;
         }
     }
@@ -309,6 +336,11 @@ void GLWidget::step(map<Qt::Key, bool>& keyStates)
                 m_enemy->inBound();
             }
         }
+        else if (!m_endSoundPlayed)
+        {
+            m_camera->getHealth() > 0 ? m_victorySound.play() : m_defeatSound.play();
+        }
+
     }
     m_client->send_position(m_camera->getPosition(), Vector3f(), m_camera->getXAxis(), m_camera->getYAxis(), m_camera->getZAxis());
 

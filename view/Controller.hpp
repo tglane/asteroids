@@ -3,6 +3,7 @@
 
 #include "util/gl_includes.h"
 #include <QtCore/Qt>
+#include <QtMultimedia/QSoundEffect>
 #include "Gamepad.hpp"
 #include "physics/Hittable.hpp"
 #include "physics/PhysicsEngine.hpp"
@@ -46,6 +47,8 @@ private:
     int m_gamepadR1;
 
     int m_gamepadL1;
+
+    QSoundEffect m_bulletSound;
 
 };
 

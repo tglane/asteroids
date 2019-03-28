@@ -1,3 +1,4 @@
+#include <QtCore/QFileInfo>
 #include "Controller.hpp"
 #include "physics/Transformable.hpp"
 
@@ -25,6 +26,9 @@ Controller::Controller() : m_cooldownPlayer(0), m_gamepadR1(0), m_gamepadL1(0)
         m_keys[i] = 0;
     }
     m_gamepadAvailable = m_gamepad.init();
+
+    m_bulletSound.setSource(QUrl::fromLocalFile(QFileInfo("../models/shooting.wav").absoluteFilePath()));
+    m_bulletSound.setVolume(0.4f);
 }
 
 bool Controller::gamepadAvailable()
@@ -86,6 +90,7 @@ void Controller::keyControl(std::map<Qt::Key, bool> &keyStates, Hittable::Ptr& p
         }
         if (m_cooldownPlayer == 0 && keyStates[Qt::Key_Space])
         {
+            m_bulletSound.play();
             client.send_bullet(player->getPosition(), player->getXAxis(), player->getZAxis());
             m_cooldownPlayer = 200;
         }
