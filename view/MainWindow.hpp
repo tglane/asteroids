@@ -16,14 +16,12 @@
 
 #include <QMainWindow>
 
-#define GL3_PROTOTYPES 1
-#include <GL/glew.h>
+#include "util/gl_includes.h"
 
 #include "GLWidget.hpp"
 
 // TODO: Besser!
 #include "build/ui_MainWindow.h"
-#include "datamodel/DataModel.hpp"
 
 namespace asteroids
 {
@@ -33,64 +31,64 @@ namespace asteroids
  *          user input and renders all objects
  *
  */
-class MainWindow : public QMainWindow
-{
+    class MainWindow : public QMainWindow
+    {
     Q_OBJECT
 
-public:
+    public:
 
-    /**
-     * @brief Construct a new Main Window object
-     *
-     * @param plyname  A .ply file to render
-     */
-    MainWindow(const std::string& plyname, DataModel::Ptr model, QWidget* parent = NULL);
+        /**
+         * @brief Construct a new Main Window object
+         *
+         * @param plyname  A .ply file to render
+         */
+        MainWindow(const std::string& plyname, QWidget* parent = NULL);
 
-    /**
-     * @brief Destroys the Main Window object
-     *
-     */
-    ~MainWindow();
+        /**
+         * @brief Destroys the Main Window object
+         *
+         */
+        ~MainWindow();
 
-    /// Returns the width of the window
-    int width();
+        /// Returns the width of the window
+        int width();
 
-    /// Returns the height of the windows
-    int height();
+        /// Returns the height of the windows
+        int height();
 
-    /**
-     * @brief   Starts and stops the timer
-     * 
-     * @param active    determines if the timer should be started or stopped
-     */
-    void activate(bool active);
+        Ui::MainWindow* ui;
 
-public Q_SLOTS:
-    /// Handle input
-    void handleInput();
+        void start_timer() { m_timer->start(1000 / 60.0); }
 
-protected:
+        void stop_timer() { m_timer->stop(); }
+        void reset_key_states() { m_keyStates.clear(); }
 
-    /// Called if a key was pressed
-    virtual void keyPressEvent(QKeyEvent* event) override;
+    public Q_SLOTS:
+        /// Handle input
+        void handleInput();
 
-    /// Calles of a key was released
-    virtual void keyReleaseEvent(QKeyEvent* event) override;
+    protected:
 
-private:
+        /// Called if a key was pressed
+        virtual void keyPressEvent(QKeyEvent* event) override;
 
-    /// QT UI of the window
-    Ui::MainWindow* ui;
+        /// Calles of a key was released
+        virtual void keyReleaseEvent(QKeyEvent* event) override;
 
-    /// gl widget
-    GLWidget*       m_widget;
+    private:
 
-    /// map with the keys and their states
-    map<Qt::Key, bool>          m_keyStates;
+        /// QT UI of the window
 
-    /// 60 fps timer
-    shared_ptr<QTimer>          m_timer;
-};
+
+        /// gl widget
+        GLWidget*       m_widget;
+
+        /// map with the keys and their states
+        map<Qt::Key, bool>          m_keyStates;
+
+        /// 60 fps timer
+        shared_ptr<QTimer>          m_timer;
+    };
 
 }
 

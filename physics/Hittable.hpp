@@ -4,6 +4,7 @@
 #include <QtCore/QTime>
 #include <rendering/Asteroid.hpp>
 #include "rendering/Bullet.hpp"
+#include "physics/PhysicalBullet.hpp"
 #include "Transformable.hpp"
 
 namespace asteroids {
@@ -12,6 +13,8 @@ class Hittable : public Transformable
 {
 
 public:
+    Hittable() = default;
+    Hittable(int id): m_id(id) { }
 
     using Ptr = std::shared_ptr<Hittable>;
 
@@ -23,9 +26,9 @@ public:
 
     int getHealth();
 
-    bool hitBullet(Bullet b);
+    bool hitBullet(PhysicalBullet& b);
 
-    bool hitAsteroid(PhysicalObject p);
+    bool hitAsteroid(PhysicalObject& p);
 
     void outOfBound();
 

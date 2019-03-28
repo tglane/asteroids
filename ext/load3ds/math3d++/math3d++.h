@@ -64,11 +64,7 @@
 	#include <windows.h>
 #endif
 
-#ifdef __APPLE__
-#include <OpenGL/gl.h>
-#else
-#include <GL/gl.h>
-#endif
+#include "util/gl_includes.h"
 
 #ifdef USE_EXTOpenGL
 	#warning USE_EXTOpenGL has been renamed to MATH3D_USE_EXTGL

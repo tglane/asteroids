@@ -43,7 +43,8 @@ public:
              float rotation,
              float speed,
              float accell,
-             float radius);
+             float radius,
+             int id);
 
     Asteroid(const Asteroid& other);
 
@@ -67,6 +68,8 @@ private:
     void copy(const Asteroid& other);
 
     float  m_scale;
+
+    Renderable::Ptr m_renderable;
 
 };
 

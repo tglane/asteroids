@@ -11,11 +11,7 @@
 
 #include "Sphere.hpp"
 
-#ifdef __APPLE__
-#include <OpenGL/gl.h>
-#else
-#include <GL/gl.h>
-#endif
+#include "util/gl_includes.h"
 
 
 namespace asteroids
@@ -39,11 +35,21 @@ int Sphere::radius()
     
 void Sphere::render()
 {
+
+
+    glDisable(GL_TEXTURE);
+    glDisable(GL_TEXTURE_2D);
+    glDisable(GL_LIGHTING);
     
      // Compute transformation matrix
 	computeMatrix();
 
-    glColor3f(1.0, 1.0, 1.0);
+
+    glColor3f(0.4, 0.4, 0.4);
+
+    // cout << specular.r << " " << specular.g << " " << specular.b << endl;
+    // cout << ambient.r << " " << ambient.g << " " << ambient.b << endl;
+    // cout << diffuse.r << " " << diffuse.g << " " << diffuse.b << endl << endl;
 
 	// Push old transformation of the OpenGL matrix stack and
 	// start rendering the mesh in according to the
@@ -56,6 +62,7 @@ void Sphere::render()
     Vector3f points[numVerts];
     int curVert = 0;
     int t;
+
 
     deltaTheta = (2*M_PI) / m_numSides;
     deltaRho = M_PI / m_numStacks;
@@ -129,6 +136,11 @@ void Sphere::render()
         glNormal3d(curX, curY, curZ);
         glVertex3d(curX, curY, curZ);
     glEnd();
+
+
+    glEnable(GL_TEXTURE);
+    glEnable(GL_TEXTURE_2D);
+    glEnable(GL_LIGHTING);
     //glPopMatrix();
 }
 

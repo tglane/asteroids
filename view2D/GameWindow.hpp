@@ -7,9 +7,12 @@
 #include <QPushButton>
 #include <QGraphicsEllipseItem>
 #include <QMouseEvent>
+#include <QMediaPlayer>
 
 #include "build/ui_GameWindow.h"
 #include "datamodel/DataModel.hpp"
+#include "network/client/tcpclient.hpp"
+#include "network/server/TcpServer.hpp"
 
 
 using asteroids::DataModel;
@@ -43,14 +46,23 @@ public:
      */
     ~GameWindow();
 
+    QStackedWidget* content();
 
     /// Returns the width of the window
     //int width();
 
     /// Returns the height of the windows
     //int height();
-public slots:
 
+signals:
+    void play();
+
+    void stop();
+
+    void pause();
+
+public slots:
+    void start_round();
     
 
 private:
@@ -60,6 +72,12 @@ private:
 
     // The model which manages the round based data
     DataModel::Ptr m_model;
+
+    QMediaPlayer* m_mediaplayer;
+
+    tcpclient::Ptr m_tcpclient;
+
+    TcpServer::Ptr m_tcpserver;
 };
 
 

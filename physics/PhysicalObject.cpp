@@ -15,19 +15,14 @@
 #include "math/Vector.hpp"
 #include "math/Normal.hpp"
 
-#ifdef __APPLE__
-#include <OpenGL/gl.h>         
-#else
-#include <GL/gl.h>
-#endif
+#include "util/gl_includes.h"
 
 namespace asteroids
 {
 
-PhysicalObject::PhysicalObject(Renderable::Ptr r, Vector<float> direction, Vector<float> position, float mass,
-        float momentum, float speed, float accel, float radius)
+PhysicalObject::PhysicalObject(Vector<float> direction, Vector<float> position, float mass,
+                               float momentum, float speed, float accel, float radius, int id)
 {
-    this->m_renderable = r;
     this->m_accel = accel;
     this->m_position = position;
     this->m_speed = speed;
@@ -36,6 +31,7 @@ PhysicalObject::PhysicalObject(Renderable::Ptr r, Vector<float> direction, Vecto
     this->m_radius = radius;
     this->m_alive = true;
     this->m_angle=0.01f;
+    this->m_id = id;
 }
 
 PhysicalObject::PhysicalObject() :
@@ -45,7 +41,21 @@ PhysicalObject::PhysicalObject() :
     m_accel(0),
     m_radius(0),
     m_angle(0),
-    m_alive(true)
+    m_alive(true),
+    m_id(0)
+{
+
+}
+
+PhysicalObject::PhysicalObject(int id) :
+    m_euler(0, 0, 0),
+    m_momentum(0),
+    m_mass(0),
+    m_accel(0),
+    m_radius(0),
+    m_angle(0),
+    m_alive(true),
+    m_id(id)
 {
 
 }
@@ -70,18 +80,6 @@ bool PhysicalObject::collision(Vector<float> p, float r)
     return (pow(dist[0], 2) + pow(dist[1], 2) + pow(dist[2], 2)) <= pow((m_radius + r), 2);
 }
 
-void PhysicalObject::render()
-{
-    // Compute transformation matrix
-    computeMatrix();
-    glPushMatrix();
-    glMultMatrixf(m_transformation.getData());
-    if(m_renderable)
-    {
-        m_renderable->render();
-    }
-    glPopMatrix();
-}
 
 /**
  * multiply the speed by factor
@@ -94,6 +92,11 @@ void PhysicalObject::multiplySpeed(int factor)
 bool PhysicalObject::alive()
 {
     return m_alive;
+}
+
+float PhysicalObject::getSpeed()
+{
+    return m_speed;
 }
 
 }

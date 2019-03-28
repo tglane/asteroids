@@ -1,12 +1,13 @@
 #include "GLWidget.hpp"
 #include "io/LevelParser.hpp"
 
-
 #include "io/TextureFactory.hpp"
 #include <QMouseEvent>
 #include <SDL2/SDL.h>
 #include <QtGui/QPainter>
 #include <math.h>
+
+bool GLWidget::open_gl = false;
 
 GLWidget::GLWidget(QWidget* parent) :
     QOpenGLWidget(parent),
@@ -25,6 +26,28 @@ void GLWidget::setLevelFile(const std::string& file)
 
 void GLWidget::initializeGL()
 {
+    // Load level
+    LevelParser lp(m_levelFile, m_enemy, m_skybox, m_asteroidField);
+    m_enemy->fixArrow();
+
+    // Setup physics
+    m_physicsEngine = make_shared<PhysicsEngine>();
+
+    m_camera = make_shared<Camera>();
+    m_camera->setPosition(Vector3f(2500, 0, 0));
+    m_camera->setXAxis(Vector3f(-1, 0, 0));
+    m_camera->setYAxis(Vector3f(0, -1, 0));
+
+    m_useGamepad = m_controller.gamepadAvailable();
+
+    m_fpsTimer.start();
+    m_startTimer.start();
+
+    if(open_gl) {
+        return;
+    }
+    open_gl = true;
+
 #ifndef __APPLE__
     glewExperimental = GL_TRUE;
     glewInit();
@@ -112,48 +135,31 @@ void GLWidget::initializeGL()
     // This makes our buffer swap syncronized with the monitor's vertical refresh
     SDL_GL_SetSwapInterval(1);
 
-    // Load level
-    LevelParser lp(m_levelFile, m_enemy, m_skybox, m_asteroidField);
-    m_enemy->fixArrow();
-    m_enemy->setId(1);
-    m_enemy->setHealth(10);
 
-    // Setup physics
-    m_physicsEngine = make_shared<PhysicsEngine>();
+}
 
-    m_camera = make_shared<Camera>();
-    m_camera->setId(0);
-    m_camera->setHealth(10);
-    m_camera->setPosition(Vector3f(2500, 0, 0));
-    m_camera->setXAxis(Vector3f(-1, 0, 0));
-    m_camera->setYAxis(Vector3f(0, -1, 0));
+void GLWidget::setClient(udpclient::Ptr client) {
+    m_client = client;
 
-    Hittable::Ptr player_ptr = std::static_pointer_cast<Hittable>(m_camera);
-    m_physicsEngine->addHittable(player_ptr);
-    Hittable::Ptr enemy_ptr = std::static_pointer_cast<Hittable>(m_enemy);
-    m_physicsEngine->addHittable(enemy_ptr);
-
-    // Add asteroids to physics engine
-    std::list<Asteroid::Ptr> asteroids;
-    m_asteroidField->getAsteroids(asteroids);
-    for (auto it = asteroids.begin(); it != asteroids.end(); it++)
-    {
-        PhysicalObject::Ptr p = std::static_pointer_cast<PhysicalObject>(*it);
-        m_physicsEngine->addDestroyable(p);
+    if (m_client->get_id() == 42) {
+        m_enemy->setId(43 << 24);
+    } else {
+        m_enemy->setId(42 << 24);
     }
 
-    m_useGamepad = m_controller.gamepadAvailable();
+    m_camera->setId(m_client->get_id() << 24);
 
-    m_fpsTimer.start();
-    m_startTimer.start();
+    m_client->setOtherFighter(m_enemy); //added
+    m_client->setPhysicsPtr(m_physicsEngine); //added
+
+    m_physicsEngine->addHittable(m_camera);
+    m_physicsEngine->addHittable(m_enemy);
 }
 
 void GLWidget::paintGL()
 {
-    // Clear bg color and enable depth test (z-Buffer)
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_DEPTH_TEST);
-
+    
     m_camera->apply();
 
     // Render stuff
@@ -164,7 +170,13 @@ void GLWidget::paintGL()
 
     if (m_enemy->getHealth() > 0)
     {
+        // If no Packet recv, move
+        if (m_client->getCount() > 0) {
+            m_enemy->move();
+        }
         m_enemy->render();
+        m_client->incCount();
+
     }
 
     glDisable(GL_DEPTH_TEST);
@@ -214,12 +226,24 @@ void GLWidget::paintGL()
     }
 }
 
+void GLWidget::reset() {
+    m_gameOver = false;
+    m_startTimer.restart();
+    m_started = false;
+
+    m_physicsEngine->reset_lists();
+
+    m_physicsEngine->addHittable(m_camera);
+    m_physicsEngine->addHittable(m_enemy);
+}
+
 void GLWidget::step(map<Qt::Key, bool>& keyStates)
 {
 
     int elapsed_time = m_fpsTimer.restart();
 
     // Get keyboard states and handle model movement
+
     m_gameOver = m_physicsEngine->process(elapsed_time) || m_gameOver;
 
     if (!m_started)
@@ -237,11 +261,11 @@ void GLWidget::step(map<Qt::Key, bool>& keyStates)
 
             if (m_useGamepad)
             {
-                m_controller.gamepadControl(player_ptr, m_physicsEngine, elapsed_time);
+                m_controller.gamepadControl(player_ptr, m_physicsEngine, *m_client, elapsed_time);
             }
             else
             {
-                m_controller.keyControl(keyStates, player_ptr, m_physicsEngine, elapsed_time);
+                m_controller.keyControl(keyStates, player_ptr, m_physicsEngine, *m_client, elapsed_time);
             }
 
             Vector3f player_pos = m_camera->getPosition();
@@ -286,21 +310,37 @@ void GLWidget::step(map<Qt::Key, bool>& keyStates)
             }
         }
     }
+    m_client->send_position(m_camera->getPosition(), Vector3f(), m_camera->getXAxis(), m_camera->getYAxis(), m_camera->getZAxis());
 
     // Trigger update, i.e., redraw via paintGL()
     this->update();
 }
 
-void GLWidget::drawHealth(QPainter& painter, int healthPlayer, int healthEnemy)
+void GLWidget::drawHealth(QPainter& painter, int totalHealthPlayer, int totalHealthEnemy)
 {
-    QPixmap playerHeart("../models/player_heart.png");
-    QPixmap enemyHeart("../models/enemy_heart.png");
-    QPixmap emptyHeart("../models/empty_heart.png");
-
+    // Draw amount of spaceships
     float size = this->width() / 30.0f;
     float gap = 0.1;
     int height = (int) (size - 2 * size * gap);
     int width = (int) (height * 1.1);
+
+    int spaceshipsPlayer = totalHealthPlayer / 10 + (totalHealthPlayer % 10 != 0 ? 1 : 0);
+    int spaceshipsEnemy = totalHealthEnemy / 10 + (totalHealthEnemy % 10 != 0 ? 1 : 0);
+
+    painter.setPen(Qt::green);
+    painter.drawRect(QRect((int) (size * 12 + size * gap), (int) (size * gap), width, height));
+    painter.drawText(QRect((int) (size * 12 + size * gap), (int) (size * gap), width, height), Qt::AlignCenter, QString::number(spaceshipsPlayer));
+    painter.setPen(Qt::red);
+    painter.drawRect(QRect((int) (this->width() - size - (size * 12 + size * gap)), (int) (size * gap), width, height));
+    painter.drawText(QRect((int) (this->width() - size - (size * 12 + size * gap)), (int) (size * gap), width, height), Qt::AlignCenter, QString::number(spaceshipsEnemy));
+
+    // Draw hearts
+    QPixmap playerHeart("../models/player_heart.png");
+    QPixmap enemyHeart("../models/enemy_heart.png");
+    QPixmap emptyHeart("../models/empty_heart.png");
+
+    int healthPlayer = totalHealthPlayer % 10 + (totalHealthPlayer % 10 == 0  && totalHealthPlayer != 0 ? 10 : 0);
+    int healthEnemy = totalHealthEnemy % 10 + (totalHealthEnemy % 10 == 0 && totalHealthEnemy != 0 ? 10 : 0);
 
     for (int i = 0; i < 10; i++)
     {
@@ -312,6 +352,7 @@ void GLWidget::drawHealth(QPainter& painter, int healthPlayer, int healthEnemy)
 void GLWidget::drawMinimap(QPainter& painter, Hittable::Ptr player, Hittable::Ptr enemy)
 {
     QPixmap minimap("../models/minimap");
+    QPixmap heightMinimap("../models/height_minimap");
     QPixmap playerMinimap("../models/player_minimap");
     QPixmap enemyMinimap("../models/enemy_minimap");
 
@@ -327,13 +368,27 @@ void GLWidget::drawMinimap(QPainter& painter, Hittable::Ptr player, Hittable::Pt
 
     painter.translate(size / 10000 * player->getPosition()[0], -size / 10000 * player->getPosition()[1]);
     painter.rotate(std::atan2(player->getXAxis()[0], player->getXAxis()[1]) * 180 / M_PI);
-    painter.drawPixmap(0 - fighterWidth / 2, 0 - fighterHeight / 2, fighterWidth, fighterHeight, playerMinimap);
+    painter.drawPixmap(-fighterWidth / 2, -fighterHeight / 2, fighterWidth, fighterHeight, playerMinimap);
 
     painter.restore();
+    painter.save();
 
     painter.translate(size / 10000 * enemy->getPosition()[0], -size / 10000 * enemy->getPosition()[1]);
     painter.rotate(std::atan2(enemy->getXAxis()[0], enemy->getXAxis()[1]) * 180 / M_PI);
-    painter.drawPixmap(0 - fighterWidth / 2, 0 - fighterHeight / 2, fighterWidth, fighterHeight, enemyMinimap);
+    painter.drawPixmap(-fighterWidth / 2, -fighterHeight / 2, fighterWidth, fighterHeight, enemyMinimap);
+
+    // Height display
+    painter.restore();
+    float heightMinimapWidth = size * 0.1;
+    painter.translate(-size / 2 - heightMinimapWidth / 2, -size / 2);
+    painter.drawPixmap(-heightMinimapWidth, 0, (int) heightMinimapWidth, (int) size, heightMinimap);
+    painter.rotate(90);
+    painter.save();
+    painter.translate(size / 2 - size / 10000 * player->getPosition()[2], 0);
+    painter.drawPixmap((int) (-heightMinimapWidth / 4), 0, (int) (heightMinimapWidth / 2), (int) heightMinimapWidth, playerMinimap);
+    painter.restore();
+    painter.translate(size / 2 - size / 10000 * enemy->getPosition()[2], 0);
+    painter.drawPixmap((int) (-heightMinimapWidth / 4), 0, (int) (heightMinimapWidth / 2), (int) heightMinimapWidth, enemyMinimap);
 
     painter.resetTransform();
 }

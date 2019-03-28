@@ -1,7 +1,7 @@
 ###############################################################################
 # Declare the minimum cmake version required
 ###############################################################################
-cmake_minimum_required(VERSION 3.0.2)
+cmake_minimum_required(VERSION 3.10.2)
 
 ###############################################################################
 # The name of out project
@@ -93,14 +93,17 @@ find_package( Qt5
     Core
     Widgets
     OpenGL
-        Gamepad
+    Gamepad
+    Multimedia
+    Network
     REQUIRED
 )
 
 include_directories(${Qt5Widgets_INCLUDE_DIRS})
 include_directories(${Qt5Core_INCLUDE_DIRS})
 include_directories(${Qt5OpenGL_INCLUDE_DIRS})
-
+include_directories(${Qt5Multimedia_INCLUDE_DIRS})
+include_directories(${Qt5Network_INCLUDE_DIRS})
 
 ###############################################################################
 # Compile external libraries
@@ -133,9 +136,12 @@ set(ASTEROID_SOURCES
     math/Randomizer.cpp
     physics/Transformable.cpp
     physics/PhysicalObject.cpp
+    physics/PhysicalBullet.cpp
     physics/PhysicsEngine.cpp
+    physics/BasePhysicsEngine.cpp
     physics/ParticleEngine.cpp
     physics/Hittable.cpp
+    physics/PhysicalBullet.cpp
     rendering/Bullet.cpp
     rendering/ParticleEffect.cpp
     rendering/Sphere.cpp
@@ -149,31 +155,43 @@ set(ASTEROID_SOURCES
     util/ColorMap.cpp   
     util/Util.cpp
     view/GLWidget.cpp
-    view/MainWindow.cpp 
-    view/Camera.cpp  
+    view/MainWindow.cpp
+    network/client/udpclient.cpp
+    network/client/tcpclient.cpp
+        network/server/TcpServer.cpp
+        network/server/UdpServer.cpp
+        network/server/ServerPhysicsEngine.cpp
+        network/UdpPeer.cpp
     datamodel/DataModel.cpp
+    datamodel/DataModel_Server.cpp
     datamodel/Planet.cpp
     datamodel/Player.cpp
     datamodel/MineOrder.cpp
     datamodel/ShipOrder.cpp
     datamodel/MoveOrder.cpp
+    datamodel/ShipyardOrder.cpp
     datamodel/Battle.cpp
     view2D/StartingDialog.cpp
     view2D/MainWindow2D.cpp
     view2D/MyEllipse.cpp
     view2D/EndWindow.cpp
     view2D/GameWindow.cpp
+    view2D/SwitchingWindowInfo.cpp
     view/Camera.cpp
     view/Controller.cpp
     Gamepad.cpp
 )
 
 set(ASTEROID_MOCS
+        util/gl_includes.h
     view/MainWindow.hpp
     view2D/MainWindow2D.hpp
     view2D/StartingDialog.hpp
     view2D/EndWindow.hpp
     view2D/GameWindow.hpp
+    view2D/SwitchingWindowInfo.hpp
+    datamodel/DataModel.hpp
+    datamodel/DataModel_Server.hpp
 )
 
 set(ASTEROID_UIS
@@ -182,6 +200,7 @@ set(ASTEROID_UIS
     view2D/StartingDialog.ui
     view2D/EndWindow.ui
     view2D/GameWindow.ui
+    view2D/SwitchingWindowInfo.ui
 )
 
 set(CMAKE_AUTOMOC ON)
@@ -204,6 +223,8 @@ set(ASTEROID_DEPENDS
     ${SDL2_LIBRARY}
     ${JPEG_LIBRARIES}
     ${Qt5Widgets_LIBRARIES}
+    ${Qt5Multimedia_LIBRARIES}
+    ${Qt5Network_LIBRARIES}
     c3dsreader
 )
 

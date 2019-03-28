@@ -12,39 +12,10 @@
 
 
 #include "Bullet.hpp"
-
-#ifdef __APPLE__
-#include <OpenGL/gl.h>
-#else
-#include <GL/gl.h>
-#endif
+#include "util/gl_includes.h"
 
 
 namespace asteroids {
-
-Bullet::Bullet(const Vector3f &fighter_position, const Vector3f fighter_axis, int shooter_id)
-		: m_alive(true), m_sphere(Vector3f(0, 0, 0), 10), m_shooter_id(shooter_id) {
-	// the bullet will move on this axis, it has to be reversed for the direction to be right
-	this->m_fighterAxis = fighter_axis;
-	this->m_iterations = 0;
-	this->m_speed = 100;
-
-	// same position as the fighter
-	m_position = fighter_position;
-}
-
-void Bullet::run(int elapsed_time) {
-	m_position = m_fighterAxis * (m_speed * 60 * elapsed_time / 1000.0) + m_position;
-	m_iterations++;
-
-	if (m_iterations > m_lifetime) {
-		m_alive = false;
-	}
-}
-
-int Bullet::radius() {
-	return m_sphere.radius();
-}
 
 void Bullet::render() {
 	// Compute transformation matrix
@@ -62,8 +33,5 @@ void Bullet::render() {
 	glPopMatrix();
 }
 
-int Bullet::get_shooter_id() const {
-	return m_shooter_id;
-}
 
 }

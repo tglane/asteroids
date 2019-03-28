@@ -14,16 +14,22 @@
 #include "datamodel/Player.hpp"
 #include "view2D/GameWindow.hpp"
 
+#include "network/client/tcpclient.hpp"
+#include "network/client/udpclient.hpp"
 
 
 int main(int argc, char** argv)
 {
-
-    DataModel::Ptr model = DataModel::Ptr(new DataModel("../models/Level-1.map"));
-
     QApplication a(argc, argv);
 
+    DataModel::Ptr model = DataModel::Ptr(new DataModel());
+    
+    //TODO add input for player name and server io
+    tcpclient::Ptr tcp_client(std::make_shared<tcpclient>(model));
+
     strategy::GameWindow gamewindow(model);
+
+    //QObject::connect(tcp_client.get(), SIGNAL(start_round()), &gamewindow, SLOT(start_round()));
 
     gamewindow.show();
 

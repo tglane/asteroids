@@ -12,11 +12,7 @@
 #include <stdio.h>
 #include <math.h>
 
-#ifdef __APPLE__
-#include <OpenGL/glu.h>
-#else
-#include <GL/glu.h>
-#endif
+#include "util/gl_includes.h"
 
 #include "view/Camera.hpp"
 

@@ -21,12 +21,12 @@
 namespace asteroids
 {
 
-        class Planet; 
-        
-	class Battle
-	{
+    class Planet;
 
-        public:
+    class Battle
+    {
+
+    public:
         using Ptr = std::shared_ptr<Battle>;
 
         /**
@@ -37,12 +37,12 @@ namespace asteroids
          * @param nShips1 Number of ships which player 1 has available in the battle
          * @param nShips2 Number of ships which player 2 has available in the battle 
          */
-        Battle(std::shared_ptr<Planet> location, Player::Ptr p1, Player::Ptr p2, int nShips1, int nShips2, bool FightResultInvader);
+        Battle(std::shared_ptr<Planet> location, Player::Ptr p1, Player::Ptr p2, int nShips1, int nShips2, bool FightResultInvader1);
 
-        public:
+    public:
 
         /**
-         * @brief Planet at which the battle is taking place 
+         * @brief Planet at which the battle is taking place
          */
         std::shared_ptr<Planet> m_location;
 
@@ -66,12 +66,22 @@ namespace asteroids
          */
         int m_numberShips2;
 
+        /**
+         * @brief Number of Ships player 1 has lost
+         */
+        int m_numberShipsLeft1;
+
+        /**
+         * @brief Number of Ships player 2 has
+         */
+        int m_numberShipsLeft2;
+
         //bool invaderWon;
 
         bool FightResultInvader;
 
 
-	};
+    };
 }
 
 #endif
