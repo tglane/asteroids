@@ -20,6 +20,7 @@ StartingDialog::StartingDialog(DataModel::Ptr model,tcpclient::Ptr tcp_client, T
     ui->ServerAddressLabel->setStyleSheet("QLabel { color: white }");
     ui->checkHostLabel->setStyleSheet("QLabel { color: white }");
     ui->ChooseMapLabel->setStyleSheet("QLabel { color: white}");
+    ui->StartGame->setText("Verbinde");
     ui->ChooseMapLabel->setVisible(false);
     ui->SelectMap->setVisible(false);
 
@@ -64,7 +65,6 @@ void StartingDialog::startGame(bool click)
     std::string server_addr = ui->ServerAddress->text().toStdString();
     if(!(ui->checkHost->isChecked()) && name != "" && name != "Please insert a name!")
     {
-        std::cout <<"Versuchen wirs"<< std::endl;
         connect(this, SIGNAL(connect_to_server(string, string)), m_tcpclient.get(), SLOT(connect_to_server(string, string)));
         connect(m_model->getWidget(DataModel::MAIN2D), SIGNAL(endround_signal()), m_tcpclient.get(), SLOT(endround_slot()));
         connect(this, SIGNAL(endround_signal()), m_tcpclient.get(), SLOT(endround_slot()));
@@ -73,14 +73,12 @@ void StartingDialog::startGame(bool click)
     }
     else if (ui->checkHost->isChecked())
     {
+        ui->StartGame->setText("Restart");
         m_tcpserver = shared_ptr<TcpServer>(new TcpServer(ui->SelectMap->currentText().toStdString()));
-        ui->Name->setText("Server Starting..");
+        ui->Name->setText("Server running..");
         ui->Name->setStyleSheet("QLineEdit { color: red }");
 
         QList<QHostAddress> list = QNetworkInterface::allAddresses();
-
-
-        // very buggy, if more than 1 ipv4, it maybe shows the right result
         QString ipv4;
         for(int nIter=0; nIter<list.count(); nIter++)
         {
@@ -104,6 +102,7 @@ void StartingDialog::selectMap(int state)
 {
     if(state == 2)
     {
+        ui->StartGame->setText("Host");
         ui->SelectMap->setVisible(true);
         ui->ChooseMapLabel->setVisible(true);
         ui->SelectMap->addItem("Level-1");
@@ -111,6 +110,7 @@ void StartingDialog::selectMap(int state)
         ui->ServerAddress->setEnabled(false);
         ui->Name->setEnabled(false);
     } else {
+        ui->StartGame->setText("Verbinde");
         ui->SelectMap->setVisible(false);
         ui->ChooseMapLabel->setVisible(false);
         ui->SelectMap->clear();
