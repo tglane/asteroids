@@ -6,6 +6,8 @@
 #include "view/MainWindow.hpp"
 
 #include <QFileInfo>
+#include <QMediaPlaylist>
+
 
 namespace strategy{
 
@@ -55,9 +57,12 @@ GameWindow::GameWindow(DataModel::Ptr model, QWidget* parent) :
     this->setPalette(palette);
 
     // Create a Mediaplayer which plays some background music
-    m_mediaplayer = new QMediaPlayer();
-    m_mediaplayer->setMedia(QUrl::fromLocalFile(QFileInfo("../models/Interstellar-Soundtrack.mp3").absoluteFilePath()));
-    //m_mediaplayer->play();
+    QMediaPlaylist* playlist = new QMediaPlaylist;
+    playlist->addMedia(QUrl::fromLocalFile(QFileInfo("../models/Interstellar-Soundtrack.mp3").absoluteFilePath()));
+    playlist->setPlaybackMode(QMediaPlaylist::Loop);
+    m_mediaplayer = new QMediaPlayer;
+    m_mediaplayer->setPlaylist(playlist);
+    m_mediaplayer->setVolume(30);
 
     connect(this, SIGNAL(play()), m_mediaplayer, SLOT(play()));
     connect(this, SIGNAL(stop()), m_mediaplayer, SLOT(stop()));
