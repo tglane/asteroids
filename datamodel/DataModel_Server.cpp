@@ -526,6 +526,7 @@ QJsonObject DataModel_Server::createJson(Player::Ptr player)
         qPlanet.insert("Mines", planet->getMinesBuild());
         qPlanet.insert("Ships", planet->getShips());
         qPlanet.insert("Shipyard", planet->getShipyardBuilt());
+        qPlanet.insert("RubinLeft", planet->getRubinLeft());
 
         //Add to the json array
         planeets.push_back(qPlanet);
