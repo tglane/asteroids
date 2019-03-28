@@ -390,7 +390,7 @@ bool DataModel_Server::updateAll(QJsonObject &update) {
 
 
             planet->setRubinLeft(rubinLeft);
-            planet->setMines(mines);
+            planet->setMinesBuilt(mines);
             planet->setShips(ships);
             planet->setOwner(player);
 
