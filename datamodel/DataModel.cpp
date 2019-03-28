@@ -14,7 +14,7 @@ DataModel::DataModel(std::string filename) : DataModel_Server(filename)
 DataModel::DataModel(std::string filename, int id, std::string player_name ) : 
     DataModel_Server(filename, id, player_name)
 {
-    m_self = Player::Ptr(new Player(id, 3000, 0, player_name));
+    m_self = Player::Ptr(new Player(id, 3000, 1, player_name));
     addPlayer(m_self);
     getUniverse(filename);
 }

@@ -16,7 +16,7 @@ DataModel_Server::DataModel_Server(std::string filename) : m_players(), m_planet
 
 DataModel_Server::DataModel_Server(std::string filename, int id, std::string player_name ) : m_players(), m_planets(), m_edges()
 {
-    m_self = Player::Ptr(new Player(id, 3000, 0, player_name));
+    m_self = Player::Ptr(new Player(id, 3000, 1, player_name));
     addPlayer(m_self);
     getUniverse(filename);
 }
@@ -24,7 +24,7 @@ DataModel_Server::DataModel_Server(std::string filename, int id, std::string pla
 void DataModel_Server::constructPlayer(int id, std::string player_name, bool is_self)
 {
     // kein Name könnte Problem sein
-    Player::Ptr p(new Player(id, 3000, 0, player_name));
+    Player::Ptr p(new Player(id, 3000, 1, player_name));
     if (is_self) {
         m_playerid = id;
         m_self = p;
@@ -323,6 +323,8 @@ void DataModel_Server::setStartPlanet(std::shared_ptr<Planet> startplanet)
 	startplanet->setOwner(m_self);
     startplanet->setInvader(m_self);
     startplanet->setInvaderShips(1);
+    /// at the beginnig the player has one ship in order to colonize a planet
+    m_self->setShips(1);
 	//startplanet->addShips(1);
 	//m_self->addPlanet(startplanet);
 }
