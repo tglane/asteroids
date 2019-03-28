@@ -341,7 +341,6 @@ void MainWindow2D::buildShip(bool click)
     // Ship should be accessible a round later
     Planet::Ptr p = m_model->getPlanetFromId(currentPlanet);
 
-    // TODO: Fehlerbehandlung
     if (p->getOwner() == NULL)
     {
         std::cout << "Planet wird nicht besessen!" << std::endl;
@@ -361,16 +360,16 @@ void MainWindow2D::buildShip(bool click)
         }
     } else {
         //p->buildShipyard();
-        m_model->buyShipyard(p, p->getOwner());
-        ui->BuildShip->setText("Build Ship");
+        if (m_model->buyShipyard(p, p->getOwner()))
+        {
+            std::cout << "Build Shipyard!" << std::endl;
+        }
+        else
+        {
+            std::cout << "Fehler MainWindow2D buyShip: m_model->buyShipyard ist fehlgeschlagen" << std::endl;
+        }
         updateAllInfo();
-        ui->BuildShip->setVisible(false);
-        // //Schifskosten
-        int shipcost = m_model->getShipCost();
-        std::string s = "Costs: " + std::to_string(shipcost) + " Rubies";
-        QString string = QString::fromStdString(s);
-        ui->BuildShip->setToolTip(string);
-        std::cout << "Build Shipyard!" << std::endl;
+        ui->BuildShip->setVisible(false);        
     }
 
     
@@ -384,11 +383,6 @@ void MainWindow2D::buildMine(bool click)
     if (p->getOwner() == NULL)
     {
         std::cout << "Planet wird nicht besessen!" << std::endl;
-        return;
-    }
-    if (p->getMinesBuild() > 0)
-    {
-        std::cout << "Planet besitzt bereits eine Mine" << std::endl;
         return;
     }
 
@@ -513,13 +507,44 @@ void MainWindow2D::updatePlanetInfo(int id)
         ui->MineOrdersLabel->setVisible(true);
         ui->MineOrdersValue->setVisible(true);
 
-        /* Schiffe und Minen können nur mit genügend Rubinen gekauft werden */
+        if (p->getShipyardBuilt())
+        {
+            ui->BuildShip->setText("Build Ship");
+            if (m_model->getSelfPlayer()->getRubin() < m_model->getShipCost())
+            {
+                ui->BuildShip->setVisible(false);
+            } 
+            else 
+            {
+                ui->BuildShip->setVisible(true);
+            }
+            //Schifskosten
+            int shipcost = m_model->getShipCost();
+            std::string s = "Costs: " + std::to_string(shipcost) + " Rubies";
+            QString string = QString::fromStdString(s);
+            ui->BuildShip->setToolTip(string);
+        } 
+        else 
+        {
+            ui->BuildShip->setText("Build Shipyard");
+            if (m_model->getSelfPlayer()->getRubin() < m_model->getShipyardCost())
+            {
+                ui->BuildShip->setVisible(false);
+            } 
+            else 
+            {
+                ui->BuildShip->setVisible(true);
+            }
+        }
+        
+        /* Minen können nur mit genügend Rubinen gekauft werden */
         if (m_model->getSelfPlayer()->getRubin() < m_model->getShipCost())
         {
             ui->BuildShip->setVisible(false);
         } else {
             ui->BuildShip->setVisible(true);
         }
+
         if (m_model->getSelfPlayer()->getRubin() < m_model->getMineCost()|| p->getMinesHidden()>0)
         {
             ui->BuildMine->setVisible(false);
@@ -527,6 +552,7 @@ void MainWindow2D::updatePlanetInfo(int id)
             ui->BuildMine->setVisible(true);
         }
 
+        
 
         std::list<Planet::Ptr> neighbour_list = p->getNeighbours();
 

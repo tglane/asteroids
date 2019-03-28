@@ -93,7 +93,7 @@ std::list<std::pair<int,int>> DataModel_Server::getEdges()
 
 bool DataModel_Server::endOfRound()
 {
-    std::cout << "End of Round!" << std::endl;
+    std::cout << "###################################     End of Round!    #################################" << std::endl;
 
     performMovements(getSelfPlayer());
     //findBattles();
@@ -137,12 +137,14 @@ bool DataModel_Server::buyShip(Planet::Ptr selectedPlanet, Player::Ptr m_self)
         if(getIDFromPlanet(selectedPlanet) == getIDFromPlanet(planet))
         {
             //ship is already being built on this planet
+            std::cout << "DataModel_server buyShip: if 1" << std::endl;
             return false;
         }
     }
 
     if(!selectedPlanet->getShipyardBuilt())
     {
+        std::cout << "DataModel_server buyShip: if 2" << std::endl;
         return false;
     }
 
@@ -160,6 +162,7 @@ bool DataModel_Server::buyShip(Planet::Ptr selectedPlanet, Player::Ptr m_self)
         return true;
     }
 
+    std::cout << "DataModel_server buyShip: if 3" << std::endl;
     return false;
 
 }
