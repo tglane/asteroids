@@ -32,16 +32,25 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
     //StyleStuff
     ui->ContextMenue->setStyleSheet("background-color:#331155; border-radius:10px; color:#FFFFFF");
     ui->Fight->setStyleSheet("background-color:#442266; color:#FFFFFF; border-radius:10px;");
-    ui->ExitGame->setStyleSheet("background-color:#110033");
-    ui->NextRound->setStyleSheet("background-color:#110033");
-    ui->BuildMine->setStyleSheet("background-color:#110033");
-    ui->BuildShip->setStyleSheet("background-color:#110033");
-    ui->SendShip->setStyleSheet("background-color:#110033");
-    ui->Colonize->setStyleSheet("background-color:#110033");
-    ui->SendShipNumber->setStyleSheet("background-color:#110033");
-    ui->DestionationPlanet->setStyleSheet("background-color:#110033");
+    ui->ExitGame->setStyleSheet("QPushButton{background-color:#110033}""QPushButton:hover{background-color:#663388}");
+    ui->NextRound->setStyleSheet("QPushButton{background-color:#110033}""QPushButton:hover{background-color:#663388}");
+    ui->BuildMine->setStyleSheet("QPushButton{background-color:#110033}""QPushButton:hover{background-color:#663388}");
+    ui->BuildShip->setStyleSheet("QPushButton{background-color:#110033}""QPushButton:hover{background-color:#663388}");
+    ui->SendShip->setStyleSheet("QPushButton{background-color:#110033}""QPushButton:hover{background-color:#663388}");
+    ui->Colonize->setStyleSheet("QPushButton{background-color:#110033}""QPushButton:hover{background-color:#663388}");
+    ui->SendShipNumber->setStyleSheet("QPushButton{background-color:#110033}""QPushButton:hover{background-color:#663388}");
+    ui->DestionationPlanet->setStyleSheet("QPushButton{background-color:#110033}""QPushButton:hover{background-color:#663388}");
     ui->SpielerInfoTable->setStyleSheet("border-width:0px;");
-
+    // //MineBuild costs
+    int minecost = m_model->getMineCost();
+    std::string s = "Costs: " + std::to_string(minecost) + " Rubies";
+    QString string = QString::fromStdString(s);
+    ui->BuildMine->setToolTip(string);
+    // //WerftBuild costs
+    int shipyardcost = m_model->getShipyardCost();
+    s = "Costs: " + std::to_string(shipyardcost) + " Rubies";
+    string = QString::fromStdString(s);
+    ui->BuildShip->setToolTip(string);
 
     //Set sidebar look
     QGraphicsOpacityEffect * effect = new QGraphicsOpacityEffect(ui->ContextMenue);
@@ -337,6 +346,13 @@ void MainWindow2D::buildShip(bool click)
     } else {
         p->buildShipyard();
         ui->BuildShip->setText("Build Ship");
+        updatePlanetInfo(currentPlanet);
+        updatePlayerInfo();
+        // //Schifskosten
+        int shipcost = m_model->getShipCost();
+        std::string s = "Costs: " + std::to_string(shipcost) + " Rubies";
+        QString string = QString::fromStdString(s);
+        ui->BuildShip->setToolTip(string);
         std::cout << "Build Shipyard!" << std::endl;
     }
 
@@ -519,6 +535,8 @@ void MainWindow2D::updatePlanetInfo(int id)
     // Planeteninfo ausfüllen
     ui->PlanetName->setText(QString::fromStdString(p->getName()));
 
+    ui->RubinNumber->setText("# " + QString::number(p->getRubinLeft()));
+
     QString mineText = QString::number(p->getMinesBuild()) + " / " + QString::number(p->getMines());
     ui->MineNumber->setText(mineText);
     // Verstecke den Button, wenn die max. Minenanzahl erreicht ist
@@ -527,7 +545,8 @@ void MainWindow2D::updatePlanetInfo(int id)
         ui->BuildMine->setVisible(false);
     }
 
-    ui->ShipNumber->setText(QString::number(p->getShips()));
+    ui->ShipNumber->setText("# " + QString::number(p->getShips()));
+
     if (p->getOwner() == NULL)
     {
         ui->Info->setText("Niemand besitzt diesen Planeten!");
@@ -537,8 +556,8 @@ void MainWindow2D::updatePlanetInfo(int id)
         ui->Info->setText(QString::fromStdString(p->getOwner()->getPlayerName()));
     }
 
-    ui->MineOrdersValue->setText(QString::number(p->getMinesHidden()));
-    ui->ShipOrdersValue->setText(QString::number(p->getShipsOrdered()));
+    ui->MineOrdersValue->setText("# " + QString::number(p->getMinesHidden()));
+    ui->ShipOrdersValue->setText("# " + QString::number(p->getShipsOrdered()));
 }
 
 void MainWindow2D::initPlanets()
