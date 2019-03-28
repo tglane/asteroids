@@ -78,7 +78,11 @@ public:
 
     void clearOrderList();
 
-    /*Kauf Methoden ende*/
+    /**
+     * @brief creates moveOrder if the order is legit
+     * @param 'from' planet of origin, 'to' destination planet (both shared_pointer), numShips number of ships which should be moved
+     * @return true, when enough ships on the planet of origin and order could be created
+     */
     bool moveShips(Planet::Ptr from, Planet::Ptr to, int numShips);
 
     Planet::Ptr getPlanetFromId(int ID);

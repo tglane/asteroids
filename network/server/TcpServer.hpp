@@ -17,13 +17,15 @@ class TcpClient
 {
 public:
     char id;
+
+    bool ready = false;
     std::shared_ptr<QTcpSocket> socket;
 
     TcpClient(char id, QTcpSocket* socket)
-        : id(id), socket(socket) {}
+        : id(id), socket(socket), ready(false){}
 
     TcpClient(const TcpClient& other)
-        : id(other.id), socket(other.socket) {}
+        : id(other.id), socket(other.socket),ready(other.ready) {}
 };
 
 class TcpServer: public QObject
@@ -36,6 +38,8 @@ public:
 
     TcpServer(std::string filename, QObject* parent = 0);
 
+    QTcpServer server;
+
 private slots:
     void onConnect();
     void readyRead();
@@ -46,7 +50,7 @@ private:
     char last_id = 42;
 
     ServerState state;
-    QTcpServer server;
+
     std::vector<TcpClient> clients;
 
     void send_strat_init();
@@ -58,6 +62,9 @@ private:
     void handle_ready(TcpClient& client, QJsonDocument& doc);
     void handle_state(TcpClient& client, QJsonDocument& doc);
     void send_battle(Battle::Ptr battle, bool first);
+
+    bool all_ready();
+
 
     int init_count = 0;
     int ready_count = 0;

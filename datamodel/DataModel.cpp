@@ -107,69 +107,6 @@ void DataModel::switchWindow(int Id)
     }
 }
 
-bool DataModel::WinCondition()
-{
-    if(first_round)
-    {
-        first_round = false;
-    }
-    else
-    {
-        std::map<int, Planet::Ptr>::iterator it;
-        int NumberOfPlanets = m_planets.size();
-        int selfOwnedPlanets = 0;
-        int enemyOwnedPlanets = 0;
-        std::cout << "Anzahl der Planeten" << std::endl;
-        std::cout << NumberOfPlanets << std::endl;
-        for(it = m_planets.begin(); it != m_planets.end(); it++)
-        {
-            Planet::Ptr Planets = it->second;
-            if(Planets->getOwner() == m_self)
-            {
-                selfOwnedPlanets++;
-            }
-            else if(Planets->getOwner() == m_enemy)
-            {
-                enemyOwnedPlanets++;
-            }
-        }
-
-        if(NumberOfPlanets == selfOwnedPlanets)
-        {
-            result = 1;
-            emit endOfGame();
-            switchWindow(END);
-            std::cout << "Gewonnen" <<std::endl;
-            return true;
-        }
-        if(selfOwnedPlanets == 0)
-        {
-            result = 2;
-            emit endOfGame();
-            switchWindow(END);
-            std::cout << "Verloren" << std::endl;
-            return true;
-        }
-        if(NumberOfPlanets == enemyOwnedPlanets)
-        {
-            result = 2;
-            emit endOfGame();
-            switchWindow(END);
-            std::cout << "Verloren" <<std::endl;
-            return true;
-        }
-        if(enemyOwnedPlanets == 0)
-        {
-            result = 1;
-            emit endOfGame();
-            switchWindow(END);
-            std::cout << "Gewonnen" << std::endl;
-            return true;
-        }
-        return false;
-    }
-}
-
 DataModel::~DataModel(){}
 
 }

@@ -349,8 +349,10 @@ void DataModel_Server::startGame()
 void DataModel_Server::setStartPlanet(std::shared_ptr<Planet> startplanet)
 {
 	startplanet->setOwner(m_self);
-	startplanet->addShips(1);
-	m_self->addPlanet(startplanet);
+    startplanet->setInvader(m_self);
+    startplanet->setInvaderShips(1);
+	//startplanet->addShips(1);
+	//m_self->addPlanet(startplanet);
 }
 
 void DataModel_Server::clearInvaders() {

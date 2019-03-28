@@ -10,11 +10,12 @@ TcpServer::TcpServer(std::string filename, QObject* parent)
 {
     level = filename;
     state = WAITING;
+
     connect(&server, SIGNAL(newConnection()), this, SLOT(onConnect()));
-    //connect(&server, SIGNAL(disconnected()), this, SLOT(onDisconnect()));
+    connect(&server, SIGNAL(disconnected()), this, SLOT(onDisconnect()));
+
     std::cout << "../models/" << filename<<std::endl;
     m_datamodel = DataModel_Server::Ptr(new DataModel_Server("../models/"+filename+".map"));
-    //m_datamodel->getUniverse("../../../models/Level-1.map");
 
     if(!server.listen(QHostAddress::Any, 1235))
     {
@@ -28,6 +29,23 @@ TcpServer::TcpServer(std::string filename, QObject* parent)
     udpServer = std::shared_ptr<UdpServer>(new UdpServer());
     connect(udpServer.get(),SIGNAL(fightEnd(int,int)), this, SLOT(fightEnd(int,int)));
 }
+
+bool TcpServer::all_ready()
+{
+    int count = 0;
+    for (auto i: clients)
+    {
+        //qDebug() << "id:" << i.id << "ready?" << i.ready;
+        if (i.ready == true)
+        {
+            count++;
+        }
+    }
+   //qDebug() << "Clients_size" << clients.size();
+   //qDebug() << "Clients_count" <<count;
+    return (clients.size() == count);
+}
+
 
 void TcpServer::onDisconnect()
 {
@@ -51,11 +69,11 @@ void TcpServer::onConnect()
     if (state != WAITING) {
         return; 
     }
-    qDebug() << "Client connected 2";
+    //qDebug() << "Client connected 2";
 
     std::cout << "client id: " << last_id << std::endl;
     TcpClient client(last_id++, server.nextPendingConnection());
-    client.socket->setSocketOption(QAbstractSocket::KeepAliveOption, 1);
+    //client.socket->setSocketOption(QAbstractSocket::KeepAliveOption, 1);
     clients.push_back(client);
 
     connect(client.socket.get(), SIGNAL(disconnect()), this, SLOT(onDisconnect()));
@@ -84,14 +102,20 @@ void TcpServer::send_state()
 
 void TcpServer::handle_ready(TcpClient& client, QJsonDocument& doc)
 {
-    qDebug() << "ready received";
-    qDebug() << doc;
-    ready_count++;
+    qDebug() << "ready received from: " << client.id;
+    //qDebug() << doc;
+    client.ready = true;
+    qDebug() << "ready?: : " << client.ready;
+    //client.ready = true;
     if (state == WAIT_READY)
     {
-        if (clients.size() == ready_count) {
-            ready_count = 0;
+        std::cout << "in_wait_ready_before_all_ready" << std::endl;
+        qDebug() <<  all_ready();
+        //client.ready=true;
+        if (all_ready()) {
+            //client.ready = false;
             for (auto j: clients) {
+                j.ready = false;
                 QJsonArray array;
                 array.push_back("strat_init");
                 qDebug() << "Sending strat_init";
@@ -117,15 +141,18 @@ void TcpServer::handle_ready(TcpClient& client, QJsonDocument& doc)
             state = ROUND;
         }
     } else if (state == PRE_FIGHT) {
-        if (clients.size() == ready_count) {
-            ready_count = 0;
+
+        if (all_ready()) {
+            //ready_count = 0;
+            for (auto j: clients) j.ready = false;
             qDebug() << "state changed: FIGHT";
             state = FIGHT;
             fight_init(m_battle_list[battle_count]);
         }
     } else if (state == END_FIGHT) {
-        if (clients.size() == ready_count) {
-            ready_count = 0;
+        ready_count++;
+        if (all_ready()) {
+            for (auto j: clients) j.ready = false;
             if (battle_count < m_battle_list.size()) {
                 qDebug() << "state changed: PRE_FIGHT";
                 state = PRE_FIGHT;
@@ -158,8 +185,8 @@ void TcpServer::handle_state(TcpClient& client, QJsonDocument& doc) {
     m_datamodel->printPlayer();
 
     ready_count++;
-    if (clients.size() == ready_count) {
-        ready_count = 0;
+    if (all_ready()) {
+        for (auto j: clients) j.ready = false;
         m_battle_list = m_datamodel->findBattles();
         m_datamodel->clearInvaders();
         qDebug() << "n battles: " << m_battle_list.size();
@@ -389,8 +416,7 @@ void TcpServer::handle_init(TcpClient& client, QJsonDocument& doc)
     // Ziehe Daten aus Document
     QJsonArray array = doc.array();
     QJsonObject temp_name = array[1].toObject();
-    //qDebug() << "array"<< array;
-    //qDebug() << "temp_name" << temp_name;
+
     QString name(temp_name["player_name"].toString().toUtf8());
     //qDebug() << name;
     m_datamodel->constructPlayer(client.id, name.toStdString(), false);
@@ -412,12 +438,12 @@ void TcpServer::handle_init(TcpClient& client, QJsonDocument& doc)
     client.socket->write(res.toJson());
 
     init_count++;
-    qDebug() << init_count;
+    qDebug() << "Init count: " << init_count;
     if (init_count == 2) {
         qDebug() << "state changed: WAIT_READY";
         state = WAIT_READY;
     }
-    qDebug() << client.socket->peerAddress();
+    //qDebug() << client.socket->peerAddress();
 
     //udpServer->add_client(client.id, client.socket->peerAddress(), client.socket->peerPort(), 100);
 }
@@ -425,7 +451,8 @@ void TcpServer::handle_init(TcpClient& client, QJsonDocument& doc)
 
 void TcpServer::readyRead()
 {
-    for (auto i: clients)
+    // fick dich c++
+    for (auto& i: clients)
     {
         if (i.socket->bytesAvailable() > 0)
         {

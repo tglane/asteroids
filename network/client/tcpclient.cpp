@@ -10,7 +10,7 @@ tcpclient::tcpclient(asteroids::DataModel::Ptr datamodel, QObject* parent)
     : m_datamodel(std::move(datamodel))
 {
     m_socket = std::make_shared<QTcpSocket>(this);
-    m_socket->setSocketOption(QAbstractSocket::KeepAliveOption, 1);
+    //m_socket->setSocketOption(QAbstractSocket::KeepAliveOption, 1);
 
     connect(m_socket.get(), SIGNAL(connected()), this, SLOT(send_init()));
     connect(m_socket.get(), SIGNAL(readyRead()), this, SLOT(recv_json()));
