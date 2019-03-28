@@ -217,16 +217,11 @@ void tcpclient::process_battle(QJsonObject recv_obj)
         std::cout << "battle post fight" << std::endl;
         /* Show end-fight window and wait for ready button clicked to go to END_ROUND */
         m_state = client_state::END_FIGHT;
-        //TODO show end fight window
-        // send ready after button click
-        // go to end_round
-        if(recv_obj.contains("ships_after1") && recv_obj.contains("ships_after2"))
-        {
-            m_switch_mode_dialoge->updateWindow(recv_obj["planet_name"].toString().toStdString(), recv_obj["player_name1"].toString().toStdString(),
-                                         recv_obj["player_name2"].toString().toStdString(), recv_obj["ships1"].toInt(), recv_obj["ships2"].toInt(),
-                                         recv_obj["ships_after1"].toInt(), recv_obj["ships_after2"].toInt());
-            m_datamodel->switchWindow(DataModel::SWITCH);
-        }
+        m_switch_mode_dialoge->updateWindow(recv_obj["planet_name"].toString().toStdString(), recv_obj["player_name1"].toString().toStdString(),
+                                     recv_obj["player_name2"].toString().toStdString(), recv_obj["ships1"].toInt(), recv_obj["ships2"].toInt(),
+                                     recv_obj["ships_after1"].toInt(), recv_obj["ships_after2"].toInt());
+        m_mainwindow->hide();
+        m_datamodel->switchWindow(DataModel::SWITCH);
     }
 }
 
@@ -245,6 +240,8 @@ void tcpclient::process_fight_init(QJsonObject recv_obj)
     } else {
         m_mainwindow->ui->openGLWidget->reset();
     }
+
+    m_state = client_state::FIGHT;
 
     m_mainwindow->start_timer();
 
