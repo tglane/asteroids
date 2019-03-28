@@ -208,6 +208,7 @@ void tcpclient::process_fight_init(QJsonObject recv_obj)
         m_mainwindow->ui->openGLWidget->reset();
     }
 
+    m_mainwindow->start_timer();
     /* Initialize new window for 3d part */
     //m_datamodel->switchWindow(DataModel_Server::MAIN3D);
 

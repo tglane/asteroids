@@ -231,6 +231,8 @@ void GLWidget::reset() {
     m_startTimer.restart();
     m_started = false;
 
+    m_physicsEngine->reset_lists();
+
     m_physicsEngine->addHittable(m_camera);
     m_physicsEngine->addHittable(m_enemy);
 }

@@ -73,7 +73,6 @@ namespace asteroids
         }
     }
 
-
     int PhysicsEngine::check_id_type(int id_to_check)
     {
         if((id_to_check >> 24) == 0)
@@ -114,6 +113,14 @@ namespace asteroids
             }
             return 2; // Means Player
         }
+    }
+
+    void PhysicsEngine::reset_lists()
+    {
+        m_hittables.clear();
+        m_objects.clear();
+        m_bullets.clear();
+        m_particles.reset_particles();
     }
 
 } /* namespace asteroids */
