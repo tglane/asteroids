@@ -562,7 +562,13 @@ void MainWindow2D::updatePlanetInfo(int id)
         ui->BuildMine->setVisible(false);
     }
 
-    ui->ShipNumber->setText("# " + QString::number(p->getShips()));
+    if (p->getShipyardBuilt())
+    {
+        ui->ShipNumber->setText("1 --- " + QString::number(p->getShips()));
+    } else {
+        ui->ShipNumber->setText("0 --- " + QString::number(p->getShips()));
+    }
+    
 
     if (p->getOwner() == NULL)
     {
