@@ -18,6 +18,7 @@
 #include "MoveOrder.hpp"
 #include "MineOrder.hpp"
 #include "ShipOrder.hpp"
+#include "ShipyardOrder.hpp"
 #include "Battle.hpp"
 
 using std::map;
@@ -67,9 +68,13 @@ public:
 
     bool buyMine(Planet::Ptr selectedPlanet, Player::Ptr m_self);
 
+    bool buyShipyard(Planet::Ptr selectedPlanet, Player::Ptr m_self);
+
     void TransaktionShip();
 
     void TransaktionMine();
+
+    void TransaktionShipyard();
 
     void clearOrderList();
 
@@ -83,7 +88,9 @@ public:
     int getIDFromPlanetName(std::string name);
 
     std::list<std::pair<int,int>> getEdges();
-
+    /**
+     * added: subtractEarnings for each planet
+     */
     void calculateFinance(Player::Ptr Player);
     
     void startGame();
@@ -189,6 +196,8 @@ protected:
     int Shipcost = 500;
 
     int Minecost = 1000;
+
+    int Shipyardcost = 2000;
 
     int Minegain = 750;
     /**

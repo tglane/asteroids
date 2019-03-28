@@ -123,12 +123,13 @@ void MainWindow2D::resizeEvent(QResizeEvent* event){
 
 MainWindow2D::~MainWindow2D() 
 {
-    if(ui)
+    // this caused the SegFault when exiting
+    /*if(ui)
         delete ui;
     if(FighterWindow != NULL)
         delete FighterWindow;
     if (scene)
-        delete scene;
+        delete scene;*/
 }
 
 
@@ -342,6 +343,7 @@ void MainWindow2D::buildShip(bool click)
         ui->BuildShip->setText("Build Ship");
         // //Schifskosten
         ui->BuildShip->setToolTip("Costs: ");
+        std::cout << "Build Shipyard!" << std::endl;
     }
 
     

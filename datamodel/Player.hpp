@@ -18,6 +18,7 @@
 #include "MoveOrder.hpp"
 #include "MineOrder.hpp"
 #include "ShipOrder.hpp"
+#include "ShipyardOrder.hpp"
 
 namespace asteroids
 {
@@ -181,6 +182,19 @@ public:
 	void putListMoveOrder(std::shared_ptr<MoveOrder> newMoveOrder);
 
 	/**
+	 * @brief add a Shipyard order to the list
+	 * @param std::shared_ptr<ShipyardOrder> new Shipyard order
+	 */
+	void putListShipyardOrder(std::shared_ptr<ShipyardOrder> newShipyardOrder);
+
+	/**
+	 * @brief returns the Shipyard order list
+	 * @return std::list<std::shared_ptr<ShipyardOrder>> Shipyard order list
+	 */
+	std::list<std::shared_ptr<ShipyardOrder>> getListShipyardOrder();
+
+
+	/**
 	 * @brief clears the ship, mine and move order list
 	 */
 	void ClearOrderListInPlayer();
@@ -190,10 +204,11 @@ public:
 	void RemovePlaneteFromList(Planet::Ptr Planet);
 
 	void PrintPlanetsList();
+
 	/**
 	 * @brief updates number of rubin and ships by the values of the planets in our ownership
-	 */
-	void updateResources();
+	 *
+	void updateResources();*/
 
 private:
 
@@ -208,8 +223,11 @@ private:
 	std::list<std::shared_ptr<MoveOrder>> m_moveOrders;
 	std::list<std::shared_ptr<MineOrder>> m_mineOrders;
 	std::list<std::shared_ptr<ShipOrder>> m_shipOrders;
+	std::list<std::shared_ptr<ShipyardOrder>> m_shipyardOrders;
+
 
 };
 }
+
 
 #endif
