@@ -42,9 +42,15 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
     ui->DestionationPlanet->setStyleSheet("QPushButton{background-color:#110033}""QPushButton:hover{background-color:#663388}");
     ui->SpielerInfoTable->setStyleSheet("border-width:0px;");
     // //MineBuild costs
-    ui->BuildMine->setToolTip("Costs: ");
+    int minecost = m_model->getMineCost();
+    std::string s = "Costs: " + std::to_string(minecost) + " Rubies";
+    QString string = QString::fromStdString(s);
+    ui->BuildMine->setToolTip(string);
     // //WerftBuild costs
-    ui->BuildShip->setToolTip("Costs: ");
+    int shipyardcost = m_model->getShipyardCost();
+    s = "Costs: " + std::to_string(shipyardcost) + " Rubies";
+    string = QString::fromStdString(s);
+    ui->BuildShip->setToolTip(string);
 
     //Set sidebar look
     QGraphicsOpacityEffect * effect = new QGraphicsOpacityEffect(ui->ContextMenue);
@@ -342,7 +348,10 @@ void MainWindow2D::buildShip(bool click)
         p->buildShipyard();
         ui->BuildShip->setText("Build Ship");
         // //Schifskosten
-        ui->BuildShip->setToolTip("Costs: ");
+        int shipcost = m_model->getShipCost();
+        std::string s = "Costs: " + std::to_string(shipcost) + " Rubies";
+        QString string = QString::fromStdString(s);
+        ui->BuildShip->setToolTip(string);
         std::cout << "Build Shipyard!" << std::endl;
     }
 
