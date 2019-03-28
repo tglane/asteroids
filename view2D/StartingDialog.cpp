@@ -71,7 +71,7 @@ void StartingDialog::startGame(bool click)
         emit connect_to_server(name, server_addr);
 
     }
-    /**else if (ui->checkHost->isChecked())
+    else if (ui->checkHost->isChecked())
     {
         m_tcpserver = shared_ptr<TcpServer>(new TcpServer(ui->SelectMap->currentText().toStdString()));
         ui->Name->setText("Server Starting..");
@@ -91,7 +91,7 @@ void StartingDialog::startGame(bool click)
 
         ui->ServerAddress->setText(ipv4);
         ui->ServerAddress->setStyleSheet("QLineEdit { color: yellow }");
-    }*/
+    }
     else
     {
         ui->Name->setText("Please insert a name!");
