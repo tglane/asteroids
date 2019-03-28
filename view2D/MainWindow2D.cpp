@@ -345,7 +345,8 @@ void MainWindow2D::buildShip(bool click)
             std::cout << "Fehler MainWindow2D: Build Ship!" << std::endl;
         }
     } else {
-        p->buildShipyard();
+        //p->buildShipyard();
+        m_model->buyShipyard(p, p->getOwner());
         ui->BuildShip->setText("Build Ship");
         updatePlanetInfo(currentPlanet);
         updatePlayerInfo();

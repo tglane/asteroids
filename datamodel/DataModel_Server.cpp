@@ -141,8 +141,13 @@ bool DataModel_Server::buyShip(Planet::Ptr selectedPlanet, Player::Ptr m_self)
         }
     }
 
+    if(!selectedPlanet->getShipyardBuilt())
+    {
+        return false;
+    }
+
     int Player_Rubin_Number = m_self->getRubin();
-    if(Player_Rubin_Number >= Shipcost && selectedPlanet->getShipyardBuilt())
+    if(Player_Rubin_Number >= Shipcost)
     {
         m_self->delRubin(Shipcost);
         /*test druck*/
