@@ -203,6 +203,11 @@ int Planet::getRubinLeft()
 	return m_rubinLeft;
 }
 
+void Planet::setRubinLeft(int rubinLeft)
+{
+	m_rubinLeft = rubinLeft;
+}
+
 int Planet::calculateEarnings(int mineRubin)
 {
 	return mineRubin * m_mines;

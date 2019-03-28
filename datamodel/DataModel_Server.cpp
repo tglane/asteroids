@@ -343,6 +343,7 @@ bool DataModel_Server::updateAll(QJsonObject &update) {
         int ships;
         int mines;
         bool shipyard;
+        int rubinLeft;
 
 
         for (it1 = array.constBegin(); it1 != array.constEnd(); it1++)
@@ -352,8 +353,10 @@ bool DataModel_Server::updateAll(QJsonObject &update) {
             mines = it1->toObject(QJsonObject()).value("Mines").toInt();
             ships = it1->toObject(QJsonObject()).value("Ships").toInt();
             shipyard = it1->toObject(QJsonObject()).value("Shipyard").toBool();
+            rubinLeft = it1->toObject(QJsonObject()).value("RubinLeft").toInt();
 
 
+            planet->setRubinLeft(rubinLeft);
             planet->setMines(mines);
             planet->setShips(ships);
             planet->setOwner(player);
@@ -522,6 +525,7 @@ QJsonObject DataModel_Server::createJson(Player::Ptr player)
         qPlanet.insert("ID", getIDFromPlanet(planet));
         qPlanet.insert("Mines", planet->getMinesBuild());
         qPlanet.insert("Ships", planet->getShips());
+        qPlanet.insert("Shipyard", planet->getShipyardBuilt());
 
         //Add to the json array
         planeets.push_back(qPlanet);
@@ -578,55 +582,6 @@ QJsonObject DataModel_Server::createBattleJson(Battle::Ptr battle)
 
     return main;
 }
-
-/*
-QJsonDocument createJsonOrders(Player::Ptr player)
-{
-    // main QJson object in the document
-    QJsonObject main;
-
-    //insert id of the player
-    main.insert("ID", player->getIdentity());
-    // Playername
-    main.insert("Name",  QString::fromStdString(player->getPlayerName()));
-    // amount of rubin
-    main.insert("Rubin", player->getIdentity());
-
-    //Json array
-    QJsonArray qMineOrders;
-
-    //Mineorders of the player
-    std::list<MineOrder::Ptr> mineOrders = player->getListMineOrder();
-
-    //Iterate over all planets and add the to the json file
-    for(std::list<MineOrder::Ptr>::iterator it = mineOrders.begin(); it != mineOrders.end(); ++it)
-    {
-        // Get mineorder and representation
-        MineOrder::Ptr mineOrder = *it;
-        QJsonObject qMineOrder;
-
-        //Add Id
-        //qMineOrder.insert("PlanetID", getIDFromPlanet(mineOrder->getPlanet()));
-
-        qMineOrders.push_back(qMineOrder);
-       
-        //The Planet and the qjson representations
-        Planet::Ptr planet = *it;
-        QJsonObject qPlanet;
-
-        // Add necessary information to representation
-        qPlanet.insert("ID", getIDFromPlanet(planet));
-        qPlanet.insert("Mines", planet->getMines());
-        qPlanet.insert("Ships", planet->getShips());
-
-        //Add to the json array
-        planeets.push_back(qPlanet);
-        
-    }
-
-    return QJsonDocument();
-}
-*/
 
 void DataModel_Server::performMovements(Player::Ptr player)
 {

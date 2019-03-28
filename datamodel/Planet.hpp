@@ -37,7 +37,7 @@ namespace asteroids
 		 * @param rubinLeft optional param = 20 how many rubin is left on this planet
 		 *
 		 */
-		Planet(std::string name, int posx, int posy/*, int rubin = 0*/, int mines = 0, int rubinLeft = 20);
+		Planet(std::string name, int posx, int posy/*, int rubin = 0*/, int mines = 0, int rubinLeft = 20000);
 
 		/**
 		 * @brief gives the number of ships on this planet
@@ -189,6 +189,11 @@ namespace asteroids
 		 * @return how many rubin this planet gave this round
 		 */
 		int subtractEarnings(int mineRubin);
+
+		/**
+		 * @sets m_rubinLeft to the given value
+		 */
+		void setRubinLeft(int rubinLeft);
 
 		/**
 		 * @brief returns how many rubin is left on this planet
