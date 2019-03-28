@@ -504,7 +504,7 @@ void MainWindow2D::updatePlanetInfo(int id)
         } else {
             ui->BuildShip->setVisible(true);
         }
-        if (m_model->getSelfPlayer()->getRubin() < m_model->getMineCost())
+        if (m_model->getSelfPlayer()->getRubin() < m_model->getMineCost()|| p->getMinesHidden()>0)
         {
             ui->BuildMine->setVisible(false);
         } else {
