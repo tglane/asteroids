@@ -32,6 +32,17 @@ TcpServer::TcpServer(std::string filename, QObject* parent)
 void TcpServer::onDisconnect()
 {
     qDebug() << "Client disconnected";
+    std::vector<TcpClient>::iterator it;
+    for (it = clients.begin(); it != clients.end(); ) {
+        if (it->socket->state() != QTcpSocket::ConnectedState) {
+            it = clients.erase(it);
+        } else {
+            it++;
+        }
+    }
+    if (clients.size() == 0) {
+        emit stop_server();
+    }
 }
 
 void TcpServer::onConnect()
@@ -75,9 +86,9 @@ void TcpServer::handle_ready(TcpClient& client, QJsonDocument& doc)
 {
     qDebug() << "ready received";
     qDebug() << doc;
+    ready_count++;
     if (state == WAIT_READY)
     {
-        ready_count++;
         if (clients.size() == ready_count) {
             ready_count = 0;
             for (auto j: clients) {
@@ -106,7 +117,6 @@ void TcpServer::handle_ready(TcpClient& client, QJsonDocument& doc)
             state = ROUND;
         }
     } else if (state == PRE_FIGHT) {
-        ready_count++;
         if (clients.size() == ready_count) {
             ready_count = 0;
             qDebug() << "state changed: FIGHT";
@@ -114,7 +124,6 @@ void TcpServer::handle_ready(TcpClient& client, QJsonDocument& doc)
             fight_init(m_battle_list[battle_count]);
         }
     } else if (state == END_FIGHT) {
-        ready_count++;
         if (clients.size() == ready_count) {
             ready_count = 0;
             if (battle_count < m_battle_list.size()) {
