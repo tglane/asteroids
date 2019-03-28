@@ -32,16 +32,25 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
     //StyleStuff
     ui->ContextMenue->setStyleSheet("background-color:#331155; border-radius:10px; color:#FFFFFF");
     ui->Fight->setStyleSheet("background-color:#442266; color:#FFFFFF; border-radius:10px;");
-    ui->ExitGame->setStyleSheet("background-color:#110033");
-    ui->NextRound->setStyleSheet("background-color:#110033");
-    ui->BuildMine->setStyleSheet("background-color:#110033");
-    ui->BuildShip->setStyleSheet("background-color:#110033");
-    ui->SendShip->setStyleSheet("background-color:#110033");
-    ui->Colonize->setStyleSheet("background-color:#110033");
-    ui->SendShipNumber->setStyleSheet("background-color:#110033");
-    ui->DestionationPlanet->setStyleSheet("background-color:#110033");
+    ui->ExitGame->setStyleSheet("QPushButton{background-color:#110033}""QPushButton:hover{background-color:#663388}");
+    ui->NextRound->setStyleSheet("QPushButton{background-color:#110033}""QPushButton:hover{background-color:#663388}");
+    ui->BuildMine->setStyleSheet("QPushButton{background-color:#110033}""QPushButton:hover{background-color:#663388}");
+    ui->BuildShip->setStyleSheet("QPushButton{background-color:#110033}""QPushButton:hover{background-color:#663388}");
+    ui->SendShip->setStyleSheet("QPushButton{background-color:#110033}""QPushButton:hover{background-color:#663388}");
+    ui->Colonize->setStyleSheet("QPushButton{background-color:#110033}""QPushButton:hover{background-color:#663388}");
+    ui->SendShipNumber->setStyleSheet("QPushButton{background-color:#110033}""QPushButton:hover{background-color:#663388}");
+    ui->DestionationPlanet->setStyleSheet("QPushButton{background-color:#110033}""QPushButton:hover{background-color:#663388}");
     ui->SpielerInfoTable->setStyleSheet("border-width:0px;");
-
+    // //MineBuild costs
+    int minecost = m_model->getMineCost();
+    std::string s = "Costs: " + std::to_string(minecost) + " Rubies";
+    QString string = QString::fromStdString(s);
+    ui->BuildMine->setToolTip(string);
+    // //WerftBuild costs
+    int shipyardcost = m_model->getShipyardCost();
+    s = "Costs: " + std::to_string(shipyardcost) + " Rubies";
+    string = QString::fromStdString(s);
+    ui->BuildShip->setToolTip(string);
 
     //Set sidebar look
     QGraphicsOpacityEffect * effect = new QGraphicsOpacityEffect(ui->ContextMenue);
@@ -120,12 +129,13 @@ void MainWindow2D::resizeEvent(QResizeEvent* event){
 
 MainWindow2D::~MainWindow2D() 
 {
-    if(ui)
+    // this caused the SegFault when exiting
+    /*if(ui)
         delete ui;
     if(FighterWindow != NULL)
         delete FighterWindow;
     if (scene)
-        delete scene;
+        delete scene;*/
 }
 
 
@@ -339,6 +349,11 @@ void MainWindow2D::buildShip(bool click)
         ui->BuildShip->setText("Build Ship");
         updatePlanetInfo(currentPlanet);
         updatePlayerInfo();
+        // //Schifskosten
+        int shipcost = m_model->getShipCost();
+        std::string s = "Costs: " + std::to_string(shipcost) + " Rubies";
+        QString string = QString::fromStdString(s);
+        ui->BuildShip->setToolTip(string);
         std::cout << "Build Shipyard!" << std::endl;
     }
 

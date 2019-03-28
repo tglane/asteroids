@@ -159,6 +159,8 @@ public:
 
     int getMineCost() { return Minecost; }
 
+    int getShipyardCost() {return Shipyardcost; }
+
     int getResult() { return result; }
 
     /**
