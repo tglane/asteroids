@@ -294,6 +294,14 @@ void TcpServer::fightEnd(int id, int health_left) {
     qDebug() << "end fight, updating data model";
     Battle::Ptr current_battle = m_battle_list[battle_count];
 
+    if (id == current_battle->m_player1->getIdentity() == id) {
+        current_battle->m_numberShipsLeft1 = ships_left;
+    } else {
+        current_battle->m_numberShipsLeft2 = ships_left;
+    }
+
+
+
     current_battle->m_player1->RemovePlaneteFromList(current_battle->m_location);
     current_battle->m_player2->RemovePlaneteFromList(current_battle->m_location);
 
@@ -320,7 +328,7 @@ void TcpServer::fightEnd(int id, int health_left) {
 
 
     battle_count++;
-    if (battle_count > 0 && battle_count < m_battle_list.size()) {
+    if (battle_count > 0 && battle_count <= m_battle_list.size()) {
         Battle::Ptr prev_battle = m_battle_list[battle_count - 1];
         send_battle(prev_battle, false);
     }
@@ -329,7 +337,6 @@ void TcpServer::fightEnd(int id, int health_left) {
 void TcpServer::send_battle(Battle::Ptr battle, bool first) {
     for (auto client: clients) {
         qDebug() << "send_battle";
-        Battle::Ptr current_battle = m_battle_list[battle_count];
         QJsonArray array;
         array.push_back("battle");
         QJsonObject battle_json;
@@ -340,8 +347,8 @@ void TcpServer::send_battle(Battle::Ptr battle, bool first) {
         battle_json.insert("ships2", QJsonValue::fromVariant(battle->m_numberShips2));
 
         if (!first) {
-            battle_json.insert("ships1", QJsonValue::fromVariant(battle->m_numberShipsLeft1));
-            battle_json.insert("ships2", QJsonValue::fromVariant(battle->m_numberShipsLeft2));
+            battle_json.insert("ships_after1", QJsonValue::fromVariant(battle->m_numberShipsLeft1));
+            battle_json.insert("ships_after2", QJsonValue::fromVariant(battle->m_numberShipsLeft2));
         }
 
         array.push_back(battle_json);

@@ -103,7 +103,7 @@ bool UdpServer::check_client_id(int id) // QNetworkDatagram &datagram)
 {
     uint32_t client_id = id >> 24;
     if (clients.count(client_id) != 1) {
-        std::cout << "invalid client_id: " << std::hex << client_id << std::dec << std::endl;
+        //std::cout << "invalid client_id: " << std::hex << client_id << std::dec << std::endl;
         return false;
     }
     //UdpClient &client = clients[client_id];
