@@ -13,7 +13,7 @@ TcpServer::TcpServer(std::string filename, QObject* parent)
     connect(&server, SIGNAL(newConnection()), this, SLOT(onConnect()));
     //connect(&server, SIGNAL(disconnected()), this, SLOT(onDisconnect()));
     std::cout << "../models/" << filename<<std::endl;
-    m_datamodel = DataModel_Server::Ptr(new DataModel_Server("../models/"+filename+".map"));
+    m_datamodel = DataModel_Server::Ptr(new DataModel_Server("../../../models/"+filename+".map"));
     //m_datamodel->getUniverse("../../../models/Level-1.map");
 
     if(!server.listen(QHostAddress::Any, 1235))
@@ -79,6 +79,7 @@ void TcpServer::handle_ready(TcpClient& client, QJsonDocument& doc)
     {
         ready_count++;
         if (clients.size() == ready_count) {
+            ready_count = 0;
             for (auto j: clients) {
                 QJsonArray array;
                 array.push_back("strat_init");
@@ -103,7 +104,22 @@ void TcpServer::handle_ready(TcpClient& client, QJsonDocument& doc)
 
             qDebug() << "state changed: ROUND";
             state = ROUND;
+        }
+    } else if (state == PRE_FIGHT) {
+        ready_count++;
+        if (clients.size() == ready_count) {
             ready_count = 0;
+            qDebug() << "state changed: FIGHT";
+            state = FIGHT;
+            fight_init(m_battle_list[battle_count]);
+        }
+    } else if (state == END_FIGHT) {
+        ready_count++;
+        if (clients.size() == ready_count) {
+            ready_count = 0;
+            qDebug() << "state changed: PRE_FIGHT";
+            state = PRE_FIGHT;
+            send_battle(m_battle_list[battle_count], false);
         }
     }
 }
@@ -127,19 +143,25 @@ void TcpServer::handle_state(TcpClient& client, QJsonDocument& doc) {
 
     ready_count++;
     if (clients.size() == ready_count) {
+        ready_count = 0;
         m_battle_list = m_datamodel->findBattles();
         m_datamodel->clearInvaders();
         qDebug() << "n battles: " << m_battle_list.size();
         //m_battle_list = std::vector<Battle::Ptr>{Battle::Ptr(nullptr)};
 
-        state = FIGHT;
         battle_count = 0;
         // Relevant,
         //udpServer.start();
 
-        qDebug() << "state changed: FIGHT";
-        send_battle();
-
+        if (m_battle_list.size() > 0) {
+            state = PRE_FIGHT;
+            qDebug() << "state changed: PRE_FIGHT";
+            send_battle(m_battle_list[0], true);
+        } else {
+            state = ROUND;
+            qDebug() << "state changed: ROUND";
+            send_state();
+        }
     }
 }
 
@@ -295,20 +317,38 @@ void TcpServer::fightEnd(int id, int health_left) {
     current_battle->m_player2->PrintPlanetsList();
     //udpServer.reset();
 
+
     battle_count++;
-    send_battle();
+    if (battle_count > 0 && battle_count < m_battle_list.size()) {
+        Battle::Ptr prev_battle = m_battle_list[battle_count - 1];
+        send_battle(prev_battle, false);
+    }
 }
 
-void TcpServer::send_battle() {
-    if (battle_count < m_battle_list.size()) {
-        // ToDo
-        fight_init(m_battle_list[battle_count]);
-    } else {
+void TcpServer::send_battle(Battle::Ptr battle, bool first) {
+    for (auto client: clients) {
+        qDebug() << "send_battle";
+        Battle::Ptr current_battle = m_battle_list[battle_count];
+        QJsonArray array;
+        array.push_back("battle");
+        QJsonObject battle_json;
+        battle_json.insert("planet_name", QJsonValue::fromVariant(QString::fromStdString(battle->m_location->getName())));
+        battle_json.insert("player_name1", QJsonValue::fromVariant(QString::fromStdString(battle->m_player1->getPlayerName())));
+        battle_json.insert("player_name2", QJsonValue::fromVariant(QString::fromStdString(battle->m_player2->getPlayerName())));
+        battle_json.insert("ships1", QJsonValue::fromVariant(battle->m_numberShips1));
+        battle_json.insert("ships2", QJsonValue::fromVariant(battle->m_numberShips2));
 
-        qDebug() << "state changed: ROUND";
-        state = ROUND;
-        ready_count = 0;
-        send_state();
+        if (!first) {
+            battle_json.insert("ships1", QJsonValue::fromVariant(battle->m_numberShipsLeft1));
+            battle_json.insert("ships2", QJsonValue::fromVariant(battle->m_numberShipsLeft2));
+        }
+
+        array.push_back(battle_json);
+        QJsonDocument res(array);
+
+        int size = res.toJson().size();
+        client.socket->write((char*)&size, 4);
+        client.socket->write(res.toJson());
     }
 }
 
@@ -378,10 +418,3 @@ void TcpServer::readyRead()
     }
 }
 
-/*int main(int argc, char** argv)
-{
-    QApplication app(argc, argv);
-    TcpServer server;
-    return app.exec();
-}
-*/

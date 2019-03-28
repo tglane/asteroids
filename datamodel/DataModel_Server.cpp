@@ -530,6 +530,7 @@ QJsonObject DataModel_Server::createJson(Player::Ptr player)
     return main;
 }
 
+/*
 QJsonObject DataModel_Server::createBattleJson(Battle::Ptr battle)
 {
     // main QJson object in the document
@@ -546,6 +547,7 @@ QJsonObject DataModel_Server::createBattleJson(Battle::Ptr battle)
 
     return main;
 }
+*/
 
 /*
 QJsonDocument createJsonOrders(Player::Ptr player)
@@ -632,6 +634,7 @@ void DataModel_Server::performMovements(Player::Ptr player)
     }
 }
 
+/*
 void DataModel_Server::BattleReport()
 {
     std::vector<std::shared_ptr<Battle>> BattleResult = m_battles;
@@ -657,6 +660,7 @@ void DataModel_Server::BattleReport()
     }
     m_battles.clear();
 }
+*/
 
 int DataModel_Server::getIDFromPlanetName(std::string name){
     return m_planetNameToId[name];

@@ -20,6 +20,8 @@ set(SERVER_SRC
     TcpServer.cpp
     UdpServer.cpp
     ServerPhysicsEngine.cpp
+    TcpServer.cpp
+    Server.cpp
     ../UdpPeer.cpp
     ../../math/Quaternion.cpp
     ../../math/Matrix.cpp

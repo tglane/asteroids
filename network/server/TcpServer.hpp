@@ -30,7 +30,7 @@ class TcpServer: public QObject
 {
     Q_OBJECT
 
-    enum ServerState {WAITING, WAIT_READY, ROUND, FIGHT};
+    enum ServerState {WAITING, WAIT_READY, ROUND, PRE_FIGHT, FIGHT, END_FIGHT};
 public:
     using Ptr = std::shared_ptr<TcpServer>;
 
@@ -57,7 +57,7 @@ private:
     void handle_init(TcpClient& client, QJsonDocument& doc);
     void handle_ready(TcpClient& client, QJsonDocument& doc);
     void handle_state(TcpClient& client, QJsonDocument& doc);
-    void send_battle();
+    void send_battle(Battle::Ptr battle, bool first);
 
     int init_count = 0;
     int ready_count = 0;
