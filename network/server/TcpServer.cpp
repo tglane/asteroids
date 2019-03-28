@@ -117,9 +117,15 @@ void TcpServer::handle_ready(TcpClient& client, QJsonDocument& doc)
         ready_count++;
         if (clients.size() == ready_count) {
             ready_count = 0;
-            qDebug() << "state changed: PRE_FIGHT";
-            state = PRE_FIGHT;
-            send_battle(m_battle_list[battle_count], false);
+            if (battle_count < m_battle_list.size()) {
+                qDebug() << "state changed: PRE_FIGHT";
+                state = PRE_FIGHT;
+                send_battle(m_battle_list[battle_count], false);
+            } else {
+                send_state();
+                qDebug() << "state changed: ROUND";
+                state = ROUND;
+            }
         }
     }
 }
@@ -291,6 +297,9 @@ void TcpServer::fightEnd(int id, int health_left) {
     udpServer->stop();
     //udpServer.reset();
     int ships_left = health_left / 10;
+    if (health_left % 10 > 0) {
+        ships_left++;
+    }
     qDebug() << "end fight, updating data model";
     Battle::Ptr current_battle = m_battle_list[battle_count];
 
@@ -299,8 +308,6 @@ void TcpServer::fightEnd(int id, int health_left) {
     } else {
         current_battle->m_numberShipsLeft2 = ships_left;
     }
-
-
 
     current_battle->m_player1->RemovePlaneteFromList(current_battle->m_location);
     current_battle->m_player2->RemovePlaneteFromList(current_battle->m_location);
@@ -317,6 +324,8 @@ void TcpServer::fightEnd(int id, int health_left) {
 
     current_battle->m_location->setShips(ships_left);
     m_datamodel->getPlayerByID(id)->incShips(ships_left);
+    current_battle->m_location->setInvaderShips(0);
+    current_battle->m_location->setInvader(nullptr);
 
     qDebug() << "Planets fight end 2";
     m_datamodel->printPlanets();
@@ -331,6 +340,9 @@ void TcpServer::fightEnd(int id, int health_left) {
     if (battle_count > 0 && battle_count <= m_battle_list.size()) {
         Battle::Ptr prev_battle = m_battle_list[battle_count - 1];
         send_battle(prev_battle, false);
+
+        qDebug() << "state changed: END_FIGHT";
+        state = END_FIGHT;
     }
 }
 

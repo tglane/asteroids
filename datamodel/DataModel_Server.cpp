@@ -407,6 +407,8 @@ std::vector<Battle::Ptr> DataModel_Server::findBattles()
                 Planets->setOwner(Planets->getInvader());
                 Planets->getOwner()->addPlanet(Planets);
                 Planets->addShips(Planets->getInvaderShips());
+                Planets->setInvader(NULL);
+                Planets->setInvaderShips(0);
 
             }
             else
@@ -417,7 +419,6 @@ std::vector<Battle::Ptr> DataModel_Server::findBattles()
                                 Planets->getInvaderShips(), true)));
                 std::cout << "Kampf Karte erzeugt" << std::endl;
             }
-            Planets->setInvader(NULL);
         }
     }
     return m_battles;

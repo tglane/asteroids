@@ -20,17 +20,17 @@ namespace asteroids
 
 void BasePhysicsEngine::addDestroyable(PhysicalObject::Ptr obj)
 {
-    m_objects.insert(std::pair<int, PhysicalObject::Ptr>(obj->get_id(), obj));
+    m_objects[obj->get_id()] =  obj;
 }
 
 void BasePhysicsEngine::addHittable(Hittable::Ptr h)
 {
-    m_hittables.insert(std::pair<int, Hittable::Ptr>(h->getId(), h));
+    m_hittables[h->getId()] = h;
 }
 
 void BasePhysicsEngine::addBullet(PhysicalBullet::Ptr bullet)
 {
-    m_bullets.insert(std::pair<int, PhysicalBullet::Ptr >(bullet->get_id(), bullet));
+    m_bullets[bullet->get_id()] = bullet;
 }
 
 bool BasePhysicsEngine::process(int elapsed_time)

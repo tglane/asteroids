@@ -39,7 +39,6 @@ std::list<std::pair<int, int>> ServerPhysicsEngine::detect_collisions()
         while (p_it != m_objects.end())
         {
 
-            std::cout << "bullet" << b->get_id() << "ast " << p_it->second->get_id() << std::endl;
             if (p_it->second->collision(b->getPosition(), b->radius()))
             {
                 // Mark bulled as killed
@@ -68,6 +67,8 @@ std::list<std::pair<int, int>> ServerPhysicsEngine::detect_collisions()
         h_it = m_hittables.begin();
         while (h_it != m_hittables.end())
         {
+
+            std::cout << m_hittables.size() << " player " << h_it->first << " health " << h_it->second->getHealth() << std::endl;
             if (b->get_shooter_id() != h_it->second->getId() && h_it->second->hitBullet(*b))
             {
                 b->destroy();

@@ -61,6 +61,7 @@ namespace asteroids
         void start_timer() { m_timer->start(1000 / 60.0); }
 
         void stop_timer() { m_timer->stop(); }
+        void reset_key_states() { m_keyStates.clear(); }
 
     public Q_SLOTS:
         /// Handle input

@@ -193,6 +193,7 @@ void tcpclient::process_state(QJsonArray recv_array)
     if (m_mainwindow != nullptr) {
         m_mainwindow->hide();
         m_mainwindow->stop_timer();
+        m_mainwindow->reset_key_states();
     }
 
     m_datamodel->switchWindow(DataModel_Server::MAIN2D);

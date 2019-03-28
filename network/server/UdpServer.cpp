@@ -158,8 +158,9 @@ void UdpServer::tick()
     }
     if (game_over) {
         std::cout << "GAME OVER!!!!!!!!!!!!!!!" << std::endl;
-        int winner_id = 0, remaining_health;
+        int winner_id, remaining_health;
         for (auto cs: clients) {
+            qDebug() << "player " << cs.second.id << " health " << cs.second.ship->getHealth();
             if (cs.second.ship->getHealth() > 0 ) {
                 winner_id = cs.second.id;
                 remaining_health = cs.second.ship->getHealth();
@@ -182,6 +183,7 @@ void UdpServer::stop()
     timer.stop();
     //time.stop();
     clients.clear();
+    physics_engine = ServerPhysicsEngine();
 }
 
 void UdpServer::add_client(int id, QHostAddress addr, int port, Vector3f& pos, int health)
