@@ -120,12 +120,13 @@ void MainWindow2D::resizeEvent(QResizeEvent* event){
 
 MainWindow2D::~MainWindow2D() 
 {
-    if(ui)
+    // this caused the SegFault when exiting
+    /*if(ui)
         delete ui;
     if(FighterWindow != NULL)
         delete FighterWindow;
     if (scene)
-        delete scene;
+        delete scene;*/
 }
 
 
