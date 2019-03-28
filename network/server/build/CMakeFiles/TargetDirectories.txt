@@ -1,0 +1,4 @@
+/home/steffen/praktikum4/network/server/build/CMakeFiles/edit_cache.dir
+/home/steffen/praktikum4/network/server/build/CMakeFiles/server.dir
+/home/steffen/praktikum4/network/server/build/CMakeFiles/rebuild_cache.dir
+/home/steffen/praktikum4/network/server/build/CMakeFiles/server_automoc.dir

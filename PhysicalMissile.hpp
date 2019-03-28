@@ -27,6 +27,12 @@ public:
 
     bool alive();
 
+    void destroy();
+
+    void setShooterId(int shooterId);
+
+    int getShooterId();
+
 private:
 
     static const float maxDistance;
@@ -35,6 +41,8 @@ private:
     static const float rotSpeed;
 
     int m_id;
+
+    int m_shooterId;
 
     float magnitude(Vector3f v);
 

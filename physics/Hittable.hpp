@@ -2,10 +2,9 @@
 #define CPP18_ASTEROIDS_HITTABLE_HPP
 
 #include <QtCore/QTime>
-#include <rendering/Asteroid.hpp>
+#include "rendering/Asteroid.hpp"
 #include "rendering/Bullet.hpp"
 #include "physics/PhysicalBullet.hpp"
-#include "Transformable.hpp"
 
 namespace asteroids {
 
@@ -29,6 +28,8 @@ public:
     bool hitBullet(PhysicalBullet& b);
 
     bool hitAsteroid(PhysicalObject& p);
+
+    bool hit(Vector3f position, float radius);
 
     void outOfBound();
 

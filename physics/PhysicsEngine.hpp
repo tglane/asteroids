@@ -61,7 +61,7 @@ namespace asteroids
         bool process(int elapsed_time);
 
     void process_collisions(int id_one, int id_two);
-    int check_id_type(int id_to_check);
+    int check_id_type(int id_to_check, int prevId);
 
 
         /// Getter for current highest IDs

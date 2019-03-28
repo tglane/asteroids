@@ -59,77 +59,86 @@ namespace asteroids
 
     }
 
-    void PhysicsEngine::process_collisions(int id_one, int id_two)
-    {
-        int first = check_id_type(id_one);
-        int second = check_id_type(id_two);
-        m_particles.update();
+void PhysicsEngine::process_collisions(int id_one, int id_two)
+{
+    int first = check_id_type(id_one, -1);
+    int second = check_id_type(id_two, first);
+    m_particles.update();
 
-        /* Add life to player when he hits an asteroid */
-        if(first == 1 && second == 0)
+    /* Add life to player when he hits an asteroid */
+    if(first == 1 && second == 0)
+    {
+        int shooter_id = id_two & 0xFF000000;
+        if(m_hittables.count(shooter_id) == 1)
         {
-            int shooter_id = id_one & 0xFF000000;
-            if(m_hittables.count(shooter_id) == 1)
-            {
-                int health = m_hittables[shooter_id]->getHealth();
-                if (m_hittables[shooter_id]->getHealth() < 10) {
-                    m_hittables[shooter_id]->setHealth(health + 1);
-                }
-            }
-        }
-        if (first == 3 && second == 2)
-        {
-            int shooter_id = id_one & 0xFF000000;
-            if(m_hittables.count(shooter_id) == 1)
-            {
-                int health = m_hittables[shooter_id]->getHealth();
-                m_hittables[shooter_id]->setHealth(health - min(3, health % 10));
+            int health = m_hittables[shooter_id]->getHealth();
+            if (m_hittables[shooter_id]->getHealth() < 10) {
+                m_hittables[shooter_id]->setHealth(health + 1);
             }
         }
     }
+}
 
-
-    int PhysicsEngine::check_id_type(int id_to_check)
+int PhysicsEngine::check_id_type(int id_to_check, int prevId)
+{
+    if((id_to_check >> 24) == 0)
     {
-        if((id_to_check >> 24) == 0)
+        /* asteroid collision */
+        if(m_objects.count(id_to_check == 1))
         {
-            if (((id_to_check >> 16) & 0x000000FF) == 0)
-            {
-                /* Bullet collision */
-                if(m_bullets.count(id_to_check) == 1) {
-
-                    m_bullets[id_to_check]->destroy();
-                    m_bullets.erase(id_to_check);
-                }
-                return 1; // Means Bullet
-            }
-            else if (((id_to_check >> 16) & 255) == 1)
-            {
-                /* Bullet collision */
-                if (m_missiles.count(id_to_check) == 1) {
-                    m_missiles.erase(id_to_check);
-                }
-                return 3; // Means Missile
-            }
+            m_particles.addEffect(ParticleEffect::createExplosionSphere(m_objects[id_to_check]->getPosition()));
+            m_objects.erase(id_to_check);
         }
-        else
+        return 0;
+    }
+    else if((id_to_check & 0xFFFFFF) != 0)
+    {
+        if (((id_to_check >> 16) & 0x000000FF) == 0)
         {
-            /* Player collision */
-            if(m_hittables.count(id_to_check) == 1) {
-                int health = m_hittables[id_to_check]->getHealth();
+            /* Bullet collision */
+            if(m_bullets.count(id_to_check) == 1) {
+
+                m_bullets[id_to_check]->destroy();
+                m_bullets.erase(id_to_check);
+            }
+            return 1; // Means Bullet
+        }
+        else if (((id_to_check >> 16) & 255) == 1)
+        {
+            /* Missile collision */
+            if (m_missiles.count(id_to_check) == 1) {
+                m_missiles.erase(id_to_check);
+            }
+            return 3; // Means Missile
+        }
+    }
+    else
+    {
+        /* Player collision */
+        if(m_hittables.count(id_to_check) == 1) {
+            int health = m_hittables[id_to_check]->getHealth();
+            if (prevId == 3)
+            {
+                int shipHealth = health % 10;
+                m_hittables[id_to_check]->setHealth(health - ((shipHealth == 1 || shipHealth == 2) ? shipHealth : 3));
+            }
+            else
+            {
                 m_hittables[id_to_check]->setHealth(health - 1);
-                if((health -1) % 10 == 0)
-                {
-                    m_particles.addEffect(ParticleEffect::createExplosionSphere(m_hittables[id_to_check]->getPosition()));
-                    m_particles.addEffect(ParticleEffect::createExplosionRing(m_hittables[id_to_check]->getPosition()));
-                }
-                if((health - 1) == 0)
-                {
-                    m_hittables.erase(id_to_check);
-                }
             }
-            return 2; // Means Player
+            health = m_hittables[id_to_check]->getHealth();
+            if (health % 10 == 0)
+            {
+                m_particles.addEffect(ParticleEffect::createExplosionSphere(m_hittables[id_to_check]->getPosition()));
+                m_particles.addEffect(ParticleEffect::createExplosionRing(m_hittables[id_to_check]->getPosition()));
+            }
+            if (health == 0)
+            {
+                m_hittables.erase(id_to_check);
+            }
         }
+        return 2; // Means Player
     }
+}
 
 } /* namespace asteroids */

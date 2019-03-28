@@ -93,4 +93,19 @@ bool PhysicalMissile::alive()
     return m_lifetime > 0;
 }
 
+void PhysicalMissile::destroy()
+{
+    m_lifetime = 0;
+}
+
+void PhysicalMissile::setShooterId(int shooterId)
+{
+    m_shooterId = shooterId;
+}
+
+int PhysicalMissile::getShooterId()
+{
+    return m_shooterId;
+}
+
 }

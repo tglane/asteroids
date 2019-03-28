@@ -99,6 +99,7 @@ void UdpServer::handle_missile(int id, Vector3f &position, Vector3f &x, Vector3f
     missile->setXAxis(x);
     missile->setYAxis(y);
     missile->setZAxis(z);
+    missile->setShooterId(client_id << 24);
     //PhysicalBullet::Ptr bullet(new PhysicalBullet(position, velocity, client_id << 24, id));
 
     physics_engine.addMissile(missile);
