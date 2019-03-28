@@ -31,7 +31,8 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
 
     //StyleStuff
     ui->ContextMenue->setStyleSheet("background-color:#331155; border-radius:10px; color:#FFFFFF");
-    ui->Fight->setStyleSheet("background-color:#442266; color:#FFFFFF; border-radius:10px;");
+    //ui->Fight->setStyleSheet("background-color:#442266; color:#FFFFFF; border-radius:10px;");
+    ui->Fight->setVisible(false);
     ui->ExitGame->setStyleSheet("QPushButton{background-color:#110033}""QPushButton:hover{background-color:#663388}");
     ui->NextRound->setStyleSheet("QPushButton{background-color:#110033}""QPushButton:hover{background-color:#663388}");
     ui->BuildMine->setStyleSheet("QPushButton{background-color:#110033}""QPushButton:hover{background-color:#663388}");
