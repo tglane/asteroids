@@ -68,6 +68,8 @@ void StartingDialog::startGame(bool click)
         connect(this, SIGNAL(connect_to_server(string, string)), m_tcpclient.get(), SLOT(connect_to_server(string, string)));
         connect(m_model->getWidget(DataModel::MAIN2D), SIGNAL(endround_signal()), m_tcpclient.get(), SLOT(endround_slot()));
         connect(this, SIGNAL(endround_signal()), m_tcpclient.get(), SLOT(endround_slot()));
+        ui->StartGame->setText("Verbinde...");
+        //ui->StartGame->setStyleSheet("QLabel { color: yellow }");
         emit connect_to_server(name, server_addr);
 
     }
