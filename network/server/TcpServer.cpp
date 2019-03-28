@@ -150,7 +150,7 @@ void TcpServer::handle_ready(TcpClient& client, QJsonDocument& doc)
             fight_init(m_battle_list[battle_count]);
         }
     } else if (state == END_FIGHT) {
-        ready_count++;
+        //ready_count++;
         if (all_ready()) {
             for (auto j: clients) j.ready = false;
             if (battle_count < m_battle_list.size()) {
@@ -184,7 +184,8 @@ void TcpServer::handle_state(TcpClient& client, QJsonDocument& doc) {
     m_datamodel->printPlanets();
     m_datamodel->printPlayer();
 
-    ready_count++;
+    //ready_count++;
+    client.ready = true;
     if (all_ready()) {
         for (auto j: clients) j.ready = false;
         m_battle_list = m_datamodel->findBattles();
@@ -375,6 +376,9 @@ void TcpServer::fightEnd(int id, int health_left) {
     battle_count++;
     if (battle_count > 0 && battle_count <= m_battle_list.size()) {
         Battle::Ptr prev_battle = m_battle_list[battle_count - 1];
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(5000));
+
         send_battle(prev_battle, false);
 
         qDebug() << "state changed: END_FIGHT";

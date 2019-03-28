@@ -15,6 +15,7 @@
 
 #include <map>
 #include <memory>
+#include <QtMultimedia/QSoundEffect>
 
 #include "PhysicalObject.hpp"
 #include "ParticleEngine.hpp"
@@ -43,7 +44,7 @@ namespace asteroids
         /**
          * @brief   Ctor.
          */
-        PhysicsEngine() = default;
+        PhysicsEngine();
 
         /**
          * @brief   Dtor.
@@ -61,12 +62,13 @@ namespace asteroids
         bool process(int elapsed_time);
 
         void process_collisions(int id_one, int id_two);
-        int check_id_type(int id_to_check);
+        int check_id_type(int id_to_check, int prevId);
 
         void reset_lists();
 
         /// Getter for current highest IDs
-        int get_curr_bull_id() { return ++curr_bull_id; }
+        int get_curr_bull_id() { return (++curr_bull_id) % 65536; }
+        int get_curr_miss_id() { return (++curr_miss_id) % 65536; }
         int get_curr_dest_id() { return curr_dest_id; }
 
     private:
@@ -75,8 +77,13 @@ namespace asteroids
 
         /// Current highest id of asteroids and bullets
         int curr_bull_id = 1;
+        int curr_miss_id = 1;
         int curr_dest_id = 1;
         int curr_player_id = 1;
+
+        QSoundEffect                 m_explosionSound;
+
+        QSoundEffect                 m_hitmarkerSound;
 
     };
 

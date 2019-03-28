@@ -13,6 +13,7 @@
 #include "math/Quaternion.hpp"
 #include "physics/PhysicsEngine.hpp"
 #include "rendering/SpaceCraft.hpp"
+#include "Missile.hpp"
 
 class udpclient: public QObject {
     Q_OBJECT
@@ -32,6 +33,11 @@ public:
      * @brief Sends position and flight direction of a new bullet to the server
      */
     void send_bullet(asteroids::Vector3f position, asteroids::Vector3f xAxis, asteroids::Vector3f zAxis);
+
+    /**
+     * @brief Sends position and flight direction of a new missile to the server
+     */
+    void send_missile(asteroids::Vector3f position, asteroids::Vector3f xAxis, asteroids::Vector3f yAxis, asteroids::Vector3f zAxis);
 
     /**
      * @brief Receives a collision package from the server
@@ -60,6 +66,12 @@ public:
      * @param other_fighter
      */
     void setOtherFighter(asteroids::SpaceCraft::Ptr other_fighter) { m_otherFighter = std::move(other_fighter); }
+
+    /**
+     * @biref Sets own fighter pointer
+     * @param ownFighter
+     */
+    void setOwnFighter(asteroids::Hittable::Ptr ownFighter) { m_ownFighter = std::move(ownFighter); }
 
     /// Get own id
     int get_id() { return m_id; }
@@ -99,6 +111,14 @@ private:
      */
     void createNewBulletFromPackage(int recv_seq_nr, int recv_id, char* data);
 
+    /**
+     * @brief Creates a missile fired from an enemy
+     * @param recv_seq_nr
+     * @param recv_id
+     * @param data
+     */
+    void createNewMissileFromPackage(int recv_seq_nr, int recv_id, char* data);
+
     std::shared_ptr<QUdpSocket> socket;
 
     int m_id;
@@ -112,6 +132,8 @@ private:
     asteroids::PhysicsEngine::Ptr m_physicsEngine;
 
     asteroids::SpaceCraft::Ptr m_otherFighter;
+
+    asteroids::Hittable::Ptr m_ownFighter;
 
     /// map for not acknowledged packages
     std::map<int, QByteArray> m_not_acknowledged;
