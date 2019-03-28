@@ -58,6 +58,10 @@ namespace asteroids
 
         Ui::MainWindow* ui;
 
+        void start_timer() { m_timer->start(1000 / 60.0); }
+
+        void stop_timer() { m_timer->stop(); }
+
     public Q_SLOTS:
         /// Handle input
         void handleInput();

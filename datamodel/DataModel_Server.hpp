@@ -192,9 +192,15 @@ public:
      */
     void printPlanets();
 
+    void clearInvaders();
+
+    void printPlayer();
+
 signals:
     void updateInfo();
     void initMap();
+
+    void endOfGame();
 
 
 protected:

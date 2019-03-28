@@ -61,6 +61,10 @@ public:
 
     SpaceCraft::Ptr getEnemy() { return m_enemy; }
 
+    void reset();
+
+    ~GLWidget() { std::cout << "GLWidget deconstruct" << std::endl; }
+
 protected:
 
     /// Init OpenGL
@@ -117,6 +121,8 @@ private:
     QPixmap                     m_enemyHeart;
 
     QPixmap                     m_emptyHeart;
+
+    static bool open_gl;
 };
 
 #endif

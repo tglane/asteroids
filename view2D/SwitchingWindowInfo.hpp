@@ -7,7 +7,6 @@
 #include "build/ui_SwitchingWindowInfo.h"
 #include "datamodel/DataModel.hpp"
 
-
 using asteroids::DataModel;
 
 namespace strategy
@@ -34,6 +33,7 @@ public:
     void updateWindow(std::string planetname, std::string player1, std::string player2, 
                 int ship1, int ship2, int ship_after1, int ship_after2);
 
+    QPushButton* getButton() { return m_startfight; }
 
 private:
 
@@ -42,6 +42,7 @@ private:
 
     asteroids::DataModel::Ptr m_model;
 
+    QPushButton* m_startfight;
 };
 
 }

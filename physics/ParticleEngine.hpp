@@ -68,6 +68,8 @@ public:
      */
     void update();
 
+    void reset_particles() { m_effects.clear(); }
+
 private:
 
     /// List of active @ref ParticleEffects

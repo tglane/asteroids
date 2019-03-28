@@ -48,6 +48,9 @@ namespace asteroids
             b->render();
             b_it++;
         }
+
+        m_particles.render();
+
     }
 
     void PhysicsEngine::process_collisions(int id_one, int id_two)
@@ -70,10 +73,19 @@ namespace asteroids
         }
     }
 
-
     int PhysicsEngine::check_id_type(int id_to_check)
     {
         if((id_to_check >> 24) == 0)
+        {
+            /* asteroid collision */
+            if(m_objects.count(id_to_check == 1))
+            {
+                m_particles.addEffect(ParticleEffect::createExplosionSphere(m_objects[id_to_check]->getPosition()));
+                m_objects.erase(id_to_check);
+            }
+            return 0;
+        }
+        else if((id_to_check & 0xFFFFFF) != 0)
         {
             /* Bullet collision */
             if(m_bullets.count(id_to_check) == 1) {
@@ -101,6 +113,14 @@ namespace asteroids
             }
             return 2; // Means Player
         }
+    }
+
+    void PhysicsEngine::reset_lists()
+    {
+        m_hittables.clear();
+        m_objects.clear();
+        m_bullets.clear();
+        m_particles.reset_particles();
     }
 
 } /* namespace asteroids */

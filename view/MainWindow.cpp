@@ -37,7 +37,7 @@ namespace asteroids
 
         // Create a timer object to trigger the main loop
         connect(m_timer.get(), SIGNAL(timeout()), this, SLOT(handleInput()));
-        m_timer->start(1000 / 60.0);
+
     }
 
     int MainWindow::width()

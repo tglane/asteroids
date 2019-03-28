@@ -20,12 +20,15 @@
 #include "rendering/Asteroid.hpp"
 #include "datamodel/DataModel.hpp"
 #include "udpclient.hpp"
+#include "view2D/SwitchingWindowInfo.hpp"
+
+using namespace strategy;
 
 class tcpclient : public QObject {
 
     Q_OBJECT
 
-    enum client_state { CONNECTING, WAIT, READY, ROUND, END_ROUND, FIGHT };
+    enum client_state { CONNECTING, WAIT, READY, ROUND, END_ROUND, PRE_FIGHT, FIGHT_READY, FIGHT, END_FIGHT };
 
 public:
 
@@ -33,7 +36,7 @@ public:
 
     tcpclient(asteroids::DataModel::Ptr datamodel, QObject* parent = 0);
 
-
+    void set_switch_pointer(SwitchingWindowInfo* sw) { m_switch_mode_dialoge = sw; }
 
 public slots:
     /**
@@ -64,8 +67,6 @@ private slots:
      */
     void recv_json();
 
-    void error_out(QAbstractSocket::SocketError) { std::cout << "error" << std::endl; }
-
 signals:
     void fight_init_signal(QJsonObject);
     
@@ -82,6 +83,9 @@ private:
     /// receive new data state after a strat round
     void process_state(QJsonArray recv_array);
 
+    /// receive battle preview and battle review package
+    void process_battle(QJsonObject recv_obj);
+
     /// receive the init package for the 3d fight
     void process_fight_init(QJsonObject recv_obj);
 
@@ -95,8 +99,6 @@ private:
 
     QString m_server_ip;
 
-    std::shared_ptr<asteroids::MainWindow> m_mainwindow;
-
     asteroids::DataModel::Ptr m_datamodel;
 
     udpclient::Ptr m_udpclient;
@@ -104,6 +106,10 @@ private:
     asteroids::PhysicsEngine::Ptr m_physicsEngine;
 
     std::shared_ptr<QTcpSocket> m_socket;
+
+    std::shared_ptr<MainWindow> m_mainwindow;
+
+    SwitchingWindowInfo* m_switch_mode_dialoge;
 
 };
 
