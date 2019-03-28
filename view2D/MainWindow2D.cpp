@@ -508,7 +508,6 @@ void MainWindow2D::updatePlanetInfo(int id)
         {
             ui->BuildMine->setVisible(false);
         } else {
-            std::cout<<"Verstecket Mienen"<< p->getMinesHidden()<<std::endl;
             ui->BuildMine->setVisible(true);
         }
 
