@@ -177,11 +177,20 @@ namespace asteroids
 
 		/**
 		 * @brief set built mines to the given number
+		 * @param minesBuilt
+		 * @return void
 		 */
 		void setMinesBuilt(int minesBuilt);
 
+
+		/**
+		 * @brief returns number of ordered ships to build on this planet
+		 */
 		int getShipsOrdered();
 
+		/**
+		 * @brief increments numbe rof ordered ships to build on this planet
+		 */
 		void incShipsOrdered();
 
 		void resetShipsOrdered();
