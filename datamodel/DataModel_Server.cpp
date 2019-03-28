@@ -188,6 +188,23 @@ bool DataModel_Server::buyMine(Planet::Ptr selectedPlanet, Player::Ptr m_self)
     std::cout << selectedPlanet->getMinesBuild() << std::endl;
     std::cout << selectedPlanet->getMines() << std::endl;
     /*test druck ende*/
+
+    //watch out so only 1 Mine can be built 
+    std::list<std::shared_ptr<MineOrder>> mineorders = m_self->getListMineOrder();
+
+    for(std::list<std::shared_ptr<MineOrder>>::iterator it = mineorders.begin(); it != mineorders.end(); ++it)
+    {
+        std::shared_ptr<MineOrder> mineorder = *it;
+
+        Planet::Ptr planet = mineorder->getPlanet();
+
+        if(getIDFromPlanet(selectedPlanet) == getIDFromPlanet(planet))
+        {
+            //Mine is already being built on this planet
+            return false;
+        }
+    }
+
     if(selectedPlanet->getMinesHidden() + selectedPlanet->getMinesBuild() < selectedPlanet->getMines())
     {
         int Player_Rubin_Number = m_self->getRubin();
