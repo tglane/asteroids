@@ -101,6 +101,7 @@ void DataModel::switchWindow(int Id)
     {
         ((strategy::GameWindow*)m_mainWindow)->content()->setCurrentWidget(m_widgets[Id]);
         emit ((strategy::GameWindow*)m_mainWindow)->play();
+        m_mainWindow->raise();
     }
 }
 
