@@ -291,18 +291,20 @@ Planet::Ptr DataModel_Server::getPlanetFromName(std::string name)
 void DataModel_Server::calculateFinance(Player::Ptr Player)
 {
     std::list<std::shared_ptr<Planet>> m_planetsForGain = m_self->getListOfPLanets();
-    int MineNumbers = 0;
-    int MineGainWithNumbers = 0;
+    //int MineNumbers = 0;
+    //int MineGainWithNumbers = 0;
+    int earnings = 0;
     for(std::list<std::shared_ptr<Planet>>::iterator it = m_planetsForGain.begin(); it != m_planetsForGain.end(); ++it)
     {
         Planet::Ptr PlanetFromPlayer = *it;
 
-        MineNumbers += PlanetFromPlayer->getMinesBuild();
-        PlanetFromPlayer->subtractEarnings(MineNumbers);
+        //MineNumbers += PlanetFromPlayer->getMinesBuild();
+        //PlanetFromPlayer->subtractEarnings(MineNumbers);
+        earnings += PlanetFromPlayer->subtractEarnings(Minegain);
     }
-    MineGainWithNumbers = MineNumbers * Minegain;
+    //MineGainWithNumbers = MineNumbers * Minegain;
 
-    m_self->addRubin(MineGainWithNumbers);
+    m_self->addRubin(earnings);
     TransaktionMine();
     TransaktionShip();
     TransaktionShipyard();
