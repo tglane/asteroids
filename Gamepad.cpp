@@ -17,6 +17,10 @@ bool Gamepad::init()
     {
         m_aPressed = pressed;
     });
+    connect(m_gamepad, &QGamepad::buttonBChanged, this, [this](bool pressed)
+    {
+        m_bPressed = pressed;
+    });
     connect(m_gamepad, &QGamepad::buttonR2Changed, this, [this](double value)
     {
         m_r2 = value;
@@ -43,6 +47,11 @@ bool Gamepad::init()
 bool Gamepad::isAPressed() const
 {
     return m_aPressed;
+}
+
+bool Gamepad::isBPressed() const
+{
+    return m_bPressed;
 }
 
 double Gamepad::getR2() const

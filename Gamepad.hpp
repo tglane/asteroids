@@ -20,6 +20,8 @@ public:
 
     bool isAPressed() const;
 
+    bool isBPressed() const;
+
     double getR2() const;
 
     double getLeftX() const;
@@ -35,6 +37,8 @@ private:
     QGamepad *m_gamepad;
 
     bool m_aPressed;
+
+    bool m_bPressed;
 
     double m_r2;
 

@@ -180,8 +180,7 @@ void Controller::gamepadControl(Hittable::Ptr& player, PhysicsEngine::Ptr& physi
                 if (m_missileCooldown < 0)
                     m_missileCooldown = 0;
             }
-            // TODO: Missiles mit Gamepad abschießen
-            if (m_missileCooldown == 0 && false)
+            if (m_missileCooldown == 0 && m_gamepad.isBPressed())
             {
                 client.send_missile(player->getPosition(), player->getXAxis(), player->getYAxis(), player->getZAxis());
                 m_missileCooldown = 1000;
