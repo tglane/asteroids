@@ -103,6 +103,7 @@ void Controller::keyControl(std::map<Qt::Key, bool> &keyStates, Hittable::Ptr& p
         }
         if (m_missileCooldown == 0 && keyStates[Qt::Key_R])
         {
+            m_bulletSound.play();
             client.send_missile(player->getPosition(), player->getXAxis(), player->getYAxis(), player->getZAxis());
             m_missileCooldown = 1000;
         }
@@ -180,9 +181,9 @@ void Controller::gamepadControl(Hittable::Ptr& player, PhysicsEngine::Ptr& physi
                 if (m_missileCooldown < 0)
                     m_missileCooldown = 0;
             }
-            // TODO: Missiles mit Gamepad abschießen
-            if (m_missileCooldown == 0 && false)
+            if (m_missileCooldown == 0 && m_gamepad.isBPressed())
             {
+                m_bulletSound.play();
                 client.send_missile(player->getPosition(), player->getXAxis(), player->getYAxis(), player->getZAxis());
                 m_missileCooldown = 1000;
             }
