@@ -275,12 +275,12 @@ void TcpServer::fight_init(Battle::Ptr battle)
             Vector3f y_axis;
             if (i.id % 2 == 0) {
                 position = Vector3f(-1000, 0, 0);
-                x_axis = Vector3f(1, 0, 0);
-                 y_axis = Vector3f(0, 1, 0);
+                x_axis = Vector3f(-1, 0, 0);
+                 y_axis = Vector3f(0, -1, 0);
             } else {
                 position = Vector3f(1000, 0, 0);
-                x_axis = Vector3f(-1, 0, 0);
-                y_axis = Vector3f(0, -1, 0);
+                x_axis = Vector3f(1, 0, 0);
+                y_axis = Vector3f(0, 1, 0);
             }
             int ship_count;
 
