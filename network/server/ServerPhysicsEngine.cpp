@@ -35,13 +35,17 @@ std::list<std::pair<int, int>> ServerPhysicsEngine::detect_collisions()
         h_it = m_hittables.begin();
         while (h_it != m_hittables.end())
         {
+            //std::cout << m_hittables.size() << " player " << h_it->first << " health " << h_it->second->getHealth() << std::endl;
             if (m->getShooterId() != h_it->second->getId() && h_it->second->hit(m->getPosition(), 50))
             {
                 if (m_hittables.size() > 1)
                 {
                     m->destroy();
                     int health = h_it->second->getHealth();
-                    h_it->second->setHealth(health - min(3, health % 10));
+
+                    int shipHealth = health % 10;
+                    h_it->second->setHealth(health - ((shipHealth == 1 || shipHealth == 2) ? shipHealth : 3));
+
                     collisions.push_back(std::pair<int, int>(m->getId(), h_it->second->getId()));
                 }
             }
@@ -104,8 +108,6 @@ std::list<std::pair<int, int>> ServerPhysicsEngine::detect_collisions()
         h_it = m_hittables.begin();
         while (h_it != m_hittables.end())
         {
-
-            std::cout << m_hittables.size() << " player " << h_it->first << " health " << h_it->second->getHealth() << std::endl;
             if (b->get_shooter_id() != h_it->second->getId() && h_it->second->hitBullet(*b))
             {
                 b->destroy();

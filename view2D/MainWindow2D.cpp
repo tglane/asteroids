@@ -514,11 +514,11 @@ void MainWindow2D::updatePlanetInfo(int id)
         ui->MineOrdersLabel->setVisible(true);
         ui->MineOrdersValue->setVisible(true);
 
-        /// Zeige den Button zum Shiffe/Werften bauen und seinen ToolTip passend zum jetzigen Planeten an
+        /// Zeige den Button zum Shiffe/Werften bauen und seinen ToolTip passend zum Zustand des gewählten Planeten an
         if (p->getShipyardBuilt())
         {
             ui->BuildShip->setText("Build Ship");
-            if (m_model->getSelfPlayer()->getRubin() < m_model->getShipCost())
+            if (m_model->getSelfPlayer()->getRubin() < m_model->getShipCost() || p->getShipsOrdered() > 0)
             {
                 ui->BuildShip->setVisible(false);
             } 
@@ -526,7 +526,6 @@ void MainWindow2D::updatePlanetInfo(int id)
             {
                 ui->BuildShip->setVisible(true);
             }
-            //Schifskosten
             int shipcost = m_model->getShipCost();
             std::string s = "Costs: " + std::to_string(shipcost) + " Rubies";
             QString string = QString::fromStdString(s);

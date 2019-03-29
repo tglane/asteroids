@@ -32,18 +32,15 @@ TcpServer::TcpServer(std::string filename, QObject* parent)
 
 bool TcpServer::all_ready()
 {
-    int count = 0;
     for (auto i: clients)
     {
         qDebug() << "id:" << i.id << "ready?" << i.ready;
-        if (i.ready == true)
+        if (!i.ready)
         {
-            count++;
+            return false;
         }
     }
-   //qDebug() << "Clients_size" << clients.size();
-   //qDebug() << "Clients_count" <<count;
-    return (clients.size() == count);
+    return true;
 }
 
 
@@ -341,7 +338,7 @@ void TcpServer::fightEnd(int id, int health_left) {
     qDebug() << "end fight, updating data model";
     Battle::Ptr current_battle = m_battle_list[battle_count];
 
-    if (id == current_battle->m_player1->getIdentity() == id) {
+    if (id == current_battle->m_player1->getIdentity()) {
         current_battle->m_numberShipsLeft1 = ships_left;
     } else {
         current_battle->m_numberShipsLeft2 = ships_left;

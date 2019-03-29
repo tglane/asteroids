@@ -31,8 +31,8 @@ public:
     Hittable::Ptr ship;
     std::map<uint32_t, QByteArray> ack_pending;
 
-    UdpClient(): ship(new Hittable(0)), id(0) {}
-    UdpClient(uint32_t id): ship(new Hittable(id << 24)), id(id) {}
+    UdpClient(): id(0), ship(new Hittable(0)) {}
+    UdpClient(uint32_t id): id(id), ship(new Hittable(id << 24)) {}
     uint32_t next_seq_nr() { return seq_nr++; }
 };
 
