@@ -24,6 +24,11 @@
 
 using namespace strategy;
 
+/**
+ * Sends, receives and parses tcp packages formated in json during the 2d strategy part.
+ * Updates the datamodel of the client with the received information
+ * Sends current datamodel state to the server
+ */
 class tcpclient : public QObject {
 
     Q_OBJECT
@@ -36,6 +41,7 @@ public:
 
     tcpclient(asteroids::DataModel::Ptr datamodel, QObject* parent = 0);
 
+    /// Sets a pointer of a SwitchWindowInfo to set received information to the SwitchWindow
     void set_switch_pointer(SwitchingWindowInfo* sw) { m_switch_mode_dialoge = sw; }
 
 public slots:
@@ -68,14 +74,29 @@ private slots:
     void recv_json();
 
 signals:
+    /**
+     * @biref signal to init a fight
+     */
     void fight_init_signal(QJsonObject);
-    
+
+    /**
+     * @brief signal to start a 2d round
+     */
     void start_round();
 
+    /**
+     * @brief signal to end the blurry pause screen between the rounds
+     */
     void end_pause();
 
+    /**
+     * @brief signal to stop the 2d music during a 3d fight part
+     */
     void pause_music();
 
+    /**
+     * @brief signal to resume the 2d music after a 3d figth part
+     */
     void resume_music();
 
 private:
@@ -95,14 +116,19 @@ private:
     /// receive the init package for the 3d fight
     void process_fight_init(QJsonObject recv_obj);
 
+    /// Size of the last received package
     int last_size = 0;
 
-    client_state m_state; /// Represents tcp client state
+    /// Current state of the client used to handle packages right
+    client_state m_state;
 
+    /// Client name string
     QString m_player_name;
 
+    /// Client id set by the server
     int m_player_id;
 
+    /// Ip of the tcp server
     QString m_server_ip;
 
     asteroids::DataModel::Ptr m_datamodel;

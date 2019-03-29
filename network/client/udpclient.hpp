@@ -15,6 +15,10 @@
 #include "rendering/SpaceCraft.hpp"
 #include "Missile.hpp"
 
+/**
+ * Sends, receives and parses udp packages during the 3d-fight and sends the new information from
+ * the server to the view
+ */
 class udpclient: public QObject {
     Q_OBJECT
 
@@ -76,10 +80,6 @@ public:
     /// Get own id
     int get_id() { return m_id; }
 
-
-
-signals:
-
 public slots:
     /**
      * @brief read incoming data from udp server
@@ -116,14 +116,19 @@ private:
      */
     void createNewMissileFromPackage(int recv_seq_nr, int recv_id, char* data);
 
+    /// Socket used for communication with the server
     std::shared_ptr<QUdpSocket> socket;
 
+    /// Stores the client id for faster identification
     int m_id;
 
+    /// Server ip
     QString m_ip;
 
+    /// Sequence number of the last sent package to check the acknowledges from the server
     unsigned int seq_number;
 
+    /// Pointer to the physics engine used to update the physic with the data received from the server
     asteroids::PhysicsEngine::Ptr m_physicsEngine;
 
     asteroids::SpaceCraft::Ptr m_otherFighter;
