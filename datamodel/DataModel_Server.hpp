@@ -171,6 +171,8 @@ public:
 
     int getShipyardCost() {return Shipyardcost; }
 
+    int getMineGain() {return Minegain; }
+
     int getResult() { return result; }
 
     /**

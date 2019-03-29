@@ -63,7 +63,7 @@ public slots:
 
     void selectMap(int state);
 
-    void start_round();
+    //void start_round();
 
     void stop_server();
 

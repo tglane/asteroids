@@ -54,8 +54,6 @@ void DataModel_Server::getUniverse(std::string filename)
         {
             f >> name >> posx >> posy >> mines;
             Planet::Ptr p = Planet::Ptr(new Planet(name, posx, posy, mines));
-
-            std::cout << "adding planet: " << name << " " << i << std::endl;
             m_planets[i] = p;
             m_nameToPlanets[name] = p;
             m_planetNameToId[name] = i;
@@ -93,8 +91,6 @@ std::list<std::pair<int,int>> DataModel_Server::getEdges()
 
 bool DataModel_Server::endOfRound()
 {
-    std::cout << "###################################     End of Round!    #################################" << std::endl;
-
     performMovements(getSelfPlayer());
     //findBattles();
     //BattlePhase();
@@ -115,15 +111,8 @@ bool DataModel_Server::endOfRound()
     return true;
 }
 
-
-/*Code von Kay Bauer*/
 bool DataModel_Server::buyShip(Planet::Ptr selectedPlanet, Player::Ptr m_self)
 {
-    /*test druck*/
-    std::cout << "Test für buyShip" << std::endl;
-    std::cout << m_self->getRubin() << std::endl;
-    /*test druck ende*/
-
     //watch out so only 1 ship can be built 
     std::list<std::shared_ptr<ShipOrder>> shiporders = m_self->getListShipOrder();
 
@@ -150,7 +139,6 @@ bool DataModel_Server::buyShip(Planet::Ptr selectedPlanet, Player::Ptr m_self)
     {
         m_self->delRubin(Shipcost);
         /*test druck*/
-        std::cout << m_self->getRubin() << std::endl;
         /*test druck ende*/
         std::shared_ptr<ShipOrder> NewShip = std::shared_ptr<ShipOrder>(new ShipOrder(selectedPlanet));
         m_self->putListShipOrder(NewShip);
@@ -158,28 +146,21 @@ bool DataModel_Server::buyShip(Planet::Ptr selectedPlanet, Player::Ptr m_self)
 
         return true;
     }
-
     return false;
 
 }
 
-bool DataModel_Server::moveShips(Planet::Ptr from, Planet::Ptr to, int numShips) {
-
-	std::cout << "MoveOrder " << numShips << " Ships from Planet " << from->getName() << " to Planet " << to->getName() << std::endl;
-
-	if(from->getShips() >= numShips && numShips > 0)
+bool DataModel_Server::moveShips(Planet::Ptr from, Planet::Ptr to, int numShips)
+{
+    if(from->getShips() >= numShips && numShips > 0)
 	{
 		MoveOrder::Ptr move = MoveOrder::Ptr(new MoveOrder(from, to, numShips));
 		m_self->putListMoveOrder(move);
-		std::cout << "MoveOrder successful"<< std::endl;
         from->delShips(numShips);
         m_self->delShips(numShips);
 		return true;
 	}
-
 	else {
-
-		std::cout << "MoveOrder not successful"<< std::endl;
 		return false;
 	}
 
@@ -187,12 +168,6 @@ bool DataModel_Server::moveShips(Planet::Ptr from, Planet::Ptr to, int numShips)
 }
 bool DataModel_Server::buyMine(Planet::Ptr selectedPlanet, Player::Ptr m_self)
 {
-    /*test druck*/
-    std::cout << "Test für buyMine" << std::endl;
-    std::cout << selectedPlanet->getMinesBuild() << std::endl;
-    std::cout << selectedPlanet->getMines() << std::endl;
-    /*test druck ende*/
-
     //watch out so only 1 Mine can be built 
     std::list<std::shared_ptr<MineOrder>> mineorders = m_self->getListMineOrder();
 
@@ -216,9 +191,6 @@ bool DataModel_Server::buyMine(Planet::Ptr selectedPlanet, Player::Ptr m_self)
         {
             m_self->delRubin(Minecost);
             selectedPlanet->setMinesHidden();
-             /*test druck*/
-            std::cout << m_self->getRubin() << std::endl;
-            /*test druck ende*/
             std::shared_ptr<MineOrder> NewMine = std::shared_ptr<MineOrder>(new MineOrder(selectedPlanet));
             m_self->putListMineOrder(NewMine); 
             return true;
@@ -326,18 +298,13 @@ void DataModel_Server::calculateFinance(Player::Ptr Player)
     {
         Planet::Ptr PlanetFromPlayer = *it;
 
+        //MineNumbers += PlanetFromPlayer->getMinesBuild();
+        //PlanetFromPlayer->subtractEarnings(MineNumbers);
         earnings += PlanetFromPlayer->subtractEarnings(Minegain);
-        /*
-        MineNumbers += PlanetFromPlayer->getMinesBuild();
-        PlanetFromPlayer->subtractEarnings(MineNumbers);
-        std::cout <<"Test MineNumbers"<< std::endl;
-        std::cout << MineNumbers << std::endl;
-        */
     }
     //MineGainWithNumbers = MineNumbers * Minegain;
 
-    //m_self->addRubin(MineGainWithNumbers);
-    m_self->addRubin(Minegain);
+    m_self->addRubin(earnings);
     TransaktionMine();
     TransaktionShip();
     TransaktionShipyard();
@@ -368,10 +335,10 @@ void DataModel_Server::clearInvaders() {
 }
 
 
-bool DataModel_Server::updateAll(QJsonObject &update) {
+bool DataModel_Server::updateAll(QJsonObject &update)
+{
 
-	//if (update.isObject() && !update.isEmpty())
-	//{
+
     int id = 0;
 
     //int rubin = 0;
@@ -400,7 +367,6 @@ bool DataModel_Server::updateAll(QJsonObject &update) {
 
         for (it1 = array.constBegin(); it1 != array.constEnd(); it1++)
         {
-            std::cout << it1->toObject(QJsonObject()).value("ID").toInt() << std::endl;
             planet = getPlanetFromId(it1->toObject(QJsonObject()).value("ID").toInt());
             mines = it1->toObject(QJsonObject()).value("Mines").toInt();
             ships = it1->toObject(QJsonObject()).value("Ships").toInt();
@@ -466,8 +432,6 @@ bool DataModel_Server::updateAll(QJsonObject &update) {
 
     }
 
-		//}//End Iterator File
-
     player->setPlanetsList(planets);
 
     emit updateInfo();
@@ -511,7 +475,6 @@ std::vector<Battle::Ptr> DataModel_Server::findBattles()
                 m_battles.push_back(std::shared_ptr<Battle>(new Battle(Planets, Planets->getOwner(), 
                                 Planets->getInvader(), Planets->getShips(),
                                 Planets->getInvaderShips(), true)));
-                std::cout << "Kampf Karte erzeugt" << std::endl;
             }
         }
     }
@@ -677,8 +640,6 @@ void DataModel_Server::performMovements(Player::Ptr player)
             Player::Ptr Empty = Player::Ptr(new Player());
             destination->setOwner(Empty);
         }
-        std::cout << destination->getOwner() << std::endl;
-        std::cout << destination->getShips() << std::endl;
       
         if(m_self == destination->getOwner()){
             //the destination planet is of the same owner

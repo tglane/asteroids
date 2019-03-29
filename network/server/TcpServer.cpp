@@ -35,7 +35,7 @@ bool TcpServer::all_ready()
     int count = 0;
     for (auto i: clients)
     {
-        //qDebug() << "id:" << i.id << "ready?" << i.ready;
+        qDebug() << "id:" << i.id << "ready?" << i.ready;
         if (i.ready == true)
         {
             count++;
@@ -44,6 +44,15 @@ bool TcpServer::all_ready()
    //qDebug() << "Clients_size" << clients.size();
    //qDebug() << "Clients_count" <<count;
     return (clients.size() == count);
+}
+
+
+void TcpServer::clear_all_ready()
+{
+    for (auto& i: clients)
+    {
+        i.ready = false;
+    }
 }
 
 
@@ -103,19 +112,15 @@ void TcpServer::send_state()
 void TcpServer::handle_ready(TcpClient& client, QJsonDocument& doc)
 {
     qDebug() << "ready received from: " << client.id;
-    //qDebug() << doc;
     client.ready = true;
     qDebug() << "ready?: : " << client.ready;
-    //client.ready = true;
     if (state == WAIT_READY)
     {
         std::cout << "in_wait_ready_before_all_ready" << std::endl;
         qDebug() <<  all_ready();
-        //client.ready=true;
         if (all_ready()) {
-            //client.ready = false;
+            clear_all_ready();
             for (auto j: clients) {
-                j.ready = false;
                 QJsonArray array;
                 array.push_back("strat_init");
                 qDebug() << "Sending strat_init";
@@ -143,16 +148,14 @@ void TcpServer::handle_ready(TcpClient& client, QJsonDocument& doc)
     } else if (state == PRE_FIGHT) {
 
         if (all_ready()) {
-            //ready_count = 0;
-            for (auto j: clients) j.ready = false;
+            clear_all_ready();
             qDebug() << "state changed: FIGHT";
             state = FIGHT;
             fight_init(m_battle_list[battle_count]);
         }
     } else if (state == END_FIGHT) {
-        //ready_count++;
         if (all_ready()) {
-            for (auto j: clients) j.ready = false;
+            clear_all_ready();
             if (battle_count < m_battle_list.size()) {
                 qDebug() << "state changed: PRE_FIGHT";
                 state = PRE_FIGHT;
@@ -183,11 +186,9 @@ void TcpServer::handle_state(TcpClient& client, QJsonDocument& doc) {
 
     m_datamodel->printPlanets();
     m_datamodel->printPlayer();
-
-    //ready_count++;
     client.ready = true;
     if (all_ready()) {
-        for (auto j: clients) j.ready = false;
+        clear_all_ready();
         m_battle_list = m_datamodel->findBattles();
         m_datamodel->clearInvaders();
         qDebug() << "n battles: " << m_battle_list.size();

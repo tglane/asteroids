@@ -76,9 +76,6 @@ public:
     /// Get own id
     int get_id() { return m_id; }
 
-    int getCount() {return frame_count;}
-
-    void incCount(){frame_count++;}
 
 
 signals:
@@ -122,8 +119,6 @@ private:
     std::shared_ptr<QUdpSocket> socket;
 
     int m_id;
-
-    int frame_count;
 
     QString m_ip;
 

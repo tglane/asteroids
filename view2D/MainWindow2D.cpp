@@ -112,6 +112,11 @@ MainWindow2D::MainWindow2D(DataModel::Ptr model, QWidget* parent) :
 
     // event is triggert as soon as planets a available in DataModel
     connect(m_model.get(), SIGNAL(initMap()), this, SLOT(initPlanets()));
+
+    m_blur = new QGraphicsBlurEffect;
+    m_blur->setBlurHints(QGraphicsBlurEffect::QualityHint);
+    ui->centralwidget->setGraphicsEffect(m_blur);
+    m_blur->setEnabled(false);
 }
 
 void MainWindow2D::updateAllInfo() {
@@ -215,9 +220,7 @@ void MainWindow2D::endOfRound(bool click)
 {
     m_model->endOfRound();
 
-    m_blur = new QGraphicsBlurEffect;
-    m_blur->setBlurHints(QGraphicsBlurEffect::QualityHint);
-    ui->centralwidget->setGraphicsEffect(m_blur);
+    m_blur->setEnabled(true);
     ui->centralwidget->setEnabled(false);
 
     //Wenn lang genug warten könnet das hier funktionieren
@@ -243,7 +246,7 @@ void MainWindow2D::endOfRound(bool click)
     updatePlanetInfo(currentPlanet);
     updatePlanetColor();
 
-    //Anzeige der aktuellen Flüge löschen
+    //Anzeigem der aktuellen Flüge löschen
     std::list<std::pair<int,int>> edges = m_model->getEdges();
     for(std::list<std::pair<int,int>>::iterator it=edges.begin(); it != edges.end(); ++it){
         std::pair<int,int> coordinates = *it;
@@ -266,8 +269,6 @@ void MainWindow2D::end_blur()
     currentYear++;
     QString qyear = QString::fromUtf8("Year: ");
     ui->Date->setText(qyear + QString::number(currentYear));
-
-    delete m_blur;
 }
 
 void MainWindow2D::updatePlanetColor(){
@@ -525,6 +526,7 @@ void MainWindow2D::updatePlanetInfo(int id)
             {
                 ui->BuildShip->setVisible(true);
             }
+            //Schifskosten
             int shipcost = m_model->getShipCost();
             std::string s = "Costs: " + std::to_string(shipcost) + " Rubies";
             QString string = QString::fromStdString(s);
@@ -581,7 +583,8 @@ void MainWindow2D::updatePlanetInfo(int id)
     // Planeteninfo ausfüllen
     ui->PlanetName->setText(QString::fromStdString(p->getName()));
 
-    ui->RubinNumber->setText("# " + QString::number(p->getRubinLeft()));
+    //ui->RubinNumber->setText("# " + QString::number(p->getRubinLeft()));
+    ui->RubinNumber->setText("# " + QString::number(p->getRubinLeft()) + " (-" + QString::number(p->calculateEarnings(m_model->getMineGain())) + ")");
 
     QString mineText = QString::number(p->getMinesBuild()) + " / " + QString::number(p->getMines());
     ui->MineNumber->setText(mineText);

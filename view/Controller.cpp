@@ -168,6 +168,8 @@ void Controller::gamepadControl(Hittable::Ptr& player, PhysicsEngine::Ptr& physi
             {
                 Bullet::Ptr bullet = make_shared<Bullet>(Bullet(player->getPosition() - player->getZAxis() * 42,
                                                                 player->getXAxis(), player->getId()));
+                m_bulletSound.play();
+                client.send_bullet(player->getPosition(), player->getXAxis(), player->getZAxis());
                 physicsEngine->addBullet(bullet);
                 m_bulletCooldown = 200;
             }

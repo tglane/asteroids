@@ -26,7 +26,8 @@ EndWindow::EndWindow(DataModel::Ptr model, QWidget* parent) :
     connect(m_model.get(), SIGNAL(endOfGame()), this, SLOT(activate()));
 }
 
-EndWindow::~EndWindow() {
+EndWindow::~EndWindow() 
+{
     if (ui) {
         delete ui;
     }
@@ -34,13 +35,13 @@ EndWindow::~EndWindow() {
 
 void EndWindow::activate()
 {
-    // DataModel::endOfGame() has to be emitted somewhere so this method is executed
     QPixmap* pixmap = new QPixmap();
-    QRandomGenerator* generator = new QRandomGenerator();
+    QRandomGenerator* generator = new QRandomGenerator(QDateTime::currentMSecsSinceEpoch());
+    
+    // randomly loading image depending on win or loss
     switch(m_model->getResult())
     {
         case 1:
-            // ranodmly select image
             if(generator->generateDouble() > 0.5)
             {
                 pixmap->load("../models/victory2.jpg");
@@ -50,30 +51,28 @@ void EndWindow::activate()
                 pixmap->load("../models/victory.jpg");
             }
             ui->ResultLabel->setText("Victory!");
-            scene->addPixmap(*pixmap);
-            ui->Image->fitInView(0, 0, pixmap->width(), pixmap->height(), Qt::KeepAspectRatio);
             break;
+        case 0:
         case 2:
-            // ranodmly select image
             if(generator->generateDouble() > 0.5)
             {
                 pixmap->load("../models/defeat.jpg");
             }
             else
             {
-               pixmap->load("../models/defeat2.jpg");
+                pixmap->load("../models/defeat2.jpg");
             }
             ui->ResultLabel->setText("Defeat!");
-            scene->addPixmap(*pixmap);
-            ui->Image->fitInView(0, 0, pixmap->width(), pixmap->height(), Qt::KeepAspectRatio);
             break;
         default:
             ui->ResultLabel->setText("Error!");
             pixmap->load("../models/defeat.jpg");
-            scene->addPixmap(*pixmap);
-            ui->Image->fitInView(0, 0, pixmap->width(), pixmap->height(), Qt::KeepAspectRatio);
             break;
     }
+    scene->addPixmap(*pixmap);
+    
+    // set size of QGraphicsView
+    ui->Image->fitInView(0, 0, pixmap->width()/1.5, pixmap->height()/1.5, Qt::KeepAspectRatio);
 }
 
 void EndWindow::exitGame(bool clicked)

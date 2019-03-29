@@ -1,38 +1,66 @@
 #include "view2D/StartingDialog.hpp"
 #include "view2D/MainWindow2D.hpp"
 #include <iostream>
+
 #include <QNetworkInterface>
+#include <QRandomGenerator>
 
 namespace strategy{
 
 StartingDialog::StartingDialog(DataModel::Ptr model,tcpclient::Ptr tcp_client, TcpServer::Ptr tcp_server, QWidget* parent) :
     QMainWindow(parent), ui(new Ui::StartingDialog())
 {
+    // registrate data model, client and server
     m_model = model;
-
     m_tcpclient = tcp_client;
     m_tcpserver = tcp_server;
 
+    // layout components
     ui->setupUi(this);
 
-    ui->Title->setStyleSheet("QLabel { color: white }");
-    ui->NameLabel->setStyleSheet("QLabel { color: white }");
-    ui->ServerAddressLabel->setStyleSheet("QLabel { color: white }");
-    ui->checkHostLabel->setStyleSheet("QLabel { color: white }");
-    ui->ChooseMapLabel->setStyleSheet("QLabel { color: white}");
+    // select random subtitle
+    QRandomGenerator generator(QDateTime::currentMSecsSinceEpoch()/1000);
+    double d;
+    if((d = generator.generateDouble()) < 0.16)
+    {
+        ui->Subtitle->setText("---Resurrection---");
+    }
+    else if(d < 0.33)
+    {
+        ui->Subtitle->setText("---Awakening---");
+    }
+    else if(d < 0.5)
+    {
+        ui->Subtitle->setText("---Apocalypse---");
+    }
+    else if(d < 0.66)
+    {
+        ui->Subtitle->setText("---Revolution---");
+    }
+    else if(d < 0.83)
+    {
+        ui->Subtitle->setText("---Afterlife---");
+    }
+    else
+    {
+        ui->Subtitle->setText("---Junior---");
+    }
+
+    // set default text, IP-address, hide components
     ui->StartGame->setText("Verbinde");
     ui->ChooseMapLabel->setVisible(false);
     ui->SelectMap->setVisible(false);
-
-    ui->Name->setText("Siegbert");
+    ui->Name->setText("Please insert your name!");
     ui->ServerAddress->setText("127.0.0.1");
 
+    // set the windows background
     QPixmap bkgnd("../models/box1.jpg");
     bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
     QPalette palette;
     palette.setBrush(QPalette::Background, bkgnd);
     this->setPalette(palette);
 
+    // connect buttons and checkbox with the matching slots
     QPushButton* startButton = ui->StartGame;
     connect(startButton, SIGNAL(clicked(bool)), this, SLOT(startGame(bool)));
 
@@ -44,9 +72,9 @@ StartingDialog::StartingDialog(DataModel::Ptr model,tcpclient::Ptr tcp_client, T
 
 }
 
-void StartingDialog::start_round() {
+/*void StartingDialog::start_round() {
     m_model->switchWindow(DataModel::MAIN2D);
-}
+}*/
 
 StartingDialog::~StartingDialog()
 {
@@ -63,7 +91,7 @@ void StartingDialog::startGame(bool click)
 {
     std::string name = ui->Name->text().toStdString();
     std::string server_addr = ui->ServerAddress->text().toStdString();
-    if(!(ui->checkHost->isChecked()) && name != "" && name != "Please insert a name!")
+    if(!(ui->checkHost->isChecked()) && name != "" && name != "Please insert your name!")
     {
         connect(this, SIGNAL(connect_to_server(string, string)), m_tcpclient.get(), SLOT(connect_to_server(string, string)));
         connect(m_model->getWidget(DataModel::MAIN2D), SIGNAL(endround_signal()), m_tcpclient.get(), SLOT(endround_slot()));
@@ -90,7 +118,7 @@ void StartingDialog::startGame(bool click)
             }
 
             ui->ServerAddress->setText(ipv4);
-            ui->ServerAddress->setStyleSheet("QLineEdit { color: yellow }");
+            ui->ServerAddress->setStyleSheet("QLineEdit { color: green }");
         } else {
             m_tcpserver->server.close();
             m_tcpserver = shared_ptr<TcpServer>(new TcpServer(ui->SelectMap->currentText().toStdString()));
@@ -98,7 +126,7 @@ void StartingDialog::startGame(bool click)
     }
     else
     {
-        ui->Name->setText("Please insert a name!");
+        ui->Name->setText("Please insert your name!");
         ui->Name->setStyleSheet("QLineEdit { color: red }");
     }
     

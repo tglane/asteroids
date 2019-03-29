@@ -99,6 +99,10 @@ void DataModel::switchWindow(int Id)
         m_mainWindow->hide();
         //((MainWindow*)m_widgets[Id])->activate(true);
     }
+    if(Id == END)
+    {
+        emit endOfGame();
+    }
     if(Id == MAIN2D || Id == SWITCH || Id == START || Id == END)
     {
         ((strategy::GameWindow*)m_mainWindow)->content()->setCurrentWidget(m_widgets[Id]);
@@ -112,6 +116,7 @@ bool DataModel::WinCondition()
     if(first_round)
     {
         first_round = false;
+        return false;
     }
     else
     {
@@ -137,7 +142,7 @@ bool DataModel::WinCondition()
         if(NumberOfPlanets == selfOwnedPlanets)
         {
             result = 1;
-            emit endOfGame();
+            //emit endOfGame();
             switchWindow(END);
             std::cout << "Gewonnen" <<std::endl;
             return true;
@@ -145,7 +150,7 @@ bool DataModel::WinCondition()
         if(selfOwnedPlanets == 0)
         {
             result = 2;
-            emit endOfGame();
+            //emit endOfGame();
             switchWindow(END);
             std::cout << "Verloren" << std::endl;
             return true;
@@ -153,7 +158,7 @@ bool DataModel::WinCondition()
         if(NumberOfPlanets == enemyOwnedPlanets)
         {
             result = 2;
-            emit endOfGame();
+            //emit endOfGame();
             switchWindow(END);
             std::cout << "Verloren" <<std::endl;
             return true;
@@ -161,7 +166,7 @@ bool DataModel::WinCondition()
         if(enemyOwnedPlanets == 0)
         {
             result = 1;
-            emit endOfGame();
+            //emit endOfGame();
             switchWindow(END);
             std::cout << "Gewonnen" << std::endl;
             return true;
