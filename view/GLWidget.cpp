@@ -246,7 +246,7 @@ void GLWidget::reset() {
     m_gameOver = false;
     m_startTimer.restart();
     m_started = false;
-
+    m_endSoundPlayed = false;
     m_physicsEngine->reset_lists();
 
     m_physicsEngine->addHittable(m_camera);
@@ -299,7 +299,7 @@ void GLWidget::step(map<Qt::Key, bool>& keyStates)
                 if (time > 1000)
                 {
                     m_camera->restartTimer(time - 1000);
-                    m_camera->setHealth(m_camera->getHealth() - 1);
+                    //m_camera->setHealth(m_camera->getHealth() - 1);
                     if (m_camera->getHealth() == 0)
                     {
                         m_gameOver = true;
@@ -320,7 +320,7 @@ void GLWidget::step(map<Qt::Key, bool>& keyStates)
                 if (time > 1000)
                 {
                     m_enemy->restartTimer(time - 1000);
-                    m_enemy->setHealth(m_enemy->getHealth() - 1);
+                    //m_enemy->setHealth(m_enemy->getHealth() - 1);
                     if (m_enemy->getHealth() == 0)
                     {
                         m_gameOver = true;

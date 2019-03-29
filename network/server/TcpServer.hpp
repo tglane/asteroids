@@ -18,14 +18,14 @@ class TcpClient
 public:
     char id;
 
-    bool ready = false;
+    bool ready;
     std::shared_ptr<QTcpSocket> socket;
 
     TcpClient(char id, QTcpSocket* socket)
-        : id(id), socket(socket), ready(false){}
+        : id(id), ready(false), socket(socket){}
 
     TcpClient(const TcpClient& other)
-        : id(other.id), socket(other.socket),ready(other.ready) {}
+        : id(other.id), ready(other.ready), socket(other.socket) {}
 };
 
 class TcpServer: public QObject
@@ -67,8 +67,8 @@ private:
     void clear_all_ready();
 
 
-    int init_count = 0;
-    int battle_count = 0;
+    unsigned int init_count = 0;
+    unsigned int battle_count = 0;
 
     std::string level;
 

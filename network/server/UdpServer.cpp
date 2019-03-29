@@ -150,11 +150,7 @@ void UdpServer::tick()
     bool game_over = physics_engine.process(time_elapsed);
     auto collisions = physics_engine.detect_collisions();
     for (auto& i: clients) {
-
-        uint32_t client_id = i.first;
         UdpClient& client = i.second;
-
-
 
         // resend unacknowledged messageserasing client
         if (client.ack_pending.size() > 0) {
@@ -185,7 +181,8 @@ void UdpServer::tick()
     }
     if (game_over) {
         std::cout << "GAME OVER!!!!!!!!!!!!!!!" << std::endl;
-        int winner_id, remaining_health;
+        int winner_id = 0;
+        int remaining_health = 0;
         for (auto cs: clients) {
             qDebug() << "player " << cs.second.id << " health " << cs.second.ship->getHealth();
             if (cs.second.ship->getHealth() > 0 ) {

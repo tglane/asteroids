@@ -79,11 +79,11 @@ void PhysicsEngine::process_collisions(int id_one, int id_two)
     /* Add life to player when he hits an asteroid */
     if(first == 1 && second == 0)
     {
-        int shooter_id = id_two & 0xFF000000;
+        int shooter_id = id_one & 0xFF000000;
         if(m_hittables.count(shooter_id) == 1)
         {
             int health = m_hittables[shooter_id]->getHealth();
-            if (m_hittables[shooter_id]->getHealth() < 10) {
+            if (health % 10 != 0) {
                 m_hittables[shooter_id]->setHealth(health + 1);
             }
         }
