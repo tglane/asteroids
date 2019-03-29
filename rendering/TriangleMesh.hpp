@@ -109,13 +109,19 @@ public:
      */
     virtual ~TriangleMesh() = default;
 
-    	/**
+    /**
 	 * @brief   Scales the mesh by the given factor
 	 */
 	void scale(float s);
 
+	/**
+	 * @brief changes the axes of the arrow model to fit into the coordinate system
+	 */
 	void fixArrow();
 
+	/**
+	 * @brief changes the axes of the missile model to fit into the coordinate system
+	 */
 	void fixMissile();
 
 protected:

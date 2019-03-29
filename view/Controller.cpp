@@ -1,3 +1,9 @@
+/**
+ * Controller.cpp
+ * @author Steffen Hinderink
+ * @author Juri Vana
+ */
+
 #include <QtCore/QFileInfo>
 #include "Controller.hpp"
 #include "physics/Transformable.hpp"
@@ -5,8 +11,9 @@
 namespace asteroids
 {
 
+// Setting all constants
 const vector<Qt::Key> Controller::mapToQt = {Qt::Key_E, Qt::Key_Q, Qt::Key_S, Qt::Key_W, Qt::Key_A, Qt::Key_D};
-const vector<Transformable::RotationTransform> Controller::mapToAngle = {Transformable::ROLL_CLOCKWISE,
+const vector<Transformable::RotationTransform> Controller::mapToRotation = {Transformable::ROLL_CLOCKWISE,
                                                                          Transformable::ROLL_COUNTERCLOCKWISE,
                                                                          Transformable::PITCH_DOWN,
                                                                          Transformable::PITCH_UP,
@@ -42,6 +49,9 @@ void Controller::keyControl(std::map<Qt::Key, bool> &keyStates, Hittable::Ptr& p
 {
     if (player->getHealth() > 0)
     {
+        // In order to make the movements smoother the speed increases and decreases linearly over time when pressing
+        // or letting go of a key.
+
         // Move
         if (keyStates[Qt::Key_Shift])
         {
@@ -78,7 +88,7 @@ void Controller::keyControl(std::map<Qt::Key, bool> &keyStates, Hittable::Ptr& p
                 }
             }
             float rot = maxRot * ((float) m_keys[i] / framesToMaxRot);
-            player->rotate(mapToAngle[i], rot);
+            player->rotate(mapToRotation[i], rot);
         }
 
         // Shoot
@@ -191,7 +201,7 @@ void Controller::gamepadControl(Hittable::Ptr& player, PhysicsEngine::Ptr& physi
     }
     else
     {
-        std::cout << "Kein Gamepad gefunden" << std::endl;
+        std::cout << "gamepad unavailable" << std::endl;
     }
 }
 

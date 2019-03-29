@@ -161,9 +161,12 @@ void GLWidget::initializeGL()
 void GLWidget::setClient(udpclient::Ptr client) {
     m_client = client;
 
-    if (m_client->get_id() == 42) {
+    if (m_client->get_id() == 42)
+    {
         m_enemy->setId(43 << 24);
-    } else {
+    }
+    else
+    {
         m_enemy->setId(42 << 24);
     }
 
@@ -257,10 +260,7 @@ void GLWidget::reset() {
 
 void GLWidget::step(map<Qt::Key, bool>& keyStates)
 {
-
     int elapsed_time = m_fpsTimer.restart();
-
-    // Get keyboard states and handle model movement
 
     m_gameOver = m_physicsEngine->process(elapsed_time) || m_gameOver;
 
@@ -299,7 +299,8 @@ void GLWidget::step(map<Qt::Key, bool>& keyStates)
                 if (time > 1000)
                 {
                     m_camera->restartTimer(time - 1000);
-                    //m_camera->setHealth(m_camera->getHealth() - 1);
+                    // commented out because this should happen on the server but was never implemented
+                    // m_camera->setHealth(m_camera->getHealth() - 1);
                     if (m_camera->getHealth() == 0)
                     {
                         m_gameOver = true;

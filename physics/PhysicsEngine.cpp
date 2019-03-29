@@ -104,6 +104,7 @@ int PhysicsEngine::check_id_type(int id_to_check, int prevId)
     }
     else if((id_to_check & 0xFFFFFF) != 0)
     {
+        // the second byte of the id is 0 for bullets and 1 for missiles
         if (((id_to_check >> 16) & 0x000000FF) == 0)
         {
             /* Bullet collision */
@@ -117,7 +118,8 @@ int PhysicsEngine::check_id_type(int id_to_check, int prevId)
         else if (((id_to_check >> 16) & 255) == 1)
         {
             /* Missile collision */
-            if (m_missiles.count(id_to_check) == 1) {
+            if (m_missiles.count(id_to_check) == 1)
+            {
                 m_missiles.erase(id_to_check);
             }
             return 3; // Means Missile
@@ -157,7 +159,7 @@ void PhysicsEngine::reset_lists()
         m_hittables.clear();
         m_objects.clear();
         m_bullets.clear();
-        m_missiles.clear(); // wild guess :D
+        m_missiles.clear();
         m_particles.reset_particles();
     }
 

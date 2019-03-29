@@ -47,11 +47,26 @@ public:
     /// Parses a level file and loads all supported objects
     void setLevelFile(const std::string& file);
 
-    /// Handles keyboard input and updates the physics engine
+    /**
+     * @brief performs one step of the 3d fight at the client
+     * @param keyStates map from all keys to their status
+     */
     void step(map<Qt::Key, bool>& keyStates);
 
+    /**
+     * @brief draws the health bars
+     * @param painter painter object used for drawing
+     * @param totalHealthPlayer health of the player
+     * @param totalHealthEnemy health of the enemy
+     */
     void drawHealth(QPainter& painter, int totalHealthPlayer, int totalHealthEnemy);
 
+    /**
+     * @brief draws the minimap
+     * @param painter painter object used for drawing
+     * @param player
+     * @param enemy
+     */
     void drawMinimap(QPainter& painter, Hittable::Ptr player, Hittable::Ptr enemy);
 
     void setClient(udpclient::Ptr client);
@@ -100,37 +115,52 @@ private:
     /// timer for correct speed with low fps
     QTime                       m_fpsTimer;
 
+    /// timer used for countdown at the start of the game
     QTime                       m_startTimer;
 
+    /// controller that handles input
     Controller                  m_controller;
 
     /// Udpclient to send pos/mov/rot to the server
-    udpclient::Ptr               m_client;
+    udpclient::Ptr              m_client;
 
+    /// flag that indicates whether or not the game has started
     bool                        m_started;
 
+    /// flag that indicates whether or not the game is finished
     bool                        m_gameOver;
 
+    /// flag that indicates whether or not the player is out of the bounds of the game space
     bool                        m_outOfBound;
 
+    /// flag that indicated whether or not a gamepad is used to control the game
     bool                        m_useGamepad;
 
+    /// the image of the cockpit
     QPixmap                     m_cockpit;
 
+    /// the image of one heart of the player
     QPixmap                     m_playerHeart;
 
+    /// the image of one heart of the enemy
     QPixmap                     m_enemyHeart;
 
+    /// the image of an empty heart
     QPixmap                     m_emptyHeart;
 
+    /// the sound of the countdown
     QSoundEffect                m_countdownSound;
 
+    /// the sound played when the game is won
     QSoundEffect                m_victorySound;
 
+    /// the sound played when the game is lost
     QSoundEffect                m_defeatSound;
 
+    /// the background music for the fight
     QMediaPlayer*               m_backgroundMusic;
 
+    /// flag that indicated whether or not the sound at the end is playing
     bool                        m_endSoundPlayed;
 
     static bool open_gl;

@@ -1,3 +1,9 @@
+/**
+ * Gamepad.cpp
+ * @author Steffen Hinderink
+ * @author Juri Vana
+ */
+
 #include "Gamepad.hpp"
 
 namespace asteroids {

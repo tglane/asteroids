@@ -104,10 +104,22 @@ public:
      */
     Vector<float> getZAxis() { return m_zAxis; }
 
+    /**
+     * @brief sets the x axis
+     * @param m_xAxis
+     */
     void setXAxis(const Vector<float> &m_xAxis);
 
+    /**
+     * @brief sets the y axis
+     * @param m_yAxis
+     */
     void setYAxis(const Vector<float> &m_yAxis);
 
+    /**
+     * @brief sets the z axis
+     * @param m_zAxis
+     */
     void setZAxis(const Vector<float> &m_zAxis);
 
 protected:

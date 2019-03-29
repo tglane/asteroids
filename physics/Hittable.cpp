@@ -1,5 +1,10 @@
-#include "Hittable.hpp"
+/**
+ * Hittable.cpp
+ * @author Steffen Hinderink
+ * @author Juri Vana
+ */
 
+#include "Hittable.hpp"
 #include <algorithm>
 #include <rendering/Asteroid.hpp>
 
@@ -39,10 +44,12 @@ bool Hittable::hitAsteroid(PhysicalObject& p)
 
 bool Hittable::hit(Vector3f position, float radius)
 {
+    // dimensions of the spaceship
     float length = 200;
     float width = 100;
     float height = 50;
 
+    // outer points of the cuboid
     Vector3f xp = this->getPosition() + this->getXAxis() * length;
     Vector3f xn = this->getPosition() - this->getXAxis() * length;
     Vector3f yp = this->getPosition() + this->getYAxis() * width;
@@ -50,6 +57,7 @@ bool Hittable::hit(Vector3f position, float radius)
     Vector3f zp = this->getPosition() + this->getZAxis() * height;
     Vector3f zn = this->getPosition() - this->getZAxis() * height;
 
+    // coordinates of the outer points of the cuboid in the orientation of the local coordinate system
     float boxMaxX = signedDistanceToPlane(xp, this->getXAxis(), this->getYAxis(), this->getZAxis());
     float boxMinX = signedDistanceToPlane(xn, this->getXAxis(), this->getYAxis(), this->getZAxis());
     float boxMaxY = signedDistanceToPlane(yp, this->getYAxis(), this->getXAxis(), this->getZAxis());
@@ -57,23 +65,26 @@ bool Hittable::hit(Vector3f position, float radius)
     float boxMaxZ = signedDistanceToPlane(zp, this->getZAxis(), this->getXAxis(), this->getYAxis());
     float boxMinZ = signedDistanceToPlane(zn, this->getZAxis(), this->getXAxis(), this->getYAxis());
 
-    float bx = signedDistanceToPlane(position, this->getXAxis(), this->getYAxis(), this->getZAxis());
-    float by = signedDistanceToPlane(position, this->getYAxis(), this->getXAxis(), this->getZAxis());
-    float bz = signedDistanceToPlane(position, this->getZAxis(), this->getXAxis(), this->getYAxis());
+    // coordinates of the sphere in the orientation of the local coordinate system
+    float sx = signedDistanceToPlane(position, this->getXAxis(), this->getYAxis(), this->getZAxis());
+    float sy = signedDistanceToPlane(position, this->getYAxis(), this->getXAxis(), this->getZAxis());
+    float sz = signedDistanceToPlane(position, this->getZAxis(), this->getXAxis(), this->getYAxis());
 
-    float x = std::max(boxMinX, std::min(bx, boxMaxX));
-    float y = std::max(boxMinY, std::min(by, boxMaxY));
-    float z = std::max(boxMinZ, std::min(bz, boxMaxZ));
-    return magnitude(Vector3f(x - bx, y - by, z - bz)) < radius;
+    // coordinates of the closest point of the cuboid to the center of the sphere
+    float x = std::max(boxMinX, std::min(sx, boxMaxX));
+    float y = std::max(boxMinY, std::min(sy, boxMaxY));
+    float z = std::max(boxMinZ, std::min(sz, boxMaxZ));
+    // if the center of the sphere has a distance to the cuboid that is less than its radius there is a collision
+    return magnitude(Vector3f(x - sx, y - sy, z - sz)) < radius;
 }
 
 float Hittable::signedDistanceToPlane(Vector3f x, Vector3f b, Vector3f e1, Vector3f e2)
 {
-    // Projection
+    // orthogonal projection
     Vector3f p = e1 * ((x * e1) / (e1 * e1)) + e2 * ((x * e2) / (e2 * e2));
-    // Unsigned distance
+    // unsigned distance
     float d = magnitude(x - p);
-    // Signed distance
+    // signed distance
     if (magnitude(x + b) < magnitude(x - b))
     {
         d *= -1;

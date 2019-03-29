@@ -1,3 +1,9 @@
+/**
+ * Missile.hpp
+ * @author Steffen Hinderink
+ * @author Juri Vana
+ */
+
 #include "Missile.hpp"
 
 namespace asteroids

@@ -43,8 +43,10 @@ sudo apt remove qt*dev
 - `W`, `A`, `S`, `D`, `Q` und `E`: Lenken
 - `Shift`: Schnell fliegen
 - `Space`: Schießen
+- `R`: Verfolgungsrakete schießen
 
 ### Gamepad:
 - `L`, `L1` und `R1`: Lenken
 - `R2`: Schnell fliegen
 - `X`: Schießen
+- `O`: Verfolgungsrakete schießen

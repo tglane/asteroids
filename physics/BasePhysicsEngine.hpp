@@ -62,6 +62,10 @@ public:
      */
     void addBullet(PhysicalBullet::Ptr bullet);
 
+    /**
+     * @brief Adds a missile to the scene
+     * @param missile new missile
+     */
     void addMissile(PhysicalMissile::Ptr missile);
 
     /**
@@ -77,8 +81,10 @@ protected:
     /// List of active bullets
     map<int, PhysicalBullet::Ptr>    m_bullets;
 
+    /// List of active missiles
     map<int, PhysicalMissile::Ptr>   m_missiles;
 
+    /// List of active hittables
     map<int, Hittable::Ptr>          m_hittables;
 };
 
