@@ -38,6 +38,8 @@ void EndWindow::activate()
     QPixmap* pixmap = new QPixmap();
     QRandomGenerator* generator = new QRandomGenerator(QDateTime::currentMSecsSinceEpoch());
     
+    scene->clear();
+
     // randomly loading image depending on win or loss
     switch(m_model->getResult())
     {
